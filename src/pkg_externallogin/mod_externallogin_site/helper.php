@@ -51,6 +51,7 @@ abstract class ModExternalloginsiteHelper
 		$noredirect = $params->get('noredirect');
 
 		// Get an instance of the generic articles model
+		/** @var ExternalloginModelServers */
 		$model = JModelLegacy::getInstance('Servers', 'ExternalloginModel', array('ignore_request' => true));
 		$model->setState('filter.published', 1);
 		$model->setState('filter.enabled', 1);

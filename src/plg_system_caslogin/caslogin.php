@@ -509,6 +509,7 @@ class PlgSystemCaslogin extends JPlugin
 			elseif (empty($sid))
 			{
 				// Get CAS servers
+                /** @var ExternalloginModelServers */
 				$model = JModelLegacy::getInstance('Servers', 'ExternalloginModel', array('ignore_request' => true));
 				$model->setState('filter.published', 1);
 				$model->setState('filter.plugin', 'system.caslogin');

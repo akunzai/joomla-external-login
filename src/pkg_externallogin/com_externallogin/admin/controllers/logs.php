@@ -66,6 +66,7 @@ class ExternalloginControllerLogs extends JControllerAdmin
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
 		// Get/Create the model
+        /** @var ExternalloginModelLogs */
 		$model = $this->getModel('Logs', 'ExternalloginModel', array());
 
 		// Remove the items.
