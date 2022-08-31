@@ -36,22 +36,22 @@ abstract class ExternalloginHelper
 	public static function addSubmenu($submenu = 'servers')
 	{
 		// Addsubmenu
-		JSubMenuHelper::addEntry(
+		JHtmlSidebar::addEntry(
 			JText::_('COM_EXTERNALLOGIN_SUBMENU_SERVERS'),
 			JRoute::_('index.php?option=com_externallogin', false),
 			$submenu == 'servers'
 		);
-		JSubMenuHelper::addEntry(
+		JHtmlSidebar::addEntry(
 			JText::_('COM_EXTERNALLOGIN_SUBMENU_USERS'),
 			JRoute::_('index.php?option=com_externallogin&view=users', false),
 			$submenu == 'users'
 		);
-		JSubMenuHelper::addEntry(
+		JHtmlSidebar::addEntry(
 			JText::_('COM_EXTERNALLOGIN_SUBMENU_LOGS'),
 			JRoute::_('index.php?option=com_externallogin&view=logs', false),
 			$submenu == 'logs'
 		);
-		JSubMenuHelper::addEntry(
+		JHtmlSidebar::addEntry(
 			JText::_('COM_EXTERNALLOGIN_SUBMENU_ABOUT'),
 			JRoute::_('index.php?option=com_externallogin&view=about', false),
 			$submenu == 'about'

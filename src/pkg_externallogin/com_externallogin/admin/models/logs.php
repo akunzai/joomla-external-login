@@ -265,9 +265,9 @@ class ExternalloginModelLogs extends JModelList
 
 			return true;
 		}
-		catch (JDatabaseException $e)
+		catch (RuntimeException $e)
 		{
-			$this->setError($e->getMessage());
+			$this->set('error', $e->getMessage());
 
 			return false;
 		}

@@ -19,7 +19,7 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
 $user = JFactory::getUser();
 $ordering = $this->state->get('list.ordering') == 'a.ordering';
-$plugins = JArrayHelper::pivot(ExternalloginHelper::getPlugins(), 'value');
+$plugins = Joomla\Utilities\ArrayHelper::pivot(ExternalloginHelper::getPlugins(), 'value');
 ?>
 <?php foreach($this->items as $i => $item): ?>
 	<tr class="row<?php echo $i % 2; ?>">

@@ -99,7 +99,7 @@ class PlgSystemExternallogin extends JPlugin
 	{
 		$app = JFactory::getApplication();
 
-		if ($app->isSite()
+		if ($app->isClient('site')
 			&& $uri->getVar('option') == 'com_users'
 			&& $uri->getVar('view') == 'login'
 			&& JPluginHelper::isEnabled('authentication', 'externallogin'))

@@ -47,7 +47,7 @@ abstract class ModExternalloginsiteHelper
 			$redirect = $params->get('redirect');
 		}
 
-		$ishome = in_array(substr(JFactory::getUri()->toString(), strlen(JUri::base())), array('', 'index.php'));
+		$ishome = in_array(substr((string)JUri::getInstance(), strlen(JUri::base())), array('', 'index.php'));
 		$noredirect = $params->get('noredirect');
 
 		// Get an instance of the generic articles model

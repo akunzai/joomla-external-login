@@ -54,11 +54,10 @@ class ExternalloginViewDownload extends JViewLegacy
 
 		$document = JFactory::getDocument();
 		$document->setMimeEncoding('text/csv');
-		JResponse::setHeader(
+		JApplicationWeb::getInstance()->setHeader(
 			'Content-disposition',
 			'attachment; filename="' . $basename . '.csv"; creation-date="' . JFactory::getDate()->toRFC822() . '"',
-			true
-		);
+			true);
 		$this->get('Content');
 	}
 }

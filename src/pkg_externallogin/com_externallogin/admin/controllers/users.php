@@ -34,9 +34,9 @@ class ExternalloginControllerUsers extends JControllerLegacy
 	 * @param   string      $prefix  Model prefix
 	 * @param   array|null  $config  Array of options
 	 *
-	 * @return  JModel
+	 * @return  ExternalloginModelUser
 	 *
-	 * @see     JController::getModel
+	 * @see     JControllerLegacy::getModel
 	 *
 	 * @since   2.1.0
 	 */
@@ -75,7 +75,7 @@ class ExternalloginControllerUsers extends JControllerLegacy
 			// Publish the items.
 			if (!$model->enableJoomla($cid))
 			{
-				$this->setMessage($model->getError(), 'error');
+				$this->setMessage($model->get('error'), 'error');
 			}
 			else
 			{
@@ -111,12 +111,12 @@ class ExternalloginControllerUsers extends JControllerLegacy
 			$model = $this->getModel();
 
 			// Make sure the item ids are integers
-			JArrayHelper::toInteger($cid);
+			Joomla\Utilities\ArrayHelper::toInteger($cid);
 
 			// Publish the items.
 			if (!$model->disableJoomla($cid))
 			{
-				$this->setMessage($model->getError(), 'error');
+				$this->setMessage($model->get('error'), 'error');
 			}
 			else
 			{
@@ -152,12 +152,12 @@ class ExternalloginControllerUsers extends JControllerLegacy
 			$model = $this->getModel();
 
 			// Make sure the item ids are integers
-			JArrayHelper::toInteger($cid);
+			Joomla\Utilities\ArrayHelper::toInteger($cid);
 
 			// Publish the items.
 			if (!$model->disableExternallogin($cid))
 			{
-				$this->setMessage($model->getError(), 'error');
+				$this->setMessage($model->get('error'), 'error');
 			}
 			else
 			{
@@ -231,7 +231,7 @@ class ExternalloginControllerUsers extends JControllerLegacy
 			// Publish the items.
 			if (!$model->enableExternallogin($cid, $sid))
 			{
-				$this->setMessage($model->getError(), 'error');
+				$this->setMessage($model->get('error'), 'error');
 			}
 			else
 			{
@@ -266,7 +266,7 @@ class ExternalloginControllerUsers extends JControllerLegacy
 		// Check if enable was successful
 		if (!$success)
 		{
-			$app->enqueueMessage($model->getError(), 'error');
+			JFactory::getApplication()->enqueueMessage($model->get('error'), 'error');
 		}
 		else
 		{

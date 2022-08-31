@@ -210,7 +210,7 @@ class PlgAuthenticationExternallogin extends JPlugin
 								// Log autoupdate
 								JLog::add(
 									new ExternalloginLogEntry(
-										$user->getError(),
+										$user->get('error'),
 										JLog::ERROR,
 										'authentication-externallogin-autoupdate'
 									)
@@ -339,7 +339,7 @@ class PlgAuthenticationExternallogin extends JPlugin
 							// Log autoregister
 							JLog::add(
 								new ExternalloginLogEntry(
-									$user->getError(),
+									$user->get('error'),
 									JLog::ERROR,
 									'authentication-externallogin-autoregister'
 								)

@@ -29,7 +29,7 @@ class ExternalloginController extends JControllerLegacy
 	 *
 	 * @since  0.0.1
 	 *
-	 * @see  JController::$default_view
+	 * @see  JControllerLegacy::$default_view
 	 */
 	protected $default_view = 'login';
 }

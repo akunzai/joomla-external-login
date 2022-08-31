@@ -36,7 +36,7 @@ abstract class ModExternalloginadminHelper
 	public static function getListServersURL($params)
 	{
 		$app = JFactory::getApplication();
-		$uri = JFactory::getURI();
+		$uri = JUri::getInstance();
 
 		// Get an instance of the generic articles model
 		/** @var ExternalloginModelServers */

@@ -44,7 +44,7 @@ class ExternalloginViewLogin extends JViewLegacy
 		// Get data from the model
 		$items = $this->get('Items');
 		$state = $this->get('State');
-		$params = JFactory::getApplication()->getParams('com_externallogin');
+		$params = JComponentHelper::getParams('com_externallogin');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))

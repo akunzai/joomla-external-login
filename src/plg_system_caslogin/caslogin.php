@@ -192,12 +192,12 @@ class PlgSystemCaslogin extends JPlugin
 			$input = $app->input;
 
 			// Get the service
-			$uri = JFactory::getURI();
+			$uri = JUri::getInstance();
 
 			// Get the ticket and the server
 			$ticket = $input->get('ticket');
 
-			if ($app->isAdmin())
+			if ($app->isClient('administrator'))
 			{
 				$sid = $input->get('server');
 			}
@@ -435,7 +435,7 @@ class PlgSystemCaslogin extends JPlugin
 									$request = JFactory::getApplication()->input->getInputForRequestMethod();
 
 									// Prepare the connection process
-									if ($app->isAdmin())
+									if ($app->isClient('administrator'))
 									{
 										$input->set('option', 'com_login');
 										$input->set('task', 'login');

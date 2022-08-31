@@ -22,7 +22,7 @@ defined('_JEXEC') or die;
  *
  * @since       2.3.0
  */
-class ExternalloginControllerServer extends JController
+class ExternalloginControllerServer extends JControllerLegacy
 {
 	/**
 	 * Proxy for getModel.
@@ -31,9 +31,9 @@ class ExternalloginControllerServer extends JController
 	 * @param   string      $prefix  Model prefix
 	 * @param   array|null  $config  Options
 	 *
-	 * @return  JModel
+	 * @return  ExternalloginModelServer
 	 *
-	 * @see     JController::getModel
+	 * @see     JControllerLegacy::getModel
 	 *
 	 * @since   2.3.0
 	 */
@@ -61,7 +61,7 @@ class ExternalloginControllerServer extends JController
 
 		if (empty($uri))
 		{
-			$this->setMessage($model->getError(), 'warning');
+			$this->setMessage($model->get('error'), 'warning');
 			$this->setRedirect('index.php', false);
 		}
 		else

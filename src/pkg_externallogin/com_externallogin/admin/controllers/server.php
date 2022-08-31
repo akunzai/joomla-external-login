@@ -97,7 +97,7 @@ class ExternalloginControllerServer extends JControllerForm
 		{
 			$this->setRedirect(
 				JRoute::_('index.php?option=com_externallogin&view=upload&tmpl=component&id=' . $id, false),
-				$model->getError(),
+				$model->get('error'),
 				'error'
 			);
 		}

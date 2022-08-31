@@ -80,7 +80,7 @@ class ExternalloginModelDownload extends JModelLegacy
 		}
 		else
 		{
-			$this->setError(JText::_('COM_EXTERNALLOGIN_ERROR_CANNOT_DOWNLOAD'));
+			$this->set('error', JText::_('COM_EXTERNALLOGIN_ERROR_CANNOT_DOWNLOAD'));
 
 			return false;
 		}

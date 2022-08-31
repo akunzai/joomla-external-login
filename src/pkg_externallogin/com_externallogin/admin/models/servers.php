@@ -151,7 +151,7 @@ class ExternalloginModelServers extends JModelList
 
 		// Filter by servers
 		$servers = $this->getState('filter.servers');
-		JArrayHelper::toInteger($servers);
+		Joomla\Utilities\ArrayHelper::toInteger($servers);
 
 		if (!empty($servers))
 		{

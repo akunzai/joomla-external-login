@@ -146,7 +146,7 @@ class ExternalloginModelServer extends JModelAdmin
 		{
 			if (!empty($pks))
 			{
-				JArrayHelper::toInteger($pks);
+				Joomla\Utilities\ArrayHelper::toInteger($pks);
 				$query = $this->_db->getQuery(true);
 				$query->delete();
 				$query->from('#__externallogin_users');
@@ -244,7 +244,7 @@ class ExternalloginModelServer extends JModelAdmin
 		}
 		else
 		{
-			$this->setError(JText::_('COM_EXTERNALLOGIN_ERROR_BAD_FILE'));
+			$this->set('error', JText::_('COM_EXTERNALLOGIN_ERROR_BAD_FILE'));
 
 			return false;
 		}

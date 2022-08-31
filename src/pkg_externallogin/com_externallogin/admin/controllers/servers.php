@@ -36,7 +36,7 @@ class ExternalloginControllerServers extends JControllerAdmin
 	 *
 	 * @return  JModel
 	 *
-	 * @see     JController::getModel
+	 * @see     JControllerAdmin::getModel
 	 *
 	 * @since   2.0.0
 	 */

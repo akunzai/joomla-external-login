@@ -82,7 +82,7 @@ class ExternalloginModelServer extends JModelItem
 
 		if (!$item->load($id) || $item->published != 1)
 		{
-			$this->setError(JText::_('COM_EXTERNALLOGIN_ERROR_SERVER_UNPUBLISHED'));
+			$this->set('error', JText::_('COM_EXTERNALLOGIN_ERROR_SERVER_UNPUBLISHED'));
 
 			return false;
 		}
@@ -133,7 +133,7 @@ class ExternalloginModelServer extends JModelItem
 		}
 
 		// Compute the URI
-		$uri = JFactory::getURI($url);
+		$uri = JUri::getInstance($url);
 
 		// Return the service/URL
 		if (JFactory::getUser()->guest)
@@ -148,7 +148,7 @@ class ExternalloginModelServer extends JModelItem
 			}
 			else
 			{
-				$this->setError(JText::_('COM_EXTERNALLOGIN_ERROR_OCCURS'));
+				$this->set('error', JText::_('COM_EXTERNALLOGIN_ERROR_OCCURS'));
 			}
 		}
 		else
