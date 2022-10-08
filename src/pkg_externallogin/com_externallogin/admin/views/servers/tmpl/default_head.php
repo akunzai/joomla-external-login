@@ -31,8 +31,10 @@ $listDirn	= $this->escape($this->state->get('list.direction'));
 		<?php echo JHtml::_('grid.sort', 'JSTATUS', 'a.published', $listDirn, $listOrder); ?>
 	</th>
 	<th width="10%">
-		<?php echo JHtml::_('grid.sort',  'JGRID_HEADING_ORDERING', 'a.ordering', $listDirn, $listOrder); ?>
-		<?php if ($listOrder == 'a.ordering') echo JHtml::_('grid.order',  $this->items, 'filesave.png', 'servers.saveorder'); ?>
+		<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ORDERING', 'a.ordering', $listDirn, $listOrder); ?>
+		<?php if ($listOrder == 'a.ordering') {
+		    echo JHtml::_('grid.order', $this->items, 'filesave.png', 'servers.saveorder');
+		} ?>
 	</th>
 	<th width="5%" class="nowrap">
 		<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>

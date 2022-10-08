@@ -17,9 +17,9 @@ defined('_JEXEC') or die;
 echo '<div id="j-sidebar-container" class="span2">' . $this->sidebar . '</div>';
 
 echo JText::sprintf(
-	'COM_EXTERNALLOGIN_ABOUT',
-	'http://www.univ-montp2.fr',
-	JHtml::_('image', 'com_externallogin/administrator/logo_um2.png', 'logo_um2', null, true)
+    'COM_EXTERNALLOGIN_ABOUT',
+    'http://www.univ-montp2.fr',
+    JHtml::_('image', 'com_externallogin/administrator/logo_um2.png', 'logo_um2', null, true)
 );
 ?>
 <br>

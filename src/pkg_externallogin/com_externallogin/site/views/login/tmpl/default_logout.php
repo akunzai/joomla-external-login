@@ -44,7 +44,7 @@ defined('_JEXEC') or die;
 				<button type="submit" class="btn btn-primary"><span class="icon-arrow-left icon-white"></span> <?php echo JText::_('JLOGOUT'); ?></button>
 			</div>
 		</div>
-		<?php // We are forced to encode the url in base64 as com_users uses this encoding ?>
+		<?php // We are forced to encode the url in base64 as com_users uses this encoding?>
 		<input type="hidden" name="return" value="<?php echo base64_encode($this->params->get('logout_redirect_menuitem', JUri::getInstance()->toString())); ?>" />
 		<?php echo JHtml::_('form.token'); ?>
 	</form>

@@ -26,46 +26,42 @@ JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_externallogi
  */
 abstract class ModExternalloginadminHelper
 {
-	/**
-	 * Get the URLs of servers
-	 *
-	 * @param   JRegistry  $params  Module parameters
-	 *
-	 * @return  array  Array of URL
-	 */
-	public static function getListServersURL($params)
-	{
-		$app = JFactory::getApplication();
-		$uri = JUri::getInstance();
+    /**
+     * Get the URLs of servers
+     *
+     * @param   JRegistry  $params  Module parameters
+     *
+     * @return  array  Array of URL
+     */
+    public static function getListServersURL($params)
+    {
+        $app = JFactory::getApplication();
+        $uri = JUri::getInstance();
 
-		// Get an instance of the generic articles model
-		/** @var ExternalloginModelServers */
-		$model = JModelLegacy::getInstance('Servers', 'ExternalloginModel', array('ignore_request' => true));
-		$model->setState('filter.published', 1);
-		$model->setState('filter.enabled', 1);
-		$model->setState('filter.servers', $params->get('server'));
-		$model->setState('list.start', 0);
-		$model->setState('list.limit', 0);
-		$model->setState('list.ordering', 'a.ordering');
-		$model->setState('list.direction', 'ASC');
-		$items = $model->getItems();
+        // Get an instance of the generic articles model
+        /** @var ExternalloginModelServers */
+        $model = JModelLegacy::getInstance('Servers', 'ExternalloginModel', ['ignore_request' => true]);
+        $model->setState('filter.published', 1);
+        $model->setState('filter.enabled', 1);
+        $model->setState('filter.servers', $params->get('server'));
+        $model->setState('list.start', 0);
+        $model->setState('list.limit', 0);
+        $model->setState('list.ordering', 'a.ordering');
+        $model->setState('list.direction', 'ASC');
+        $items = $model->getItems();
 
-		foreach ($items as $i => $item)
-		{
-			$item->params = new JRegistry($item->params);
-			$uri->setVar('server', $item->id);
-			$results = $app->triggerEvent('onGetLoginUrl', array($item, JRoute::_($uri, true)));
+        foreach ($items as $i => $item) {
+            $item->params = new JRegistry($item->params);
+            $uri->setVar('server', $item->id);
+            $results = $app->triggerEvent('onGetLoginUrl', [$item, JRoute::_($uri, true)]);
 
-			if (!empty($results))
-			{
-				$item->url = $results[0];
-			}
-			else
-			{
-				unset($items[$i]);
-			}
-		}
+            if (!empty($results)) {
+                $item->url = $results[0];
+            } else {
+                unset($items[$i]);
+            }
+        }
 
-		return $items;
-	}
+        return $items;
+    }
 }

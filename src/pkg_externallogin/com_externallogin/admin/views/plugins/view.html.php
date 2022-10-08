@@ -27,36 +27,35 @@ jimport('joomla.application.component.view');
  */
 class ExternalloginViewPlugins extends JViewLegacy
 {
-	/**
-	 * Execute and display a layout script.
-	 *
-	 * @param   string  $tpl  The name of the layout file to parse.
-	 *
-	 * @return  void|JError
-	 *
-	 * @see     Overload JView::display
-	 *
-	 * @since   2.0.0
-	 */
-	public function display($tpl = null)
-	{
-		// Get data from the model
-		$items = $this->get('Items');
+    /**
+     * Execute and display a layout script.
+     *
+     * @param   string  $tpl  The name of the layout file to parse.
+     *
+     * @return  void|JError
+     *
+     * @see     Overload JView::display
+     *
+     * @since   2.0.0
+     */
+    public function display($tpl = null)
+    {
+        // Get data from the model
+        $items = $this->get('Items');
 
-		// Check for errors.
-		if (count($errors = $this->get('Errors')))
-		{
-			$app = JFactory::getApplication();
-			$app->enqueueMessage(implode('<br />', $errors), 'error');
-			$app->redirect('index.php');
+        // Check for errors.
+        if (count($errors = $this->get('Errors'))) {
+            $app = JFactory::getApplication();
+            $app->enqueueMessage(implode('<br />', $errors), 'error');
+            $app->redirect('index.php');
 
-			return false;
-		}
+            return false;
+        }
 
-		// Assign data to the view
-		$this->items = $items;
+        // Assign data to the view
+        $this->items = $items;
 
-		// Display the template
-		parent::display($tpl);
-	}
+        // Display the template
+        parent::display($tpl);
+    }
 }

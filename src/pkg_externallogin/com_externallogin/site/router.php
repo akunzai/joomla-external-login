@@ -25,54 +25,46 @@ defined('_JEXEC') or die;
  */
 function externalloginBuildRoute(&$query)
 {
-	// Declare static variables.
-	static $items;
-	static $default;
-	static $login;
+    // Declare static variables.
+    static $items;
+    static $default;
+    static $login;
 
-	// Initialise variables.
-	$segments = array();
+    // Initialise variables.
+    $segments = [];
 
-	// Get the relevant menu items if not loaded.
-	if (empty($items))
-	{
-		// Get all relevant menu items.
-		$app	= JFactory::getApplication();
-		$menu	= $app->getMenu();
-		$items	= $menu->getItems('component', 'com_externallogin');
+    // Get the relevant menu items if not loaded.
+    if (empty($items)) {
+        // Get all relevant menu items.
+        $app	= JFactory::getApplication();
+        $menu	= $app->getMenu();
+        $items	= $menu->getItems('component', 'com_externallogin');
 
-		// Build an array of serialized query strings to menu item id mappings.
-		for ($i = 0, $n = count($items); $i < $n; $i++)
-		{
-			// Check to see if we have found the login menu item.
-			if (empty($login) && !empty($items[$i]->query['view']) && ($items[$i]->query['view'] == 'login'))
-			{
-				$login = $items[$i]->id;
-			}
-		}
-	}
+        // Build an array of serialized query strings to menu item id mappings.
+        for ($i = 0, $n = count($items); $i < $n; $i++) {
+            // Check to see if we have found the login menu item.
+            if (empty($login) && !empty($items[$i]->query['view']) && ($items[$i]->query['view'] == 'login')) {
+                $login = $items[$i]->id;
+            }
+        }
+    }
 
-	if (!empty($query['view']))
-	{
-		switch ($query['view'])
-		{
-			default:
-			case 'login':
-				if (isset($login))
-				{
-					$query['Itemid'] = $login;
-				}
-				else
-				{
-					$segments[] = 'login';
-				}
-				break;
-		}
+    if (!empty($query['view'])) {
+        switch ($query['view']) {
+            default:
+            case 'login':
+                if (isset($login)) {
+                    $query['Itemid'] = $login;
+                } else {
+                    $segments[] = 'login';
+                }
+                break;
+        }
 
-		unset($query['view']);
-	}
+        unset($query['view']);
+    }
 
-	return $segments;
+    return $segments;
 }
 
 /**
@@ -86,16 +78,13 @@ function externalloginBuildRoute(&$query)
  */
 function externalloginParseRoute($segments)
 {
-	// Only run routine if there are segments to parse.
-	if (count($segments) == 0)
-	{
-		return;
-	}
-	else
-	{
-		$view = array_pop($segments);
-		$vars['view'] = $view;
+    // Only run routine if there are segments to parse.
+    if (count($segments) == 0) {
+        return;
+    } else {
+        $view = array_pop($segments);
+        $vars['view'] = $view;
 
-		return $vars;
-	}
+        return $vars;
+    }
 }

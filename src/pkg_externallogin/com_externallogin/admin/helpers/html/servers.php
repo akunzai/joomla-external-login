@@ -24,78 +24,78 @@ defined('_JEXEC') or die;
  */
 abstract class ExternalloginHtmlServers
 {
-	/**
-	 * Returns a published state on a grid
-	 *
-	 * @param   integer  $value    The state value.
-	 * @param   integer  $i        The row index
-	 * @param   boolean  $enabled  An optional setting for access control on the action.
-	 *
-	 * @return  string  The Html code
-	 *
-	 * @see JHtmlJGrid::state
-	 *
-	 * @since   2.0.0
-	 */
-	public static function state($value, $i, $enabled = true)
-	{
-		$states	= array(
-			4	=> array(
-				'unpublish',
-				'COM_EXTERNALLOGIN_GRID_SERVER_UNINSTALLED',
-				'COM_EXTERNALLOGIN_GRID_SERVER_UNPUBLISH',
-				'COM_EXTERNALLOGIN_GRID_SERVER_UNINSTALLED',
-				false,
-				'expired',
-				'expired'
-			),
-			3	=> array(
-				'unpublish',
-				'COM_EXTERNALLOGIN_GRID_SERVER_DISABLED',
-				'COM_EXTERNALLOGIN_GRID_SERVER_UNPUBLISH',
-				'COM_EXTERNALLOGIN_GRID_SERVER_DISABLED',
-				false,
-				'warning',
-				'warning'
-			),
-			2	=> array(
-				'publish',
-				'COM_EXTERNALLOGIN_GRID_SERVER_ARCHIVED',
-				'COM_EXTERNALLOGIN_GRID_SERVER_PUBLISH',
-				'COM_EXTERNALLOGIN_GRID_SERVER_ARCHIVED',
-				false,
-				'archive',
-				'archive'
-			),
-			1	=> array(
-				'unpublish',
-				'COM_EXTERNALLOGIN_GRID_SERVER_PUBLISHED',
-				'COM_EXTERNALLOGIN_GRID_SERVER_UNPUBLISH',
-				'COM_EXTERNALLOGIN_GRID_SERVER_PUBLISHED',
-				false,
-				'publish',
-				'publish'
-			),
-			0	=> array(
-				'publish',
-				'COM_EXTERNALLOGIN_GRID_SERVER_UNPUBLISHED',
-				'COM_EXTERNALLOGIN_GRID_SERVER_PUBLISH',
-				'COM_EXTERNALLOGIN_GRID_SERVER_UNPUBLISHED',
-				false,
-				'unpublish',
-				'unpublish'
-			),
-			-2	=> array(
-				'unpublish',
-				'COM_EXTERNALLOGIN_GRID_SERVER_TRASHED',
-				'COM_EXTERNALLOGIN_GRID_SERVER_UNPUBLISH',
-				'COM_EXTERNALLOGIN_GRID_SERVER_TRASHED',
-				false,
-				'trash',
-				'trash'
-			),
-		);
+    /**
+     * Returns a published state on a grid
+     *
+     * @param   integer  $value    The state value.
+     * @param   integer  $i        The row index
+     * @param   boolean  $enabled  An optional setting for access control on the action.
+     *
+     * @return  string  The Html code
+     *
+     * @see JHtmlJGrid::state
+     *
+     * @since   2.0.0
+     */
+    public static function state($value, $i, $enabled = true)
+    {
+        $states	= [
+            4	=> [
+                'unpublish',
+                'COM_EXTERNALLOGIN_GRID_SERVER_UNINSTALLED',
+                'COM_EXTERNALLOGIN_GRID_SERVER_UNPUBLISH',
+                'COM_EXTERNALLOGIN_GRID_SERVER_UNINSTALLED',
+                false,
+                'expired',
+                'expired',
+            ],
+            3	=> [
+                'unpublish',
+                'COM_EXTERNALLOGIN_GRID_SERVER_DISABLED',
+                'COM_EXTERNALLOGIN_GRID_SERVER_UNPUBLISH',
+                'COM_EXTERNALLOGIN_GRID_SERVER_DISABLED',
+                false,
+                'warning',
+                'warning',
+            ],
+            2	=> [
+                'publish',
+                'COM_EXTERNALLOGIN_GRID_SERVER_ARCHIVED',
+                'COM_EXTERNALLOGIN_GRID_SERVER_PUBLISH',
+                'COM_EXTERNALLOGIN_GRID_SERVER_ARCHIVED',
+                false,
+                'archive',
+                'archive',
+            ],
+            1	=> [
+                'unpublish',
+                'COM_EXTERNALLOGIN_GRID_SERVER_PUBLISHED',
+                'COM_EXTERNALLOGIN_GRID_SERVER_UNPUBLISH',
+                'COM_EXTERNALLOGIN_GRID_SERVER_PUBLISHED',
+                false,
+                'publish',
+                'publish',
+            ],
+            0	=> [
+                'publish',
+                'COM_EXTERNALLOGIN_GRID_SERVER_UNPUBLISHED',
+                'COM_EXTERNALLOGIN_GRID_SERVER_PUBLISH',
+                'COM_EXTERNALLOGIN_GRID_SERVER_UNPUBLISHED',
+                false,
+                'unpublish',
+                'unpublish',
+            ],
+            -2	=> [
+                'unpublish',
+                'COM_EXTERNALLOGIN_GRID_SERVER_TRASHED',
+                'COM_EXTERNALLOGIN_GRID_SERVER_UNPUBLISH',
+                'COM_EXTERNALLOGIN_GRID_SERVER_TRASHED',
+                false,
+                'trash',
+                'trash',
+            ],
+        ];
 
-		return JHtml::_('jgrid.state', $states, $value, $i, 'servers.', $enabled, true, 'cb');
-	}
+        return JHtml::_('jgrid.state', $states, $value, $i, 'servers.', $enabled, true, 'cb');
+    }
 }

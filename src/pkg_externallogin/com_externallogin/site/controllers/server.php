@@ -24,49 +24,46 @@ defined('_JEXEC') or die;
  */
 class ExternalloginControllerServer extends JControllerLegacy
 {
-	/**
-	 * Proxy for getModel.
-	 *
-	 * @param   string      $name    Model name
-	 * @param   string      $prefix  Model prefix
-	 * @param   array|null  $config  Options
-	 *
-	 * @return  ExternalloginModelServer
-	 *
-	 * @see     JControllerLegacy::getModel
-	 *
-	 * @since   2.3.0
-	 */
-	public function getModel($name = 'Server', $prefix = 'ExternalloginModel', $config = null)
-	{
-		return parent::getModel($name, $prefix, isset($config) ? $config : array('ignore_request' => true));
-	}
+    /**
+     * Proxy for getModel.
+     *
+     * @param   string      $name    Model name
+     * @param   string      $prefix  Model prefix
+     * @param   array|null  $config  Options
+     *
+     * @return  ExternalloginModelServer
+     *
+     * @see     JControllerLegacy::getModel
+     *
+     * @since   2.3.0
+     */
+    public function getModel($name = 'Server', $prefix = 'ExternalloginModel', $config = null)
+    {
+        return parent::getModel($name, $prefix, $config ?? ['ignore_request' => true]);
+    }
 
-	/**
-	 * Login task.
-	 *
-	 * @return  void
-	 *
-	 * @since   2.3.0
-	 */
-	public function login()
-	{
-		JSession::checkToken('post') or jexit(JText::_('JInvalid_Token'));
+    /**
+     * Login task.
+     *
+     * @return  void
+     *
+     * @since   2.3.0
+     */
+    public function login()
+    {
+        JSession::checkToken('post') or jexit(JText::_('JInvalid_Token'));
 
-		// Get the model
-		$model = $this->getModel();
+        // Get the model
+        $model = $this->getModel();
 
-		// Get the uri
-		$uri = $model->getItem();
+        // Get the uri
+        $uri = $model->getItem();
 
-		if (empty($uri))
-		{
-			$this->setMessage($model->get('error'), 'warning');
-			$this->setRedirect('index.php', false);
-		}
-		else
-		{
-			$this->setRedirect(JRoute::_($uri, false));
-		}
-	}
+        if (empty($uri)) {
+            $this->setMessage($model->get('error'), 'warning');
+            $this->setRedirect('index.php', false);
+        } else {
+            $this->setRedirect(JRoute::_($uri, false));
+        }
+    }
 }

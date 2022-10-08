@@ -65,7 +65,7 @@ $fieldSets = $this->form->getFieldsets();
 		</div>
 	</div>
 	<div>
-		<input type="hidden" name="plugin" value="<?php echo htmlspecialchars($this->item->plugin, ENT_COMPAT , 'UTF-8'); ?>" />
+		<input type="hidden" name="plugin" value="<?php echo htmlspecialchars($this->item->plugin, ENT_COMPAT, 'UTF-8'); ?>" />
 		<input type="hidden" name="task" value="" />
 		<?php echo JHtml::_('form.token'); ?>
 	</div>

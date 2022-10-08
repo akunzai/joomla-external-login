@@ -18,13 +18,10 @@ defined('_JEXEC') or die;
 JHtml::_('behavior.tooltip');
 
 // Set url for form action
-if (!isset($this->globalS))
-{
-	$frmAct = JRoute::_('index.php?option=com_externallogin&view=servers&tmpl=component&layout=modal');
-}
-else
-{
-	$frmAct = JRoute::_('index.php?option=com_externallogin&view=servers&tmpl=component&layout=modal&globalS=1');
+if (!isset($this->globalS)) {
+    $frmAct = JRoute::_('index.php?option=com_externallogin&view=servers&tmpl=component&layout=modal');
+} else {
+    $frmAct = JRoute::_('index.php?option=com_externallogin&view=servers&tmpl=component&layout=modal&globalS=1');
 }
 
 ?>

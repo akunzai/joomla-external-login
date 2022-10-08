@@ -19,19 +19,19 @@ defined('_JEXEC') or die;
 	<fieldset class="loginform">
 <?php
 if ($enabled):
-	switch ($count):
-		case 0:
-			require JModuleHelper::getLayoutPath('mod_externallogin_admin', 'zero');
-			break;
-		case 1:
-			require JModuleHelper::getLayoutPath('mod_externallogin_admin', 'alone');
-			break;
-		default:
-			require JModuleHelper::getLayoutPath('mod_externallogin_admin', 'form');
-			break;
-	endswitch;
+    switch ($count):
+        case 0:
+            require JModuleHelper::getLayoutPath('mod_externallogin_admin', 'zero');
+            break;
+        case 1:
+            require JModuleHelper::getLayoutPath('mod_externallogin_admin', 'alone');
+            break;
+        default:
+            require JModuleHelper::getLayoutPath('mod_externallogin_admin', 'form');
+            break;
+    endswitch;
 else:
-	require JModuleHelper::getLayoutPath('mod_externallogin_admin', 'disabled');
+    require JModuleHelper::getLayoutPath('mod_externallogin_admin', 'disabled');
 endif;
 ?>
 	</fieldset>

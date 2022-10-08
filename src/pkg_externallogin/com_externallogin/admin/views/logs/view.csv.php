@@ -27,37 +27,37 @@ jimport('joomla.application.component.view');
  */
 class ExternalloginViewLogs extends JViewLegacy
 {
-	/**
-	 * Execute and display a layout script.
-	 *
-	 * @param   string  $tpl  The name of the layout file to parse.
-	 *
-	 * @return  void|JError
-	 *
-	 * @see     Overload JView::display
-	 *
-	 * @since   2.1.0
-	 */
-	public function display($tpl = null)
-	{
-		$basename = $this->get('BaseName');
+    /**
+     * Execute and display a layout script.
+     *
+     * @param   string  $tpl  The name of the layout file to parse.
+     *
+     * @return  void|JError
+     *
+     * @see     Overload JView::display
+     *
+     * @since   2.1.0
+     */
+    public function display($tpl = null)
+    {
+        $basename = $this->get('BaseName');
 
-		// Check for errors.
-		if (count($errors = $this->get('Errors')))
-		{
-			$app = JFactory::getApplication();
-			$app->enqueueMessage(implode('<br />', $errors), 'error');
-			$app->redirect('index.php');
+        // Check for errors.
+        if (count($errors = $this->get('Errors'))) {
+            $app = JFactory::getApplication();
+            $app->enqueueMessage(implode('<br />', $errors), 'error');
+            $app->redirect('index.php');
 
-			return false;
-		}
+            return false;
+        }
 
-		$document = JFactory::getDocument();
-		$document->setMimeEncoding('text/csv');
-		JApplicationWeb::getInstance()->setHeader(
-			'Content-disposition',
-			'attachment; filename="' . $basename . '.csv"; creation-date="' . JFactory::getDate()->toRFC822() . '"',
-			true);
-		$this->get('Content');
-	}
+        $document = JFactory::getDocument();
+        $document->setMimeEncoding('text/csv');
+        JApplicationWeb::getInstance()->setHeader(
+            'Content-disposition',
+            'attachment; filename="' . $basename . '.csv"; creation-date="' . JFactory::getDate()->toRFC822() . '"',
+            true
+        );
+        $this->get('Content');
+    }
 }

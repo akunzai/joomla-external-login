@@ -26,57 +26,57 @@ jimport('joomla.application.component.view');
  */
 class ExternalloginViewAbout extends JViewLegacy
 {
-	/**
-	 * Execute and display a layout script.
-	 *
-	 * @param   string  $tpl  The name of the layout file to parse.
-	 *
-	 * @return  void|JError
-	 *
-	 * @see     Overload JView::display
-	 *
-	 * @since   2.0.0
-	 */
-	public function display($tpl = null)
-	{
-		// Set the toolbar
-		$this->addToolBar();
+    /**
+     * Execute and display a layout script.
+     *
+     * @param   string  $tpl  The name of the layout file to parse.
+     *
+     * @return  void|JError
+     *
+     * @see     Overload JView::display
+     *
+     * @since   2.0.0
+     */
+    public function display($tpl = null)
+    {
+        // Set the toolbar
+        $this->addToolBar();
 
-		$this->sidebar = JHtml::_('sidebar.render');
+        $this->sidebar = JHtml::_('sidebar.render');
 
-		// Display the template
-		parent::display($tpl);
-	}
+        // Display the template
+        parent::display($tpl);
+    }
 
-	/**
-	 * Setting the toolbar
-	 *
-	 * @return  void
-	 *
-	 * @since   2.0.0
-	 */
-	protected function addToolbar()
-	{
-		// Load specific css component
-		JHtml::_('stylesheet', 'com_externallogin/administrator/externallogin.css', array(), true);
+    /**
+     * Setting the toolbar
+     *
+     * @return  void
+     *
+     * @since   2.0.0
+     */
+    protected function addToolbar()
+    {
+        // Load specific css component
+        JHtml::_('stylesheet', 'com_externallogin/administrator/externallogin.css', [], true);
 
-		// Set the title
-		$title = JText::_('COM_EXTERNALLOGIN_MANAGER_ABOUT');
-		$layout = new JLayoutFile('joomla.toolbar.title');
-		$html   = $layout->render(array('title' => $title, 'icon' => 'help'));
-		$app = JFactory::getApplication();
-		$app->JComponentTitle = $html;
-		JFactory::getDocument()->setTitle(strip_tags($title) . ' - ' . $app->get('sitename') . ' - ' . JText::_('JADMINISTRATION'));
+        // Set the title
+        $title = JText::_('COM_EXTERNALLOGIN_MANAGER_ABOUT');
+        $layout = new JLayoutFile('joomla.toolbar.title');
+        $html   = $layout->render(['title' => $title, 'icon' => 'help']);
+        $app = JFactory::getApplication();
+        $app->JComponentTitle = $html;
+        JFactory::getDocument()->setTitle(strip_tags($title) . ' - ' . $app->get('sitename') . ' - ' . JText::_('JADMINISTRATION'));
 
-		$bar = JToolbar::getInstance('toolbar');
-		$return = urlencode(base64_encode((string) JUri::getInstance()));
-		$bar->appendButton('Link', 'options', 'JToolbar_Options', 'index.php?option=com_config&amp;view=component&amp;component=com_externallogin&amp;return=' . $return);
-		$bar->appendButton('Separator', 'divider');
-		$bar->appendButton('Help', 'COM_EXTERNALLOGIN_HELP_MANAGER_ABOUT', false, null, null);
+        $bar = JToolbar::getInstance('toolbar');
+        $return = urlencode(base64_encode((string) JUri::getInstance()));
+        $bar->appendButton('Link', 'options', 'JToolbar_Options', 'index.php?option=com_config&amp;view=component&amp;component=com_externallogin&amp;return=' . $return);
+        $bar->appendButton('Separator', 'divider');
+        $bar->appendButton('Help', 'COM_EXTERNALLOGIN_HELP_MANAGER_ABOUT', false, null, null);
 
-		JHtml::_('sidebar.addentry', JText::_('COM_EXTERNALLOGIN_SUBMENU_SERVERS'), 'index.php?option=com_externallogin', false);
-		JHtml::_('sidebar.addentry', JText::_('COM_EXTERNALLOGIN_SUBMENU_USERS'), 'index.php?option=com_externallogin&view=users', false);
-		JHtml::_('sidebar.addentry', JText::_('COM_EXTERNALLOGIN_SUBMENU_LOGS'), 'index.php?option=com_externallogin&view=logs', false);
-		JHtml::_('sidebar.addentry', JText::_('COM_EXTERNALLOGIN_SUBMENU_ABOUT'), 'index.php?option=com_externallogin&view=about', true);
-	}
+        JHtml::_('sidebar.addentry', JText::_('COM_EXTERNALLOGIN_SUBMENU_SERVERS'), 'index.php?option=com_externallogin', false);
+        JHtml::_('sidebar.addentry', JText::_('COM_EXTERNALLOGIN_SUBMENU_USERS'), 'index.php?option=com_externallogin&view=users', false);
+        JHtml::_('sidebar.addentry', JText::_('COM_EXTERNALLOGIN_SUBMENU_LOGS'), 'index.php?option=com_externallogin&view=logs', false);
+        JHtml::_('sidebar.addentry', JText::_('COM_EXTERNALLOGIN_SUBMENU_ABOUT'), 'index.php?option=com_externallogin&view=about', true);
+    }
 }

@@ -27,21 +27,21 @@ jimport('joomla.application.component.controlleradmin');
  */
 class ExternalloginControllerServers extends JControllerAdmin
 {
-	/**
-	 * Proxy for getModel.
-	 *
-	 * @param   string      $name    Model name
-	 * @param   string      $prefix  Model prefix
-	 * @param   array|null  $config  Array of options
-	 *
-	 * @return  JModel
-	 *
-	 * @see     JControllerAdmin::getModel
-	 *
-	 * @since   2.0.0
-	 */
-	public function getModel($name = 'Server', $prefix = 'ExternalloginModel', $config = null)
-	{
-		return parent::getModel($name, $prefix, isset($config) ? $config : array('ignore_request' => true));
-	}
+    /**
+     * Proxy for getModel.
+     *
+     * @param   string      $name    Model name
+     * @param   string      $prefix  Model prefix
+     * @param   array|null  $config  Array of options
+     *
+     * @return  JModel
+     *
+     * @see     JControllerAdmin::getModel
+     *
+     * @since   2.0.0
+     */
+    public function getModel($name = 'Server', $prefix = 'ExternalloginModel', $config = null)
+    {
+        return parent::getModel($name, $prefix, $config ?? ['ignore_request' => true]);
+    }
 }

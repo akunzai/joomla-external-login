@@ -21,7 +21,7 @@ JHtml::_('formbehavior.chosen', 'select');
 
 JHtml::_('behavior.framework', true);
 JHtml::_('script', 'system/modal.js', true, true);
-JHtml::_('stylesheet', 'system/modal.css', array(), true);
+JHtml::_('stylesheet', 'system/modal.css', [], true);
 
 $listOrder	= $this->escape($this->state->get('list.ordering'));
 $listDirn	= $this->escape($this->state->get('list.direction'));
@@ -66,7 +66,7 @@ Joomla.submitbutton = function(pressbutton)
 ");
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_externallogin&view=servers'); ?>" method="post" name="adminForm" id="adminForm">
-	<?php if (!empty( $this->sidebar)) : ?>
+	<?php if (!empty($this->sidebar)) : ?>
 	<div id="j-sidebar-container" class="span2">
 		<?php echo $this->sidebar; ?>
 	</div>

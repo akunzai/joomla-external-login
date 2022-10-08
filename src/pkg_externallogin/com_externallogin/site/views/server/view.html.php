@@ -27,33 +27,32 @@ jimport('joomla.application.component.view');
  */
 class ExternalloginViewServer extends JViewLegacy
 {
-	/**
-	 * Execute and display a layout script.
-	 *
-	 * @param   string  $tpl  The name of the layout file to parse.
-	 *
-	 * @return  void|JError
-	 *
-	 * @see     Overload JView::display
-	 *
-	 * @since   2.0.0
-	 */
-	public function display($tpl = null)
-	{
-		// Get data from the model
-		$item = $this->get('Item');
-		$state = $this->get('State');
-		$app = JFactory::getApplication();
+    /**
+     * Execute and display a layout script.
+     *
+     * @param   string  $tpl  The name of the layout file to parse.
+     *
+     * @return  void|JError
+     *
+     * @see     Overload JView::display
+     *
+     * @since   2.0.0
+     */
+    public function display($tpl = null)
+    {
+        // Get data from the model
+        $item = $this->get('Item');
+        $state = $this->get('State');
+        $app = JFactory::getApplication();
 
-		// Check for errors.
-		if (count($errors = $this->get('Errors')))
-		{
-			$app->enqueueMessage(implode('<br />', $errors), 'error');
-			$app->redirect('index.php');
+        // Check for errors.
+        if (count($errors = $this->get('Errors'))) {
+            $app->enqueueMessage(implode('<br />', $errors), 'error');
+            $app->redirect('index.php');
 
-			return false;
-		}
+            return false;
+        }
 
-		$app->redirect($item);
-	}
+        $app->redirect($item);
+    }
 }

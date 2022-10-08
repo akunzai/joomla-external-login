@@ -27,29 +27,27 @@ jimport('joomla.application.component.model');
  */
 class ExternalloginModelPlugins extends JModelLegacy
 {
-	/**
-	 * Get plugins
-	 *
-	 * @return  array  Array of buttons
-	 *
-	 * @since  2.0.0
-	 */
-	public function getItems()
-	{
-		$items = array();
+    /**
+     * Get plugins
+     *
+     * @return  array  Array of buttons
+     *
+     * @since  2.0.0
+     */
+    public function getItems()
+    {
+        $items = [];
 
-		// Include buttons defined by published external login plugins
-		$app = JFactory::getApplication();
-		$arrays = (array) $app->triggerEvent('onGetIcons', array('com_externallogin'));
+        // Include buttons defined by published external login plugins
+        $app = JFactory::getApplication();
+        $arrays = (array) $app->triggerEvent('onGetIcons', ['com_externallogin']);
 
-		foreach ($arrays as $response)
-		{
-			foreach ($response as $plugin)
-			{
-				$items[] = $plugin;
-			}
-		}
+        foreach ($arrays as $response) {
+            foreach ($response as $plugin) {
+                $items[] = $plugin;
+            }
+        }
 
-		return $items;
-	}
+        return $items;
+    }
 }

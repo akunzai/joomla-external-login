@@ -24,24 +24,23 @@ defined('_JEXEC') or die;
  */
 class ExternalloginLogEntry extends JLogEntry
 {
-	/**
-	 * Constructor
-	 *
-	 * @param   string  $message   The message to log.
-	 * @param   string  $priority  Message priority based on {$this->priorities}.
-	 * @param   string  $category  Type of entry
-	 * @param   string  $date      Date of entry (defaults to now if not specified or blank)
-	 *
-	 * @since   11.1
-	 */
-	public function __construct($message, $priority = JLog::INFO, $category = '', $date = null)
-	{
-		if (empty($date))
-		{
-			list($microtime, $time) = explode(' ', microtime());
-			$date = date('Y-m-d H:i:s', $time) . trim($microtime, '0');
-		}
+    /**
+     * Constructor
+     *
+     * @param   string  $message   The message to log.
+     * @param   string  $priority  Message priority based on {$this->priorities}.
+     * @param   string  $category  Type of entry
+     * @param   string  $date      Date of entry (defaults to now if not specified or blank)
+     *
+     * @since   11.1
+     */
+    public function __construct($message, $priority = JLog::INFO, $category = '', $date = null)
+    {
+        if (empty($date)) {
+            [$microtime, $time] = explode(' ', microtime());
+            $date = date('Y-m-d H:i:s', $time) . trim($microtime, '0');
+        }
 
-		parent::__construct($message, $priority, $category, $date);
-	}
+        parent::__construct($message, $priority, $category, $date);
+    }
 }

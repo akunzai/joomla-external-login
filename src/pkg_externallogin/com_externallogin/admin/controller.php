@@ -24,12 +24,12 @@ defined('_JEXEC') or die;
  */
 class ExternalloginController extends JControllerLegacy
 {
-	/**
-	 * @var  string  The default view for the display method.
-	 *
-	 * @since  0.0.1
-	 *
-	 * @see  JControllerLegacy::$default_view
-	 */
-	protected $default_view = 'servers';
+    /**
+     * @var  string  The default view for the display method.
+     *
+     * @since  0.0.1
+     *
+     * @see  JControllerLegacy::$default_view
+     */
+    protected $default_view = 'servers';
 }

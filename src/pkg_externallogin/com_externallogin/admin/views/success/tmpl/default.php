@@ -17,4 +17,3 @@ defined('_JEXEC') or die;
 JFactory::getDocument()->addScriptDeclaration('window.parent.addEvent(\'domready\', function() {
 	window.top.setTimeout(\'window.parent.SqueezeBox.close()\', 2000);
 });');
-

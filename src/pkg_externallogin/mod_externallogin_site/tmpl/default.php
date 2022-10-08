@@ -19,22 +19,22 @@ defined('_JEXEC') or die;
 	<form action="<?php echo JRoute::_('index.php', true, $params->get('usesecure')); ?>" method="post" id="external-login">
 		<fieldset class="loginform">
 	<?php
-	if ($enabled):
-		switch ($count):
-			case 0:
-				require JModuleHelper::getLayoutPath('mod_externallogin_site', 'zero');
-				break;
-			case 1:
-				require JModuleHelper::getLayoutPath('mod_externallogin_site', 'alone');
-				break;
-			default:
-				require JModuleHelper::getLayoutPath('mod_externallogin_site', 'form');
-				break;
-		endswitch;
-	else:
-		require JModuleHelper::getLayoutPath('mod_externallogin_site', 'disabled');
-	endif;
-	?>
+    if ($enabled):
+        switch ($count):
+            case 0:
+                require JModuleHelper::getLayoutPath('mod_externallogin_site', 'zero');
+                break;
+            case 1:
+                require JModuleHelper::getLayoutPath('mod_externallogin_site', 'alone');
+                break;
+            default:
+                require JModuleHelper::getLayoutPath('mod_externallogin_site', 'form');
+                break;
+        endswitch;
+    else:
+        require JModuleHelper::getLayoutPath('mod_externallogin_site', 'disabled');
+    endif;
+?>
 		</fieldset>
 	</form>
 	<div class="clr"></div>
