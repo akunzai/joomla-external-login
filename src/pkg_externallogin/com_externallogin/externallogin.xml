@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="component" version="@JOOMLAVERSION@" method="upgrade">
+<extension type="component" version="3" method="upgrade">
 
 	<name>COM_EXTERNALLOGIN</name>
 
 	<!-- The following elements are optional and free of formatting conttraints -->
 	<creationDate>July 2008</creationDate>
-	<author>Christophe Demko, Ioannis Barounis, Alexandre Gandois</author>
-	<authorEmail>externallogin@chdemko.com</authorEmail>
-	<authorUrl>http://www.chdemko.com</authorUrl>
-	<copyright>Copyright (C) 2008-2018 Christophe Demko, Ioannis Barounis, Alexandre Gandois.</copyright>
-	<license>http://www.gnu.org/licenses/gpl-2.0.html</license>
+	<author>Christophe Demko, Ioannis Barounis, Alexandre Gandois, others, see contributor page</author>
+	<authorUrl>https://github.com/akunzai/joomla-external-login</authorUrl>
+	<license>GNU General Public License version 2 or later; see LICENSE</license>
 
 	<!--  The version string is recorded in the extension table -->
-	<version>@VERSION@</version>
+	<version>##VERSION##</version>
 
 	<!-- The description is optional and defaults to the name -->
 	<description>COM_EXTERNALLOGIN_DESCRIPTION</description>
@@ -110,4 +108,3 @@
 	</administration>
 
 </extension>
-

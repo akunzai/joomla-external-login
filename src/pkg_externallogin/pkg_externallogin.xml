@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="package" version="3" method="upgrade">
+
+	<name>pkg_externallogin</name>
+
+	<!-- The following elements are optional and free of formatting conttraints -->
+	<creationDate>May 2012</creationDate>
+	<author>Christophe Demko, Ioannis Barounis, Alexandre Gandois, others, see contributor page</author>
+	<authorUrl>https://github.com/akunzai/joomla-external-login</authorUrl>
+	<license>GNU General Public License version 2 or later; see LICENSE</license>
+
+	<!--  The version string is recorded in the extension table -->
+	<version>##VERSION##</version>
+
+	<!-- The description is optional and defaults to the name -->
+	<description>PKG_EXTERNALLOGIN_DESCRIPTION</description>
+
+	<url>https://www.github/akunzai/joomla-externallogin</url>
+	<packagename>externallogin</packagename>
+
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.pkg_externallogin.sys.ini</language>
+	</languages>
+
+	<files>
+		<file type="component" id="com_externallogin">com_externallogin.zip</file>
+		<file type="module" id="mod_externallogin_site" client="site">mod_externallogin_site.zip</file>
+		<file type="module" id="mod_externallogin_admin" client="administrator">mod_externallogin_admin.zip</file>
+		<file type="plugin" id="externallogin" group="authentication">plg_authentication_externallogin.zip</file>
+		<file type="plugin" id="externallogin" group="system">plg_system_externallogin.zip</file>
+	</files>
+
+	<!-- UPDATESERVER DEFINITION -->
+	<updateservers>
+		<!-- Note: No spaces or linebreaks allowed between the server tags -->
+		<server type="extension" priority="1" name="External Login Update Site">https://raw.githubusercontent.com/akunzai/joomla-external-login/main/manifest.xml</server>
+	</updateservers>
+
+</extension>

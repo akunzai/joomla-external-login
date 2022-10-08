@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension version="@JOOMLAVERSION@" type="plugin" group="system" method="upgrade">
+<extension version="3" type="plugin" group="system" method="upgrade">
 
 	<name>PLG_SYSTEM_CASLOGIN</name>
 
 	<!-- The following elements are optional and free of formatting conttraints -->
 	<creationDate>July 2008</creationDate>
-	<author>Christophe Demko, Ioannis Barounis, Alexandre Gandois</author>
-	<authorEmail>external-login@chdemko.com</authorEmail>
-	<authorUrl>http://www.chdemko.com</authorUrl>
-	<copyright>Copyright (C) 2008-2018 Christophe Demko, Ioannis Barounis, Alexandre Gandois.</copyright>
-	<license>http://www.gnu.org/licenses/gpl-2.0.html</license>
+	<author>Christophe Demko, Ioannis Barounis, Alexandre Gandois, others, see contributor page</author>
+	<authorUrl>https://github.com/akunzai/joomla-external-login</authorUrl>
+	<license>GNU General Public License version 2 or later; see LICENSE</license>
 
 	<!--  The version string is recorded in the extension table -->
-	<version>@VERSION@</version>
+	<version>##VERSION##</version>
 
 	<!-- The description is optional and defaults to the name -->
 	<description>PLG_SYSTEM_CASLOGIN_DESCRIPTION</description>
@@ -36,7 +34,7 @@
 	<!-- UPDATESERVER DEFINITION -->
 	<updateservers>
 		<!-- Note: No spaces or linebreaks allowed between the server tags -->
-		<server type="collection" priority="1" name="External Login Update Site">@SERVER@/server-@SHORTVERSION@.xml</server>
+		<server type="extension" priority="1" name="External Login Update Site">https://raw.githubusercontent.com/akunzai/joomla-external-login/main/manifest.xml</server>
 	</updateservers>
 
 </extension>

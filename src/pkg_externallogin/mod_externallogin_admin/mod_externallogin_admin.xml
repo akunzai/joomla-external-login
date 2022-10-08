@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="module" version="@JOOMLAVERSION@" client="administrator" method="upgrade">
+<extension type="module" version="3" client="administrator" method="upgrade">
 
 	<name>MOD_EXTERNALLOGIN_ADMIN</name>
 
 	<!-- The following elements are optional and free of formatting conttraints -->
 	<creationDate>July 2008</creationDate>
-	<author>Christophe Demko, Ioannis Barounis, Alexandre Gandois</author>
-	<authorEmail>external-login@chdemko.com</authorEmail>
-	<authorUrl>http://www.chdemko.com</authorUrl>
-	<copyright>Copyright (C) 2008-2018 Christophe Demko, Ioannis Barounis, Alexandre Gandois.</copyright>
-	<license>http://www.gnu.org/licenses/gpl-2.0.html</license>
+	<author>Christophe Demko, Ioannis Barounis, Alexandre Gandois, others, see contributor page</author>
+	<authorUrl>https://github.com/akunzai/joomla-external-login</authorUrl>
+	<license>GNU General Public License version 2 or later; see LICENSE</license>
 
 	<!--  The version string is recorded in the extension table -->
-	<version>@VERSION@</version>
+	<version>##VERSION##</version>
 
 	<!-- The description is optional and defaults to the name -->
 	<description>MOD_EXTERNALLOGIN_ADMIN_DESCRIPTION</description>
@@ -52,4 +50,3 @@
 	</config>
 
 </extension>
-
