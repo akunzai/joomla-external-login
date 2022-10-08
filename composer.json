@@ -1,9 +1,13 @@
 {
-	"name": "chdemko/joomla-external-login",
+	"name": "akunzai/joomla-external-login",
 	"type": "project",
 	"description": "External Login for Joomla!",
-	"keywords": ["external","login","Joomla!"],
-	"homepage": "http://github.com/chdemko/joomla-external-login",
+	"keywords": [
+		"external",
+		"login",
+		"Joomla!"
+	],
+	"homepage": "http://github.com/akunzai/joomla-external-login",
 	"license": "GNU General Public License, version 2",
 	"authors": [
 		{
@@ -14,20 +18,17 @@
 		}
 	],
 	"require": {
-		"php": ">=5.5.0",
-		"alchemy/zippy": "~0.4",
-		"symfony/yaml": "~2.3"
+		"php": ">=7.4.0"
 	},
 	"require-dev": {
-		"phpdocumentor/phpdocumentor": "2.9.*",
-		"php-coveralls/php-coveralls": "^2.0",
-		"joomla/coding-standards": "~2.0@alpha",
-		"phpunit/phpunit": "^7.0"
+		"alchemy/zippy": "^1.0",
+		"symfony/yaml": "^6.1",
+		"friendsofphp/php-cs-fixer": "^3.11"
 	},
 	"scripts": {
-		"style": [
-			"phpcs --report=full --extensions=php --standard=ruleset.xml src/ --ignore=tmpl",
-			"phpcs --report=full --standard=ruleset.xml bin/* bin/*/*"
+		"lint": [
+			"! find . -type f -name '*.php' -exec php -d display_errors=1 -d error_reporting=-1 -l {} \\; 2>&1 | grep -v ^'No syntax errors'",
+			"php-cs-fixer fix --diff --dry-run"
 		],
 		"build": [
 			"bin/server",
