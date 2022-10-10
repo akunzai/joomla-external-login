@@ -14,7 +14,6 @@
 // No direct access to this file
 defined('_JEXEC') or die;
 ?>
-<?php if ($module->showtitle != 0):?>
+<?php if ($module->showtitle != 0) : ?>
 	<h3><?php echo $module->title; ?></h3>
 <?php endif; ?>
-
