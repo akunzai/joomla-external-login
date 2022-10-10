@@ -1,0 +1,13 @@
+parameters:
+  level: 0
+  paths:
+    - src
+  scanFiles:
+    - vendor/hamidionline/joomla-stubs/stubs.php
+  scanDirectories:
+    - vendor/joomla/joomla-cms/administrator/includes
+    - vendor/joomla/joomla-cms/includes
+    - vendor/joomla/joomla-cms/libraries
+  ignoreErrors:
+    - '#Class [a-zA-Z0-9\\_]+ referenced with incorrect case: [a-zA-Z0-9\\_]+.#'
+    - '#Access to an undefined property [a-zA-Z0-9\\_]+::\$[a-z]+.#'
