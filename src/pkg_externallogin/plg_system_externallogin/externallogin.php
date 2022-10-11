@@ -173,6 +173,7 @@ class PlgSystemExternallogin extends JPlugin
                 return true;
             }
         }
+        return false;
     }
 
     /**

@@ -29,3 +29,5 @@ jobs:
         run: composer install --prefer-dist --no-progress
       - name: Lint
         run: composer lint
+      - name: PHPStan Static Analysis
+        run: composer exec phpstan -- analyse --no-progress --no-interaction

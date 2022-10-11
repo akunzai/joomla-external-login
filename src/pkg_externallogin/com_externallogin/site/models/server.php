@@ -70,7 +70,7 @@ class ExternalloginModelServer extends JModelItem
     /**
      * Returns the server
      *
-     * @return	JTable  A database object
+     * @return	JUri|string|void  the service URI
      *
      * @since	2.0.0
      */

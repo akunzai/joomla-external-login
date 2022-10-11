@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "491bb47fea2a292aaee516f8a2f9e4b8",
+    "content-hash": "d70a0cb31a099c9191f1979d540a214e",
     "packages": [],
     "packages-dev": [
         {
@@ -462,6 +462,89 @@
                 }
             ],
             "time": "2022-09-01T18:24:51+00:00"
+        },
+        {
+            "name": "hamidionline/joomla-stubs",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hamidionline/joomla-stubs",
+                "reference": "master"
+            },
+            "type": "library"
+        },
+        {
+            "name": "joomla/joomla-cms",
+            "version": "3.10.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/joomla/joomla-cms.git",
+                "reference": "tags/3.10.11"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/joomla/joomla-cms/releases/download/3.10.11/Joomla_3.10.11-Stable-Full_Package.zip"
+            },
+            "type": "library"
+        },
+        {
+            "name": "phpstan/phpstan",
+            "version": "1.8.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/phpstan.git",
+                "reference": "08310ce271984587e2a4cda94e1ac66510a6ea07"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/08310ce271984587e2a4cda94e1ac66510a6ea07",
+                "reference": "08310ce271984587e2a4cda94e1ac66510a6ea07",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2|^8.0"
+            },
+            "conflict": {
+                "phpstan/phpstan-shim": "*"
+            },
+            "bin": [
+                "phpstan",
+                "phpstan.phar"
+            ],
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHPStan - PHP Static Analysis Tool",
+            "keywords": [
+                "dev",
+                "static analysis"
+            ],
+            "support": {
+                "issues": "https://github.com/phpstan/phpstan/issues",
+                "source": "https://github.com/phpstan/phpstan/tree/1.8.8"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/ondrejmirtes",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/phpstan",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/phpstan/phpstan",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2022-10-06T12:51:57+00:00"
         },
         {
             "name": "psr/cache",

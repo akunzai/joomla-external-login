@@ -131,6 +131,7 @@ class PlgSystemCaslogin extends JPlugin
         if ($context == 'com_externallogin') {
             return ['value' => 'system.caslogin', 'text' => 'PLG_SYSTEM_CASLOGIN_OPTION'];
         }
+        return [];
     }
 
     /**

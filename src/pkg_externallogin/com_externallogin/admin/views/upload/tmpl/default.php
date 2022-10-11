@@ -46,4 +46,3 @@ $fieldSets = $this->form->getFieldsets();
 		<?php echo JHtml::_('form.token'); ?>
 	</fieldset>
 <?php endforeach; ?>
-
