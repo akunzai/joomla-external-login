@@ -73,6 +73,7 @@
 			"mkdir -p build",
 			"cd src/pkg_externallogin/com_externallogin; zip -r ../com_externallogin.zip . -x '*.bak'",
 			"cd src/pkg_externallogin/mod_externallogin_admin; zip -r ../mod_externallogin_admin.zip . -x '*.bak'",
+			"cd src/pkg_externallogin/mod_externallogin_site; zip -r ../mod_externallogin_site.zip . -x '*.bak'",
 			"cd src/pkg_externallogin/plg_authentication_externallogin; zip -r ../plg_authentication_externallogin.zip . -x '*.bak'",
 			"cd src/pkg_externallogin/plg_system_externallogin; zip -r ../plg_system_externallogin.zip . -x '*.bak'",
 			"cd src/pkg_externallogin; zip -r ../../build/pkg_externallogin.zip pkg_externallogin.xml language *.zip; rm *.zip",
