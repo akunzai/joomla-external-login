@@ -1,13 +1,7 @@
 {
 	"name": "akunzai/joomla-external-login",
-	"type": "project",
 	"description": "External Login for Joomla!",
-	"keywords": [
-		"external",
-		"login",
-		"Joomla"
-	],
-	"homepage": "http://github.com/akunzai/joomla-external-login",
+	"type": "project",
 	"license": "GPL-2.0-or-later",
 	"authors": [
 		{
@@ -21,6 +15,10 @@
 			"role": "Developer"
 		}
 	],
+	"config": {
+		"preferred-install": "dist",
+		"sort-packages": true
+	},
 	"repositories": [
 		{
 			"type": "package",
@@ -60,6 +58,7 @@
 		"joomla/joomla-cms": "3.10.11",
 		"phpstan/phpstan": "^1.8"
 	},
+	"prefer-stable": true,
 	"scripts": {
 		"lint": [
 			"php -v",
@@ -79,8 +78,5 @@
 			"cd src/plg_user_cbexternallogin; zip -r ../../build/plg_user_cbexternallogin.zip . -x '*.bak'",
 			"grep -rl '##VERSION##' ./src | xargs -I{} sh -c 'mv $1 ${1%.bak}' _ {}"
 		]
-	},
-	"config": {
-		"sort-packages": true
 	}
 }
