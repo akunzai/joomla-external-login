@@ -9,9 +9,9 @@ The [Joomla!](https://www.joomla.org/) authentication extension allows to login 
 
 ## Requirements
 
-- [Joomla!](https://www.joomla.org/) 3.x
-- [Composer](https://getcomposer.org/)
 - PHP >= 7.4
+- [Composer](https://getcomposer.org/)
+- [Joomla!](https://www.joomla.org/) 3.x
 
 ## Build
 
