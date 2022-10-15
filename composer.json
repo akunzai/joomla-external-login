@@ -12,9 +12,7 @@
 	"authors": [
 		{
 			"name": "Charley Wu",
-			"email": "akunzai@gmail.com",
-			"homepage": "http://github.com/akunzai",
-			"role": "Developer"
+			"email": "akunzai@gmail.com"
 		},
 		{
 			"name": "Christophe Demko",
@@ -57,7 +55,7 @@
 		"php": ">=7.4.0"
 	},
 	"require-dev": {
-		"friendsofphp/php-cs-fixer": "^3.11",
+		"friendsofphp/php-cs-fixer": "^3.12",
 		"hamidionline/joomla-stubs": "*",
 		"joomla/joomla-cms": "3.10.11",
 		"phpstan/phpstan": "^1.8"
@@ -81,5 +79,8 @@
 			"cd src/plg_user_cbexternallogin; zip -r ../../build/plg_user_cbexternallogin.zip . -x '*.bak'",
 			"grep -rl '##VERSION##' ./src | xargs -I{} sh -c 'mv $1 ${1%.bak}' _ {}"
 		]
+	},
+	"config": {
+		"sort-packages": true
 	}
 }
