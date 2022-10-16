@@ -11,3 +11,4 @@ parameters:
   ignoreErrors:
     - '#Class [a-zA-Z0-9\\_]+ referenced with incorrect case: [a-zA-Z0-9\\_]+.#'
     - '#Access to an undefined property [a-zA-Z0-9\\_]+::\$[a-z]+.#'
+  tmpDir: tmp
