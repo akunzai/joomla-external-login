@@ -10,7 +10,7 @@
 	<license>GNU General Public License version 2 or later; see LICENSE</license>
 
 	<!--  The version string is recorded in the extension table -->
-	<version>##VERSION##</version>
+	<version>3.2.1-dev</version>
 
 	<!-- The description is optional and defaults to the name -->
 	<description>COM_EXTERNALLOGIN_DESCRIPTION</description>
@@ -38,7 +38,7 @@
 	<!-- Note the folder attribute: This attribute describes the folder
 		to copy FROM in the package to install therefore files copied
 		in this section are copied from /site/ in the package -->
-	<files folder="site">
+	<files folder="components/com_externallogin">
 		<filename>externallogin.php</filename>
 		<filename>controller.php</filename>
 		<filename>helpers.php</filename>
@@ -47,11 +47,11 @@
 		<folder>views</folder>
 	</files>
 
-	<languages folder="site">
+	<languages>
 		<language tag="en-GB">language/en-GB/en-GB.com_externallogin.ini</language>
 	</languages>
 
-	<media destination="com_externallogin" folder="media">
+	<media destination="com_externallogin" folder="media/com_externallogin">
 		<folder>css</folder>
 		<folder>images</folder>
 	</media>
@@ -78,7 +78,7 @@
 		<!-- Note the folder attribute: This attribute describes the folder
 			to copy FROM in the package to install therefore files copied
 			in this section are copied from /admin/ in the package -->
-		<files folder="admin">
+		<files folder="administrator/components/com_externallogin">
 			<!-- Admin Main File Copy Section -->
 			<filename>config.xml</filename>
 			<filename>access.xml</filename>
@@ -101,7 +101,7 @@
 			<folder>log</folder>
 		</files>
 
-		<languages folder="admin">
+		<languages folder="administrator">
 			<language tag="en-GB">language/en-GB/en-GB.com_externallogin.ini</language>
 			<language tag="en-GB">language/en-GB/en-GB.com_externallogin.sys.ini</language>
 		</languages>
