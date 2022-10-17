@@ -88,7 +88,7 @@ class PlgSystemExternallogin extends JPlugin
      * Redirect to com_externallogin in case of login view
      *
      * @param   JRouter  $router  Router
-     * @param   JURI     $uri     URI
+     * @param   JUri     $uri     URI
      *
      * @return  void
      *
@@ -124,7 +124,7 @@ class PlgSystemExternallogin extends JPlugin
      * Method is called after user data is deleted from the database
      *
      * @param   array    $user     Holds the user data
-     * @param   boolean  $success  True if user was succesfully stored in the database
+     * @param   boolean  $success  True if user was successfully stored in the database
      * @param   string   $msg      Message
      *
      * @return  boolean
