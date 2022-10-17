@@ -1,0 +1,16 @@
+{
+  // https://github.com/bmewburn/vscode-intelephense/issues/1372
+  "intelephense.files.exclude": [
+    "**/.git/**",
+    "**/.svn/**",
+    "**/.hg/**",
+    "**/CVS/**",
+    "**/.DS_Store/**",
+    "**/node_modules/**",
+    "**/bower_components/**",
+    "**/vendor/**/{Tests,tests}/**",
+    "**/.history/**",
+    "**/tmp/**"
+  ],
+  "cSpell.words": ["Joomla"]
+}
