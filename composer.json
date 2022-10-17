@@ -66,7 +66,7 @@
 			"php-cs-fixer fix --diff --dry-run"
 		],
 		"build": [
-			"mkdir -p ./build ./src/packages",
+			"mkdir -p ./src/packages",
 			"php ./bundle.php ./src/administrator/modules/mod_externallogin_admin/mod_externallogin_admin.xml ./src/packages/mod_externallogin_admin.zip",
 			"php ./bundle.php ./src/com_externallogin.xml ./src/packages/com_externallogin.zip",
 			"php ./bundle.php ./src/modules/mod_externallogin_site/mod_externallogin_site.xml ./src/packages/mod_externallogin_site.zip",

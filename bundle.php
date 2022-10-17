@@ -41,6 +41,10 @@ class JoomlaArchiveBuilder
 
 	public function build($zipFile)
 	{
+		$zipPath = dirname($zipFile);
+		if (!file_exists($zipPath)) {
+			mkdir($zipPath, 0777, true);
+		}
 		$this->zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 		$this->addFile($this->file);
 		$this->addFiles();
