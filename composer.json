@@ -66,17 +66,16 @@
 			"php-cs-fixer fix --diff --dry-run"
 		],
 		"build": [
-			"VERSION=$(git describe --tags --abbrev=0); echo $VERSION; grep -rl '##VERSION##' ./src | xargs sed -i.bak \"s/##VERSION##/$VERSION/\"",
-			"mkdir -p build",
-			"cd src/pkg_externallogin/com_externallogin; zip -r ../com_externallogin.zip . -x '*.bak'",
-			"cd src/pkg_externallogin/mod_externallogin_admin; zip -r ../mod_externallogin_admin.zip . -x '*.bak'",
-			"cd src/pkg_externallogin/mod_externallogin_site; zip -r ../mod_externallogin_site.zip . -x '*.bak'",
-			"cd src/pkg_externallogin/plg_authentication_externallogin; zip -r ../plg_authentication_externallogin.zip . -x '*.bak'",
-			"cd src/pkg_externallogin/plg_system_externallogin; zip -r ../plg_system_externallogin.zip . -x '*.bak'",
-			"cd src/pkg_externallogin; zip -r ../../build/pkg_externallogin.zip pkg_externallogin.xml language *.zip; rm *.zip",
-			"cd src/plg_system_caslogin; zip -r ../../build/plg_system_caslogin.zip . -x '*.bak'",
-			"cd src/plg_user_cbexternallogin; zip -r ../../build/plg_user_cbexternallogin.zip . -x '*.bak'",
-			"grep -rl '##VERSION##' ./src | xargs -I{} sh -c 'mv $1 ${1%.bak}' _ {}"
+			"mkdir -p ./build ./src/packages",
+			"php ./bundle.php ./src/administrator/modules/mod_externallogin_admin/mod_externallogin_admin.xml ./src/packages/mod_externallogin_admin.zip",
+			"php ./bundle.php ./src/com_externallogin.xml ./src/packages/com_externallogin.zip",
+			"php ./bundle.php ./src/modules/mod_externallogin_site/mod_externallogin_site.xml ./src/packages/mod_externallogin_site.zip",
+			"php ./bundle.php ./src/plugins/authentication/externallogin/externallogin.xml ./src/packages/plg_authentication_externallogin.zip",
+			"php ./bundle.php ./src/plugins/system/externallogin/externallogin.xml ./src/packages/plg_system_externallogin.zip",
+			"php ./bundle.php ./src/plugins/system/caslogin/caslogin.xml ./build/plg_system_caslogin.zip",
+			"php ./bundle.php ./src/plugins/user/cbexternallogin/cbexternallogin.xml ./build/plg_user_cbexternallogin.zip",
+			"php ./bundle.php ./src/pkg_externallogin.xml ./build/pkg_externallogin.zip",
+			"rm -rf ./src/packages"
 		]
 	}
 }
