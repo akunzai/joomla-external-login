@@ -65,6 +65,9 @@ RUN { \
 		echo 'html_errors = Off'; \
 	} > /usr/local/etc/php/conf.d/error-logging.ini
 
+# Xdebug's default debugging port has changed from 9000 to 9003 since v3
+RUN sed -i 's/9000/9003/' /usr/local/etc/php/conf.d/xdebug.ini
+
 # https://hub.docker.com/_/joomla
 ARG JOOMLA_VERSION=3.0.11
 # Download package and extract to web volume
