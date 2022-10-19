@@ -19,7 +19,9 @@ JHtml::_('bootstrap.tooltip');
 JHtml::_('dropdown.init');
 JHtml::_('formbehavior.chosen', 'select');
 
-JHtml::_('behavior.framework', true);
+if (version_compare(JVERSION, '4.0.0', '<')) {
+	JHtml::_('behavior.framework', true);
+}
 JHtml::_('script', 'system/modal.js', true, true);
 JHtml::_('stylesheet', 'system/modal.css', [], true);
 
