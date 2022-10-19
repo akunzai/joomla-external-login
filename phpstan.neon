@@ -1,3 +1,6 @@
+includes:
+  - phpstan-baseline.neon
+
 parameters:
   level: 0
   paths:
@@ -9,6 +12,6 @@ parameters:
     - vendor/joomla/joomla-cms/includes
     - vendor/joomla/joomla-cms/libraries
   ignoreErrors:
-    - '#Class [a-zA-Z0-9\\_]+ referenced with incorrect case: [a-zA-Z0-9\\_]+.#'
-    - '#Access to an undefined property [a-zA-Z0-9\\_]+::\$[a-z]+.#'
+    # joomla stubs
+    - '#Class j[a-zA-Z]+ referenced with incorrect case\: J[a-zA-Z]+#'
   tmpDir: tmp
