@@ -20,6 +20,6 @@ jimport('joomla.application.component.helper');
 require_once dirname(__FILE__) . '/helper.php';
 
 $enabled = JComponentHelper::getComponent('com_externallogin', true)->enabled && JPluginHelper::isEnabled('authentication', 'externallogin');
-$servers = modExternalloginadminHelper::getListServersURL($params);
+$servers = ModExternalloginadminHelper::getListServersURL($params);
 $count = count($servers);
 require JModuleHelper::getLayoutPath('mod_externallogin_admin', $params->get('layout', 'default'));
