@@ -42,7 +42,7 @@ class PlgSystemExternallogin extends JPlugin
      *
      * @since   2.0.0
      */
-    public function __construct(& $subject, $config)
+    public function __construct(&$subject, $config)
     {
         parent::__construct($subject, $config);
         $this->loadLanguage();
@@ -98,22 +98,24 @@ class PlgSystemExternallogin extends JPlugin
     {
         $app = JFactory::getApplication();
 
-        if ($app->isClient('site')
+        if (
+            $app->isClient('site')
             && $uri->getVar('option') == 'com_users'
             && $uri->getVar('view') == 'login'
-            && JPluginHelper::isEnabled('authentication', 'externallogin')) {
+            && JPluginHelper::isEnabled('authentication', 'externallogin')
+        ) {
             $redirect = $app->getUserState('com_externallogin.redirect');
 
             if ($redirect) {
                 $app->redirect(JRoute::_('index.php?Itemid=' . $redirect, true));
-            } else {
-                $item = JComponentHelper::getParams('com_externallogin')->get('unauthorized_redirect_menuitem');
+                return;
+            }
+            $item = JComponentHelper::getParams('com_externallogin')->get('unauthorized_redirect_menuitem');
 
-                if ($item == -1) {
-                    $uri->setVar('option', 'com_externallogin');
-                } elseif ($item) {
-                    $app->redirect(JRoute::_('index.php?Itemid=' . $item, true));
-                }
+            if ($item == -1) {
+                $uri->setVar('option', 'com_externallogin');
+            } elseif ($item) {
+                $app->redirect(JRoute::_('index.php?Itemid=' . $item, true));
             }
         }
     }
@@ -144,7 +146,7 @@ class PlgSystemExternallogin extends JPlugin
                     JLog::add(
                         new ExternalloginLogEntry(
                             'Unsuccessful deletion of user "' . $user['username'] . '" by user "' .
-                            JFactory::getUser()->username . '" on server ' . $sid,
+                                JFactory::getUser()->username . '" on server ' . $sid,
                             JLog::WARNING,
                             'system-externallogin-deletion'
                         )
@@ -163,7 +165,7 @@ class PlgSystemExternallogin extends JPlugin
                     JLog::add(
                         new ExternalloginLogEntry(
                             'Successful deletion of user "' . $user['username'] . '" by user "' .
-                            JFactory::getUser()->username . '" on server ' . $sid,
+                                JFactory::getUser()->username . '" on server ' . $sid,
                             JLog::INFO,
                             'system-externallogin-deletion'
                         )

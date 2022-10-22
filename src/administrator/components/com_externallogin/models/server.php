@@ -107,9 +107,11 @@ class ExternalloginModelServer extends JModelAdmin
         if (empty($data)) {
             $data = $this->getItem();
 
-            if (version_compare(JVERSION, '3.7.0', '>=')
+            if (
+                version_compare(JVERSION, '3.7.0', '>=')
                 && property_exists($data, 'params')
-                && isset($data->params['data'])) {
+                && isset($data->params['data'])
+            ) {
                 $registry = new JRegistry($data->params['data']);
                 $data->params = $registry->toArray();
             }
@@ -135,20 +137,18 @@ class ExternalloginModelServer extends JModelAdmin
      */
     public function delete(&$pks)
     {
-        if (parent::delete($pks)) {
-            if (!empty($pks)) {
-                Joomla\Utilities\ArrayHelper::toInteger($pks);
-                $query = $this->_db->getQuery(true);
-                $query->delete();
-                $query->from('#__externallogin_users');
-                $query->where('server_id IN (' . implode(',', $pks) . ')');
-                $this->_db->setQuery($query)->execute();
-            }
-
-            return true;
-        } else {
+        if (!parent::delete($pks)) {
             return false;
         }
+        if (!empty($pks)) {
+            Joomla\Utilities\ArrayHelper::toInteger($pks);
+            $query = $this->_db->getQuery(true);
+            $query->delete();
+            $query->from('#__externallogin_users');
+            $query->where('server_id IN (' . implode(',', $pks) . ')');
+            $this->_db->setQuery($query)->execute();
+        }
+        return true;
     }
 
     /**
@@ -163,64 +163,63 @@ class ExternalloginModelServer extends JModelAdmin
         $files = JFactory::getApplication()->input->files->get('jform', null, 'array');
         $sid = (int) $form['id'];
 
-        if ($files['file']['type'] == 'text/csv') {
-            $handle = fopen($files['file']['tmp_name'], "r");
-
-            do {
-                $data = fgetcsv($handle);
-
-                if ($data && count($data) == 4) {
-                    $user = JUser::getInstance();
-
-                    if ($id = intval(JUserHelper::getUserId($data[0]))) {
-                        $user->load($id);
-                    }
-
-                    $user->username = $data[0];
-                    $user->name = $data[1];
-                    $user->email = $data[2];
-                    $user->groups = [];
-                    $groups = explode(',', $data[3]);
-
-                    foreach ($groups as $group) {
-                        if (is_numeric($group)) {
-                            $user->groups[] = intval($group);
-                        } else {
-                            $user->groups = array_merge((array) $user->groups, (array) ExternalloginHelper::getGroups($group));
-                        }
-                    }
-
-                    if ($user->save()) {
-                        $query = $this->_db->getQuery(true);
-                        $query->select('user_id');
-                        $query->from('#__externallogin_users');
-                        $query->where('user_id = ' . (int) $user->id);
-                        $this->_db->setQuery($query);
-
-                        $query = $this->_db->getQuery(true);
-                        $query->set('server_id = ' . (int) $sid);
-
-                        if ($this->_db->loadResult()) {
-                            $query->update('#__externallogin_users');
-                            $query->where('user_id = ' . (int) $user->id);
-                        } else {
-                            $query->insert('#__externallogin_users');
-                            $query->set('user_id = ' . (int) $user->id);
-                        }
-
-                        $this->_db->setQuery($query);
-                        $this->_db->execute();
-                    }
-                }
-            } while ($data);
-
-            fclose($handle);
-
-            return true;
-        } else {
+        if ($files['file']['type'] != 'text/csv') {
             $this->set('error', JText::_('COM_EXTERNALLOGIN_ERROR_BAD_FILE'));
-
             return false;
         }
+
+        $handle = fopen($files['file']['tmp_name'], "r");
+        do {
+            $data = fgetcsv($handle);
+
+            if ($data && count($data) != 4) {
+                continue;
+            }
+            $user = JUser::getInstance();
+
+            if ($id = intval(JUserHelper::getUserId($data[0]))) {
+                $user->load($id);
+            }
+
+            $user->username = $data[0];
+            $user->name = $data[1];
+            $user->email = $data[2];
+            $user->groups = [];
+            $groups = explode(',', $data[3]);
+
+            foreach ($groups as $group) {
+                if (is_numeric($group)) {
+                    $user->groups[] = intval($group);
+                } else {
+                    $user->groups = array_merge((array) $user->groups, (array) ExternalloginHelper::getGroups($group));
+                }
+            }
+
+            if ($user->save()) {
+                $query = $this->_db->getQuery(true);
+                $query->select('user_id');
+                $query->from('#__externallogin_users');
+                $query->where('user_id = ' . (int) $user->id);
+                $this->_db->setQuery($query);
+
+                $query = $this->_db->getQuery(true);
+                $query->set('server_id = ' . (int) $sid);
+
+                if ($this->_db->loadResult()) {
+                    $query->update('#__externallogin_users');
+                    $query->where('user_id = ' . (int) $user->id);
+                } else {
+                    $query->insert('#__externallogin_users');
+                    $query->set('user_id = ' . (int) $user->id);
+                }
+
+                $this->_db->setQuery($query);
+                $this->_db->execute();
+            }
+        } while ($data);
+
+        fclose($handle);
+
+        return true;
     }
 }

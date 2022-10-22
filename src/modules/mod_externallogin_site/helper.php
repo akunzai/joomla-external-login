@@ -38,18 +38,17 @@ abstract class ModExternalloginsiteHelper
         $app = JFactory::getApplication();
         $redirect = $app->input->get('redirect', $app->getUserState('users.login.form.data.return'));
 
-        if ($redirect) {
-            $redirect = urlencode($redirect);
-        } else {
-            $redirect = $params->get('redirect');
-        }
+        $redirect = $redirect ? urlencode($redirect) : $params->get('redirect');
 
-        $ishome = in_array(substr((string)JUri::getInstance(), strlen(JUri::base())), ['', 'index.php']);
-        $noredirect = $params->get('noredirect');
+        $isHome = in_array(substr((string)JUri::getInstance(), strlen(JUri::base())), ['', 'index.php']);
+        $noRedirect = $params->get('noredirect');
 
         // Get an instance of the generic articles model
         /** @var ExternalloginModelServers */
         $model = JModelLegacy::getInstance('Servers', 'ExternalloginModel', ['ignore_request' => true]);
+        if (!$model) {
+            return [];
+        }
         $model->setState('filter.published', 1);
         $model->setState('filter.enabled', 1);
         $model->setState('filter.servers', $params->get('server'));
@@ -63,7 +62,7 @@ abstract class ModExternalloginsiteHelper
             $item->params = new JRegistry($item->params);
             $url = 'index.php?option=com_externallogin&view=server&server=' . $item->id;
 
-            if ($noredirect && !$ishome) {
+            if ($noRedirect && !$isHome) {
                 $url .= '&noredirect=1';
             } elseif (!empty($redirect)) {
                 $url .= '&redirect=' . $redirect;

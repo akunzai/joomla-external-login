@@ -159,45 +159,38 @@ abstract class ExternalloginHelper
         $dbo = JFactory::getDbo();
 
         // Split the path
-        if (empty($separator)) {
-            $path = [$path];
-        } else {
-            $path = explode($separator, $path);
-        }
+        $path = empty($separator) ? [$path] : explode($separator, $path);
 
         $count = count($path);
 
-        // Path is correct
-        if ($count && !empty($path[$count - 1])) {
-            // Prepare query
-            $query = $dbo->getQuery(true);
-            $query->select('a' . ($count - 1) . '.id as id');
-            $query->from('#__usergroups AS a' . ($count - 1));
-            $query->where('a' . ($count - 1) . '.title = ' . $dbo->quote($path[$count - 1]));
-
-            for ($i = $count - 2; $i >= 0; $i--) {
-                if (empty($path[$i])) {
-                    if ($i == 0) {
-                        // Path is absolute
-                        $query->where('a1.parent_id = 0');
-                    } else {
-                        // Path is incorrect
-                        return null;
-                    }
-                } else {
-                    $query->leftJoin('#__usergroups AS a' . $i . ' ON a' . $i . '.id = a' . ($i + 1) . '.parent_id');
-                    $query->where('a' . $i . '.title LIKE ' . $dbo->quote($path[$i]));
-                }
-            }
-
-            $dbo->setQuery($query);
-
-            return $dbo->loadColumn();
-        }
         // Path is incorrect
-        else {
-            return null;
+        if ($count === 0 || empty($path[$count - 1])) {
+            return [];
         }
+
+        // Prepare query
+        $query = $dbo->getQuery(true);
+        $query->select('a' . ($count - 1) . '.id as id');
+        $query->from('#__usergroups AS a' . ($count - 1));
+        $query->where('a' . ($count - 1) . '.title = ' . $dbo->quote($path[$count - 1]));
+
+        for ($i = $count - 2; $i >= 0; $i--) {
+            if (empty($path[$i])) {
+                if ($i == 0) {
+                    // Path is absolute
+                    $query->where('a1.parent_id = 0');
+                } else {
+                    // Path is incorrect
+                    return [];
+                }
+            } else {
+                $query->leftJoin('#__usergroups AS a' . $i . ' ON a' . $i . '.id = a' . ($i + 1) . '.parent_id');
+                $query->where('a' . $i . '.title LIKE ' . $dbo->quote($path[$i]));
+            }
+        }
+
+        $dbo->setQuery($query);
+        return $dbo->loadColumn();
     }
 
     /**
@@ -211,38 +204,37 @@ abstract class ExternalloginHelper
      */
     public static function url($redirect)
     {
-        if (is_numeric($redirect)) {
-            $app = JFactory::getApplication();
-            $item = $app->getMenu()->getItem($redirect);
-
-            if ($item) {
-                switch ($item->type) {
-                    case 'url':
-                        if ((strpos($item->link, 'index.php?') === 0) && (strpos($item->link, 'Itemid=') === false)) {
-                            // If this is an internal Joomla link, ensure the Itemid is set.
-                            $link = $item->link . '&Itemid=' . $item->id;
-                        } else {
-                            $link = $item->link;
-                        }
-                        break;
-
-                    case 'alias':
-                        $link = 'index.php?Itemid=' . $item->params->get('aliasoptions');
-                        break;
-
-                    default:
-                        $link = 'index.php?Itemid=' . $item->id;
-                        break;
-                }
-            } else {
-                $link = 'index.php';
-            }
-
-            $url = JRoute::_($link, true, $item->params->get('secure', ($app->get('force_ssl', 0) === 2) ? 1 : - 1) === 1 ? 1 : 2);
-        } else {
-            $url = urldecode($redirect);
+        if (!is_numeric($redirect)) {
+            return urldecode($redirect);
         }
 
+        $app = JFactory::getApplication();
+        $item = $app->getMenu()->getItem($redirect);
+
+        if ($item) {
+            switch ($item->type) {
+                case 'url':
+                    if ((strpos($item->link, 'index.php?') === 0) && (strpos($item->link, 'Itemid=') === false)) {
+                        // If this is an internal Joomla link, ensure the Itemid is set.
+                        $link = $item->link . '&Itemid=' . $item->id;
+                    } else {
+                        $link = $item->link;
+                    }
+                    break;
+
+                case 'alias':
+                    $link = 'index.php?Itemid=' . $item->params->get('aliasoptions');
+                    break;
+
+                default:
+                    $link = 'index.php?Itemid=' . $item->id;
+                    break;
+            }
+        } else {
+            $link = 'index.php';
+        }
+
+        $url = JRoute::_($link, true, $item->params->get('secure', ($app->get('force_ssl', 0) === 2) ? 1 : -1) === 1 ? 1 : 2);
         return $url;
     }
 }

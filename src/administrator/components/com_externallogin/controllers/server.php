@@ -90,12 +90,12 @@ class ExternalloginControllerServer extends JControllerForm
                 JRoute::_('index.php?option=com_externallogin&view=success&tmpl=component', false),
                 JText::_('COM_EXTERNALLOGIN_MSG_UPLOAD_SUCCESS')
             );
-        } else {
-            $this->setRedirect(
-                JRoute::_('index.php?option=com_externallogin&view=upload&tmpl=component&id=' . $id, false),
-                $model->get('error'),
-                'error'
-            );
+            return;
         }
+        $this->setRedirect(
+            JRoute::_('index.php?option=com_externallogin&view=upload&tmpl=component&id=' . $id, false),
+            $model->get('error'),
+            'error'
+        );
     }
 }

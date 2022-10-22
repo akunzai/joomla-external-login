@@ -62,8 +62,8 @@ class ExternalloginControllerServer extends JControllerLegacy
         if (empty($uri)) {
             $this->setMessage($model->get('error'), 'warning');
             $this->setRedirect('index.php', false);
-        } else {
-            $this->setRedirect(JRoute::_($uri, false));
+            return;
         }
+        $this->setRedirect(JRoute::_($uri, false));
     }
 }

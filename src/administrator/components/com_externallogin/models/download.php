@@ -76,11 +76,9 @@ class ExternalloginModelDownload extends JModelLegacy
 
         if ($table->load($this->getState($this->getName() . '.id'))) {
             return JFactory::getConfig()->get('sitename') . '_' . $table->title . '_' . JFactory::getDate();
-        } else {
-            $this->set('error', JText::_('COM_EXTERNALLOGIN_ERROR_CANNOT_DOWNLOAD'));
-
-            return false;
         }
+        $this->set('error', JText::_('COM_EXTERNALLOGIN_ERROR_CANNOT_DOWNLOAD'));
+        return false;
     }
 
     /**

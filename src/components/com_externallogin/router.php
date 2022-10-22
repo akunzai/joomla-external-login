@@ -36,9 +36,9 @@ function externalloginBuildRoute(&$query)
     // Get the relevant menu items if not loaded.
     if (empty($items)) {
         // Get all relevant menu items.
-        $app	= JFactory::getApplication();
-        $menu	= $app->getMenu();
-        $items	= $menu->getItems('component', 'com_externallogin');
+        $app    = JFactory::getApplication();
+        $menu    = $app->getMenu();
+        $items    = $menu->getItems('component', 'com_externallogin');
 
         // Build an array of serialized query strings to menu item id mappings.
         for ($i = 0, $n = count($items); $i < $n; $i++) {
@@ -81,10 +81,8 @@ function externalloginParseRoute($segments)
     // Only run routine if there are segments to parse.
     if (count($segments) == 0) {
         return;
-    } else {
-        $view = array_pop($segments);
-        $vars['view'] = $view;
-
-        return $vars;
     }
+    $view = array_pop($segments);
+    $vars['view'] = $view;
+    return $vars;
 }

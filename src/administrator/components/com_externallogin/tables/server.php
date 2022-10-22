@@ -56,17 +56,13 @@ class ExternalloginTableServer extends JTable
      */
     public function load($keys = null, $reset = true)
     {
-        if (parent::load($keys, $reset)) {
-            if (isset($this->params)) {
-                $this->params = new JRegistry($this->params);
-            } else {
-                $this->params = new JRegistry();
-            }
-
-            return true;
-        } else {
+        if (!parent::load($keys, $reset)) {
             return false;
         }
+        $this->params = isset($this->params)
+            ? new JRegistry($this->params)
+            : new JRegistry();
+        return true;
     }
 
     /**
