@@ -11,6 +11,9 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
@@ -19,24 +22,24 @@ $listDirn	= $this->escape($this->state->get('list.direction'));
 ?>
 <tr>
 	<th width="1%">
-		<input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
+		<input type="checkbox" name="checkall-toggle" value="" title="<?php echo Text::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
 	</th>
 	<th>
-		<?php echo JHtml::_('grid.sort', 'JGLOBAL_TITLE', 'a.title', $listDirn, $listOrder); ?>
+		<?php echo HTMLHelper::_('grid.sort', 'JGLOBAL_TITLE', 'a.title', $listDirn, $listOrder); ?>
 	</th>
 	<th width="20%">
-		<?php echo JHtml::_('grid.sort', 'COM_EXTERNALLOGIN_HEADING_PLUGIN', 'e.ordering', $listDirn, $listOrder); ?>
+		<?php echo HTMLHelper::_('grid.sort', 'COM_EXTERNALLOGIN_HEADING_PLUGIN', 'e.ordering', $listDirn, $listOrder); ?>
 	</th>
 	<th width="5%">
-		<?php echo JHtml::_('grid.sort', 'JSTATUS', 'a.published', $listDirn, $listOrder); ?>
+		<?php echo HTMLHelper::_('grid.sort', 'JSTATUS', 'a.published', $listDirn, $listOrder); ?>
 	</th>
 	<th width="10%">
-		<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ORDERING', 'a.ordering', $listDirn, $listOrder); ?>
+		<?php echo HTMLHelper::_('grid.sort', 'JGRID_HEADING_ORDERING', 'a.ordering', $listDirn, $listOrder); ?>
 		<?php if ($listOrder == 'a.ordering') {
-		    echo JHtml::_('grid.order', $this->items, 'filesave.png', 'servers.saveorder');
+			echo HTMLHelper::_('grid.order', $this->items, 'filesave.png', 'servers.saveorder');
 		} ?>
 	</th>
 	<th width="5%" class="nowrap">
-		<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
+		<?php echo HTMLHelper::_('grid.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
 	</th>
 </tr>

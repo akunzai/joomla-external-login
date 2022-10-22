@@ -11,11 +11,15 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
 // Import the Joomla model library
-jimport('joomla.application.component.model');
+JLoader::import('joomla.application.component.model');
 
 /**
  * Download Model of External Login component
@@ -25,7 +29,7 @@ jimport('joomla.application.component.model');
  *
  * @since       2.0.0
  */
-class ExternalloginModelDownload extends JModelLegacy
+class ExternalloginModelDownload extends \Joomla\CMS\MVC\Model\BaseDatabaseModel
 {
     /**
      * Method to auto-populate the model state.
@@ -41,7 +45,7 @@ class ExternalloginModelDownload extends JModelLegacy
     protected function populateState()
     {
         // Get the pk of the record from the request.
-        $pk = JFactory::getApplication()->input->getInt('id');
+        $pk = Factory::getApplication()->input->getInt('id');
         $this->setState($this->getName() . '.id', $pk);
     }
 
@@ -52,7 +56,7 @@ class ExternalloginModelDownload extends JModelLegacy
      * @param   string  $prefix  A prefix for the table class name. Optional.
      * @param   array   $config  Configuration array for model. Optional.
      *
-     * @return	JTable  A database object
+     * @return	Table  A database object
      *
      * @see     JModel::getTable
      *
@@ -60,7 +64,7 @@ class ExternalloginModelDownload extends JModelLegacy
      */
     public function getTable($type = 'Server', $prefix = 'ExternalloginTable', $config = [])
     {
-        return JTable::getInstance($type, $prefix, $config);
+        return Table::getInstance($type, $prefix, $config);
     }
 
     /**
@@ -75,9 +79,9 @@ class ExternalloginModelDownload extends JModelLegacy
         $table = $this->getTable();
 
         if ($table->load($this->getState($this->getName() . '.id'))) {
-            return JFactory::getConfig()->get('sitename') . '_' . $table->title . '_' . JFactory::getDate();
+            return Factory::getConfig()->get('sitename') . '_' . $table->title . '_' . Factory::getDate();
         }
-        $this->set('error', JText::_('COM_EXTERNALLOGIN_ERROR_CANNOT_DOWNLOAD'));
+        $this->set('error', Text::_('COM_EXTERNALLOGIN_ERROR_CANNOT_DOWNLOAD'));
         return false;
     }
 
@@ -91,7 +95,7 @@ class ExternalloginModelDownload extends JModelLegacy
     public function getContent()
     {
         $file = fopen('php://output', 'w');
-        $db = JFactory::getDbo();
+        $db = Factory::getDbo();
         $query = $db->getQuery(true);
         $query->select('a.username, a.name, a.email');
         $query->from('#__users AS a');

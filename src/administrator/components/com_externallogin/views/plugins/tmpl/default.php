@@ -11,19 +11,21 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Language\Text;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 ?>
 <div class="cpanel">
-<?php if (empty($this->items)): ?>
-	<?php echo JText::_('COM_EXTERNALLOGIN_NO_PLUGINS'); ?>
-<?php else: ?>
-	<?php foreach ($this->items as $item): ?>
-		<a class="btn" href="<?php echo $item['link']?>" target="<?php echo $item['target']; ?>">
-			<span class="<?php echo $item['image'];?>" title="<?php echo htmlspecialchars($item['alt'], ENT_COMPAT, 'UTF-8'); ?>"></span>
-			<br />
-			<span><?php echo $item['text']; ?></span>
-		</a>
-	<?php endforeach; ?>
-<?php endif; ?>
+	<?php if (empty($this->items)) : ?>
+		<?php echo Text::_('COM_EXTERNALLOGIN_NO_PLUGINS'); ?>
+	<?php else : ?>
+		<?php foreach ($this->items as $item) : ?>
+			<a class="btn" href="<?php echo $item['link'] ?>" target="<?php echo $item['target']; ?>">
+				<span class="<?php echo $item['image']; ?>" title="<?php echo htmlspecialchars($item['alt'], ENT_COMPAT, 'UTF-8'); ?>"></span>
+				<br />
+				<span><?php echo $item['text']; ?></span>
+			</a>
+		<?php endforeach; ?>
+	<?php endif; ?>
 </div>

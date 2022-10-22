@@ -15,7 +15,7 @@
 defined('_JEXEC') or die;
 
 // Import Joomla view library
-jimport('joomla.application.component.view');
+JLoader::import('joomla.application.component.view');
 
 /**
  * Success View of External Login component
@@ -25,6 +25,6 @@ jimport('joomla.application.component.view');
  *
  * @since       2.0.0
  */
-class ExternalloginViewSuccess extends JViewLegacy
+class ExternalloginViewSuccess extends \Joomla\CMS\MVC\View\HtmlView
 {
 }

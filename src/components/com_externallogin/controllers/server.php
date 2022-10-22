@@ -11,6 +11,10 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
@@ -22,7 +26,7 @@ defined('_JEXEC') or die;
  *
  * @since       2.3.0
  */
-class ExternalloginControllerServer extends JControllerLegacy
+class ExternalloginControllerServer extends \Joomla\CMS\MVC\Controller\BaseController
 {
     /**
      * Proxy for getModel.
@@ -51,7 +55,7 @@ class ExternalloginControllerServer extends JControllerLegacy
      */
     public function login()
     {
-        JSession::checkToken('post') or jexit(JText::_('JInvalid_Token'));
+        Session::checkToken('post') or exit(Text::_('JInvalid_Token'));
 
         // Get the model
         $model = $this->getModel();
@@ -64,6 +68,6 @@ class ExternalloginControllerServer extends JControllerLegacy
             $this->setRedirect('index.php', false);
             return;
         }
-        $this->setRedirect(JRoute::_($uri, false));
+        $this->setRedirect(Route::_($uri, false));
     }
 }

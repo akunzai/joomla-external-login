@@ -11,6 +11,9 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
@@ -19,23 +22,23 @@ $listDirn	= $this->escape($this->state->get('list.direction'));
 ?>
 <tr>
 	<th>
-		<?php echo JHtml::_('grid.sort', 'JGLOBAL_TITLE', 'a.title', $listDirn, $listOrder); ?>
+		<?php echo HTMLHelper::_('grid.sort', 'JGLOBAL_TITLE', 'a.title', $listDirn, $listOrder); ?>
 	</th>
-	<?php if(isset($this->globalS)): ?>
+	<?php if (isset($this->globalS)) : ?>
 		<th>
-			<?php echo JText::_('COM_EXTERNALLOGIN_TOOLBAR_ENABLE_ACTIVATE_ALL'); ?>
+			<?php echo Text::_('COM_EXTERNALLOGIN_TOOLBAR_ENABLE_ACTIVATE_ALL'); ?>
 		</th>
 		<th>
-			<?php echo JText::_('COM_EXTERNALLOGIN_TOOLBAR_DISABLE_ALL'); ?>
+			<?php echo Text::_('COM_EXTERNALLOGIN_TOOLBAR_DISABLE_ALL'); ?>
 		</th>
 	<?php endif; ?>
 	<th width="20%">
-		<?php echo JHtml::_('grid.sort', 'COM_EXTERNALLOGIN_HEADING_PLUGIN', 'e.ordering', $listDirn, $listOrder); ?>
+		<?php echo HTMLHelper::_('grid.sort', 'COM_EXTERNALLOGIN_HEADING_PLUGIN', 'e.ordering', $listDirn, $listOrder); ?>
 	</th>
 	<th width="5%">
-		<?php echo JHtml::_('grid.sort', 'JSTATUS', 'a.published', $listDirn, $listOrder); ?>
+		<?php echo HTMLHelper::_('grid.sort', 'JSTATUS', 'a.published', $listDirn, $listOrder); ?>
 	</th>
 	<th width="5%" class="nowrap">
-		<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
+		<?php echo HTMLHelper::_('grid.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
 	</th>
 </tr>

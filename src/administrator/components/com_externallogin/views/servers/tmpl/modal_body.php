@@ -11,53 +11,58 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\Utilities\ArrayHelper;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
 // Include the component HTML helpers.
-JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
+HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
-$user = JFactory::getUser();
+$user = Factory::getUser();
 $ordering = $this->state->get('list.ordering') == 'a.ordering';
-$plugins = Joomla\Utilities\ArrayHelper::pivot(ExternalloginHelper::getPlugins(), 'value');
+$plugins = ArrayHelper::pivot(ExternalloginHelper::getPlugins(), 'value');
 
 if (!count($this->items)) {
-    ?>
+?>
 	<tr class="row<?php echo $i % 2; ?>">
 		<td colspan="6" class="center">
-			<?php echo JText::_('COM_EXTERNALLOGIN_NO_RECORDS'); ?>
+			<?php echo Text::_('COM_EXTERNALLOGIN_NO_RECORDS'); ?>
 		</td>
 	</tr>
-	<?php
+<?php
 } else {
-    ?>
-<?php foreach($this->items as $i => $item): ?>
-	<tr class="row<?php echo $i % 2; ?>">
-		<td>
-			<a class="pointer" onclick="if (window.parent) {window.parent.document.adminForm.server.value=<?php echo $item->id; ?>;window.close(); window.parent.submitbutton('users.enableExternallogin');}"><?php echo $this->escape($item->title); ?></a>
-		</td>
-		<?php if(isset($this->globalS)): ?>
+?>
+	<?php foreach ($this->items as $i => $item) : ?>
+		<tr class="row<?php echo $i % 2; ?>">
 			<td>
-				<button class="btn" onclick="if (window.parent) {window.parent.document.adminForm.server.value=<?php echo $item->id; ?>;window.close(); window.parent.submitbutton('users.enableExternalloginGlobal');}"><?php echo JText::_('COM_EXTERNALLOGIN_BUTTON_ACTIVATE_ALL'); ?></button>
+				<a class="pointer" onclick="if (window.parent) {window.parent.document.adminForm.server.value=<?php echo $item->id; ?>;window.close(); window.parent.submitbutton('users.enableExternallogin');}"><?php echo $this->escape($item->title); ?></a>
 			</td>
+			<?php if (isset($this->globalS)) : ?>
+				<td>
+					<button class="btn" onclick="if (window.parent) {window.parent.document.adminForm.server.value=<?php echo $item->id; ?>;window.close(); window.parent.submitbutton('users.enableExternalloginGlobal');}"><?php echo Text::_('COM_EXTERNALLOGIN_BUTTON_ACTIVATE_ALL'); ?></button>
+				</td>
+				<td>
+					<button class="btn" onclick="if (window.parent) {window.parent.document.adminForm.server.value=<?php echo $item->id; ?>;window.close(); window.parent.submitbutton('users.disableExternalloginGlobal');}"><?php echo Text::_('COM_EXTERNALLOGIN_BUTTON_DISABLE_ALL'); ?></button>
+				</td>
+			<?php endif; ?>
 			<td>
-				<button class="btn" onclick="if (window.parent) {window.parent.document.adminForm.server.value=<?php echo $item->id; ?>;window.close(); window.parent.submitbutton('users.disableExternalloginGlobal');}"><?php echo JText::_('COM_EXTERNALLOGIN_BUTTON_DISABLE_ALL'); ?></button>
+				<?php echo isset($plugins[$item->plugin]) ? $this->escape(Text::_($plugins[$item->plugin]['text'])) : Text::_('COM_EXTERNALLOGIN_GRID_SERVER_DISABLED'); ?>
 			</td>
-		<?php endif; ?>
-		<td>
-			<?php echo isset($plugins[$item->plugin]) ? $this->escape(JText::_($plugins[$item->plugin]['text'])) : JText::_('COM_EXTERNALLOGIN_GRID_SERVER_DISABLED'); ?>
-		</td>
-		<td class="center">
-			<?php echo JHtml::_(
-			    'ExternalloginHtml.Servers.state',
-			    $item->published == 1 ? ($item->enabled == null ? 4 : ($item->enabled == 0 ? 3 : 1)) : $item->published,
-			    $i,
-			    false
-			); ?>
-		</td>
-		<td class="right">
-			<?php echo $item->id; ?>
-		</td>
-	</tr>
+			<td class="center">
+				<?php echo HTMLHelper::_(
+					'ExternalloginHtml.Servers.state',
+					$item->published == 1 ? ($item->enabled == null ? 4 : ($item->enabled == 0 ? 3 : 1)) : $item->published,
+					$i,
+					false
+				); ?>
+			</td>
+			<td class="right">
+				<?php echo $item->id; ?>
+			</td>
+		</tr>
 <?php endforeach;
-}?>
+} ?>

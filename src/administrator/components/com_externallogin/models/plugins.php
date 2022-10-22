@@ -11,11 +11,13 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Factory;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
 // Import the Joomla model library
-jimport('joomla.application.component.model');
+JLoader::import('joomla.application.component.model');
 
 /**
  * Plugins Model of External Login component
@@ -25,7 +27,7 @@ jimport('joomla.application.component.model');
  *
  * @since       2.0.0
  */
-class ExternalloginModelPlugins extends JModelLegacy
+class ExternalloginModelPlugins extends \Joomla\CMS\MVC\Model\BaseDatabaseModel
 {
     /**
      * Get plugins
@@ -39,7 +41,7 @@ class ExternalloginModelPlugins extends JModelLegacy
         $items = [];
 
         // Include buttons defined by published external login plugins
-        $app = JFactory::getApplication();
+        $app = Factory::getApplication();
         $arrays = (array) $app->triggerEvent('onGetIcons', ['com_externallogin']);
 
         foreach ($arrays as $response) {

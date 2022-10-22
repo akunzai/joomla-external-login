@@ -15,7 +15,7 @@
 defined('_JEXEC') or die;
 
 // Import Joomla controlleradmin library
-jimport('joomla.application.component.controlleradmin');
+JLoader::import('joomla.application.component.controlleradmin');
 
 /**
  * Servers Controller of External Login component
@@ -25,7 +25,7 @@ jimport('joomla.application.component.controlleradmin');
  *
  * @since       2.0.0
  */
-class ExternalloginControllerServers extends JControllerAdmin
+class ExternalloginControllerServers extends \Joomla\CMS\MVC\Controller\AdminController
 {
     /**
      * Proxy for getModel.
@@ -34,7 +34,7 @@ class ExternalloginControllerServers extends JControllerAdmin
      * @param   string      $prefix  Model prefix
      * @param   array|null  $config  Array of options
      *
-     * @return  JModel
+     * @return  \Joomla\CMS\MVC\Model\BaseDatabaseModel
      *
      * @see     JControllerAdmin::getModel
      *

@@ -11,11 +11,14 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
 // Import the Joomla modellist library
-jimport('joomla.application.component.modellist');
+JLoader::import('joomla.application.component.modellist');
 
 /**
  * Logs Model of External Login component
@@ -25,7 +28,7 @@ jimport('joomla.application.component.modellist');
  *
  * @since       2.1.0
  */
-class ExternalloginModelLogs extends JModelList
+class ExternalloginModelLogs extends \Joomla\CMS\MVC\Model\ListModel
 {
     /**
      * Valid filter fields or ordering.
@@ -55,7 +58,7 @@ class ExternalloginModelLogs extends JModelList
     protected function populateState($ordering = null, $direction = null)
     {
         // Adjust the context to support modal layouts.
-        if ($layout = JFactory::getApplication()->input->get('layout')) {
+        if ($layout = Factory::getApplication()->input->get('layout')) {
             $this->context .= '.' . $layout;
         }
 
@@ -90,7 +93,7 @@ class ExternalloginModelLogs extends JModelList
     protected function getListQuery()
     {
         // Create a new query object.
-        $db = JFactory::getDBO();
+        $db = Factory::getDBO();
         $query = $db->getQuery(true);
 
         // Select some fields
@@ -125,7 +128,7 @@ class ExternalloginModelLogs extends JModelList
         $begin = $this->getState('filter.begin');
 
         if (!empty($begin)) {
-            $begin = JFactory::getDate($begin);
+            $begin = Factory::getDate($begin);
             $query->where('a.date >= ' . $db->quote($begin->toUnix()));
         }
 
@@ -133,7 +136,7 @@ class ExternalloginModelLogs extends JModelList
         $end = $this->getState('filter.end');
 
         if (!empty($end)) {
-            $end = JFactory::getDate($end);
+            $end = Factory::getDate($end);
             $query->where('a.date < ' . $db->quote($end->toUnix() + 24 * 60 * 60));
         }
 
@@ -154,7 +157,7 @@ class ExternalloginModelLogs extends JModelList
      */
     public function getBaseName()
     {
-        return JFactory::getConfig()->get('sitename') . '_externallogin-logs_' . JFactory::getDate();
+        return Factory::getConfig()->get('sitename') . '_externallogin-logs_' . Factory::getDate();
     }
 
     /**
@@ -167,12 +170,12 @@ class ExternalloginModelLogs extends JModelList
     public function getContent()
     {
         $file = fopen('php://output', 'w');
-        $db = JFactory::getDbo();
+        $db = Factory::getDbo();
         $db->setQuery($this->getListQuery());
         $results = $db->loadAssocList();
 
         foreach ($results as $result) {
-            $result['priority'] = JText::_('COM_EXTERNALLOGIN_GRID_LOG_PRIORITY_' . $result['priority']);
+            $result['priority'] = Text::_('COM_EXTERNALLOGIN_GRID_LOG_PRIORITY_' . $result['priority']);
             [$time, $microtime] = explode('.', $result['date']);
             $result['date'] = date('Y-m-d H:i:s', $time) . '.' . $microtime;
             fputcsv($file, $result);
@@ -191,7 +194,7 @@ class ExternalloginModelLogs extends JModelList
     public function delete()
     {
         // Create a new query object.
-        $db = JFactory::getDBO();
+        $db = Factory::getDBO();
         $query = $db->getQuery(true);
 
         // Delete
@@ -226,7 +229,7 @@ class ExternalloginModelLogs extends JModelList
         $begin = $this->getState('filter.begin');
 
         if (!empty($begin)) {
-            $begin = JFactory::getDate($begin);
+            $begin = Factory::getDate($begin);
             $query->where('date >= ' . $db->quote($begin->toUnix()));
         }
 
@@ -234,7 +237,7 @@ class ExternalloginModelLogs extends JModelList
         $end = $this->getState('filter.end');
 
         if (!empty($end)) {
-            $end = JFactory::getDate($end);
+            $end = Factory::getDate($end);
             $query->where('date < ' . $db->quote($end->toUnix() + 24 * 60 * 60));
         }
 
@@ -242,13 +245,13 @@ class ExternalloginModelLogs extends JModelList
 
         try {
             $db->execute();
-            $app = JFactory::getApplication();
+            $app = Factory::getApplication();
             $app->setUserState($this->context . '.filter.search', '');
             $app->setUserState($this->context . '.filter.priority', '');
             $app->setUserState($this->context . '.filter.category', '');
             $app->setUserState($this->context . '.filter.begin', '');
             $app->setUserState($this->context . '.filter.end', '');
-            $app->enqueueMessage(JText::_('COM_EXTERNALLOGIN_MSG_LOGS_FILTER_RESET'), 'notice');
+            $app->enqueueMessage(Text::_('COM_EXTERNALLOGIN_MSG_LOGS_FILTER_RESET'), 'notice');
 
             return true;
         } catch (RuntimeException $e) {

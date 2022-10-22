@@ -11,6 +11,10 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Language\Text;
+
 // No direct access to this file
 defined('_JEXEC') or die;
-echo JText::_('MOD_EXTERNALLOGIN_ADMIN_DISABLED');
+
+
+echo Text::_('MOD_EXTERNALLOGIN_ADMIN_DISABLED');

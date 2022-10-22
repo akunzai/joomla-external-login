@@ -11,9 +11,11 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Factory;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
-JFactory::getDocument()->addScriptDeclaration('window.parent.addEvent(\'domready\', function() {
+Factory::getDocument()->addScriptDeclaration('window.parent.addEvent(\'domready\', function() {
 	window.top.setTimeout(\'window.parent.SqueezeBox.close()\', 2000);
 });');

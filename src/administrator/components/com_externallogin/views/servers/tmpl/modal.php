@@ -11,17 +11,20 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Router\Route;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
 // load tooltip behavior
-JHtml::_('behavior.tooltip');
+HTMLHelper::_('behavior.tooltip');
 
 // Set url for form action
 if (!isset($this->globalS)) {
-    $frmAct = JRoute::_('index.php?option=com_externallogin&view=servers&tmpl=component&layout=modal');
+	$frmAct = Route::_('index.php?option=com_externallogin&view=servers&tmpl=component&layout=modal');
 } else {
-    $frmAct = JRoute::_('index.php?option=com_externallogin&view=servers&tmpl=component&layout=modal&globalS=1');
+	$frmAct = Route::_('index.php?option=com_externallogin&view=servers&tmpl=component&layout=modal&globalS=1');
 }
 
 ?>
@@ -36,6 +39,6 @@ if (!isset($this->globalS)) {
 		<input type="hidden" name="task" value="" />
 		<input type="hidden" name="filter_order" value="<?php echo $this->escape($this->state->get('list.ordering')); ?>" />
 		<input type="hidden" name="filter_order_Dir" value="<?php echo $this->escape($this->state->get('list.direction')); ?>" />
-		<?php echo JHtml::_('form.token'); ?>
+		<?php echo HTMLHelper::_('form.token'); ?>
 	</div>
 </form>

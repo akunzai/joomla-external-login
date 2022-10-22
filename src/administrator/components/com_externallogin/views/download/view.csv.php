@@ -11,11 +11,14 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Application\WebApplication;
+use Joomla\CMS\Factory;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
 // Import Joomla view library
-jimport('joomla.application.component.view');
+JLoader::import('joomla.application.component.view');
 
 /**
  * Server View of External Login component
@@ -25,7 +28,7 @@ jimport('joomla.application.component.view');
  *
  * @since       2.0.0
  */
-class ExternalloginViewDownload extends JViewLegacy
+class ExternalloginViewDownload extends \Joomla\CMS\MVC\View\HtmlView
 {
     /**
      * Execute and display a layout script.
@@ -44,18 +47,18 @@ class ExternalloginViewDownload extends JViewLegacy
 
         // Check for errors.
         if (count($errors = $this->get('Errors'))) {
-            $app = JFactory::getApplication();
+            $app = Factory::getApplication();
             $app->enqueueMessage(implode('<br />', $errors), 'error');
             $app->redirect('index.php');
 
             return false;
         }
 
-        $document = JFactory::getDocument();
+        $document = Factory::getDocument();
         $document->setMimeEncoding('text/csv');
-        JApplicationWeb::getInstance()->setHeader(
+        WebApplication::getInstance()->setHeader(
             'Content-disposition',
-            'attachment; filename="' . $basename . '.csv"; creation-date="' . JFactory::getDate()->toRFC822() . '"',
+            'attachment; filename="' . $basename . '.csv"; creation-date="' . Factory::getDate()->toRFC822() . '"',
             true
         );
         $this->get('Content');

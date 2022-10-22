@@ -11,11 +11,13 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Factory;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
 // Import Joomla view library
-jimport('joomla.application.component.view');
+JLoader::import('joomla.application.component.view');
 
 /**
  * Server View of External Login component
@@ -25,7 +27,7 @@ jimport('joomla.application.component.view');
  *
  * @since       2.0.0
  */
-class ExternalloginViewServer extends JViewLegacy
+class ExternalloginViewServer extends \Joomla\CMS\MVC\View\HtmlView
 {
     /**
      * Execute and display a layout script.
@@ -43,7 +45,7 @@ class ExternalloginViewServer extends JViewLegacy
         // Get data from the model
         $item = $this->get('Item');
         $state = $this->get('State');
-        $app = JFactory::getApplication();
+        $app = Factory::getApplication();
 
         // Check for errors.
         if (count($errors = $this->get('Errors'))) {

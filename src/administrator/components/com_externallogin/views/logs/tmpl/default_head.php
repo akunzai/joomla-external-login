@@ -11,6 +11,8 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\HTML\HTMLHelper;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
@@ -19,15 +21,15 @@ $listDirn	= $this->escape($this->state->get('list.direction'));
 ?>
 <tr>
 	<th width="10%">
-		<?php echo JHtml::_('grid.sort', 'COM_EXTERNALLOGIN_HEADING_PRIORITY', 'a.priority', $listDirn, $listOrder); ?>
+		<?php echo HTMLHelper::_('grid.sort', 'COM_EXTERNALLOGIN_HEADING_PRIORITY', 'a.priority', $listDirn, $listOrder); ?>
 	</th>
 	<th width="20%">
-		<?php echo JHtml::_('grid.sort', 'COM_EXTERNALLOGIN_HEADING_CATEGORY', 'a.category', $listDirn, $listOrder); ?>
+		<?php echo HTMLHelper::_('grid.sort', 'COM_EXTERNALLOGIN_HEADING_CATEGORY', 'a.category', $listDirn, $listOrder); ?>
 	</th>
 	<th width="15%">
-		<?php echo JHtml::_('grid.sort', 'COM_EXTERNALLOGIN_HEADING_DATE', 'a.date', $listDirn, $listOrder); ?>
+		<?php echo HTMLHelper::_('grid.sort', 'COM_EXTERNALLOGIN_HEADING_DATE', 'a.date', $listDirn, $listOrder); ?>
 	</th>
 	<th>
-		<?php echo JHtml::_('grid.sort', 'COM_EXTERNALLOGIN_HEADING_MESSAGE', 'a.message', $listDirn, $listOrder); ?>
+		<?php echo HTMLHelper::_('grid.sort', 'COM_EXTERNALLOGIN_HEADING_MESSAGE', 'a.message', $listDirn, $listOrder); ?>
 	</th>
 </tr>

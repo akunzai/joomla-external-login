@@ -11,6 +11,8 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\HTML\HTMLHelper;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
@@ -39,8 +41,8 @@ abstract class ExternalloginHtmlServers
      */
     public static function state($value, $i, $enabled = true)
     {
-        $states	= [
-            4	=> [
+        $states    = [
+            4    => [
                 'unpublish',
                 'COM_EXTERNALLOGIN_GRID_SERVER_UNINSTALLED',
                 'COM_EXTERNALLOGIN_GRID_SERVER_UNPUBLISH',
@@ -49,7 +51,7 @@ abstract class ExternalloginHtmlServers
                 'expired',
                 'expired',
             ],
-            3	=> [
+            3    => [
                 'unpublish',
                 'COM_EXTERNALLOGIN_GRID_SERVER_DISABLED',
                 'COM_EXTERNALLOGIN_GRID_SERVER_UNPUBLISH',
@@ -58,7 +60,7 @@ abstract class ExternalloginHtmlServers
                 'warning',
                 'warning',
             ],
-            2	=> [
+            2    => [
                 'publish',
                 'COM_EXTERNALLOGIN_GRID_SERVER_ARCHIVED',
                 'COM_EXTERNALLOGIN_GRID_SERVER_PUBLISH',
@@ -67,7 +69,7 @@ abstract class ExternalloginHtmlServers
                 'archive',
                 'archive',
             ],
-            1	=> [
+            1    => [
                 'unpublish',
                 'COM_EXTERNALLOGIN_GRID_SERVER_PUBLISHED',
                 'COM_EXTERNALLOGIN_GRID_SERVER_UNPUBLISH',
@@ -76,7 +78,7 @@ abstract class ExternalloginHtmlServers
                 'publish',
                 'publish',
             ],
-            0	=> [
+            0    => [
                 'publish',
                 'COM_EXTERNALLOGIN_GRID_SERVER_UNPUBLISHED',
                 'COM_EXTERNALLOGIN_GRID_SERVER_PUBLISH',
@@ -85,7 +87,7 @@ abstract class ExternalloginHtmlServers
                 'unpublish',
                 'unpublish',
             ],
-            -2	=> [
+            -2    => [
                 'unpublish',
                 'COM_EXTERNALLOGIN_GRID_SERVER_TRASHED',
                 'COM_EXTERNALLOGIN_GRID_SERVER_UNPUBLISH',
@@ -96,6 +98,6 @@ abstract class ExternalloginHtmlServers
             ],
         ];
 
-        return JHtml::_('jgrid.state', $states, $value, $i, 'servers.', $enabled, true, 'cb');
+        return HTMLHelper::_('jgrid.state', $states, $value, $i, 'servers.', $enabled, true, 'cb');
     }
 }

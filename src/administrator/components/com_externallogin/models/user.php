@@ -11,11 +11,14 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Table\Table;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
 // Import Joomla model library
-jimport('joomla.application.component.model');
+JLoader::import('joomla.application.component.model');
 
 /**
  * User Model of External Login component
@@ -25,7 +28,7 @@ jimport('joomla.application.component.model');
  *
  * @since       2.1.0
  */
-class ExternalloginModelUser extends JModelLegacy
+class ExternalloginModelUser extends \Joomla\CMS\MVC\Model\BaseDatabaseModel
 {
     /**
      * Method to enable the Joomla login for a set of user.
@@ -39,7 +42,7 @@ class ExternalloginModelUser extends JModelLegacy
     public function enableJoomla(&$pks)
     {
         // Initialise variables.
-        $table = JTable::getInstance('User');
+        $table = Table::getInstance('User');
         $pks = (array) $pks;
 
         // Attempt to change the state of the records.
@@ -67,7 +70,7 @@ class ExternalloginModelUser extends JModelLegacy
     public function disableJoomla(&$pks)
     {
         // Initialise variables.
-        $table = JTable::getInstance('User');
+        $table = Table::getInstance('User');
         $pks = (array) $pks;
 
         // Attempt to change the state of the records.
@@ -105,7 +108,7 @@ class ExternalloginModelUser extends JModelLegacy
     public function disableExternallogin(&$pks)
     {
         // Initialise variables.
-        $table = JTable::getInstance('User');
+        $table = Table::getInstance('User');
         $pks = (array) $pks;
 
         // Attempt to change the state of the records.
@@ -154,7 +157,7 @@ class ExternalloginModelUser extends JModelLegacy
         $this->_db->setQuery($query);
 
         // Get application
-        $app = JFactory::getApplication();
+        $app = Factory::getApplication();
 
         try {
             $userID = $this->_db->loadResult();
@@ -192,7 +195,7 @@ class ExternalloginModelUser extends JModelLegacy
     public function enableExternallogin(&$pks, $sid)
     {
         // Initialise variables.
-        $table = JTable::getInstance('User');
+        $table = Table::getInstance('User');
         $pks = (array) $pks;
 
         // Attempt to change the state of the records.
@@ -238,7 +241,7 @@ class ExternalloginModelUser extends JModelLegacy
     public function enableExternalloginGlobal($sid)
     {
         // Get application
-        $app = JFactory::getApplication();
+        $app = Factory::getApplication();
 
         // Get all user id's
         $query = $this->_db->getQuery(true);

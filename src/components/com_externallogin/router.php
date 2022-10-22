@@ -11,6 +11,8 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Factory;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
@@ -36,7 +38,7 @@ function externalloginBuildRoute(&$query)
     // Get the relevant menu items if not loaded.
     if (empty($items)) {
         // Get all relevant menu items.
-        $app    = JFactory::getApplication();
+        $app    = Factory::getApplication();
         $menu    = $app->getMenu();
         $items    = $menu->getItems('component', 'com_externallogin');
 

@@ -11,12 +11,17 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
+use Joomla\Utilities\ArrayHelper;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
 // Import Joomla controller library
-jimport('joomla.application.component.controller');
-
+JLoader::import('joomla.application.component.controller');
 /**
  * Users Controller of External Login component
  *
@@ -25,7 +30,7 @@ jimport('joomla.application.component.controller');
  *
  * @since       2.1.0
  */
-class ExternalloginControllerUsers extends JControllerLegacy
+class ExternalloginControllerUsers extends \Joomla\CMS\MVC\Controller\BaseController
 {
     /**
      * Proxy for getModel.
@@ -55,29 +60,29 @@ class ExternalloginControllerUsers extends JControllerLegacy
     public function enableJoomla()
     {
         // Check for request forgeries
-        JSession::checkToken() or die(JText::_('JINVALID_TOKEN'));
+        Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
 
         // Get items to publish from the request.
         $cid = $this->input->get('cid', [], 'array');
 
         if (empty($cid)) {
-            $this->setMessage(JText::_('COM_EXTERNALLOGIN_USERS_NO_ITEM_SELECTED'), 'warning');
+            $this->setMessage(Text::_('COM_EXTERNALLOGIN_USERS_NO_ITEM_SELECTED'), 'warning');
         } else {
             // Get the model.
             $model = $this->getModel();
 
             // Make sure the item ids are integers
-            Joomla\Utilities\ArrayHelper::toInteger($cid);
+            ArrayHelper::toInteger($cid);
 
             // Publish the items.
             if (!$model->enableJoomla($cid)) {
                 $this->setMessage($model->get('error'), 'error');
             } else {
-                $this->setMessage(JText::plural('COM_EXTERNALLOGIN_USERS_N_USERS_JOOMLA_ENABLED', count($cid)));
+                $this->setMessage(Text::plural('COM_EXTERNALLOGIN_USERS_N_USERS_JOOMLA_ENABLED', count($cid)));
             }
         }
 
-        $this->setRedirect(JRoute::_('index.php?option=com_externallogin&view=users', false));
+        $this->setRedirect(Route::_('index.php?option=com_externallogin&view=users', false));
     }
 
     /**
@@ -90,29 +95,29 @@ class ExternalloginControllerUsers extends JControllerLegacy
     public function disableJoomla()
     {
         // Check for request forgeries
-        JSession::checkToken() or die(JText::_('JINVALID_TOKEN'));
+        Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
 
         // Get items to publish from the request.
         $cid = $this->input->get('cid', [], 'array');
 
         if (empty($cid)) {
-            $this->setMessage(JText::_('COM_EXTERNALLOGIN_USERS_NO_ITEM_SELECTED'), 'warning');
+            $this->setMessage(Text::_('COM_EXTERNALLOGIN_USERS_NO_ITEM_SELECTED'), 'warning');
         } else {
             // Get the model.
             $model = $this->getModel();
 
             // Make sure the item ids are integers
-            Joomla\Utilities\ArrayHelper::toInteger($cid);
+            ArrayHelper::toInteger($cid);
 
             // Publish the items.
             if (!$model->disableJoomla($cid)) {
                 $this->setMessage($model->get('error'), 'error');
             } else {
-                $this->setMessage(JText::plural('COM_EXTERNALLOGIN_USERS_N_USERS_JOOMLA_DISABLED', count($cid)));
+                $this->setMessage(Text::plural('COM_EXTERNALLOGIN_USERS_N_USERS_JOOMLA_DISABLED', count($cid)));
             }
         }
 
-        $this->setRedirect(JRoute::_('index.php?option=com_externallogin&view=users', false));
+        $this->setRedirect(Route::_('index.php?option=com_externallogin&view=users', false));
     }
 
     /**
@@ -125,29 +130,29 @@ class ExternalloginControllerUsers extends JControllerLegacy
     public function disableExternallogin()
     {
         // Check for request forgeries
-        JSession::checkToken() or die(JText::_('JINVALID_TOKEN'));
+        Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
 
         // Get items to publish from the request.
         $cid = $this->input->get('cid', [], 'array');
 
         if (empty($cid)) {
-            $this->setMessage(JText::_('COM_EXTERNALLOGIN_USERS_NO_ITEM_SELECTED'), 'warning');
+            $this->setMessage(Text::_('COM_EXTERNALLOGIN_USERS_NO_ITEM_SELECTED'), 'warning');
         } else {
             // Get the model.
             $model = $this->getModel();
 
             // Make sure the item ids are integers
-            Joomla\Utilities\ArrayHelper::toInteger($cid);
+            ArrayHelper::toInteger($cid);
 
             // Publish the items.
             if (!$model->disableExternallogin($cid)) {
                 $this->setMessage($model->get('error'), 'error');
             } else {
-                $this->setMessage(JText::plural('COM_EXTERNALLOGIN_USERS_N_USERS_EXTERNALLOGIN_DISABLED', count($cid)));
+                $this->setMessage(Text::plural('COM_EXTERNALLOGIN_USERS_N_USERS_EXTERNALLOGIN_DISABLED', count($cid)));
             }
         }
 
-        $this->setRedirect(JRoute::_('index.php?option=com_externallogin&view=users', false));
+        $this->setRedirect(Route::_('index.php?option=com_externallogin&view=users', false));
     }
 
     /**
@@ -160,10 +165,10 @@ class ExternalloginControllerUsers extends JControllerLegacy
     public function disableExternalloginGlobal()
     {
         // Check for request forgeries
-        JSession::checkToken() or die(JText::_('JINVALID_TOKEN'));
+        Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
 
         // Get server id.
-        $sid = JFactory::getApplication()->input->getInt('server');
+        $sid = Factory::getApplication()->input->getInt('server');
 
         // Get the model.
         $model = $this->getModel();
@@ -173,11 +178,11 @@ class ExternalloginControllerUsers extends JControllerLegacy
 
         // Check if disable was successful
         if ($success) {
-            $this->setMessage(JText::_('COM_EXTERNALLOGIN_USERS_ALL_USERS_EXTERNALLOGIN_DISABLED'));
+            $this->setMessage(Text::_('COM_EXTERNALLOGIN_USERS_ALL_USERS_EXTERNALLOGIN_DISABLED'));
         }
 
         // Go back to user overview
-        $this->setRedirect(JRoute::_('index.php?option=com_externallogin&view=users', false));
+        $this->setRedirect(Route::_('index.php?option=com_externallogin&view=users', false));
     }
 
     /**
@@ -190,31 +195,31 @@ class ExternalloginControllerUsers extends JControllerLegacy
     public function enableExternallogin()
     {
         // Check for request forgeries
-        JSession::checkToken() or die(JText::_('JINVALID_TOKEN'));
-        $input = JFactory::getApplication()->input;
+        Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
+        $input = Factory::getApplication()->input;
 
         // Get items to publish from the request.
         $cid  = $input->get('cid', [], 'array');
         $sid  = $input->get('server', 0, 'uint');
 
         if (empty($cid)) {
-            $this->setMessage(JText::_('COM_EXTERNALLOGIN_USERS_NO_ITEM_SELECTED'), 'warning');
+            $this->setMessage(Text::_('COM_EXTERNALLOGIN_USERS_NO_ITEM_SELECTED'), 'warning');
         } else {
             // Get the model.
             $model = $this->getModel();
 
             // Make sure the item ids are integers
-            Joomla\Utilities\ArrayHelper::toInteger($cid);
+            ArrayHelper::toInteger($cid);
 
             // Publish the items.
             if (!$model->enableExternallogin($cid, $sid)) {
                 $this->setMessage($model->get('error'), 'error');
             } else {
-                $this->setMessage(JText::plural('COM_EXTERNALLOGIN_USERS_N_USERS_EXTERNALLOGIN_ENABLED', count($cid)));
+                $this->setMessage(Text::plural('COM_EXTERNALLOGIN_USERS_N_USERS_EXTERNALLOGIN_ENABLED', count($cid)));
             }
         }
 
-        $this->setRedirect(JRoute::_('index.php?option=com_externallogin&view=users', false));
+        $this->setRedirect(Route::_('index.php?option=com_externallogin&view=users', false));
     }
 
     /**
@@ -227,10 +232,10 @@ class ExternalloginControllerUsers extends JControllerLegacy
     public function enableExternalloginGlobal()
     {
         // Check for request forgeries
-        JSession::checkToken() or die(JText::_('JINVALID_TOKEN'));
+        Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
 
         // Get server id.
-        $sid = JFactory::getApplication()->input->getInt('server');
+        $sid = Factory::getApplication()->input->getInt('server');
 
         // Get the model.
         $model = $this->getModel();
@@ -240,12 +245,12 @@ class ExternalloginControllerUsers extends JControllerLegacy
 
         // Check if enable was successful
         if (!$success) {
-            JFactory::getApplication()->enqueueMessage($model->get('error'), 'error');
+            Factory::getApplication()->enqueueMessage($model->get('error'), 'error');
         } else {
-            $this->setMessage(JText::_('COM_EXTERNALLOGIN_USERS_ALL_USERS_JOOMLA_ENABLED'));
+            $this->setMessage(Text::_('COM_EXTERNALLOGIN_USERS_ALL_USERS_JOOMLA_ENABLED'));
         }
 
         // Go back to user overview
-        $this->setRedirect(JRoute::_('index.php?option=com_externallogin&view=users', false));
+        $this->setRedirect(Route::_('index.php?option=com_externallogin&view=users', false));
     }
 }

@@ -11,24 +11,28 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Router\Route;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
 // load tooltip behavior
-JHtml::_('bootstrap.tooltip');
-JHtml::_('dropdown.init');
-JHtml::_('formbehavior.chosen', 'select');
+HTMLHelper::_('bootstrap.tooltip');
+HTMLHelper::_('dropdown.init');
+HTMLHelper::_('formbehavior.chosen', 'select');
 
 if (version_compare(JVERSION, '4.0.0', '<')) {
-	JHtml::_('behavior.framework', true);
+	HTMLHelper::_('behavior.framework', true);
 }
-JHtml::_('script', 'system/modal.js', true, true);
-JHtml::_('stylesheet', 'system/modal.css', [], true);
+HTMLHelper::_('script', 'system/modal.js', true, true);
+HTMLHelper::_('stylesheet', 'system/modal.css', [], true);
 
 $listOrder	= $this->escape($this->state->get('list.ordering'));
 $listDirn	= $this->escape($this->state->get('list.direction'));
 
-JFactory::getDocument()->addScriptDeclaration("
+Factory::getDocument()->addScriptDeclaration("
 Joomla.submitbutton = function(pressbutton)
 {
 	if (pressbutton == 'server.upload')
@@ -43,7 +47,7 @@ Joomla.submitbutton = function(pressbutton)
 				break;
 			}
 		}
-		SqueezeBox.open(\"" . JRoute::_('index.php?option=com_externallogin&view=upload&tmpl=component', false) . "\" + '&id=' + c, {handler: 'iframe', size: {x: 600, y: 300}});
+		SqueezeBox.open(\"" . Route::_('index.php?option=com_externallogin&view=upload&tmpl=component', false) . "\" + '&id=' + c, {handler: 'iframe', size: {x: 600, y: 300}});
 	}
 	else
 	{
@@ -67,27 +71,27 @@ Joomla.submitbutton = function(pressbutton)
 	}
 ");
 ?>
-<form action="<?php echo JRoute::_('index.php?option=com_externallogin&view=servers'); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo Route::_('index.php?option=com_externallogin&view=servers'); ?>" method="post" name="adminForm" id="adminForm">
 	<?php if (!empty($this->sidebar)) : ?>
-	<div id="j-sidebar-container" class="span2">
-		<?php echo $this->sidebar; ?>
-	</div>
-	<div id="j-main-container" class="span10">
-<?php else : ?>
-	<div id="j-main-container">
-<?php endif; ?>
-		<?php echo $this->loadTemplate('filter'); ?>
-		<table class="table table-striped">
-			<thead><?php echo $this->loadTemplate('head'); ?></thead>
-			<tfoot><?php echo $this->loadTemplate('foot'); ?></tfoot>
-			<tbody><?php echo $this->loadTemplate('body'); ?></tbody>
-		</table>
-		<div>
-			<input type="hidden" name="task" value="" />
-			<input type="hidden" name="boxchecked" value="0" />
-			<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
-			<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
-			<?php echo JHtml::_('form.token'); ?>
+		<div id="j-sidebar-container" class="span2">
+			<?php echo $this->sidebar; ?>
 		</div>
-	</div>
+		<div id="j-main-container" class="span10">
+		<?php else : ?>
+			<div id="j-main-container">
+			<?php endif; ?>
+			<?php echo $this->loadTemplate('filter'); ?>
+			<table class="table table-striped">
+				<thead><?php echo $this->loadTemplate('head'); ?></thead>
+				<tfoot><?php echo $this->loadTemplate('foot'); ?></tfoot>
+				<tbody><?php echo $this->loadTemplate('body'); ?></tbody>
+			</table>
+			<div>
+				<input type="hidden" name="task" value="" />
+				<input type="hidden" name="boxchecked" value="0" />
+				<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
+				<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
+				<?php echo HTMLHelper::_('form.token'); ?>
+			</div>
+			</div>
 </form>

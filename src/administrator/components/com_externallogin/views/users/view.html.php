@@ -11,11 +11,17 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\Toolbar;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
 // Import Joomla view library
-jimport('joomla.application.component.view');
+JLoader::import('joomla.application.component.view');
 
 /**
  * Users View of External Login component
@@ -25,7 +31,7 @@ jimport('joomla.application.component.view');
  *
  * @since       2.1.0
  */
-class ExternalloginViewUsers extends JViewLegacy
+class ExternalloginViewUsers extends \Joomla\CMS\MVC\View\HtmlView
 {
     /**
      * Execute and display a layout script.
@@ -47,7 +53,7 @@ class ExternalloginViewUsers extends JViewLegacy
 
         // Check for errors.
         if (count($errors = $this->get('Errors'))) {
-            $app = JFactory::getApplication();
+            $app = Factory::getApplication();
             $app->enqueueMessage(implode('<br />', $errors), 'error');
             $app->redirect('index.php');
 
@@ -59,15 +65,15 @@ class ExternalloginViewUsers extends JViewLegacy
         $this->pagination = $pagination;
         $this->state = $state;
 
-        JHtml::_('sidebar.addentry', JText::_('COM_EXTERNALLOGIN_SUBMENU_SERVERS'), 'index.php?option=com_externallogin', false);
-        JHtml::_('sidebar.addentry', JText::_('COM_EXTERNALLOGIN_SUBMENU_USERS'), 'index.php?option=com_externallogin&view=users', true);
-        JHtml::_('sidebar.addentry', JText::_('COM_EXTERNALLOGIN_SUBMENU_LOGS'), 'index.php?option=com_externallogin&view=logs', false);
-        JHtml::_('sidebar.addentry', JText::_('COM_EXTERNALLOGIN_SUBMENU_ABOUT'), 'index.php?option=com_externallogin&view=about', false);
+        HTMLHelper::_('sidebar.addentry', Text::_('COM_EXTERNALLOGIN_SUBMENU_SERVERS'), 'index.php?option=com_externallogin', false);
+        HTMLHelper::_('sidebar.addentry', Text::_('COM_EXTERNALLOGIN_SUBMENU_USERS'), 'index.php?option=com_externallogin&view=users', true);
+        HTMLHelper::_('sidebar.addentry', Text::_('COM_EXTERNALLOGIN_SUBMENU_LOGS'), 'index.php?option=com_externallogin&view=logs', false);
+        HTMLHelper::_('sidebar.addentry', Text::_('COM_EXTERNALLOGIN_SUBMENU_ABOUT'), 'index.php?option=com_externallogin&view=about', false);
 
         // Set the toolbar
         $this->addToolBar();
 
-        $this->sidebar = JHtml::_('sidebar.render');
+        $this->sidebar = HTMLHelper::_('sidebar.render');
 
         // Display the template
         parent::display($tpl);
@@ -83,12 +89,12 @@ class ExternalloginViewUsers extends JViewLegacy
     protected function addToolbar()
     {
         // Load specific css component
-        JHtml::_('stylesheet', 'com_externallogin/administrator/externallogin.css', [], true);
+        HTMLHelper::_('stylesheet', 'com_externallogin/administrator/externallogin.css', [], true);
 
-        $bar = JToolbar::getInstance('toolbar');
+        $bar = Toolbar::getInstance('toolbar');
 
         // Set the toolbar
-        JToolbarHelper::title(JText::_('COM_EXTERNALLOGIN_MANAGER_USERS'), 'users');
+        ToolbarHelper::title(Text::_('COM_EXTERNALLOGIN_MANAGER_USERS'), 'users');
 
         // Add a standard button.
         $bar->appendButton(
@@ -118,15 +124,15 @@ class ExternalloginViewUsers extends JViewLegacy
             0,
             ''
         );
-        JToolbarHelper::custom(
+        ToolbarHelper::custom(
             'users.disableExternallogin',
             'unpublish',
             'users-disable-externallogin',
             'COM_EXTERNALLOGIN_TOOLBAR_DISABLE_EXTERNALLOGIN'
         );
-        JToolbarHelper::preferences('com_externallogin');
-        JToolbarHelper::divider();
-        JToolbarHelper::help('COM_EXTERNALLOGIN_HELP_MANAGER_USERS');
+        ToolbarHelper::preferences('com_externallogin');
+        ToolbarHelper::divider();
+        ToolbarHelper::help('COM_EXTERNALLOGIN_HELP_MANAGER_USERS');
         $bar->appendButton(
             'Popup',
             'edit',
@@ -139,20 +145,20 @@ class ExternalloginViewUsers extends JViewLegacy
             ''
         );
 
-        JHtml::_('sidebar.setaction', 'index.php?option=com_externallogin&view=users');
+        HTMLHelper::_('sidebar.setaction', 'index.php?option=com_externallogin&view=users');
 
-        JHtml::_(
+        HTMLHelper::_(
             'sidebar.addFilter',
-            JText::_('COM_EXTERNALLOGIN_OPTION_SELECT_PLUGIN'),
+            Text::_('COM_EXTERNALLOGIN_OPTION_SELECT_PLUGIN'),
             'filter_plugin',
-            JHtml::_('select.options', ExternalloginHelper::getPlugins(), 'value', 'text', $this->state->get('filter.plugin'), true)
+            HTMLHelper::_('select.options', ExternalloginHelper::getPlugins(), 'value', 'text', $this->state->get('filter.plugin'), true)
         );
 
-        JHtml::_(
+        HTMLHelper::_(
             'sidebar.addFilter',
-            JText::_('COM_EXTERNALLOGIN_OPTION_SELECT_SERVER'),
+            Text::_('COM_EXTERNALLOGIN_OPTION_SELECT_SERVER'),
             'filter_server',
-            JHtml::_(
+            HTMLHelper::_(
                 'select.options',
                 ExternalloginHelper::getServers(['ignore_request' => true]),
                 'value',
@@ -162,13 +168,13 @@ class ExternalloginViewUsers extends JViewLegacy
             )
         );
 
-        JHtml::_(
+        HTMLHelper::_(
             'sidebar.addFilter',
-            JText::_('COM_EXTERNALLOGIN_OPTION_SELECT_JOOMLA'),
+            Text::_('COM_EXTERNALLOGIN_OPTION_SELECT_JOOMLA'),
             'filter_joomla',
-            JHtml::_(
+            HTMLHelper::_(
                 'select.options',
-                JHtml::_('jgrid.publishedOptions', ['archived' => false, 'trash' => false, 'all' => false]),
+                HTMLHelper::_('jgrid.publishedOptions', ['archived' => false, 'trash' => false, 'all' => false]),
                 'value',
                 'text',
                 $this->state->get('filter.joomla'),
@@ -176,13 +182,13 @@ class ExternalloginViewUsers extends JViewLegacy
             )
         );
 
-        JHtml::_(
+        HTMLHelper::_(
             'sidebar.addFilter',
-            JText::_('COM_EXTERNALLOGIN_OPTION_SELECT_EXTERNAL'),
+            Text::_('COM_EXTERNALLOGIN_OPTION_SELECT_EXTERNAL'),
             'filter_external',
-            JHtml::_(
+            HTMLHelper::_(
                 'select.options',
-                JHtml::_('jgrid.publishedOptions', ['archived' => false, 'trash' => false, 'all' => false]),
+                HTMLHelper::_('jgrid.publishedOptions', ['archived' => false, 'trash' => false, 'all' => false]),
                 'value',
                 'text',
                 $this->state->get('filter.external'),
@@ -201,12 +207,12 @@ class ExternalloginViewUsers extends JViewLegacy
     protected function getSortFields()
     {
         return [
-            'a.username' => JText::_('COM_EXTERNALLOGIN_HEADING_USERNAME'),
-            'a.name' => JText::_('COM_EXTERNALLOGIN_HEADING_NAME'),
-            'a.email' => JText::_('COM_EXTERNALLOGIN_HEADING_EMAIL'),
-            'a.plugin' => JText::_('COM_EXTERNALLOGIN_HEADING_PLUGIN'),
-            's.title' => JText::_('COM_EXTERNALLOGIN_HEADING_SERVER'),
-            'a.id' => JText::_('JGRID_HEADING_ID'),
+            'a.username' => Text::_('COM_EXTERNALLOGIN_HEADING_USERNAME'),
+            'a.name' => Text::_('COM_EXTERNALLOGIN_HEADING_NAME'),
+            'a.email' => Text::_('COM_EXTERNALLOGIN_HEADING_EMAIL'),
+            'a.plugin' => Text::_('COM_EXTERNALLOGIN_HEADING_PLUGIN'),
+            's.title' => Text::_('COM_EXTERNALLOGIN_HEADING_SERVER'),
+            'a.id' => Text::_('JGRID_HEADING_ID'),
         ];
     }
 }

@@ -22,7 +22,7 @@ defined('_JEXEC') or die;
  *
  * @since       2.0.0
  */
-class ExternalloginController extends JControllerLegacy
+class ExternalloginController extends \Joomla\CMS\MVC\Controller\BaseController
 {
     /**
      * @var  string  The default view for the display method.
