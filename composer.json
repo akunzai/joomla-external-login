@@ -39,10 +39,10 @@
 		{
 			"type": "package",
 			"package": {
-				"name": "hamidionline/joomla-stubs",
-				"version": "1.0.0",
+				"name": "akunzai/joomla-stubs",
+				"version": "master",
 				"source": {
-					"url": "https://github.com/hamidionline/joomla-stubs",
+					"url": "https://github.com/akunzai/joomla-stubs.git",
 					"type": "git",
 					"reference": "master"
 				}
@@ -53,8 +53,8 @@
 		"php": ">=7.4.0"
 	},
 	"require-dev": {
+		"akunzai/joomla-stubs": "dev-master",
 		"friendsofphp/php-cs-fixer": "^3.12",
-		"hamidionline/joomla-stubs": "*",
 		"joomla/joomla-cms": "3.10.11",
 		"phpstan/phpstan": "^1.8"
 	},

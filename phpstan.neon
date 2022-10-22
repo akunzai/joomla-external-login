@@ -6,12 +6,9 @@ parameters:
   paths:
     - src
   scanFiles:
-    - vendor/hamidionline/joomla-stubs/stubs.php
+    - vendor/akunzai/joomla-stubs/joomla-stubs.php
   scanDirectories:
     - vendor/joomla/joomla-cms/administrator/includes
     - vendor/joomla/joomla-cms/includes
     - vendor/joomla/joomla-cms/libraries
-  ignoreErrors:
-    # joomla stubs
-    - '#Class j[a-zA-Z]+ referenced with incorrect case\: J[a-zA-Z]+#'
   tmpDir: tmp

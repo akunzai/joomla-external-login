@@ -95,7 +95,7 @@ class ExternalloginViewServers extends JViewLegacy
         $app = JFactory::getApplication();
         $app->JComponentTitle = $html;
         JFactory::getDocument()->setTitle(strip_tags($title) . ' - ' . $app->get('sitename') . ' - ' . JText::_('JADMINISTRATION'));
-        $bar = JToolBar::getInstance('toolbar');
+        $bar = JToolbar::getInstance('toolbar');
         $bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_externallogin&amp;view=plugins&amp;tmpl=component', 800, 400);
         $bar->appendButton('Standard', 'edit', 'JTOOLBAR_EDIT', 'server.edit', true);
         $bar->appendButton('Standard', 'publish', 'JTOOLBAR_PUBLISH', 'servers.publish', true);
