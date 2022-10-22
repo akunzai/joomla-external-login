@@ -1,136 +1,136 @@
 parameters:
-  ignoreErrors:
-    -
-      message: "#^Access to an undefined property ExternalloginTableServer\\:\\:\\$ordering\\.$#"
-      count: 1
-      path: src/administrator/components/com_externallogin/tables/server.php
+	ignoreErrors:
+		-
+			message: "#^Access to an undefined property ExternalloginTableServer\\:\\:\\$ordering\\.$#"
+			count: 1
+			path: src/administrator/components/com_externallogin/tables/server.php
 
-    -
-      message: "#^Access to an undefined property ExternalloginTableServer\\:\\:\\$params\\.$#"
-      count: 2
-      path: src/administrator/components/com_externallogin/tables/server.php
+		-
+			message: "#^Access to an undefined property ExternalloginTableServer\\:\\:\\$params\\.$#"
+			count: 2
+			path: src/administrator/components/com_externallogin/tables/server.php
 
-    -
-      message: "#^Access to an undefined property ExternalloginViewAbout\\:\\:\\$sidebar\\.$#"
-      count: 1
-      path: src/administrator/components/com_externallogin/views/about/view.html.php
+		-
+			message: "#^Access to an undefined property ExternalloginViewAbout\\:\\:\\$sidebar\\.$#"
+			count: 1
+			path: src/administrator/components/com_externallogin/views/about/view.html.php
 
-    -
-      message: "#^Access to an undefined property object\\:\\:\\$state\\.$#"
-      count: 2
-      path: src/administrator/components/com_externallogin/views/logs/tmpl/default.php
+		-
+			message: "#^Access to an undefined property object\\:\\:\\$state\\.$#"
+			count: 2
+			path: src/administrator/components/com_externallogin/views/logs/tmpl/default.php
 
-    -
-      message: "#^Access to an undefined property ExternalloginViewLogs\\:\\:\\$items\\.$#"
-      count: 1
-      path: src/administrator/components/com_externallogin/views/logs/view.html.php
+		-
+			message: "#^Access to an undefined property ExternalloginViewLogs\\:\\:\\$items\\.$#"
+			count: 1
+			path: src/administrator/components/com_externallogin/views/logs/view.html.php
 
-    -
-      message: "#^Access to an undefined property ExternalloginViewLogs\\:\\:\\$pagination\\.$#"
-      count: 1
-      path: src/administrator/components/com_externallogin/views/logs/view.html.php
+		-
+			message: "#^Access to an undefined property ExternalloginViewLogs\\:\\:\\$pagination\\.$#"
+			count: 1
+			path: src/administrator/components/com_externallogin/views/logs/view.html.php
 
-    -
-      message: "#^Access to an undefined property ExternalloginViewLogs\\:\\:\\$sidebar\\.$#"
-      count: 1
-      path: src/administrator/components/com_externallogin/views/logs/view.html.php
+		-
+			message: "#^Access to an undefined property ExternalloginViewLogs\\:\\:\\$sidebar\\.$#"
+			count: 1
+			path: src/administrator/components/com_externallogin/views/logs/view.html.php
 
-    -
-      message: "#^Access to an undefined property ExternalloginViewLogs\\:\\:\\$state\\.$#"
-      count: 3
-      path: src/administrator/components/com_externallogin/views/logs/view.html.php
+		-
+			message: "#^Access to an undefined property ExternalloginViewLogs\\:\\:\\$state\\.$#"
+			count: 3
+			path: src/administrator/components/com_externallogin/views/logs/view.html.php
 
-    -
-      message: "#^Access to an undefined property ExternalloginViewPlugins\\:\\:\\$items\\.$#"
-      count: 1
-      path: src/administrator/components/com_externallogin/views/plugins/view.html.php
+		-
+			message: "#^Access to an undefined property ExternalloginViewPlugins\\:\\:\\$items\\.$#"
+			count: 1
+			path: src/administrator/components/com_externallogin/views/plugins/view.html.php
 
-    -
-      message: "#^Access to an undefined property ExternalloginViewServer\\:\\:\\$form\\.$#"
-      count: 1
-      path: src/administrator/components/com_externallogin/views/server/view.html.php
+		-
+			message: "#^Access to an undefined property ExternalloginViewServer\\:\\:\\$form\\.$#"
+			count: 1
+			path: src/administrator/components/com_externallogin/views/server/view.html.php
 
-    -
-      message: "#^Access to an undefined property ExternalloginViewServer\\:\\:\\$item\\.$#"
-      count: 4
-      path: src/administrator/components/com_externallogin/views/server/view.html.php
+		-
+			message: "#^Access to an undefined property ExternalloginViewServer\\:\\:\\$item\\.$#"
+			count: 4
+			path: src/administrator/components/com_externallogin/views/server/view.html.php
 
-    -
-      message: "#^Access to an undefined property ExternalloginViewServer\\:\\:\\$state\\.$#"
-      count: 1
-      path: src/administrator/components/com_externallogin/views/server/view.html.php
+		-
+			message: "#^Access to an undefined property ExternalloginViewServer\\:\\:\\$state\\.$#"
+			count: 1
+			path: src/administrator/components/com_externallogin/views/server/view.html.php
 
-    -
-      message: "#^Access to an undefined property ExternalloginViewServers\\:\\:\\$globalS\\.$#"
-      count: 1
-      path: src/administrator/components/com_externallogin/views/servers/view.html.php
+		-
+			message: "#^Access to an undefined property ExternalloginViewServers\\:\\:\\$globalS\\.$#"
+			count: 1
+			path: src/administrator/components/com_externallogin/views/servers/view.html.php
 
-    -
-      message: "#^Access to an undefined property ExternalloginViewServers\\:\\:\\$items\\.$#"
-      count: 1
-      path: src/administrator/components/com_externallogin/views/servers/view.html.php
+		-
+			message: "#^Access to an undefined property ExternalloginViewServers\\:\\:\\$items\\.$#"
+			count: 1
+			path: src/administrator/components/com_externallogin/views/servers/view.html.php
 
-    -
-      message: "#^Access to an undefined property ExternalloginViewServers\\:\\:\\$pagination\\.$#"
-      count: 1
-      path: src/administrator/components/com_externallogin/views/servers/view.html.php
+		-
+			message: "#^Access to an undefined property ExternalloginViewServers\\:\\:\\$pagination\\.$#"
+			count: 1
+			path: src/administrator/components/com_externallogin/views/servers/view.html.php
 
-    -
-      message: "#^Access to an undefined property ExternalloginViewServers\\:\\:\\$sidebar\\.$#"
-      count: 1
-      path: src/administrator/components/com_externallogin/views/servers/view.html.php
+		-
+			message: "#^Access to an undefined property ExternalloginViewServers\\:\\:\\$sidebar\\.$#"
+			count: 1
+			path: src/administrator/components/com_externallogin/views/servers/view.html.php
 
-    -
-      message: "#^Access to an undefined property ExternalloginViewServers\\:\\:\\$state\\.$#"
-      count: 4
-      path: src/administrator/components/com_externallogin/views/servers/view.html.php
+		-
+			message: "#^Access to an undefined property ExternalloginViewServers\\:\\:\\$state\\.$#"
+			count: 4
+			path: src/administrator/components/com_externallogin/views/servers/view.html.php
 
-    -
-      message: "#^Access to an undefined property ExternalloginViewUpload\\:\\:\\$form\\.$#"
-      count: 1
-      path: src/administrator/components/com_externallogin/views/upload/view.html.php
+		-
+			message: "#^Access to an undefined property ExternalloginViewUpload\\:\\:\\$form\\.$#"
+			count: 1
+			path: src/administrator/components/com_externallogin/views/upload/view.html.php
 
-    -
-      message: "#^Access to an undefined property ExternalloginViewUpload\\:\\:\\$item\\.$#"
-      count: 1
-      path: src/administrator/components/com_externallogin/views/upload/view.html.php
+		-
+			message: "#^Access to an undefined property ExternalloginViewUpload\\:\\:\\$item\\.$#"
+			count: 1
+			path: src/administrator/components/com_externallogin/views/upload/view.html.php
 
-    -
-      message: "#^Access to an undefined property ExternalloginViewUpload\\:\\:\\$state\\.$#"
-      count: 1
-      path: src/administrator/components/com_externallogin/views/upload/view.html.php
+		-
+			message: "#^Access to an undefined property ExternalloginViewUpload\\:\\:\\$state\\.$#"
+			count: 1
+			path: src/administrator/components/com_externallogin/views/upload/view.html.php
 
-    -
-      message: "#^Access to an undefined property ExternalloginViewUsers\\:\\:\\$items\\.$#"
-      count: 1
-      path: src/administrator/components/com_externallogin/views/users/view.html.php
+		-
+			message: "#^Access to an undefined property ExternalloginViewUsers\\:\\:\\$items\\.$#"
+			count: 1
+			path: src/administrator/components/com_externallogin/views/users/view.html.php
 
-    -
-      message: "#^Access to an undefined property ExternalloginViewUsers\\:\\:\\$pagination\\.$#"
-      count: 1
-      path: src/administrator/components/com_externallogin/views/users/view.html.php
+		-
+			message: "#^Access to an undefined property ExternalloginViewUsers\\:\\:\\$pagination\\.$#"
+			count: 1
+			path: src/administrator/components/com_externallogin/views/users/view.html.php
 
-    -
-      message: "#^Access to an undefined property ExternalloginViewUsers\\:\\:\\$sidebar\\.$#"
-      count: 1
-      path: src/administrator/components/com_externallogin/views/users/view.html.php
+		-
+			message: "#^Access to an undefined property ExternalloginViewUsers\\:\\:\\$sidebar\\.$#"
+			count: 1
+			path: src/administrator/components/com_externallogin/views/users/view.html.php
 
-    -
-      message: "#^Access to an undefined property ExternalloginViewUsers\\:\\:\\$state\\.$#"
-      count: 5
-      path: src/administrator/components/com_externallogin/views/users/view.html.php
+		-
+			message: "#^Access to an undefined property ExternalloginViewUsers\\:\\:\\$state\\.$#"
+			count: 5
+			path: src/administrator/components/com_externallogin/views/users/view.html.php
 
-    -
-      message: "#^Access to an undefined property ExternalloginViewLogin\\:\\:\\$items\\.$#"
-      count: 1
-      path: src/components/com_externallogin/views/login/view.html.php
+		-
+			message: "#^Access to an undefined property ExternalloginViewLogin\\:\\:\\$items\\.$#"
+			count: 1
+			path: src/components/com_externallogin/views/login/view.html.php
 
-    -
-      message: "#^Access to an undefined property ExternalloginViewLogin\\:\\:\\$params\\.$#"
-      count: 1
-      path: src/components/com_externallogin/views/login/view.html.php
+		-
+			message: "#^Access to an undefined property ExternalloginViewLogin\\:\\:\\$params\\.$#"
+			count: 1
+			path: src/components/com_externallogin/views/login/view.html.php
 
-    -
-      message: "#^Access to an undefined property ExternalloginViewLogin\\:\\:\\$state\\.$#"
-      count: 1
-      path: src/components/com_externallogin/views/login/view.html.php
+		-
+			message: "#^Access to an undefined property ExternalloginViewLogin\\:\\:\\$state\\.$#"
+			count: 1
+			path: src/components/com_externallogin/views/login/view.html.php
