@@ -85,7 +85,7 @@ class ExternalloginViewUsers extends JViewLegacy
         // Load specific css component
         JHtml::_('stylesheet', 'com_externallogin/administrator/externallogin.css', [], true);
 
-        $bar = JToolBar::getInstance('toolbar');
+        $bar = JToolbar::getInstance('toolbar');
 
         // Set the toolbar
         $title = JText::_('COM_EXTERNALLOGIN_MANAGER_USERS');

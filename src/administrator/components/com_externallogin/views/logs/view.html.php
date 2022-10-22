@@ -89,7 +89,7 @@ class ExternalloginViewLogs extends JViewLegacy
         JFactory::getDocument()->setTitle(strip_tags($title) . ' - ' . $app->get('sitename') . ' - ' . JText::_('JADMINISTRATION'));
 
         $return = urlencode(base64_encode((string) JUri::getInstance()));
-        $bar = JToolBar::getInstance('toolbar');
+        $bar = JToolbar::getInstance('toolbar');
         $bar->appendButton('Confirm', 'COM_EXTERNALLOGIN_MSG_LOGS_DELETE', 'delete', 'JTOOLBAR_DELETE', 'logs.delete', false);
         $bar->appendButton('Link', 'download', 'COM_EXTERNALLOGIN_TOOLBAR_LOGS_DOWNLOAD', 'index.php?option=com_externallogin&view=logs&format=csv');
         $bar->appendButton('Link', 'options', 'JToolbar_Options', 'index.php?option=com_config&amp;view=component&amp;component=com_externallogin&amp;return=' . $return);
