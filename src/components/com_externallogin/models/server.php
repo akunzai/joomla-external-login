@@ -70,7 +70,7 @@ class ExternalloginModelServer extends JModelItem
     /**
      * Returns the server
      *
-     * @return	JUri|string|void  the service URI
+     * @return	JUri|string|bool  the service URI
      *
      * @since	2.0.0
      */
@@ -82,18 +82,13 @@ class ExternalloginModelServer extends JModelItem
 
         if (!$item->load($id) || $item->published != 1) {
             $this->set('error', JText::_('COM_EXTERNALLOGIN_ERROR_SERVER_UNPUBLISHED'));
-
             return false;
         }
 
         $app = JFactory::getApplication();
         $menu = $app->getMenu()->getActive();
 
-        if ($menu) {
-            $params = $menu->params;
-        } else {
-            $params = new JRegistry();
-        }
+        $params = is_null($menu) ? new JRegistry() : $menu->params;
 
         // Compute the url
         $redirect = $this->getState(
@@ -128,18 +123,16 @@ class ExternalloginModelServer extends JModelItem
         $uri = JUri::getInstance($url);
 
         // Return the service/URL
-        if (JFactory::getUser()->guest) {
-            $app->setUserState('com_externallogin.server', $item->id);
-
-            $results = $app->triggerEvent('onGetLoginUrl', [$item, $uri]);
-
-            if (!empty($results)) {
-                return $results[0];
-            } else {
-                $this->set('error', JText::_('COM_EXTERNALLOGIN_ERROR_OCCURS'));
-            }
-        } else {
+        if (!JFactory::getUser()->guest) {
             return $uri;
         }
+        $app->setUserState('com_externallogin.server', $item->id);
+        $results = $app->triggerEvent('onGetLoginUrl', [$item, $uri]);
+
+        if (empty($results)) {
+            $this->set('error', JText::_('COM_EXTERNALLOGIN_ERROR_OCCURS'));
+            return false;
+        }
+        return $results[0];
     }
 }
