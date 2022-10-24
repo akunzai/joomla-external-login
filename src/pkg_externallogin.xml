@@ -26,8 +26,10 @@
 		<file type="component" id="com_externallogin">com_externallogin.zip</file>
 		<file type="module" id="mod_externallogin_site" client="site">mod_externallogin_site.zip</file>
 		<file type="module" id="mod_externallogin_admin" client="administrator">mod_externallogin_admin.zip</file>
-		<file type="plugin" id="externallogin" group="authentication">plg_authentication_externallogin.zip</file>
-		<file type="plugin" id="externallogin" group="system">plg_system_externallogin.zip</file>
+		<file type="plugin" id="plg_authentication_externallogin" group="authentication">plg_authentication_externallogin.zip</file>
+		<file type="plugin" id="plg_system_externallogin" group="system">plg_system_externallogin.zip</file>
+		<file type="plugin" id="plg_system_caslogin" group="system">plg_system_caslogin.zip</file>
+		<file type="plugin" id="plg_user_cbexternallogin" group="system">plg_user_cbexternallogin.zip</file>
 	</files>
 
 	<!-- UPDATESERVER DEFINITION -->

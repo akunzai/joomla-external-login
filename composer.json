@@ -80,8 +80,8 @@
 			"php ./bundle.php ./src/modules/mod_externallogin_site/mod_externallogin_site.xml ./src/packages/mod_externallogin_site.zip",
 			"php ./bundle.php ./src/plugins/authentication/externallogin/externallogin.xml ./src/packages/plg_authentication_externallogin.zip",
 			"php ./bundle.php ./src/plugins/system/externallogin/externallogin.xml ./src/packages/plg_system_externallogin.zip",
-			"php ./bundle.php ./src/plugins/system/caslogin/caslogin.xml ./build/plg_system_caslogin.zip",
-			"php ./bundle.php ./src/plugins/user/cbexternallogin/cbexternallogin.xml ./build/plg_user_cbexternallogin.zip",
+			"php ./bundle.php ./src/plugins/system/caslogin/caslogin.xml ./src/packages/plg_system_caslogin.zip",
+			"php ./bundle.php ./src/plugins/user/cbexternallogin/cbexternallogin.xml ./src/packages/plg_user_cbexternallogin.zip",
 			"php ./bundle.php ./src/pkg_externallogin.xml ./build/pkg_externallogin.zip",
 			"rm -rf ./src/packages"
 		]

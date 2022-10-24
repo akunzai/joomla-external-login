@@ -29,12 +29,4 @@
 		<language tag="en-GB">language/en-GB/en-GB.plg_system_caslogin.sys.ini</language>
 	</languages>
 
-	<config />
-
-	<!-- UPDATESERVER DEFINITION -->
-	<updateservers>
-		<!-- Note: No spaces or linebreaks allowed between the server tags -->
-		<server type="extension" priority="1" name="External Login Update Site">https://raw.githubusercontent.com/akunzai/joomla-external-login/main/manifest.xml</server>
-	</updateservers>
-
 </extension>

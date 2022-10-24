@@ -24,8 +24,6 @@ jobs:
           generate_release_notes: true
           files: |
             build/pkg_externallogin.zip
-            build/plg_system_caslogin.zip
-            build/plg_user_cbexternallogin.zip
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/') && !(contains(github.ref,'dev') || contains(github.ref,'beta') || contains(github.ref,'alpha') || contains(github.ref,'rc'))
@@ -33,5 +31,3 @@ jobs:
           generate_release_notes: true
           files: |
             build/pkg_externallogin.zip
-            build/plg_system_caslogin.zip
-            build/plg_user_cbexternallogin.zip

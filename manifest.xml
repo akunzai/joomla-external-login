@@ -5,42 +5,11 @@
 		<description>External Login Package</description>
 		<element>pkg_externallogin</element>
 		<type>package</type>
+		<client>site</client>
 		<version>3.2.2-dev</version>
 		<infourl title="External Login">https://github.com/akunzai/joomla-external-login/releases/3.2.2-dev</infourl>
 		<downloads>
 			<downloadurl type="full" format="zip">https://github.com/akunzai/joomla-external-login/releases/download/3.2.2-dev/pkg_externallogin.zip</downloadurl>
-		</downloads>
-		<tags>
-			<tag>dev</tag>
-		</tags>
-		<targetplatform name="joomla" version="3" />
-	</update>
-	<update>
-		<name>System - CAS Login</name>
-		<description>System - CAS Login</description>
-		<element>caslogin</element>
-		<group>system</group>
-		<type>plugin</type>
-		<version>3.2.2-dev</version>
-		<infourl title="External Login">https://github.com/akunzai/joomla-external-login/releases/3.2.2-dev</infourl>
-		<downloads>
-			<downloadurl type="full" format="zip">https://github.com/akunzai/joomla-external-login/releases/download/3.2.2-dev/plg_system_caslogin.zip</downloadurl>
-		</downloads>
-		<tags>
-			<tag>dev</tag>
-		</tags>
-		<targetplatform name="joomla" version="3" />
-	</update>
-	<update>
-		<name>User - Community Builder External Login</name>
-		<description>User - Community Builder External Login</description>
-		<element>cbexternallogin</element>
-		<group>user</group>
-		<type>plugin</type>
-		<version>3.2.2-dev</version>
-		<infourl title="External Login">https://github.com/akunzai/joomla-external-login/releases/tag/3.2.2-dev</infourl>
-		<downloads>
-			<downloadurl type="full" format="zip">https://github.com/akunzai/joomla-external-login/releases/download/3.2.2-dev/plg_user_cbexternallogin.zip</downloadurl>
 		</downloads>
 		<tags>
 			<tag>dev</tag>
