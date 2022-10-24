@@ -89,33 +89,27 @@ class ExternalloginViewServers extends JViewLegacy
         JHtml::_('stylesheet', 'com_externallogin/administrator/externallogin.css', [], true);
 
         // Set the toolbar
-        $title = JText::_('COM_EXTERNALLOGIN_MANAGER_SERVERS');
-        $layout = new JLayoutFile('joomla.toolbar.title');
-        $html   = $layout->render(['title' => $title, 'icon' => 'database']);
-        $app = JFactory::getApplication();
-        $app->JComponentTitle = $html;
-        JFactory::getDocument()->setTitle(strip_tags($title) . ' - ' . $app->get('sitename') . ' - ' . JText::_('JADMINISTRATION'));
+        JToolbarHelper::title(JText::_('COM_EXTERNALLOGIN_MANAGER_SERVERS'), 'database');
         $bar = JToolbar::getInstance('toolbar');
         $bar->appendButton('Popup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_externallogin&amp;view=plugins&amp;tmpl=component', 800, 400);
-        $bar->appendButton('Standard', 'edit', 'JTOOLBAR_EDIT', 'server.edit', true);
-        $bar->appendButton('Standard', 'publish', 'JTOOLBAR_PUBLISH', 'servers.publish', true);
-        $bar->appendButton('Standard', 'unpublish', 'JTOOLBAR_UNPUBLISH', 'servers.unpublish', true);
-        $bar->appendButton('Standard', 'checkin', 'JTOOLBAR_CHECKIN', 'servers.checkin', true);
+        JToolbarHelper::editList('server.edit');
+        JToolbarHelper::publishList('servers.publish');
+        JToolbarHelper::unpublishList('servers.unpublish');
+        JToolbarHelper::checkin('servers.checkin');
 
-        if ($this->state->get('filter.published') == - 2) {
-            $bar->appendButton('Confirm', 'COM_EXTERNALLOGIN_MSG_SERVERS_DELETE', 'delete', 'servers.delete', 'servers.delete', true);
+        if ($this->state->get('filter.published') == -2) {
+            JToolbarHelper::deleteList('COM_EXTERNALLOGIN_MSG_SERVERS_DELETE', 'servers.delete');
         } else {
-            $bar->appendButton('Standard', 'archive', 'JTOOLBAR_ARCHIVE', 'servers.archive', true);
-            $bar->appendButton('Standard', 'trash', 'JTOOLBAR_TRASH', 'servers.trash', true, false);
-            $bar->appendButton('Separator', 'divider');
+            JToolbarHelper::archiveList('servers.archive');
+            JToolbarHelper::trash('servers.trash');
+            JToolbarHelper::divider();
         }
 
-        $bar->appendButton('Standard', 'upload', 'COM_EXTERNALLOGIN_TOOLBAR_SERVER_UPLOAD', 'server.upload', true);
-        $bar->appendButton('Standard', 'download', 'COM_EXTERNALLOGIN_TOOLBAR_SERVER_DOWNLOAD', 'server.download', true);
-        $return = urlencode(base64_encode((string) JUri::getInstance()));
-        $bar->appendButton('Link', 'options', 'JToolbar_Options', 'index.php?option=com_config&amp;view=component&amp;component=com_externallogin&amp;return=' . $return);
-        $bar->appendButton('Separator', 'divider');
-        $bar->appendButton('Help', 'COM_EXTERNALLOGIN_HELP_MANAGER_SERVERS', false, null, null);
+        JToolbarHelper::custom('server.upload', 'upload', 'upload', 'COM_EXTERNALLOGIN_TOOLBAR_SERVER_UPLOAD');
+        JToolbarHelper::custom('server.download', 'download', 'download', 'COM_EXTERNALLOGIN_TOOLBAR_SERVER_DOWNLOAD');
+        JToolbarHelper::preferences('com_externallogin');
+        JToolbarHelper::divider();
+        JToolbarHelper::help('COM_EXTERNALLOGIN_HELP_MANAGER_SERVERS');
 
         JHtml::_('sidebar.addentry', JText::_('COM_EXTERNALLOGIN_SUBMENU_SERVERS'), 'index.php?option=com_externallogin', true);
         JHtml::_('sidebar.addentry', JText::_('COM_EXTERNALLOGIN_SUBMENU_USERS'), 'index.php?option=com_externallogin&view=users', false);
