@@ -323,7 +323,7 @@ class PlgAuthenticationExternallogin extends JPlugin
     private function userLoginFail(
         $response,
         $redirection = null,
-        $status = JAuthentication::STATUS_DENIED | JAuthentication::STATUS_UNKNOWN,
+        $status = JAuthentication::STATUS_DENIED | JAuthentication::STATUS_UNKNOWN
     ) {
         if (!empty($redirection)) {
             JFactory::getApplication()->setUserState('com_externallogin.redirect', $redirection);
