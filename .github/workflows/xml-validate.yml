@@ -1,0 +1,27 @@
+name: 'XML Validation'
+
+on:
+  push:
+    paths:
+      - '**.xml'
+  pull_request:
+    paths:
+      - '**.xml'
+  # Allow manually triggering the workflow.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  xml-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Install xmllint
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxml2-utils
+      - name: Validate XML files
+        run: 'find . -type f -iname "*.xml" | xargs xmllint --noout'

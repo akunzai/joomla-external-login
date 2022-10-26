@@ -61,8 +61,6 @@
 	"prefer-stable": true,
 	"scripts": {
 		"lint": [
-			"php -v",
-			"! find ./src -type f -name '*.php' -exec php -d display_errors=1 -d error_reporting=-1 -l {} \\; 2>&1 | grep -v ^'No syntax errors'",
 			"php-cs-fixer fix --diff --dry-run"
 		],
 		"fix": [

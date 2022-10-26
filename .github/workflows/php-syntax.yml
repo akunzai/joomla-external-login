@@ -1,0 +1,31 @@
+name: 'PHP Syntax Check'
+
+on:
+  push:
+    paths:
+      - '**.php'
+  pull_request:
+    paths:
+      - '**.php'
+  # Allow manually triggering the workflow.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  php-syntax:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['7.4', '8.0', '8.1']
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+      - name: Check .php files
+        run: '! find . -type f -name "*.php" -exec php -d display_errors=1 -d error_reporting=-1 -l {} \; 2>&1 | grep -v ^"No syntax errors"'
