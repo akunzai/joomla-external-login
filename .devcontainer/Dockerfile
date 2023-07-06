@@ -78,7 +78,8 @@ RUN set -ex; \
 	mkdir /usr/src/joomla; \
 	tar -xf joomla.tar.bz2 -C /usr/src/joomla; \
 	rm joomla.tar.bz2; \
-	chown -R www-data:www-data /usr/src/joomla
+	chown -R www-data:www-data /usr/src/joomla; \
+    chmod -R g+w /usr/src/joomla;
 
 COPY --from=joomla:3.10.11 /entrypoint.sh /entrypoint.sh
 COPY --from=joomla:3.10.11 /makedb.php /makedb.php
