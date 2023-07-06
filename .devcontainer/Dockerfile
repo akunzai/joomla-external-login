@@ -9,7 +9,7 @@ ENV JOOMLA_INSTALLATION_DISABLE_LOCALHOST_CHECK=1
 
 # install MariaDB client
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get install -y mariadb-client \ 
+    && apt-get install -y mariadb-client \
     && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 # enable Apache2 modules
@@ -67,6 +67,8 @@ RUN { \
 
 # Xdebug's default debugging port has changed from 9000 to 9003 since v3
 RUN sed -i 's/9000/9003/' /usr/local/etc/php/conf.d/xdebug.ini
+# Reset step debugging activation from yes to default (trigger)
+RUN sed -i '/xdebug.start_with_request/d' /usr/local/etc/php/conf.d/xdebug.ini
 
 # https://hub.docker.com/_/joomla
 ARG JOOMLA_VERSION=3.0.11
