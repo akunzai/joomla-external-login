@@ -50,7 +50,7 @@
 		}
 	],
 	"require": {
-		"php": ">=7.4.0"
+		"php": ">=8.1"
 	},
 	"require-dev": {
 		"akunzai/joomla-stubs": "dev-master",
