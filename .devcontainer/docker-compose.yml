@@ -12,21 +12,21 @@ services:
       - ..:/workspace:cached
       - joomla-data:/var/www/html
     environment:
-      JOOMLA_DB_HOST: mariadb
+      JOOMLA_DB_HOST: mysql
       JOOMLA_DB_PASSWORD: secret
     depends_on:
-      - mariadb
+      - mysql
 
-  mariadb:
-    # https://hub.docker.com/_/mariadb
-    image: mariadb
+  mysql:
+    # https://hub.docker.com/_/mysql
+    image: mysql
     restart: unless-stopped
     volumes:
-      - mariadb-data:/var/lib/mysql
+      - mysql-data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: secret
       MYSQL_DATABASE: joomla
 
 volumes:
   joomla-data: null
-  mariadb-data: null
+  mysql-data: null
