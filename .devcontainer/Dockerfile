@@ -71,7 +71,7 @@ RUN sed -i 's/9000/9003/' /usr/local/etc/php/conf.d/xdebug.ini
 RUN sed -i '/xdebug.start_with_request/d' /usr/local/etc/php/conf.d/xdebug.ini
 
 # https://hub.docker.com/_/joomla
-ARG JOOMLA_VERSION=3.0.11
+ARG JOOMLA_VERSION=3.10.11
 # Download package and extract to web volume
 RUN set -ex; \
 	curl -o joomla.tar.bz2 -SL https://github.com/joomla/joomla-cms/releases/download/${JOOMLA_VERSION}/Joomla_${JOOMLA_VERSION}-Stable-Full_Package.tar.bz2; \
