@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        VARIANT: "8.1-apache-bullseye"
+        VARIANT: "8.1-apache-bookworm"
         JOOMLA_VERSION: "3.10.11"
     volumes:
       - ..:/workspace:cached

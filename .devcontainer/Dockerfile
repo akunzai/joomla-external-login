@@ -1,5 +1,5 @@
 # https://mcr.microsoft.com/v2/vscode/devcontainers/php/tags/list
-ARG VARIANT=8.1-apache-bullseye
+ARG VARIANT=8.1-apache-bookworm
 # https://github.com/devcontainers/images/blob/main/src/php/.devcontainer/Dockerfile
 FROM mcr.microsoft.com/vscode/devcontainers/php:${VARIANT}
 
