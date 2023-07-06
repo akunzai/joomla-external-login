@@ -48,7 +48,7 @@
 	</files>
 
 	<languages>
-		<language tag="en-GB">language/en-GB/en-GB.com_externallogin.ini</language>
+		<language tag="en-GB">language/en-GB/com_externallogin.ini</language>
 	</languages>
 
 	<media destination="com_externallogin" folder="media/com_externallogin">
@@ -102,8 +102,8 @@
 		</files>
 
 		<languages folder="administrator">
-			<language tag="en-GB">language/en-GB/en-GB.com_externallogin.ini</language>
-			<language tag="en-GB">language/en-GB/en-GB.com_externallogin.sys.ini</language>
+			<language tag="en-GB">language/en-GB/com_externallogin.ini</language>
+			<language tag="en-GB">language/en-GB/com_externallogin.sys.ini</language>
 		</languages>
 	</administration>
 
