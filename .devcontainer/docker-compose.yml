@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
       args:
         VARIANT: "8.1-apache-bookworm"
-        JOOMLA_VERSION: "3.10.11"
+        JOOMLA_VERSION: "3.10.12"
     volumes:
       - ..:/workspace:cached
       - joomla-data:/var/www/html
