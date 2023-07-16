@@ -56,7 +56,7 @@
 		"akunzai/joomla-stubs": "dev-master",
 		"friendsofphp/php-cs-fixer": "v3.21.2",
 		"joomla/joomla-cms": "3.10.12",
-		"phpstan/phpstan": "^1.8"
+		"phpstan/phpstan": "^1.10.25"
 	},
 	"prefer-stable": true,
 	"scripts": {
