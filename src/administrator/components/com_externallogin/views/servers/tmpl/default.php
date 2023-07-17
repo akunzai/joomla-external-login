@@ -26,8 +26,8 @@ HTMLHelper::_('formbehavior.chosen', 'select');
 if (version_compare(JVERSION, '4.0.0', '<')) {
 	HTMLHelper::_('behavior.framework', true);
 }
-HTMLHelper::_('script', 'system/modal.js', true, true);
 HTMLHelper::_('stylesheet', 'system/modal.css', [], true);
+HTMLHelper::script('system/modal.js', ['framework' => true, 'relative' => true]);
 
 $listOrder	= $this->escape($this->state->get('list.ordering'));
 $listDirn	= $this->escape($this->state->get('list.direction'));
