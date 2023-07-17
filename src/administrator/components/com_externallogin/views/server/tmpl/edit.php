@@ -21,9 +21,12 @@ defined('_JEXEC') or die;
 if (version_compare(JVERSION, '4.0.0', '<')) {
 	HTMLHelper::_('behavior.tooltip');
 	HTMLHelper::_('behavior.formvalidation');
+} else {
+	HTMLHelper::_('jquery.framework');
 }
 
 $fieldSets = $this->form->getFieldsets();
+$fistTabName = array_key_first($fieldSets);
 ?>
 <script type="text/javascript">
 	Joomla.submitbutton = function(task) {
@@ -38,35 +41,27 @@ $fieldSets = $this->form->getFieldsets();
 <form action="<?php echo Route::_('index.php?option=com_externallogin&id=' . $this->item->id); ?>" method="post" name="adminForm" id="server-form" class="form-validate form-horizontal">
 	<div class="row-fluid">
 		<div class="span10">
-			<ul class="nav nav-tabs" id="configTabs">
-				<?php $fieldSets = $this->form->getFieldsets(); ?>
-				<?php foreach ($fieldSets as $name => $fieldSet) : ?>
-					<?php $label = empty($fieldSet->label) ? 'COM_CONFIG_' . $name . '_FIELDSET_LABEL' : $fieldSet->label; ?>
-					<li><a href="#<?php echo $name; ?>" data-toggle="tab"><?php echo Text::_($label); ?></a></li>
-				<?php endforeach; ?>
-			</ul>
-			<div class="tab-content">
-				<?php $fieldSets = $this->form->getFieldsets(); ?>
-				<?php foreach ($fieldSets as $name => $fieldSet) : ?>
-					<div class="tab-pane" id="<?php echo $name; ?>">
-						<?php if (isset($fieldSet->description) && !empty($fieldSet->description)) : ?>
-							<p class="tab-description"><?php echo Text::_($fieldSet->description); ?></p>
-						<?php endif; ?>
-						<?php foreach ($this->form->getFieldset($name) as $field) : ?>
-							<div class="control-group">
-								<?php if (!$field->hidden && $name != "permissions") : ?>
-									<div class="control-label">
-										<?php echo $field->label; ?>
-									</div>
-								<?php endif; ?>
-								<div class="<?php if ($name != "permissions") : ?>controls<?php endif; ?>">
-									<?php echo $field->input; ?>
-								</div>
+			<?php echo HTMLHelper::_('bootstrap.startTabSet', 'configTabs', ['active' => $fistTabName]); ?>
+			<?php foreach ($fieldSets as $name => $fieldSet) : ?>
+				<?php $label = empty($fieldSet->label) ? 'COM_CONFIG_' . $name . '_FIELDSET_LABEL' : $fieldSet->label; ?>
+				<?php echo HTMLHelper::_('bootstrap.addTab', 'configTabs', $name, Text::_($label)); ?>
+				<?php if (isset($fieldSet->description) && !empty($fieldSet->description)) : ?>
+					<p class="tab-description"><?php echo Text::_($fieldSet->description); ?></p>
+				<?php endif; ?>
+				<?php foreach ($this->form->getFieldset($name) as $field) : ?>
+					<div class="control-group">
+						<?php if (!$field->hidden && $name != "permissions") : ?>
+							<div class="control-label">
+								<?php echo $field->label; ?>
 							</div>
-						<?php endforeach; ?>
+						<?php endif; ?>
+						<div class="<?php if ($name != "permissions") : ?>controls<?php endif; ?>">
+							<?php echo $field->input; ?>
+						</div>
 					</div>
 				<?php endforeach; ?>
-			</div>
+				<?php echo HTMLHelper::_('bootstrap.endTab'); ?>
+			<?php endforeach; ?>
 		</div>
 	</div>
 	<div>
@@ -75,6 +70,3 @@ $fieldSets = $this->form->getFieldsets();
 		<?php echo HTMLHelper::_('form.token'); ?>
 	</div>
 </form>
-<script type="text/javascript">
-	jQuery('#configTabs').find('a:first').tab('show'); // Select first tab
-</script>
