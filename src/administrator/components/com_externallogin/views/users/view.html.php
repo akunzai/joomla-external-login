@@ -89,7 +89,7 @@ class ExternalloginViewUsers extends \Joomla\CMS\MVC\View\HtmlView
     protected function addToolbar()
     {
         // Load specific css component
-        HTMLHelper::_('stylesheet', 'com_externallogin/administrator/externallogin.css', [], true);
+        HTMLHelper::stylesheet('com_externallogin/administrator/externallogin.css', ['relative' => true]);
 
         $bar = Toolbar::getInstance('toolbar');
 

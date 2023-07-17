@@ -84,7 +84,7 @@ class ExternalloginViewLogs extends \Joomla\CMS\MVC\View\HtmlView
     protected function addToolbar()
     {
         // Load specific css component
-        HTMLHelper::_('stylesheet', 'com_externallogin/administrator/externallogin.css', [], true);
+        HTMLHelper::stylesheet('com_externallogin/administrator/externallogin.css', ['relative' => true]);
 
         // Set the toolbar
         ToolbarHelper::title(Text::_('COM_EXTERNALLOGIN_MANAGER_LOGS'), 'list-view');
