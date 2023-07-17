@@ -260,6 +260,7 @@ class PlgSystemCaslogin extends \Joomla\CMS\Plugin\CMSPlugin
             return;
         }
         if (empty($ticket) && !empty($serverID)) {
+            /** @var ExternalloginTable|bool */
             $server = Table::getInstance('Server', 'ExternalloginTable');
             if ($server && $server->load($serverID) && $server->plugin == 'system.caslogin') {
                 // Log message
