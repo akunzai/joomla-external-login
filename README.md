@@ -11,7 +11,7 @@ The [Joomla!](https://www.joomla.org/) authentication extension allows to login 
 
 - PHP >= 8.1
 - [Composer](https://getcomposer.org/)
-- [Joomla!](https://www.joomla.org/) 3.x
+- [Joomla!](https://www.joomla.org/) 3.10.x or 4.x
 
 ## Build
 
@@ -26,4 +26,4 @@ composer build
 ## History of this extension
 
 - [Christophe Demko](https://github.com/chdemko) continue the [Authentication Manager project](http://joomlacode.org/gf/project/auth_manager/), originally developed for Joomla! 1.5, and make it compatible with Joomla! 3.x.
-- [Charley Wu](https://github.com/akunzai) continue the [External Login extension](https://github.com/chdemko/joomla-external-login) and make it compatible with PHP 8.1 and Joomla! 4.0.
+- [Charley Wu](https://github.com/akunzai) continue the [External Login extension](https://github.com/chdemko/joomla-external-login) and make it compatible with PHP 8.1 and Joomla! 4.x.
