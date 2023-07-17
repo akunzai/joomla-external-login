@@ -11,11 +11,16 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
 // Import Joomla controllerform library
-jimport('joomla.application.component.controllerform');
+JLoader::import('joomla.application.component.controllerform');
 
 /**
  * Server Controller of External Login component
@@ -25,7 +30,7 @@ jimport('joomla.application.component.controllerform');
  *
  * @since       2.0.0
  */
-class ExternalloginControllerServer extends JControllerForm
+class ExternalloginControllerServer extends \Joomla\CMS\MVC\Controller\FormController
 {
     /**
      * Gets the URL arguments to append to an item redirect.
@@ -41,7 +46,7 @@ class ExternalloginControllerServer extends JControllerForm
      */
     protected function getRedirectToItemAppend($recordId = null, $urlVar = 'id')
     {
-        $plugin = JFactory::getApplication()->input->get('plugin', '');
+        $plugin = Factory::getApplication()->input->get('plugin', '');
         $append = parent::getRedirectToItemAppend($recordId, $urlVar);
 
         if (!empty($plugin)) {
@@ -59,12 +64,12 @@ class ExternalloginControllerServer extends JControllerForm
     public function download()
     {
         // Check for request forgeries.
-        JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+        Session::checkToken() or exit(Text::_('JINVALID_TOKEN'));
 
         // Initialise variables.
-        $cid = JFactory::getApplication()->input->get('cid', [], 'array');
+        $cid = Factory::getApplication()->input->get('cid', [], 'array');
 
-        $this->setRedirect(JRoute::_('index.php?option=com_externallogin&view=download&format=csv&id=' . $cid[0], false));
+        $this->setRedirect(Route::_('index.php?option=com_externallogin&view=download&format=csv&id=' . $cid[0], false));
 
         return true;
     }
@@ -77,23 +82,23 @@ class ExternalloginControllerServer extends JControllerForm
     public function upload()
     {
         // Check for request forgeries.
-        JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+        Session::checkToken() or exit(Text::_('JINVALID_TOKEN'));
 
         // Initialise variables.
-        $form = JFactory::getApplication()->input->get('jform', [], 'array');
+        $form = Factory::getApplication()->input->get('jform', [], 'array');
         $id = (int) $form['id'];
 
         $model = $this->getModel();
 
         if ($model->upload($form)) {
             $this->setRedirect(
-                JRoute::_('index.php?option=com_externallogin&view=success&tmpl=component', false),
-                JText::_('COM_EXTERNALLOGIN_MSG_UPLOAD_SUCCESS')
+                Route::_('index.php?option=com_externallogin&view=success&tmpl=component', false),
+                Text::_('COM_EXTERNALLOGIN_MSG_UPLOAD_SUCCESS')
             );
             return;
         }
         $this->setRedirect(
-            JRoute::_('index.php?option=com_externallogin&view=upload&tmpl=component&id=' . $id, false),
+            Route::_('index.php?option=com_externallogin&view=upload&tmpl=component&id=' . $id, false),
             $model->get('error'),
             'error'
         );

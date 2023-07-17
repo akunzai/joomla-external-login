@@ -11,11 +11,15 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\Registry\Registry;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
 // Import the Joomla modellist library
-jimport('joomla.application.component.modellist');
+JLoader::import('joomla.application.component.modellist');
 
 /**
  * Login Model of External Login component
@@ -25,7 +29,7 @@ jimport('joomla.application.component.modellist');
  *
  * @since       2.0.0
  */
-class ExternalloginModelLogin extends JModelList
+class ExternalloginModelLogin extends \Joomla\CMS\MVC\Model\ListModel
 {
     /**
      * Method to auto-populate the model state.
@@ -43,15 +47,15 @@ class ExternalloginModelLogin extends JModelList
      */
     protected function populateState($ordering = null, $direction = null)
     {
+        $app = Factory::getApplication();
         // Adjust the context to support modal layouts.
-        if ($layout = JFactory::getApplication()->input->get('layout')) {
+        if ($layout = $app->input->get('layout')) {
             $this->context .= '.' . $layout;
         }
 
-        $app = JFactory::getApplication();
         $redirect = $app->input->get('redirect', $app->getUserState('users.login.form.data.return'));
         $this->setState('server.redirect', $redirect);
-        $noredirect = JFactory::getApplication()->input->get('noredirect');
+        $noredirect = $app->input->get('noredirect');
         $this->setState('server.noredirect', $noredirect);
 
         // List state information.
@@ -70,7 +74,7 @@ class ExternalloginModelLogin extends JModelList
     protected function getListQuery()
     {
         // Create a new query object.
-        $db = JFactory::getDBO();
+        $db = Factory::getDBO();
         $query = $db->getQuery(true);
 
         // Select some fields
@@ -83,8 +87,8 @@ class ExternalloginModelLogin extends JModelList
         $query->join(
             'LEFT',
             '#__extensions AS e ON ' .
-            $db->quoteName('e.type') . '=' . $db->quote('plugin') . ' AND ' .
-            $query->concatenate([$db->quoteName('e.folder'), $db->quoteName('e.element')], '.') . '=' . $db->quoteName('a.plugin')
+                $db->quoteName('e.type') . '=' . $db->quote('plugin') . ' AND ' .
+                $query->concatenate([$db->quoteName('e.folder'), $db->quoteName('e.element')], '.') . '=' . $db->quoteName('a.plugin')
         );
         $query->where('e.enabled = 1');
 
@@ -109,24 +113,24 @@ class ExternalloginModelLogin extends JModelList
     public function getItems()
     {
         $items = parent::getItems();
-        $app = JFactory::getApplication();
+        $app = Factory::getApplication();
         $menu = $app->getMenu()->getActive();
 
         if ($menu) {
             $params = $menu->params;
         } else {
-            $params = new JRegistry();
+            $params = new Registry();
         }
 
         foreach ($items as $i => $item) {
-            $item->params = new JRegistry($item->params);
+            $item->params = new Registry($item->params);
             $redirect = $this->getState(
                 'server.redirect',
                 $params->get(
                     'redirect',
                     $item->params->get(
                         'redirect',
-                        JComponentHelper::getParams('com_externallogin')->get('redirect')
+                        ComponentHelper::getParams('com_externallogin')->get('redirect')
                     )
                 )
             );
@@ -134,7 +138,7 @@ class ExternalloginModelLogin extends JModelList
                 'server.noredirect',
                 $item->params->get(
                     'noredirect',
-                    JComponentHelper::getParams('com_externallogin')->get('noredirect')
+                    ComponentHelper::getParams('com_externallogin')->get('noredirect')
                 )
             );
 

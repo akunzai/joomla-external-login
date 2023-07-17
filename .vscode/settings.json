@@ -12,5 +12,8 @@
     "**/.history/**",
     "**/tmp/**"
   ],
-  "cSpell.words": ["Joomla"]
+  "cSpell.words": [
+    "Initialise",
+    "Joomla"
+  ]
 }

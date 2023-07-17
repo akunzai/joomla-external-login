@@ -11,22 +11,26 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\BaseController;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
 // Access check.
-if (!JFactory::getUser()->authorise('core.manage', 'com_externallogin')) {
-    return JFactory::getApplication()->enqueueMessage(JText::_('JERROR_ALERTNOAUTHOR'), 'error');
+if (!Factory::getUser()->authorise('core.manage', 'com_externallogin')) {
+    return Factory::getApplication()->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'error');
 }
 
 // Require helpers file
 require_once dirname(__FILE__) . '/helpers.php';
 
 // Get an instance of the controller prefixed by Externallogin
-$controller = JControllerLegacy::getInstance('Externallogin');
+$controller = BaseController::getInstance('Externallogin');
 
 // Perform the Request task
-$controller->execute(JFactory::getApplication()->input->get('task'));
+$controller->execute(Factory::getApplication()->input->get('task'));
 
 // Redirect if set by the controller
 $controller->redirect();

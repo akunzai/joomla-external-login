@@ -11,11 +11,13 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\Registry\Registry;
+
 // No direct access
 defined('_JEXEC') or die;
 
 // Import Joomla table library
-jimport('joomla.database.table');
+JLoader::import('joomla.database.table');
 
 /**
  * Server Table class of External Login component
@@ -25,7 +27,7 @@ jimport('joomla.database.table');
  *
  * @since       0.0.1
  */
-class ExternalloginTableServer extends JTable
+class ExternalloginTableServer extends \Joomla\CMS\Table\Table
 {
     /**
      * Constructor
@@ -60,8 +62,8 @@ class ExternalloginTableServer extends JTable
             return false;
         }
         $this->params = isset($this->params)
-            ? new JRegistry($this->params)
-            : new JRegistry();
+            ? new Registry($this->params)
+            : new Registry();
         return true;
     }
 
@@ -86,7 +88,7 @@ class ExternalloginTableServer extends JTable
         }
 
         if (is_array($this->params)) {
-            $this->params = (string) new JRegistry($this->params);
+            $this->params = (string) new Registry($this->params);
         }
 
         if (parent::store($updateNulls)) {

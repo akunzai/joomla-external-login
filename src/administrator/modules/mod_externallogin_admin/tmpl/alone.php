@@ -11,6 +11,8 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Language\Text;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 ?>
@@ -19,9 +21,8 @@ defined('_JEXEC') or die;
 	<div class="controls">
 		<div class="btn-group pull-left">
 			<button tabindex="3" class="btn btn-primary btn-large" onclick="document.location.href='<?php echo $servers[0]->url; ?>'; return false;">
-				<i class="icon-lock icon-white"></i> <?php echo JText::_('MOD_EXTERNALLOGIN_ADMIN_LOGIN'); ?>
+				<i class="icon-lock icon-white"></i> <?php echo Text::_('MOD_EXTERNALLOGIN_ADMIN_LOGIN'); ?>
 			</button>
 		</div>
 	</div>
 </div>
-

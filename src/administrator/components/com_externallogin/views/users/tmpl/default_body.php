@@ -11,20 +11,26 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\Utilities\ArrayHelper;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
 // Include the component HTML helpers.
-JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
+HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
-$user = JFactory::getUser();
+$user = Factory::getUser();
 $ordering = $this->state->get('list.ordering') == 'a.ordering';
-$plugins = Joomla\Utilities\ArrayHelper::pivot(ExternalloginHelper::getPlugins(), 'value');
+$plugins = ArrayHelper::pivot(ExternalloginHelper::getPlugins(), 'value');
 ?>
-<?php foreach($this->items as $i => $item): ?>
+<?php foreach ($this->items as $i => $item) : ?>
 	<tr class="row<?php echo $i % 2; ?>">
 		<td class="center">
-			<?php echo JHtml::_('grid.id', $i, $item->id); ?>
+			<?php echo HTMLHelper::_('grid.id', $i, $item->id); ?>
 		</td>
 		<td>
 			<?php echo $this->escape($item->username); ?>
@@ -36,28 +42,21 @@ $plugins = Joomla\Utilities\ArrayHelper::pivot(ExternalloginHelper::getPlugins()
 			<?php echo $this->escape($item->email); ?>
 		</td>
 		<td>
-			<?php if (isset($item->plugin)):?>
-				<?php echo isset($plugins[$item->plugin]) ? $this->escape(JText::_($plugins[$item->plugin]['text'])) : JText::_('COM_EXTERNALLOGIN_GRID_SERVER_DISABLED'); ?>
+			<?php if (isset($item->plugin)) : ?>
+				<?php echo isset($plugins[$item->plugin]) ? $this->escape(Text::_($plugins[$item->plugin]['text'])) : Text::_('COM_EXTERNALLOGIN_GRID_SERVER_DISABLED'); ?>
 			<?php endif; ?>
 		</td>
 		<td>
 			<?php echo $this->escape($item->title); ?>
 		</td>
 		<td class="center">
-			<?php echo JHtml::_('ExternalloginHtml.Users.joomla', $item->joomla, $i, isset($item->plugin)); ?>
+			<?php echo HTMLHelper::_('ExternalloginHtml.Users.joomla', $item->joomla, $i, isset($item->plugin)); ?>
 		</td>
 		<td class="center">
-			<?php if (isset($item->plugin)):?>
-				<?php echo JHtml::_('ExternalloginHtml.Users.externallogin', 1, $i, $item->joomla); ?>
-			<?php else: ?>
-				<button
-					value="<?php echo JRoute::_('index.php?option=com_externallogin&amp;view=servers&amp;layout=modal&amp;tmpl=component', true);?>"
-					class="btn btn-micro modal"
-					onclick="document.getElementById('cb<?php echo $i;?>').checked = true; return true;"
-                    title="<?php echo addslashes(htmlspecialchars(JText::_('COM_EXTERNALLOGIN_GRID_USER_EXTERNALLOGIN_ENABLE'), ENT_COMPAT, 'UTF-8')); ?>"
-					data-toggle="modal"
-					data-target="#modal-publish"
-				>
+			<?php if (isset($item->plugin)) : ?>
+				<?php echo HTMLHelper::_('ExternalloginHtml.Users.externallogin', 1, $i, $item->joomla); ?>
+			<?php else : ?>
+				<button value="<?php echo Route::_('index.php?option=com_externallogin&amp;view=servers&amp;layout=modal&amp;tmpl=component', true); ?>" class="btn btn-micro modal" onclick="document.getElementById('cb<?php echo $i; ?>').checked = true; return true;" title="<?php echo addslashes(htmlspecialchars(Text::_('COM_EXTERNALLOGIN_GRID_USER_EXTERNALLOGIN_ENABLE'), ENT_COMPAT, 'UTF-8')); ?>" data-toggle="modal" data-target="#modal-publish">
 					<span class="icon-unpublish"></span>
 				</button>
 			<?php endif; ?>

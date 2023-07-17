@@ -11,13 +11,15 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Factory;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
-if (JFactory::getUser()->guest):
+if (Factory::getUser()->guest) :
     // The user is not logged in.
     echo $this->loadTemplate('login');
-else:
+else :
     // The user is already logged in.
     echo $this->loadTemplate('logout');
 endif;

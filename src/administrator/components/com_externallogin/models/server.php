@@ -11,11 +11,19 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\User\User;
+use Joomla\CMS\User\UserHelper;
+use Joomla\Registry\Registry;
+use Joomla\Utilities\ArrayHelper;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
 // Import Joomla modeladmin library
-jimport('joomla.application.component.modeladmin');
+JLoader::import('joomla.application.component.modeladmin');
 
 /**
  * Server Model of External Login component
@@ -25,7 +33,7 @@ jimport('joomla.application.component.modeladmin');
  *
  * @since       2.0.0
  */
-class ExternalloginModelServer extends JModelAdmin
+class ExternalloginModelServer extends \Joomla\CMS\MVC\Model\AdminModel
 {
     /**
      * Stock method to auto-populate the model state.
@@ -39,7 +47,7 @@ class ExternalloginModelServer extends JModelAdmin
         parent::populateState();
 
         // Get the plugin from the request.
-        $plugin = JFactory::getApplication()->input->get('plugin');
+        $plugin = Factory::getApplication()->input->get('plugin');
         $this->setState($this->getName() . '.plugin', $plugin);
     }
 
@@ -50,7 +58,7 @@ class ExternalloginModelServer extends JModelAdmin
      * @param   string  $prefix  A prefix for the table class name. Optional.
      * @param   array   $config  Configuration array for model. Optional.
      *
-     * @return	JTable  A database object
+     * @return	Table  A database object
      *
      * @see     JModel::getTable
      *
@@ -58,7 +66,7 @@ class ExternalloginModelServer extends JModelAdmin
      */
     public function getTable($type = 'Server', $prefix = 'ExternalloginTable', $config = [])
     {
-        return JTable::getInstance($type, $prefix, $config);
+        return Table::getInstance($type, $prefix, $config);
     }
 
     /**
@@ -102,7 +110,7 @@ class ExternalloginModelServer extends JModelAdmin
     protected function loadFormData()
     {
         // Check the session for previously entered form data.
-        $data = JFactory::getApplication()->getUserState('com_externallogin.edit.server.data', []);
+        $data = Factory::getApplication()->getUserState('com_externallogin.edit.server.data', []);
 
         if (empty($data)) {
             $data = $this->getItem();
@@ -112,7 +120,7 @@ class ExternalloginModelServer extends JModelAdmin
                 && property_exists($data, 'params')
                 && isset($data->params['data'])
             ) {
-                $registry = new JRegistry($data->params['data']);
+                $registry = new Registry($data->params['data']);
                 $data->params = $registry->toArray();
             }
         }
@@ -141,7 +149,7 @@ class ExternalloginModelServer extends JModelAdmin
             return false;
         }
         if (!empty($pks)) {
-            Joomla\Utilities\ArrayHelper::toInteger($pks);
+            ArrayHelper::toInteger($pks);
             $query = $this->_db->getQuery(true);
             $query->delete();
             $query->from('#__externallogin_users');
@@ -154,17 +162,17 @@ class ExternalloginModelServer extends JModelAdmin
     /**
      * Upload users
      *
-     * @param   JForm  $form  Form
+     * @param   \Joomla\CMS\Form\Form  $form  Form
      *
      * @return  boolean  True on success
      */
     public function upload($form)
     {
-        $files = JFactory::getApplication()->input->files->get('jform', null, 'array');
+        $files = Factory::getApplication()->input->files->get('jform', null, 'array');
         $sid = (int) $form['id'];
 
         if ($files['file']['type'] != 'text/csv') {
-            $this->set('error', JText::_('COM_EXTERNALLOGIN_ERROR_BAD_FILE'));
+            $this->set('error', Text::_('COM_EXTERNALLOGIN_ERROR_BAD_FILE'));
             return false;
         }
 
@@ -175,9 +183,9 @@ class ExternalloginModelServer extends JModelAdmin
             if ($data && count($data) != 4) {
                 continue;
             }
-            $user = JUser::getInstance();
+            $user = User::getInstance();
 
-            if ($id = intval(JUserHelper::getUserId($data[0]))) {
+            if ($id = intval(UserHelper::getUserId($data[0]))) {
                 $user->load($id);
             }
 

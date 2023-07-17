@@ -11,11 +11,14 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Factory;
+use Joomla\Utilities\ArrayHelper;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
 // Import the Joomla modellist library
-jimport('joomla.application.component.modellist');
+JLoader::import('joomla.application.component.modellist');
 
 /**
  * Servers Model of External Login component
@@ -25,7 +28,7 @@ jimport('joomla.application.component.modellist');
  *
  * @since       2.0.0
  */
-class ExternalloginModelServers extends JModelList
+class ExternalloginModelServers extends \Joomla\CMS\MVC\Model\ListModel
 {
     /**
      * Valid filter fields or ordering.
@@ -55,7 +58,7 @@ class ExternalloginModelServers extends JModelList
     protected function populateState($ordering = null, $direction = null)
     {
         // Adjust the context to support modal layouts.
-        if ($layout = JFactory::getApplication()->input->get('layout')) {
+        if ($layout = Factory::getApplication()->input->get('layout')) {
             $this->context .= '.' . $layout;
         }
 
@@ -84,7 +87,7 @@ class ExternalloginModelServers extends JModelList
     protected function getListQuery()
     {
         // Create a new query object.
-        $db = JFactory::getDBO();
+        $db = Factory::getDBO();
         $query = $db->getQuery(true);
 
         // Select some fields
@@ -143,7 +146,7 @@ class ExternalloginModelServers extends JModelList
 
         // Filter by servers
         $servers = $this->getState('filter.servers');
-        Joomla\Utilities\ArrayHelper::toInteger($servers);
+        ArrayHelper::toInteger($servers);
 
         if (!empty($servers)) {
             $query->where('a.id IN (' . implode(',', $servers) . ')');

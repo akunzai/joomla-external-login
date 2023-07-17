@@ -11,15 +11,19 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Helper\ModuleHelper;
+use Joomla\CMS\Plugin\PluginHelper;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
-jimport('joomla.plugin.helper');
-jimport('joomla.application.component.helper');
+JLoader::import('joomla.plugin.helper');
+JLoader::import('joomla.application.component.helper');
 
 require_once dirname(__FILE__) . '/helper.php';
 
-$enabled = JComponentHelper::getComponent('com_externallogin', true)->enabled && JPluginHelper::isEnabled('authentication', 'externallogin');
+$enabled = ComponentHelper::getComponent('com_externallogin', true)->enabled && PluginHelper::isEnabled('authentication', 'externallogin');
 $servers = ModExternalloginadminHelper::getListServersURL($params);
 $count = count($servers);
-require JModuleHelper::getLayoutPath('mod_externallogin_admin', $params->get('layout', 'default'));
+require ModuleHelper::getLayoutPath('mod_externallogin_admin', $params->get('layout', 'default'));

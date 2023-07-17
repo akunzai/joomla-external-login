@@ -11,11 +11,19 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
+use Joomla\Registry\Registry;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
 // Import the Joomla modellist library
-jimport('joomla.application.component.modelitem');
+JLoader::import('joomla.application.component.modelitem');
 
 /**
  * Server Model of External Login component
@@ -25,7 +33,7 @@ jimport('joomla.application.component.modelitem');
  *
  * @since       2.0.0
  */
-class ExternalloginModelServer extends JModelItem
+class ExternalloginModelServer extends \Joomla\CMS\MVC\Model\ItemModel
 {
     /**
      * Method to auto-populate the model state.
@@ -40,11 +48,12 @@ class ExternalloginModelServer extends JModelItem
      */
     protected function populateState()
     {
-        $id = JFactory::getApplication()->input->get('server', 0, 'uint');
+        $app = Factory::getApplication();
+        $id = $app->input->get('server', 0, 'uint');
         $this->setState('server.id', $id);
-        $redirect = JFactory::getApplication()->input->get('redirect', '', 'RAW');
+        $redirect = $app->input->get('redirect', '', 'RAW');
         $this->setState('server.redirect', $redirect);
-        $noredirect = JFactory::getApplication()->input->get('noredirect');
+        $noredirect = $app->input->get('noredirect');
         $this->setState('server.noredirect', $noredirect);
         parent::populateState();
     }
@@ -56,7 +65,7 @@ class ExternalloginModelServer extends JModelItem
      * @param   string  $prefix  A prefix for the table class name. Optional.
      * @param   array   $config  Configuration array for model. Optional.
      *
-     * @return	JTable  A database object
+     * @return	Table  A database object
      *
      * @see     JModel::getTable
      *
@@ -64,13 +73,13 @@ class ExternalloginModelServer extends JModelItem
      */
     public function getTable($type = 'Server', $prefix = 'ExternalloginTable', $config = [])
     {
-        return JTable::getInstance($type, $prefix, $config);
+        return Table::getInstance($type, $prefix, $config);
     }
 
     /**
      * Returns the server
      *
-     * @return	JUri|string|bool  the service URI
+     * @return	Uri|string|bool  the service URI
      *
      * @since	2.0.0
      */
@@ -81,14 +90,14 @@ class ExternalloginModelServer extends JModelItem
         $item = $this->getTable();
 
         if (!$item->load($id) || $item->published != 1) {
-            $this->set('error', JText::_('COM_EXTERNALLOGIN_ERROR_SERVER_UNPUBLISHED'));
+            $this->set('error', Text::_('COM_EXTERNALLOGIN_ERROR_SERVER_UNPUBLISHED'));
             return false;
         }
 
-        $app = JFactory::getApplication();
+        $app = Factory::getApplication();
         $menu = $app->getMenu()->getActive();
 
-        $params = is_null($menu) ? new JRegistry() : $menu->params;
+        $params = is_null($menu) ? new Registry() : $menu->params;
 
         // Compute the url
         $redirect = $this->getState(
@@ -97,7 +106,7 @@ class ExternalloginModelServer extends JModelItem
                 'redirect',
                 $item->params->get(
                     'redirect',
-                    JComponentHelper::getParams('com_externallogin')->get('redirect')
+                    ComponentHelper::getParams('com_externallogin')->get('redirect')
                 )
             )
         );
@@ -105,7 +114,7 @@ class ExternalloginModelServer extends JModelItem
             'server.noredirect',
             $item->params->get(
                 'noredirect',
-                JComponentHelper::getParams('com_externallogin')->get('noredirect')
+                ComponentHelper::getParams('com_externallogin')->get('noredirect')
             )
         );
 
@@ -114,23 +123,23 @@ class ExternalloginModelServer extends JModelItem
         } else {
             $url = $app->input->server->getString('HTTP_REFERER');
 
-            if (empty($url) || !JUri::isInternal($url)) {
-                $url = JRoute::_('index.php', true, $app->get('force_ssl') == 2);
+            if (empty($url) || !Uri::isInternal($url)) {
+                $url = Route::_('index.php', true, $app->get('force_ssl') == 2);
             }
         }
 
         // Compute the URI
-        $uri = JUri::getInstance($url);
+        $uri = Uri::getInstance($url);
 
         // Return the service/URL
-        if (!JFactory::getUser()->guest) {
+        if (!Factory::getUser()->guest) {
             return $uri;
         }
         $app->setUserState('com_externallogin.server', $item->id);
         $results = $app->triggerEvent('onGetLoginUrl', [$item, $uri]);
 
         if (empty($results)) {
-            $this->set('error', JText::_('COM_EXTERNALLOGIN_ERROR_OCCURS'));
+            $this->set('error', Text::_('COM_EXTERNALLOGIN_ERROR_OCCURS'));
             return false;
         }
         return $results[0];

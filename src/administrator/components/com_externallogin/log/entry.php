@@ -11,6 +11,8 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Log\Log;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
@@ -22,7 +24,7 @@ defined('_JEXEC') or die;
  *
  * @since       2.1.0
  */
-class ExternalloginLogEntry extends JLogEntry
+class ExternalloginLogEntry extends \Joomla\CMS\Log\LogEntry
 {
     /**
      * Constructor
@@ -34,7 +36,7 @@ class ExternalloginLogEntry extends JLogEntry
      *
      * @since   11.1
      */
-    public function __construct($message, $priority = JLog::INFO, $category = '', $date = null)
+    public function __construct($message, $priority = Log::INFO, $category = '', $date = null)
     {
         if (empty($date)) {
             [$microtime, $time] = explode(' ', microtime());

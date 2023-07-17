@@ -11,11 +11,16 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
 // Import Joomla view library
-jimport('joomla.application.component.view');
+JLoader::import('joomla.application.component.view');
 
 /**
  * Server View of External Login component
@@ -25,7 +30,7 @@ jimport('joomla.application.component.view');
  *
  * @since       2.0.0
  */
-class ExternalloginViewServer extends JViewLegacy
+class ExternalloginViewServer extends \Joomla\CMS\MVC\View\HtmlView
 {
     /**
      * Execute and display a layout script.
@@ -47,7 +52,7 @@ class ExternalloginViewServer extends JViewLegacy
 
         // Check for errors.
         if (count($errors = $this->get('Errors'))) {
-            $app = JFactory::getApplication();
+            $app = Factory::getApplication();
             $app->enqueueMessage(implode('<br />', $errors), 'error');
             $app->redirect('index.php');
 
@@ -76,33 +81,33 @@ class ExternalloginViewServer extends JViewLegacy
     protected function addToolbar()
     {
         // Load specific css component
-        JHtml::_('stylesheet', 'com_externallogin/administrator/externallogin.css', [], true);
+        HTMLHelper::stylesheet('com_externallogin/administrator/externallogin.css', ['relative' => true]);
 
-        JFactory::getApplication()->input->set('hidemainmenu', true);
+        Factory::getApplication()->input->set('hidemainmenu', true);
 
-        $user = JFactory::getUser();
+        $user = Factory::getUser();
         $userId = $user->get('id');
         $isNew = $this->item->id == 0;
         $checkedOut = !($this->item->checked_out == 0 || $this->item->checked_out == $userId);
         $type = ($checkedOut ? 'view' : $isNew) ? 'new' : 'edit';
 
         // Set the title
-        JToolbarHelper::title(JText::_('COM_EXTERNALLOGIN_MANAGER_SERVER_' . $type), 'server-' . $type);
+        ToolbarHelper::title(Text::_('COM_EXTERNALLOGIN_MANAGER_SERVER_' . $type), 'server-' . $type);
 
         // Build the actions for new and existing records.
         if ($isNew) {
-            JToolbarHelper::apply('server.apply');
-            JToolbarHelper::save('server.save');
-            JToolbarHelper::cancel('server.cancel');
+            ToolbarHelper::apply('server.apply');
+            ToolbarHelper::save('server.save');
+            ToolbarHelper::cancel('server.cancel');
         } else {
             // Can't save the record if it's checked out.
             if (!$checkedOut) {
-                JToolbarHelper::apply('server.apply');
-                JToolbarHelper::save('server.save');
+                ToolbarHelper::apply('server.apply');
+                ToolbarHelper::save('server.save');
             }
-            JToolbarHelper::cancel('server.cancel', 'JTOOLBAR_CLOSE');
+            ToolbarHelper::cancel('server.cancel', 'JTOOLBAR_CLOSE');
         }
-        JToolbarHelper::divider();
-        JToolbarHelper::help('COM_EXTERNALLOGIN_HELP_MANAGER_SERVER');
+        ToolbarHelper::divider();
+        ToolbarHelper::help('COM_EXTERNALLOGIN_HELP_MANAGER_SERVER');
     }
 }

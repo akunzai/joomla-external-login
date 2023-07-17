@@ -11,13 +11,16 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Router\Route;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
 // load tooltip behavior
-JHtml::_('bootstrap.tooltip');
-JHtml::_('dropdown.init');
-JHtml::_('formbehavior.chosen', 'select');
+HTMLHelper::_('bootstrap.tooltip');
+HTMLHelper::_('dropdown.init');
+HTMLHelper::_('formbehavior.chosen', 'select');
 
 $listOrder	= $this->escape($this->state->get('list.ordering'));
 $listDirn	= $this->escape($this->state->get('list.direction'));
@@ -46,7 +49,7 @@ $listDirn	= $this->escape($this->state->get('list.direction'));
 		Joomla.tableOrdering(order, dirn, '');
 	}
 </script>
-<form action="<?php echo JRoute::_('index.php?option=com_externallogin&view=users'); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo Route::_('index.php?option=com_externallogin&view=users'); ?>" method="post" name="adminForm" id="adminForm">
 <?php if (!empty($this->sidebar)) : ?>
 	<div id="j-sidebar-container" class="span2">
 		<?php echo $this->sidebar; ?>
@@ -67,7 +70,7 @@ $listDirn	= $this->escape($this->state->get('list.direction'));
             <input type="hidden" name="server" value="" />
 			<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
 			<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
-			<?php echo JHtml::_('form.token'); ?>
+			<?php echo HTMLHelper::_('form.token'); ?>
 		</div>
 	</div>
 </form>

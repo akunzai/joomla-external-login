@@ -11,19 +11,23 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Log\Log;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Table\Table;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
-jimport('joomla.database.table');
-JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_externallogin/tables');
+JLoader::import('joomla.database.table');
+Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_externallogin/tables');
 
-if (version_compare(JVERSION, '3.8.0', '>=')) {
-    JLoader::registerAlias('ExternalloginLogger', '\\Joomla\\CMS\\Log\\Logger\\ExternalloginLogger');
-}
-
+JLoader::registerAlias('ExternalloginLogger', '\\Joomla\\CMS\\Log\\Logger\\ExternalloginLogger');
 JLoader::register('ExternalloginLogger', JPATH_ADMINISTRATOR . '/components/com_externallogin/log/logger.php');
 JLoader::register('ExternalloginLogEntry', JPATH_ADMINISTRATOR . '/components/com_externallogin/log/entry.php');
-
 /**
  * External Login - External Login plugin.
  *
@@ -32,7 +36,7 @@ JLoader::register('ExternalloginLogEntry', JPATH_ADMINISTRATOR . '/components/co
  *
  * @since       2.0.0
  */
-class PlgSystemExternallogin extends JPlugin
+class PlgSystemExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
 {
     /**
      * Constructor.
@@ -46,9 +50,9 @@ class PlgSystemExternallogin extends JPlugin
     {
         parent::__construct($subject, $config);
         $this->loadLanguage();
-        JLog::addLogger(
+        Log::addLogger(
             ['logger' => 'externallogin', 'db_table' => '#__externallogin_logs', 'plugin' => 'system-externallogin'],
-            JLog::ALL,
+            Log::ALL,
             ['system-externallogin-deletion', 'system-externallogin-password']
         );
     }
@@ -63,7 +67,7 @@ class PlgSystemExternallogin extends JPlugin
     public function onAfterInitialise()
     {
         // Get the application
-        $app = JFactory::getApplication();
+        $app = Factory::getApplication();
 
         // Get the router
         $router = $app->getRouter();
@@ -81,14 +85,14 @@ class PlgSystemExternallogin extends JPlugin
      */
     public function onAfterRender()
     {
-        JFactory::getApplication()->setUserState('users.login.form.data.return', null);
+        Factory::getApplication()->setUserState('users.login.form.data.return', null);
     }
 
     /**
      * Redirect to com_externallogin in case of login view
      *
-     * @param   JRouter  $router  Router
-     * @param   JUri     $uri     URI
+     * @param   \Joomla\CMS\Router\Router  $router  Router
+     * @param   \Joomla\CMS\Uri\Uri     $uri     URI
      *
      * @return  void
      *
@@ -96,26 +100,26 @@ class PlgSystemExternallogin extends JPlugin
      */
     public function buildRule(&$router, &$uri)
     {
-        $app = JFactory::getApplication();
+        $app = Factory::getApplication();
 
         if (
             $app->isClient('site')
             && $uri->getVar('option') == 'com_users'
             && $uri->getVar('view') == 'login'
-            && JPluginHelper::isEnabled('authentication', 'externallogin')
+            && PluginHelper::isEnabled('authentication', 'externallogin')
         ) {
             $redirect = $app->getUserState('com_externallogin.redirect');
 
             if ($redirect) {
-                $app->redirect(JRoute::_('index.php?Itemid=' . $redirect, true));
+                $app->redirect(Route::_('index.php?Itemid=' . $redirect, true));
                 return;
             }
-            $item = JComponentHelper::getParams('com_externallogin')->get('unauthorized_redirect_menuitem');
+            $item = ComponentHelper::getParams('com_externallogin')->get('unauthorized_redirect_menuitem');
 
             if ($item == -1) {
                 $uri->setVar('option', 'com_externallogin');
             } elseif ($item) {
-                $app->redirect(JRoute::_('index.php?Itemid=' . $item, true));
+                $app->redirect(Route::_('index.php?Itemid=' . $item, true));
             }
         }
     }
@@ -135,19 +139,20 @@ class PlgSystemExternallogin extends JPlugin
      */
     public function onUserAfterDelete($user, $success, $msg)
     {
-        $dbo = JFactory::getDbo();
+        $dbo = Factory::getDbo();
         $dbo->setQuery($dbo->getQuery(true)->select('server_id')->from('#__externallogin_users')->where('user_id = ' . (int) $user['id']));
         $sid = $dbo->loadResult();
-        $server = JTable::getInstance('Server', 'ExternalloginTable');
+        /** @var ExternalloginTable */
+        $server = Table::getInstance('Server', 'ExternalloginTable');
 
         if ($server->load($sid)) {
             if (!$success) {
                 if ($server->params->get('log_user_delete', 0)) {
-                    JLog::add(
+                    Log::add(
                         new ExternalloginLogEntry(
                             'Unsuccessful deletion of user "' . $user['username'] . '" by user "' .
-                                JFactory::getUser()->username . '" on server ' . $sid,
-                            JLog::WARNING,
+                                Factory::getUser()->username . '" on server ' . $sid,
+                            Log::WARNING,
                             'system-externallogin-deletion'
                         )
                     );
@@ -155,18 +160,18 @@ class PlgSystemExternallogin extends JPlugin
 
                 return false;
             } else {
-                $dbo = JFactory::getDbo();
+                $dbo = Factory::getDbo();
                 $query = $dbo->getQuery(true);
                 $query->delete('#__externallogin_users')->where('user_id = ' . (int) $user['id']);
                 $dbo->setQuery($query);
                 $dbo->execute();
 
                 if ($server->params->get('log_user_delete', 0)) {
-                    JLog::add(
+                    Log::add(
                         new ExternalloginLogEntry(
                             'Successful deletion of user "' . $user['username'] . '" by user "' .
-                                JFactory::getUser()->username . '" on server ' . $sid,
-                            JLog::INFO,
+                                Factory::getUser()->username . '" on server ' . $sid,
+                            Log::INFO,
                             'system-externallogin-deletion'
                         )
                     );
@@ -194,13 +199,14 @@ class PlgSystemExternallogin extends JPlugin
     public function onUserBeforeSave($old, $isnew, $new)
     {
         if ($new['password'] != '') {
-            $dbo = JFactory::getDbo();
+            $dbo = Factory::getDbo();
             $dbo->setQuery($dbo->getQuery(true)->select('server_id')->from('#__externallogin_users')->where('user_id = ' . (int) $new['id']));
             $sid = $dbo->loadResult();
-            $server = JTable::getInstance('Server', 'ExternalloginTable');
+            /** @var ExternalloginTable */
+            $server = Table::getInstance('Server', 'ExternalloginTable');
 
             if ($server->load($sid) && !$server->params->get('allow_change_password', 0)) {
-                $dbo = JFactory::getDbo();
+                $dbo = Factory::getDbo();
                 $query = $dbo->getQuery(true);
                 $query->select('COUNT(*)');
                 $query->from('#__externallogin_users AS e');
@@ -211,16 +217,16 @@ class PlgSystemExternallogin extends JPlugin
 
                 if ($dbo->loadResult() > 0) {
                     if ($server->params->get('log_user_change_password', 0)) {
-                        JLog::add(
+                        Log::add(
                             new ExternalloginLogEntry(
                                 'Attempt to change password for user "' . $new['username'] . '" on server ' . $sid,
-                                JLog::WARNING,
+                                Log::WARNING,
                                 'system-externallogin-deletion'
                             )
                         );
                     }
 
-                    JFactory::getApplication()->enqueueMessage(JText::_('PLG_SYSTEM_EXTERNALLOGIN_WARNING_PASSWORD_MODIFIED'), 'notice');
+                    Factory::getApplication()->enqueueMessage(Text::_('PLG_SYSTEM_EXTERNALLOGIN_WARNING_PASSWORD_MODIFIED'), 'notice');
 
                     return false;
                 }

@@ -9,6 +9,9 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
@@ -20,7 +23,7 @@ defined('_JEXEC') or die;
  *
  * @since       2.0.0
  */
-class PlgUserCbexternallogin extends JPlugin
+class PlgUserCbexternallogin extends \Joomla\CMS\Plugin\CMSPlugin
 {
     /**
      * Constructor.
@@ -30,7 +33,7 @@ class PlgUserCbexternallogin extends JPlugin
      *
      * @since   2.0.0
      */
-    public function __construct(& $subject, $config)
+    public function __construct(&$subject, $config)
     {
         parent::__construct($subject, $config);
         $this->loadLanguage();
@@ -49,9 +52,9 @@ class PlgUserCbexternallogin extends JPlugin
     public function onUserLogin($user, $options = [])
     {
         // User comes from external login plugin and community builder is installed and enabled
-        if (isset($user['server']) && JComponentHelper::getComponent('com_comprofiler', true)->enabled) {
+        if (isset($user['server']) && ComponentHelper::getComponent('com_comprofiler', true)->enabled) {
             // Verify if user is stored into community builder
-            $dbo = JFactory::getDbo();
+            $dbo = Factory::getDbo();
             $query = $dbo->getQuery(true);
             $query->select('COUNT(*)');
             $query->from('#__comprofiler');

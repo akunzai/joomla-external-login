@@ -11,10 +11,17 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+use Joomla\Registry\Registry;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
-JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_externallogin/models', 'ExternalloginModel');
+BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_externallogin/models', 'ExternalloginModel');
 
 /**
  * Module helper class
@@ -29,23 +36,23 @@ abstract class ModExternalloginsiteHelper
     /**
      * Get the URLs of servers
      *
-     * @param   JRegistry  $params  Module parameters
+     * @param   Registry  $params  Module parameters
      *
      * @return  array  Array of URL
      */
     public static function getListServersURL($params)
     {
-        $app = JFactory::getApplication();
+        $app = Factory::getApplication();
         $redirect = $app->input->get('redirect', $app->getUserState('users.login.form.data.return'));
 
         $redirect = $redirect ? urlencode($redirect) : $params->get('redirect');
 
-        $isHome = in_array(substr((string)JUri::getInstance(), strlen(JUri::base())), ['', 'index.php']);
+        $isHome = in_array(substr((string)Uri::getInstance(), strlen(Uri::base())), ['', 'index.php']);
         $noRedirect = $params->get('noredirect');
 
         // Get an instance of the generic articles model
         /** @var ExternalloginModelServers */
-        $model = JModelLegacy::getInstance('Servers', 'ExternalloginModel', ['ignore_request' => true]);
+        $model = BaseDatabaseModel::getInstance('Servers', 'ExternalloginModel', ['ignore_request' => true]);
         if (!$model) {
             return [];
         }
@@ -59,7 +66,7 @@ abstract class ModExternalloginsiteHelper
         $items = $model->getItems();
 
         foreach ($items as $i => $item) {
-            $item->params = new JRegistry($item->params);
+            $item->params = new Registry($item->params);
             $url = 'index.php?option=com_externallogin&view=server&server=' . $item->id;
 
             if ($noRedirect && !$isHome) {
@@ -83,16 +90,16 @@ abstract class ModExternalloginsiteHelper
      */
     public static function getLogoutUrl($params)
     {
-        $app = JFactory::getApplication();
+        $app = Factory::getApplication();
         $item = $app->getMenu()->getItem(
             $params->get(
                 'logout_redirect_menuitem',
-                JComponentHelper::getComponent('com_externallogin', true)->params->get('logout_redirect_menuitem')
+                ComponentHelper::getComponent('com_externallogin', true)->params->get('logout_redirect_menuitem')
             )
         );
 
         // Stay on the same page
-        $url = JUri::getInstance()->toString();
+        $url = Uri::getInstance()->toString();
 
         if ($item) {
             $lang = '';
@@ -101,7 +108,7 @@ abstract class ModExternalloginsiteHelper
                 $lang = '&lang=' . $item->language;
             }
 
-            $url = JRoute::_('index.php?Itemid=' . $item->id . $lang, $app->get('force_ssl') === 2 ? 1 : 2);
+            $url = Route::_('index.php?Itemid=' . $item->id . $lang, $app->get('force_ssl') === 2 ? 1 : 2);
         }
 
         // We are forced to encode the url in base64 as com_users uses this encoding

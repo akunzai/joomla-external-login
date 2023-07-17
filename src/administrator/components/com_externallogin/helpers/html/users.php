@@ -11,6 +11,8 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\HTML\HTMLHelper;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
@@ -39,8 +41,8 @@ abstract class ExternalloginHtmlUsers
      */
     public static function joomla($value, $i, $enabled = true)
     {
-        $states	= [
-            1	=> [
+        $states    = [
+            1    => [
                 'disableJoomla',
                 'COM_EXTERNALLOGIN_GRID_USER_JOOMLA_ENABLED',
                 'COM_EXTERNALLOGIN_GRID_USER_JOOMLA_DISABLE',
@@ -49,7 +51,7 @@ abstract class ExternalloginHtmlUsers
                 'publish',
                 'publish',
             ],
-            0	=> [
+            0    => [
                 'enableJoomla',
                 'COM_EXTERNALLOGIN_GRID_USER_JOOMLA_DISABLED',
                 'COM_EXTERNALLOGIN_GRID_USER_JOOMLA_ENABLE',
@@ -60,7 +62,7 @@ abstract class ExternalloginHtmlUsers
             ],
         ];
 
-        return JHtml::_('jgrid.state', $states, $value, $i, 'users.', $enabled, true, 'cb');
+        return HTMLHelper::_('jgrid.state', $states, $value, $i, 'users.', $enabled, true, 'cb');
     }
 
     /**
@@ -78,8 +80,8 @@ abstract class ExternalloginHtmlUsers
      */
     public static function externallogin($value, $i, $enabled = true)
     {
-        $states	= [
-            1	=> [
+        $states    = [
+            1    => [
                 'disableExternallogin',
                 'COM_EXTERNALLOGIN_GRID_USER_EXTERNALLOGIN_ENABLED',
                 'COM_EXTERNALLOGIN_GRID_USER_EXTERNALLOGIN_DISABLE',
@@ -88,7 +90,7 @@ abstract class ExternalloginHtmlUsers
                 'publish',
                 'publish',
             ],
-            0	=> [
+            0    => [
                 'enableJoomla',
                 'COM_EXTERNALLOGIN_GRID_USER_JOOMLA_DISABLED',
                 'COM_EXTERNALLOGIN_GRID_USER_JOOMLA_ENABLE',
@@ -99,6 +101,6 @@ abstract class ExternalloginHtmlUsers
             ],
         ];
 
-        return JHtml::_('jgrid.state', $states, $value, $i, 'users.', $enabled, true, 'cb');
+        return HTMLHelper::_('jgrid.state', $states, $value, $i, 'users.', $enabled, true, 'cb');
     }
 }

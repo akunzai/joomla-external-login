@@ -11,6 +11,11 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Router\Route;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
@@ -37,33 +42,33 @@ abstract class ExternalloginHelper
     {
         // Addsubmenu
         JHtmlSidebar::addEntry(
-            JText::_('COM_EXTERNALLOGIN_SUBMENU_SERVERS'),
-            JRoute::_('index.php?option=com_externallogin', false),
+            Text::_('COM_EXTERNALLOGIN_SUBMENU_SERVERS'),
+            Route::_('index.php?option=com_externallogin', false),
             $submenu == 'servers'
         );
         JHtmlSidebar::addEntry(
-            JText::_('COM_EXTERNALLOGIN_SUBMENU_USERS'),
-            JRoute::_('index.php?option=com_externallogin&view=users', false),
+            Text::_('COM_EXTERNALLOGIN_SUBMENU_USERS'),
+            Route::_('index.php?option=com_externallogin&view=users', false),
             $submenu == 'users'
         );
         JHtmlSidebar::addEntry(
-            JText::_('COM_EXTERNALLOGIN_SUBMENU_LOGS'),
-            JRoute::_('index.php?option=com_externallogin&view=logs', false),
+            Text::_('COM_EXTERNALLOGIN_SUBMENU_LOGS'),
+            Route::_('index.php?option=com_externallogin&view=logs', false),
             $submenu == 'logs'
         );
         JHtmlSidebar::addEntry(
-            JText::_('COM_EXTERNALLOGIN_SUBMENU_ABOUT'),
-            JRoute::_('index.php?option=com_externallogin&view=about', false),
+            Text::_('COM_EXTERNALLOGIN_SUBMENU_ABOUT'),
+            Route::_('index.php?option=com_externallogin&view=about', false),
             $submenu == 'about'
         );
 
         // Set some global property
-        $document = JFactory::getDocument();
+        $document = Factory::getDocument();
         $document->setTitle(
-            JText::sprintf(
+            Text::sprintf(
                 'COM_EXTERNALLOGIN_PAGETITLE',
-                JFactory::getConfig()->get('sitename'),
-                JText::_('COM_EXTERNALLOGIN_PAGETITLE_' . $submenu)
+                Factory::getConfig()->get('sitename'),
+                Text::_('COM_EXTERNALLOGIN_PAGETITLE_' . $submenu)
             )
         );
     }
@@ -77,7 +82,7 @@ abstract class ExternalloginHelper
      */
     public static function getPlugins()
     {
-        $app = JFactory::getApplication();
+        $app = Factory::getApplication();
 
         return (array) $app->triggerEvent('onGetOption', ['com_externallogin']);
     }
@@ -95,7 +100,7 @@ abstract class ExternalloginHelper
     {
         $options = [];
         /** @var ExternalloginModelServers */
-        $model = JModelLegacy::getInstance('Servers', 'ExternalloginModel', $config);
+        $model = BaseDatabaseModel::getInstance('Servers', 'ExternalloginModel', $config);
         $model->setState('list.ordering', 'a.ordering');
         $model->setState('list.direction', 'ASC');
         $items = $model->getItems();
@@ -134,7 +139,7 @@ abstract class ExternalloginHelper
      */
     public static function getCategories()
     {
-        $dbo = JFactory::getDbo();
+        $dbo = Factory::getDbo();
         $categories = $dbo->setQuery($dbo->getQuery(true)->select('category')->from('#__externallogin_logs')->group('category'))->loadColumn();
         $options = [];
 
@@ -156,7 +161,7 @@ abstract class ExternalloginHelper
     public static function getGroups($path, $separator = '/')
     {
         // Get the dbo
-        $dbo = JFactory::getDbo();
+        $dbo = Factory::getDbo();
 
         // Split the path
         $path = empty($separator) ? [$path] : explode($separator, $path);
@@ -208,7 +213,7 @@ abstract class ExternalloginHelper
             return urldecode($redirect);
         }
 
-        $app = JFactory::getApplication();
+        $app = Factory::getApplication();
         $item = $app->getMenu()->getItem($redirect);
 
         if ($item) {
@@ -234,7 +239,7 @@ abstract class ExternalloginHelper
             $link = 'index.php';
         }
 
-        $url = JRoute::_($link, true, $item->params->get('secure', ($app->get('force_ssl', 0) === 2) ? 1 : -1) === 1 ? 1 : 2);
+        $url = Route::_($link, true, $item->params->get('secure', ($app->get('force_ssl', 0) === 2) ? 1 : -1) === 1 ? 1 : 2);
         return $url;
     }
 }

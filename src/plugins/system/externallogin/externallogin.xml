@@ -10,7 +10,7 @@
 	<license>GNU General Public License version 2 or later; see LICENSE</license>
 
 	<!--  The version string is recorded in the extension table -->
-	<version>3.2.2</version>
+	<version>4.0.0-dev</version>
 
 	<!-- The description is optional and defaults to the name -->
 	<description>PLG_SYSTEM_EXTERNALLOGIN_DESCRIPTION</description>
@@ -20,8 +20,8 @@
 	</files>
 
 	<languages>
-		<language tag="en-GB">language/en-GB/en-GB.plg_system_externallogin.ini</language>
-		<language tag="en-GB">language/en-GB/en-GB.plg_system_externallogin.sys.ini</language>
+		<language tag="en-GB">language/en-GB/plg_system_externallogin.ini</language>
+		<language tag="en-GB">language/en-GB/plg_system_externallogin.sys.ini</language>
 	</languages>
 
 	<config/>

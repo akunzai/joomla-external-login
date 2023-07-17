@@ -11,11 +11,13 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Factory;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
 // Import the Joomla modellist library
-jimport('joomla.application.component.modellist');
+JLoader::import('joomla.application.component.modellist');
 
 /**
  * Servers Model of External Login component
@@ -25,7 +27,7 @@ jimport('joomla.application.component.modellist');
  *
  * @since       2.1.0
  */
-class ExternalloginModelUsers extends JModelList
+class ExternalloginModelUsers extends \Joomla\CMS\MVC\Model\ListModel
 {
     /**
      * Valid filter fields or ordering.
@@ -55,7 +57,7 @@ class ExternalloginModelUsers extends JModelList
     protected function populateState($ordering = null, $direction = null)
     {
         // Adjust the context to support modal layouts.
-        if ($layout = JFactory::getApplication()->input->get('layout')) {
+        if ($layout = Factory::getApplication()->input->get('layout')) {
             $this->context .= '.' . $layout;
         }
 
@@ -90,7 +92,7 @@ class ExternalloginModelUsers extends JModelList
     protected function getListQuery()
     {
         // Create a new query object.
-        $db = JFactory::getDBO();
+        $db = Factory::getDBO();
         $query = $db->getQuery(true);
 
         // Select some fields
@@ -111,8 +113,8 @@ class ExternalloginModelUsers extends JModelList
         $query->join(
             'LEFT',
             '#__extensions AS e ON ' .
-            $db->quoteName('e.type') . '=' . $db->quote('plugin') . ' AND ' .
-            $query->concatenate([$db->quoteName('e.folder'), $db->quoteName('e.element')], '.') . '=' . $db->quoteName('s.plugin')
+                $db->quoteName('e.type') . '=' . $db->quote('plugin') . ' AND ' .
+                $query->concatenate([$db->quoteName('e.folder'), $db->quoteName('e.element')], '.') . '=' . $db->quoteName('s.plugin')
         );
         $query->select('e.enabled AS enabled');
 
@@ -157,9 +159,9 @@ class ExternalloginModelUsers extends JModelList
 
                 // Compile the different search clauses.
                 $searches = [];
-                $searches[]	= 'a.name LIKE ' . $token;
-                $searches[]	= 'a.username LIKE ' . $token;
-                $searches[]	= 'a.email LIKE ' . $token;
+                $searches[]    = 'a.name LIKE ' . $token;
+                $searches[]    = 'a.username LIKE ' . $token;
+                $searches[]    = 'a.email LIKE ' . $token;
 
                 // Add the clauses to the query.
                 $query->where('(' . implode(' OR ', $searches) . ')');

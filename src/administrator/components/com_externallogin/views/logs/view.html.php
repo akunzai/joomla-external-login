@@ -11,11 +11,17 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\Toolbar;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
 // Import Joomla view library
-jimport('joomla.application.component.view');
+JLoader::import('joomla.application.component.view');
 
 /**
  * Logs View of External Login component
@@ -25,7 +31,7 @@ jimport('joomla.application.component.view');
  *
  * @since       2.1.0
  */
-class ExternalloginViewLogs extends JViewLegacy
+class ExternalloginViewLogs extends \Joomla\CMS\MVC\View\HtmlView
 {
     /**
      * Execute and display a layout script.
@@ -47,7 +53,7 @@ class ExternalloginViewLogs extends JViewLegacy
 
         // Check for errors.
         if (count($errors = $this->get('Errors'))) {
-            $app = JFactory::getApplication();
+            $app = Factory::getApplication();
             $app->enqueueMessage(implode('<br />', $errors), 'error');
             $app->redirect('index.php');
 
@@ -62,7 +68,7 @@ class ExternalloginViewLogs extends JViewLegacy
         // Set the toolbar
         $this->addToolBar();
 
-        $this->sidebar = JHtml::_('sidebar.render');
+        $this->sidebar = HTMLHelper::_('sidebar.render');
 
         // Display the template
         parent::display($tpl);
@@ -78,36 +84,36 @@ class ExternalloginViewLogs extends JViewLegacy
     protected function addToolbar()
     {
         // Load specific css component
-        JHtml::_('stylesheet', 'com_externallogin/administrator/externallogin.css', [], true);
+        HTMLHelper::stylesheet('com_externallogin/administrator/externallogin.css', ['relative' => true]);
 
         // Set the toolbar
-        JToolbarHelper::title(JText::_('COM_EXTERNALLOGIN_MANAGER_LOGS'), 'list-view');
-        $bar = JToolbar::getInstance('toolbar');
-        $bar->appendButton('Confirm', 'COM_EXTERNALLOGIN_MSG_LOGS_DELETE', 'delete', 'JTOOLBAR_DELETE', 'logs.delete', false);
-        $bar->appendButton('Link', 'download', 'COM_EXTERNALLOGIN_TOOLBAR_LOGS_DOWNLOAD', 'index.php?option=com_externallogin&view=logs&format=csv');
-        JToolbarHelper::preferences('com_externallogin');
-        JToolbarHelper::divider();
-        JToolbarHelper::help('COM_EXTERNALLOGIN_HELP_MANAGER_LOGS');
+        ToolbarHelper::title(Text::_('COM_EXTERNALLOGIN_MANAGER_LOGS'), 'list-view');
+        $toolbar = Toolbar::getInstance('toolbar');
+        $toolbar->appendButton('Confirm', 'COM_EXTERNALLOGIN_MSG_LOGS_DELETE', 'delete', 'JTOOLBAR_DELETE', 'logs.delete', false);
+        $toolbar->appendButton('Link', 'download', 'COM_EXTERNALLOGIN_TOOLBAR_LOGS_DOWNLOAD', 'index.php?option=com_externallogin&view=logs&format=csv');
+        ToolbarHelper::preferences('com_externallogin');
+        ToolbarHelper::divider();
+        ToolbarHelper::help('COM_EXTERNALLOGIN_HELP_MANAGER_LOGS');
 
-        JHtml::_('sidebar.addentry', JText::_('COM_EXTERNALLOGIN_SUBMENU_SERVERS'), 'index.php?option=com_externallogin', false);
-        JHtml::_('sidebar.addentry', JText::_('COM_EXTERNALLOGIN_SUBMENU_USERS'), 'index.php?option=com_externallogin&view=users', false);
-        JHtml::_('sidebar.addentry', JText::_('COM_EXTERNALLOGIN_SUBMENU_LOGS'), 'index.php?option=com_externallogin&view=logs', true);
-        JHtml::_('sidebar.addentry', JText::_('COM_EXTERNALLOGIN_SUBMENU_ABOUT'), 'index.php?option=com_externallogin&view=about', false);
+        HTMLHelper::_('sidebar.addentry', Text::_('COM_EXTERNALLOGIN_SUBMENU_SERVERS'), 'index.php?option=com_externallogin', false);
+        HTMLHelper::_('sidebar.addentry', Text::_('COM_EXTERNALLOGIN_SUBMENU_USERS'), 'index.php?option=com_externallogin&view=users', false);
+        HTMLHelper::_('sidebar.addentry', Text::_('COM_EXTERNALLOGIN_SUBMENU_LOGS'), 'index.php?option=com_externallogin&view=logs', true);
+        HTMLHelper::_('sidebar.addentry', Text::_('COM_EXTERNALLOGIN_SUBMENU_ABOUT'), 'index.php?option=com_externallogin&view=about', false);
 
-        JHtml::_('sidebar.setaction', 'index.php?option=com_externallogin&view=logs');
+        HTMLHelper::_('sidebar.setaction', 'index.php?option=com_externallogin&view=logs');
 
-        JHtml::_(
+        HTMLHelper::_(
             'sidebar.addFilter',
-            JText::_('COM_EXTERNALLOGIN_OPTION_SELECT_PRIORITY'),
+            Text::_('COM_EXTERNALLOGIN_OPTION_SELECT_PRIORITY'),
             'filter_priority',
-            JHtml::_('select.options', ExternalloginHelper::getPriorities(), 'value', 'text', $this->state->get('filter.priority'), true)
+            HTMLHelper::_('select.options', ExternalloginHelper::getPriorities(), 'value', 'text', $this->state->get('filter.priority'), true)
         );
 
-        JHtml::_(
+        HTMLHelper::_(
             'sidebar.addFilter',
-            JText::_('JOPTION_SELECT_PUBLISHED'),
+            Text::_('JOPTION_SELECT_PUBLISHED'),
             'filter_category',
-            JHtml::_('select.options', ExternalloginHelper::getCategories(), 'value', 'text', $this->state->get('filter.category'), true)
+            HTMLHelper::_('select.options', ExternalloginHelper::getCategories(), 'value', 'text', $this->state->get('filter.category'), true)
         );
     }
 
@@ -121,10 +127,10 @@ class ExternalloginViewLogs extends JViewLegacy
     protected function getSortFields()
     {
         return [
-            'a.priority' => JText::_('COM_EXTERNALLOGIN_HEADING_PRIORITY'),
-            'a.category' => JText::_('COM_EXTERNALLOGIN_HEADING_CATEGORY'),
-            'a.date' => JText::_('COM_EXTERNALLOGIN_HEADING_DATE'),
-            'a.message' => JText::_('COM_EXTERNALLOGIN_HEADING_MESSAGE'),
+            'a.priority' => Text::_('COM_EXTERNALLOGIN_HEADING_PRIORITY'),
+            'a.category' => Text::_('COM_EXTERNALLOGIN_HEADING_CATEGORY'),
+            'a.date' => Text::_('COM_EXTERNALLOGIN_HEADING_DATE'),
+            'a.message' => Text::_('COM_EXTERNALLOGIN_HEADING_MESSAGE'),
         ];
     }
 }

@@ -14,8 +14,6 @@
 // No direct access to this file
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Log\LogEntry;
-
 /**
  * External Login - External Login logger.
  *
@@ -24,18 +22,18 @@ use Joomla\CMS\Log\LogEntry;
  *
  * @since       2.1.0
  */
-class ExternalloginLogger extends JLogLoggerDatabase
+class ExternalloginLogger extends \Joomla\CMS\Log\Logger\DatabaseLogger
 {
     /**
      * Method to add an entry to the log.
      *
-     * @param   LogEntry  $entry  The log entry object to add to the log.
+     * @param   \Joomla\CMS\Log\LogEntry  $entry  The log entry object to add to the log.
      *
      * @return  void
      *
      * @since   2.1.0
      */
-    public function addEntry(LogEntry $entry)
+    public function addEntry(\Joomla\CMS\Log\LogEntry $entry)
     {
         if ($entry instanceof ExternalloginLogEntry) {
             // Connect to the database if not connected.

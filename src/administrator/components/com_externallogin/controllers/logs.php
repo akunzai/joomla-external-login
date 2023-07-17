@@ -11,11 +11,15 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
 // Import Joomla controlleradmin library
-jimport('joomla.application.component.controlleradmin');
+JLoader::import('joomla.application.component.controlleradmin');
 
 /**
  * Logs Controller of External Login component
@@ -25,7 +29,7 @@ jimport('joomla.application.component.controlleradmin');
  *
  * @since       2.1.0
  */
-class ExternalloginControllerLogs extends JControllerAdmin
+class ExternalloginControllerLogs extends \Joomla\CMS\MVC\Controller\AdminController
 {
     /**
      * The prefix to use with controller messages.
@@ -42,7 +46,7 @@ class ExternalloginControllerLogs extends JControllerAdmin
      * @param   string      $prefix  Model prefix
      * @param   array|null  $config  Array of options
      *
-     * @return  JModel
+     * @return  \Joomla\CMS\MVC\Model\BaseDatabaseModel
      *
      * @see     JControllerAdmin::getModel
      *
@@ -63,7 +67,7 @@ class ExternalloginControllerLogs extends JControllerAdmin
     public function delete()
     {
         // Check for request forgeries.
-        JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+        Session::checkToken() or exit(Text::_('JINVALID_TOKEN'));
 
         // Get/Create the model
         /** @var ExternalloginModelLogs */
@@ -73,11 +77,11 @@ class ExternalloginControllerLogs extends JControllerAdmin
         $count = $model->getTotal();
 
         if ($model->delete()) {
-            $this->setMessage(JText::plural('COM_EXTERNALLOGIN_LOGS_N_ITEMS_DELETED', $count));
+            $this->setMessage(Text::plural('COM_EXTERNALLOGIN_LOGS_N_ITEMS_DELETED', $count));
         } else {
             $this->setMessage($model->get('error'), 'error');
         }
 
-        $this->setRedirect(JRoute::_('index.php?option=com_externallogin&view=logs', false));
+        $this->setRedirect(Route::_('index.php?option=com_externallogin&view=logs', false));
     }
 }

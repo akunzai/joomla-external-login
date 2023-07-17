@@ -11,11 +11,13 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Factory;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
 // Import Joomla view library
-jimport('joomla.application.component.view');
+JLoader::import('joomla.application.component.view');
 
 /**
  * Plugins View of External Login component
@@ -25,7 +27,7 @@ jimport('joomla.application.component.view');
  *
  * @since       2.0.0
  */
-class ExternalloginViewPlugins extends JViewLegacy
+class ExternalloginViewPlugins extends \Joomla\CMS\MVC\View\HtmlView
 {
     /**
      * Execute and display a layout script.
@@ -45,7 +47,7 @@ class ExternalloginViewPlugins extends JViewLegacy
 
         // Check for errors.
         if (count($errors = $this->get('Errors'))) {
-            $app = JFactory::getApplication();
+            $app = Factory::getApplication();
             $app->enqueueMessage(implode('<br />', $errors), 'error');
             $app->redirect('index.php');
 

@@ -11,15 +11,18 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
 echo '<div id="j-sidebar-container" class="span2">' . $this->sidebar . '</div>';
 
-echo JText::sprintf(
+echo Text::sprintf(
     'COM_EXTERNALLOGIN_ABOUT',
     'http://www.univ-montp2.fr',
-    JHtml::_('image', 'com_externallogin/administrator/logo_um2.png', 'logo_um2', null, true)
+    HTMLHelper::_('image', 'com_externallogin/administrator/logo_um2.png', 'logo_um2', null, true)
 );
 ?>
 <br>

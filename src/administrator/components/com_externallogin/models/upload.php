@@ -11,11 +11,13 @@
  * @link        http://www.chdemko.com
  */
 
+use Joomla\CMS\Table\Table;
+
 // No direct access to this file
 defined('_JEXEC') or die;
 
 // Import Joomla modeladmin library
-jimport('joomla.application.component.modeladmin');
+JLoader::import('joomla.application.component.modeladmin');
 
 /**
  * Upload Model of External Login component
@@ -25,7 +27,7 @@ jimport('joomla.application.component.modeladmin');
  *
  * @since       2.0.0
  */
-class ExternalloginModelUpload extends JModelAdmin
+class ExternalloginModelUpload extends \Joomla\CMS\MVC\Model\AdminModel
 {
     /**
      * Returns a reference to the a Table object, always creating it.
@@ -34,7 +36,7 @@ class ExternalloginModelUpload extends JModelAdmin
      * @param   string  $prefix  A prefix for the table class name. Optional.
      * @param   array   $config  Configuration array for model. Optional.
      *
-     * @return	JTable  A database object
+     * @return	Table  A database object
      *
      * @see     JModel::getTable
      *
@@ -42,7 +44,7 @@ class ExternalloginModelUpload extends JModelAdmin
      */
     public function getTable($type = 'Server', $prefix = 'ExternalloginTable', $config = [])
     {
-        return JTable::getInstance($type, $prefix, $config);
+        return Table::getInstance($type, $prefix, $config);
     }
 
     /**
