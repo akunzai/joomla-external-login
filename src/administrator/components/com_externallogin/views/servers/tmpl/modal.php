@@ -17,8 +17,10 @@ use Joomla\CMS\Router\Route;
 // No direct access to this file
 defined('_JEXEC') or die;
 
-// load tooltip behavior
-HTMLHelper::_('behavior.tooltip');
+if (version_compare(JVERSION, '4.0.0', '<')) {
+	// load tooltip behavior
+	HTMLHelper::_('behavior.tooltip');
+}
 
 // Set url for form action
 if (!isset($this->globalS)) {

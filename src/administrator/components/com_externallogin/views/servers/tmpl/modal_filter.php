@@ -17,8 +17,10 @@ use Joomla\CMS\Language\Text;
 // No direct access to this file
 defined('_JEXEC') or die;
 
-// load tooltip behavior
-HTMLHelper::_('behavior.tooltip');
+if (version_compare(JVERSION, '4.0.0', '<')) {
+	// load tooltip behavior
+	HTMLHelper::_('behavior.tooltip');
+}
 ?>
 <fieldset id="filter">
 	<div class="filter-modal-box">

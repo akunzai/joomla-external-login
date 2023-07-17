@@ -18,7 +18,9 @@ use Joomla\CMS\Router\Route;
 // No direct access to this file
 defined('_JEXEC') or die;
 
-HTMLHelper::_('behavior.tooltip');
+if (version_compare(JVERSION, '4.0.0', '<')) {
+	HTMLHelper::_('behavior.tooltip');
+}
 
 $fieldSets = $this->form->getFieldsets();
 
