@@ -58,22 +58,19 @@
 
 	<administration>
 		<!-- Administration Menu Section -->
-		<menu img="../media/com_externallogin/images/administrator/icon-16-externallogin.png">COM_EXTERNALLOGIN_MENU</menu>
+		<menu>COM_EXTERNALLOGIN_MENU</menu>
 		<submenu>
 			<menu
 				view="servers"
 			>COM_EXTERNALLOGIN_MENU_SERVERS</menu>
 			<menu
 				view="users"
-				img="../media/com_externallogin/images/administrator/icon-16-users.png"
 			>COM_EXTERNALLOGIN_MENU_USERS</menu>
 			<menu
 				view="logs"
-				img="../media/com_externallogin/images/administrator/icon-16-logs.png"
 			>COM_EXTERNALLOGIN_MENU_LOGS</menu>
 			<menu
 				view="about"
-				img="../media/com_externallogin/images/administrator/icon-16-about.png"
 			>COM_EXTERNALLOGIN_MENU_ABOUT</menu>
 		</submenu>
 
