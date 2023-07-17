@@ -36,7 +36,7 @@ $listDirn	= $this->escape($this->state->get('list.direction'));
 	<th width="10%">
 		<?php echo HTMLHelper::_('grid.sort', 'JGRID_HEADING_ORDERING', 'a.ordering', $listDirn, $listOrder); ?>
 		<?php if ($listOrder == 'a.ordering') {
-			echo HTMLHelper::_('grid.order', $this->items, 'filesave.png', 'servers.saveorder');
+		    echo HTMLHelper::_('grid.order', $this->items, 'filesave.png', 'servers.saveorder');
 		} ?>
 	</th>
 	<th width="5%" class="nowrap">

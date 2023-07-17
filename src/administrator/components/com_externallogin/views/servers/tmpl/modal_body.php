@@ -27,7 +27,7 @@ $ordering = $this->state->get('list.ordering') == 'a.ordering';
 $plugins = ArrayHelper::pivot(ExternalloginHelper::getPlugins(), 'value');
 
 if (!count($this->items)) {
-?>
+    ?>
 	<tr class="row<?php echo $i % 2; ?>">
 		<td colspan="6" class="center">
 			<?php echo Text::_('COM_EXTERNALLOGIN_NO_RECORDS'); ?>
@@ -35,7 +35,7 @@ if (!count($this->items)) {
 	</tr>
 <?php
 } else {
-?>
+    ?>
 	<?php foreach ($this->items as $i => $item) : ?>
 		<tr class="row<?php echo $i % 2; ?>">
 			<td>
@@ -54,10 +54,10 @@ if (!count($this->items)) {
 			</td>
 			<td class="center">
 				<?php echo HTMLHelper::_(
-					'ExternalloginHtml.Servers.state',
-					$item->published == 1 ? ($item->enabled == null ? 4 : ($item->enabled == 0 ? 3 : 1)) : $item->published,
-					$i,
-					false
+				    'ExternalloginHtml.Servers.state',
+				    $item->published == 1 ? ($item->enabled == null ? 4 : ($item->enabled == 0 ? 3 : 1)) : $item->published,
+				    $i,
+				    false
 				); ?>
 			</td>
 			<td class="right">

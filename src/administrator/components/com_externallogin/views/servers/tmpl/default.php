@@ -24,7 +24,7 @@ HTMLHelper::_('dropdown.init');
 HTMLHelper::_('formbehavior.chosen', 'select');
 
 if (version_compare(JVERSION, '4.0.0', '<')) {
-	HTMLHelper::_('behavior.framework', true);
+    HTMLHelper::_('behavior.framework', true);
 }
 HTMLHelper::script('system/modal.js', ['framework' => true, 'relative' => true]);
 HTMLHelper::stylesheet('system/modal.css', ['relative' => true]);

@@ -19,10 +19,10 @@ use Joomla\CMS\Router\Route;
 defined('_JEXEC') or die;
 
 if (version_compare(JVERSION, '4.0.0', '<')) {
-	HTMLHelper::_('behavior.tooltip');
-	HTMLHelper::_('behavior.formvalidation');
+    HTMLHelper::_('behavior.tooltip');
+    HTMLHelper::_('behavior.formvalidation');
 } else {
-	HTMLHelper::_('jquery.framework');
+    HTMLHelper::_('jquery.framework');
 }
 
 $fieldSets = $this->form->getFieldsets();

@@ -51,7 +51,7 @@ defined('_JEXEC') or die;
 			</div>
 		</div>
 		<?php // We are forced to encode the url in base64 as com_users uses this encoding
-		?>
+        ?>
 		<input type="hidden" name="return" value="<?php echo base64_encode($this->params->get('logout_redirect_menuitem', Uri::getInstance()->toString())); ?>" />
 		<?php echo HTMLHelper::_('form.token'); ?>
 	</form>

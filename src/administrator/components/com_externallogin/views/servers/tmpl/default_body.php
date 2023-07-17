@@ -28,7 +28,7 @@ $ordering = $this->state->get('list.ordering') == 'a.ordering';
 $plugins = ArrayHelper::pivot(ExternalloginHelper::getPlugins(), 'value');
 
 if (!count($this->items)) {
-?>
+    ?>
 	<tr class="row<?php echo $i % 2; ?>">
 		<td colspan="6" class="center">
 			<?php echo Text::_('COM_EXTERNALLOGIN_NO_RECORDS'); ?>
@@ -36,11 +36,11 @@ if (!count($this->items)) {
 	</tr>
 <?php
 } else {
-?>
+    ?>
 	<?php foreach ($this->items as $i => $item) : ?>
 		<?php
-		$canChange	= $user->authorise('core.manage', 'com_checkin') || $item->checked_out == $userId || $item->checked_out == 0;
-		?>
+            $canChange	= $user->authorise('core.manage', 'com_checkin') || $item->checked_out == $userId || $item->checked_out == 0;
+	    ?>
 		<tr class="row<?php echo $i % 2; ?>">
 			<td class="center">
 				<?php echo HTMLHelper::_('grid.id', $i, $item->id); ?>
@@ -58,10 +58,10 @@ if (!count($this->items)) {
 			</td>
 			<td class="center">
 				<?php echo HTMLHelper::_(
-					'ExternalloginHtml.Servers.state',
-					$item->published == 1 ? ($item->enabled == null ? 4 : ($item->enabled == 0 ? 3 : 1)) : $item->published,
-					$i,
-					$canChange
+				    'ExternalloginHtml.Servers.state',
+				    $item->published == 1 ? ($item->enabled == null ? 4 : ($item->enabled == 0 ? 3 : 1)) : $item->published,
+				    $i,
+				    $canChange
 				); ?>
 			</td>
 			<td class="order center">

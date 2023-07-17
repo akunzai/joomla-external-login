@@ -18,15 +18,15 @@ use Joomla\CMS\Router\Route;
 defined('_JEXEC') or die;
 
 if (version_compare(JVERSION, '4.0.0', '<')) {
-	// load tooltip behavior
-	HTMLHelper::_('behavior.tooltip');
+    // load tooltip behavior
+    HTMLHelper::_('behavior.tooltip');
 }
 
 // Set url for form action
 if (!isset($this->globalS)) {
-	$frmAct = Route::_('index.php?option=com_externallogin&view=servers&tmpl=component&layout=modal');
+    $frmAct = Route::_('index.php?option=com_externallogin&view=servers&tmpl=component&layout=modal');
 } else {
-	$frmAct = Route::_('index.php?option=com_externallogin&view=servers&tmpl=component&layout=modal&globalS=1');
+    $frmAct = Route::_('index.php?option=com_externallogin&view=servers&tmpl=component&layout=modal&globalS=1');
 }
 
 ?>

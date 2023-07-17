@@ -37,7 +37,7 @@ defined('_JEXEC') or die;
         else :
             require ModuleHelper::getLayoutPath('mod_externallogin_admin', 'disabled');
         endif;
-        ?>
+?>
     </fieldset>
     <?php echo HTMLHelper::_('form.token'); ?>
 </form>

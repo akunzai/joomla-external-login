@@ -18,8 +18,8 @@ use Joomla\CMS\Language\Text;
 defined('_JEXEC') or die;
 
 if (version_compare(JVERSION, '4.0.0', '<')) {
-	// load tooltip behavior
-	HTMLHelper::_('behavior.tooltip');
+    // load tooltip behavior
+    HTMLHelper::_('behavior.tooltip');
 }
 $listOrder	= $this->escape($this->state->get('list.ordering'));
 $listDirn	= $this->escape($this->state->get('list.direction'));
@@ -43,11 +43,11 @@ $sortFields = $this->getSortFields();
 		<select name="directionTable" id="directionTable" class="input-medium" onchange="Joomla.orderTable()">
 			<option value=""><?php echo Text::_('JFIELD_ORDERING_DESC'); ?></option>
 			<option value="asc" <?php if ($listDirn == 'asc') {
-									echo 'selected="selected"';
-								} ?>><?php echo Text::_('JGLOBAL_ORDER_ASCENDING'); ?></option>
+			    echo 'selected="selected"';
+			} ?>><?php echo Text::_('JGLOBAL_ORDER_ASCENDING'); ?></option>
 			<option value="desc" <?php if ($listDirn == 'desc') {
-										echo 'selected="selected"';
-									} ?>><?php echo Text::_('JGLOBAL_ORDER_DESCENDING'); ?></option>
+			    echo 'selected="selected"';
+			} ?>><?php echo Text::_('JGLOBAL_ORDER_DESCENDING'); ?></option>
 		</select>
 	</div>
 	<div class="btn-group pull-right">
