@@ -88,9 +88,9 @@ class ExternalloginViewLogs extends \Joomla\CMS\MVC\View\HtmlView
 
         // Set the toolbar
         ToolbarHelper::title(Text::_('COM_EXTERNALLOGIN_MANAGER_LOGS'), 'list-view');
-        $bar = Toolbar::getInstance('toolbar');
-        $bar->appendButton('Confirm', 'COM_EXTERNALLOGIN_MSG_LOGS_DELETE', 'delete', 'TOOLBAR_DELETE', 'logs.delete', false);
-        $bar->appendButton('Link', 'download', 'COM_EXTERNALLOGIN_TOOLBAR_LOGS_DOWNLOAD', 'index.php?option=com_externallogin&view=logs&format=csv');
+        $toolbar = Toolbar::getInstance('toolbar');
+        $toolbar->appendButton('Confirm', 'COM_EXTERNALLOGIN_MSG_LOGS_DELETE', 'delete', 'JTOOLBAR_DELETE', 'logs.delete', false);
+        $toolbar->appendButton('Link', 'download', 'COM_EXTERNALLOGIN_TOOLBAR_LOGS_DOWNLOAD', 'index.php?option=com_externallogin&view=logs&format=csv');
         ToolbarHelper::preferences('com_externallogin');
         ToolbarHelper::divider();
         ToolbarHelper::help('COM_EXTERNALLOGIN_HELP_MANAGER_LOGS');
