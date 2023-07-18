@@ -54,13 +54,11 @@ class ExternalloginViewDownload extends \Joomla\CMS\MVC\View\HtmlView
             return false;
         }
 
-        $document = Factory::getDocument();
-        $document->setMimeEncoding('text/csv');
-        WebApplication::getInstance()->setHeader(
-            'Content-disposition',
-            'attachment; filename="' . $basename . '.csv"; creation-date="' . Factory::getDate()->toRFC822() . '"',
-            true
-        );
+        header('Content-Type: text/csv; charset=utf8');
+        header('Content-Disposition: attachment; filename="' . $basename . '".csv');
+        header('Pragma: no-cache');
+        header('Expires: 0');
         $this->get('Content');
+        exit();
     }
 }
