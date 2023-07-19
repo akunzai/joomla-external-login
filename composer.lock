@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "df2bba69f45fa4f093f19de6c1874ae8",
+    "content-hash": "a6e1db5203fc4ae5bae0ec42f256d971",
     "packages": [],
     "packages-dev": [
         {
@@ -380,16 +380,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v3.21.2",
+            "version": "v3.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer.git",
-                "reference": "80f68059bd371cd42c7b03bb6caa6352faed5b8e"
+                "reference": "92b019f6c8d79aa26349d0db7671d37440dc0ff3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/80f68059bd371cd42c7b03bb6caa6352faed5b8e",
-                "reference": "80f68059bd371cd42c7b03bb6caa6352faed5b8e",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/92b019f6c8d79aa26349d0db7671d37440dc0ff3",
+                "reference": "92b019f6c8d79aa26349d0db7671d37440dc0ff3",
                 "shasum": ""
             },
             "require": {
@@ -465,7 +465,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues",
-                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.21.2"
+                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.22.0"
             },
             "funding": [
                 {
@@ -473,7 +473,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-07-16T09:28:11+00:00"
+            "time": "2023-07-16T23:08:06+00:00"
         },
         {
             "name": "joomla/joomla-cms",
@@ -491,16 +491,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.25",
+            "version": "1.10.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "578f4e70d117f9a90699324c555922800ac38d8c"
+                "reference": "5d660cbb7e1b89253a47147ae44044f49832351f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/578f4e70d117f9a90699324c555922800ac38d8c",
-                "reference": "578f4e70d117f9a90699324c555922800ac38d8c",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/5d660cbb7e1b89253a47147ae44044f49832351f",
+                "reference": "5d660cbb7e1b89253a47147ae44044f49832351f",
                 "shasum": ""
             },
             "require": {
@@ -549,7 +549,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-07-06T12:11:37+00:00"
+            "time": "2023-07-19T12:44:37+00:00"
         },
         {
             "name": "psr/cache",
