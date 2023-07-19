@@ -60,14 +60,13 @@ class ExternalloginControllerServer extends \Joomla\CMS\MVC\Controller\BaseContr
         // Get the model
         $model = $this->getModel();
 
-        // Get the uri
-        $uri = $model->getItem();
-
-        if (empty($uri)) {
-            $this->setMessage($model->get('error'), 'warning');
+        try {
+            // Get the uri
+            $uri = $model->getItem();
+            $this->setRedirect(Route::_($uri, false));
+        } catch (Exception $e) {
+            $this->setMessage($e->getMessage(), 'warning');
             $this->setRedirect('index.php', false);
-            return;
         }
-        $this->setRedirect(Route::_($uri, false));
     }
 }

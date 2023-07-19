@@ -76,10 +76,11 @@ class ExternalloginControllerLogs extends \Joomla\CMS\MVC\Controller\AdminContro
         // Remove the items.
         $count = $model->getTotal();
 
-        if ($model->delete()) {
+        try {
+            $model->delete();
             $this->setMessage(Text::plural('COM_EXTERNALLOGIN_LOGS_N_ITEMS_DELETED', $count));
-        } else {
-            $this->setMessage($model->get('error'), 'error');
+        } catch (Exception $e) {
+            $this->setMessage($e->getMessage(), 'error');
         }
 
         $this->setRedirect(Route::_('index.php?option=com_externallogin&view=logs', false));

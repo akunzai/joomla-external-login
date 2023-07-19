@@ -187,7 +187,7 @@ class ExternalloginModelLogs extends \Joomla\CMS\MVC\Model\ListModel
     /**
      * Delete items
      *
-     * @return	boolean	 TRUE on success, FALSE on failure.
+     * @return	void
      *
      * @since	2.1.0
      */
@@ -243,21 +243,13 @@ class ExternalloginModelLogs extends \Joomla\CMS\MVC\Model\ListModel
 
         $db->setQuery($query);
 
-        try {
-            $db->execute();
-            $app = Factory::getApplication();
-            $app->setUserState($this->context . '.filter.search', '');
-            $app->setUserState($this->context . '.filter.priority', '');
-            $app->setUserState($this->context . '.filter.category', '');
-            $app->setUserState($this->context . '.filter.begin', '');
-            $app->setUserState($this->context . '.filter.end', '');
-            $app->enqueueMessage(Text::_('COM_EXTERNALLOGIN_MSG_LOGS_FILTER_RESET'), 'notice');
-
-            return true;
-        } catch (RuntimeException $e) {
-            $this->set('error', $e->getMessage());
-
-            return false;
-        }
+        $db->execute();
+        $app = Factory::getApplication();
+        $app->setUserState($this->context . '.filter.search', '');
+        $app->setUserState($this->context . '.filter.priority', '');
+        $app->setUserState($this->context . '.filter.category', '');
+        $app->setUserState($this->context . '.filter.begin', '');
+        $app->setUserState($this->context . '.filter.end', '');
+        $app->enqueueMessage(Text::_('COM_EXTERNALLOGIN_MSG_LOGS_FILTER_RESET'), 'notice');
     }
 }

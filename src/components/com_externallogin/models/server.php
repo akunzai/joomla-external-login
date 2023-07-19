@@ -79,7 +79,7 @@ class ExternalloginModelServer extends \Joomla\CMS\MVC\Model\ItemModel
     /**
      * Returns the server
      *
-     * @return	Uri|string|bool  the service URI
+     * @return	Uri|string  the service URI
      *
      * @since	2.0.0
      */
@@ -90,8 +90,7 @@ class ExternalloginModelServer extends \Joomla\CMS\MVC\Model\ItemModel
         $item = $this->getTable();
 
         if (!$item->load($id) || $item->published != 1) {
-            $this->set('error', Text::_('COM_EXTERNALLOGIN_ERROR_SERVER_UNPUBLISHED'));
-            return false;
+            throw new Exception(Text::_('COM_EXTERNALLOGIN_ERROR_SERVER_UNPUBLISHED'));
         }
 
         $app = Factory::getApplication();
@@ -139,8 +138,7 @@ class ExternalloginModelServer extends \Joomla\CMS\MVC\Model\ItemModel
         $results = $app->triggerEvent('onGetLoginUrl', [$item, $uri]);
 
         if (empty($results)) {
-            $this->set('error', Text::_('COM_EXTERNALLOGIN_ERROR_OCCURS'));
-            return false;
+            throw new Exception(Text::_('COM_EXTERNALLOGIN_ERROR_OCCURS'));
         }
         return $results[0];
     }
