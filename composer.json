@@ -35,18 +35,6 @@
 					"reference": "tags/3.10.12"
 				}
 			}
-		},
-		{
-			"type": "package",
-			"package": {
-				"name": "akunzai/joomla-stubs",
-				"version": "master",
-				"source": {
-					"url": "https://github.com/akunzai/joomla-stubs.git",
-					"type": "git",
-					"reference": "master"
-				}
-			}
 		}
 	],
 	"require": {
