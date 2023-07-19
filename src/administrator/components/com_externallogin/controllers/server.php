@@ -90,17 +90,18 @@ class ExternalloginControllerServer extends \Joomla\CMS\MVC\Controller\FormContr
 
         $model = $this->getModel();
 
-        if ($model->upload($form)) {
+        try {
+            $model->upload($form);
             $this->setRedirect(
                 Route::_('index.php?option=com_externallogin&view=success&tmpl=component', false),
                 Text::_('COM_EXTERNALLOGIN_MSG_UPLOAD_SUCCESS')
             );
-            return;
+        } catch (Exception $e) {
+            $this->setRedirect(
+                Route::_('index.php?option=com_externallogin&view=upload&tmpl=component&id=' . $id, false),
+                $e->getMessage(),
+                'error'
+            );
         }
-        $this->setRedirect(
-            Route::_('index.php?option=com_externallogin&view=upload&tmpl=component&id=' . $id, false),
-            $model->get('error'),
-            'error'
-        );
     }
 }

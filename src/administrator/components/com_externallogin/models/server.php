@@ -87,7 +87,7 @@ class ExternalloginModelServer extends \Joomla\CMS\MVC\Model\AdminModel
         $plugin = $data['plugin'] ?? $this->getState($this->getName() . '.plugin');
 
         if (empty($plugin)) {
-            $item = $this->getItem();
+            $item = parent::getItem();
             $plugin = $item->plugin;
         }
 
@@ -113,7 +113,7 @@ class ExternalloginModelServer extends \Joomla\CMS\MVC\Model\AdminModel
         $data = Factory::getApplication()->getUserState('com_externallogin.edit.server.data', []);
 
         if (empty($data)) {
-            $data = $this->getItem();
+            $data = parent::getItem();
 
             if (
                 version_compare(JVERSION, '3.7.0', '>=')
@@ -164,7 +164,7 @@ class ExternalloginModelServer extends \Joomla\CMS\MVC\Model\AdminModel
      *
      * @param   \Joomla\CMS\Form\Form  $form  Form
      *
-     * @return  boolean  True on success
+     * @return  void
      */
     public function upload($form)
     {
@@ -172,8 +172,7 @@ class ExternalloginModelServer extends \Joomla\CMS\MVC\Model\AdminModel
         $sid = (int) $form['id'];
 
         if ($files['file']['type'] != 'text/csv') {
-            $this->set('error', Text::_('COM_EXTERNALLOGIN_ERROR_BAD_FILE'));
-            return false;
+            throw new Exception(Text::_('COM_EXTERNALLOGIN_ERROR_BAD_FILE'));
         }
 
         $handle = fopen($files['file']['tmp_name'], "r");
@@ -227,7 +226,5 @@ class ExternalloginModelServer extends \Joomla\CMS\MVC\Model\AdminModel
         } while ($data);
 
         fclose($handle);
-
-        return true;
     }
 }

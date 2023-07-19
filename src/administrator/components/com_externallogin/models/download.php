@@ -78,11 +78,10 @@ class ExternalloginModelDownload extends \Joomla\CMS\MVC\Model\BaseDatabaseModel
     {
         $table = $this->getTable();
 
-        if ($table->load($this->getState($this->getName() . '.id'))) {
-            return Factory::getConfig()->get('sitename') . '_' . $table->title . '_' . Factory::getDate();
+        if (!$table->load($this->getState($this->getName() . '.id'))) {
+            throw new Exception(Text::_('COM_EXTERNALLOGIN_ERROR_CANNOT_DOWNLOAD'));
         }
-        $this->set('error', Text::_('COM_EXTERNALLOGIN_ERROR_CANNOT_DOWNLOAD'));
-        return false;
+        return Factory::getConfig()->get('sitename') . '_' . $table->title . '_' . Factory::getDate();
     }
 
     /**
