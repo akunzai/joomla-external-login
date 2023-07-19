@@ -13,6 +13,7 @@
 
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
@@ -104,7 +105,7 @@ abstract class ModExternalloginsiteHelper
         if ($item) {
             $lang = '';
 
-            if (JLanguageMultilang::isEnabled() && $item->language !== '*') {
+            if (Multilanguage::isEnabled() && $item->language !== '*') {
                 $lang = '&lang=' . $item->language;
             }
 
