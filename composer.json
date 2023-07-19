@@ -53,7 +53,6 @@
 		"php": ">=8.1"
 	},
 	"require-dev": {
-		"akunzai/joomla-stubs": "dev-master",
 		"friendsofphp/php-cs-fixer": "v3.21.2",
 		"joomla/joomla-cms": "3.10.12",
 		"phpstan/phpstan": "^1.10.25"
