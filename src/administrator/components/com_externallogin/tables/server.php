@@ -30,6 +30,18 @@ JLoader::import('joomla.database.table');
 class ExternalloginTableServer extends \Joomla\CMS\Table\Table
 {
     /**
+     * The parameter object
+     *
+     * @var Registry
+     */
+    protected $params;
+
+    /**
+     * @var int
+     */
+    protected $ordering;
+
+    /**
      * Constructor
      *
      * @param   object  $db  Database connector object

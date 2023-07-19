@@ -31,6 +31,13 @@ JLoader::import('joomla.application.component.view');
 class ExternalloginViewAbout extends \Joomla\CMS\MVC\View\HtmlView
 {
     /**
+     * The HTML for displaying sidebar
+     *
+     * @var string
+     */
+    protected $sidebar;
+
+    /**
      * Execute and display a layout script.
      *
      * @param   string  $tpl  The name of the layout file to parse.
