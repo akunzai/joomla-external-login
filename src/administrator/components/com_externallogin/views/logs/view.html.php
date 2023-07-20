@@ -36,7 +36,7 @@ class ExternalloginViewLogs extends \Joomla\CMS\MVC\View\HtmlView
     /**
      * The model state
      *
-     * @var array
+     * @var \Joomla\CMS\Object\CMSObject
      */
     protected $state;
 
@@ -66,9 +66,9 @@ class ExternalloginViewLogs extends \Joomla\CMS\MVC\View\HtmlView
      *
      * @param   string  $tpl  The name of the layout file to parse.
      *
-     * @return  void|JError
+     * @return  void|bool
      *
-     * @see     Overload JView::display
+     * @see     Overload JViewLegacy::display
      *
      * @since   2.1.0
      */
