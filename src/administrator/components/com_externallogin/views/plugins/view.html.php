@@ -30,6 +30,13 @@ JLoader::import('joomla.application.component.view');
 class ExternalloginViewPlugins extends \Joomla\CMS\MVC\View\HtmlView
 {
     /**
+     * An array of items.
+     *
+     * @var array
+     */
+    protected $items;
+
+    /**
      * Execute and display a layout script.
      *
      * @param   string  $tpl  The name of the layout file to parse.

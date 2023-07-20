@@ -11,7 +11,6 @@
  * @link        http://www.chdemko.com
  */
 
-use Joomla\CMS\Application\WebApplication;
 use Joomla\CMS\Factory;
 
 // No direct access to this file

@@ -33,6 +33,27 @@ JLoader::import('joomla.application.component.view');
 class ExternalloginViewServer extends \Joomla\CMS\MVC\View\HtmlView
 {
     /**
+     * The model state
+     *
+     * @var object
+     */
+    protected $state;
+
+    /**
+     * The active item
+     *
+     * @var object
+     */
+    protected $item;
+
+    /**
+     * The Form object
+     *
+     * @var \Joomla\CMS\Form\Form
+     */
+    protected $form;
+
+    /**
      * Execute and display a layout script.
      *
      * @param   string  $tpl  The name of the layout file to parse.

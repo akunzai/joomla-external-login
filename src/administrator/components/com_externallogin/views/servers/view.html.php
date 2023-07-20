@@ -34,6 +34,41 @@ JLoader::import('joomla.application.component.view');
 class ExternalloginViewServers extends \Joomla\CMS\MVC\View\HtmlView
 {
     /**
+     * The model state
+     *
+     * @var object
+     */
+    protected $state;
+
+    /**
+     * An array of items
+     *
+     * @var array
+     */
+    protected $items;
+
+    /**
+     * The pagination object
+     *
+     * @var \Joomla\CMS\Pagination\Pagination
+     */
+    protected $pagination;
+
+    /**
+     * The HTML for displaying sidebar
+     *
+     * @var string
+     */
+    protected $sidebar;
+
+    /**
+     * is a global server?
+     *
+     * @var bool
+     */
+    protected $globalS;
+
+    /**
      * Execute and display a layout script.
      *
      * @param   string  $tpl  The name of the layout file to parse.

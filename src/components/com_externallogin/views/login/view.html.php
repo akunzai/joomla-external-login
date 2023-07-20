@@ -32,6 +32,27 @@ JLoader::import('joomla.application.component.helper');
 class ExternalloginViewLogin extends \Joomla\CMS\MVC\View\HtmlView
 {
     /**
+     * The model state
+     *
+     * @var object
+     */
+    protected $state;
+
+    /**
+     * An array of items
+     *
+     * @var array
+     */
+    protected $items;
+
+    /**
+     * The parameter object
+     *
+     * @var \Joomla\Registry\Registry
+     */
+    protected $params;
+
+    /**
      * Execute and display a layout script.
      *
      * @param   string  $tpl  The name of the layout file to parse.
