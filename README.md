@@ -1,4 +1,4 @@
-# External Login extension for Joomla
+# External Login extension for Joomla!
 
 [![Build Status][ci-badge]][ci]
 
