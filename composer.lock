@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "61cac0709f4e7c6049ee5b405c59c71b",
+    "content-hash": "2335705cd5a88102a97000b5f845b02c",
     "packages": [],
     "packages-dev": [
         {
@@ -477,15 +477,15 @@
         },
         {
             "name": "joomla/joomla-cms",
-            "version": "3.10.12",
+            "version": "4.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/joomla/joomla-cms.git",
-                "reference": "tags/3.10.12"
+                "reference": "tags/4.3.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/joomla/joomla-cms/releases/download/3.10.12/Joomla_3.10.12-Stable-Full_Package.zip"
+                "url": "https://github.com/joomla/joomla-cms/releases/download/4.3.3/Joomla_4.3.3-Stable-Full_Package.zip"
             },
             "type": "library"
         },

@@ -71,7 +71,7 @@ RUN sed -i 's/9000/9003/' /usr/local/etc/php/conf.d/xdebug.ini
 RUN sed -i '/xdebug.start_with_request/d' /usr/local/etc/php/conf.d/xdebug.ini
 
 # https://hub.docker.com/_/joomla
-ARG JOOMLA_VERSION=3.10.12
+ARG JOOMLA_VERSION=4.3.3
 # Download package and extract to web volume
 RUN set -ex; \
 	curl -o joomla.tar.bz2 -SL https://github.com/joomla/joomla-cms/releases/download/${JOOMLA_VERSION}/Joomla_${JOOMLA_VERSION}-Stable-Full_Package.tar.bz2; \
@@ -81,8 +81,8 @@ RUN set -ex; \
 	chown -R www-data:www-data /usr/src/joomla; \
     chmod -R g+w /usr/src/joomla;
 
-COPY --from=joomla:3.10.12 /entrypoint.sh /entrypoint.sh
-COPY --from=joomla:3.10.12 /makedb.php /makedb.php
+COPY --from=joomla:4.3.3 /entrypoint.sh /entrypoint.sh
+COPY --from=joomla:4.3.3 /makedb.php /makedb.php
 
 EXPOSE 8080
 ENTRYPOINT ["/entrypoint.sh"]
