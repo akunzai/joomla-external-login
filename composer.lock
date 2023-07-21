@@ -4,9 +4,19 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2335705cd5a88102a97000b5f845b02c",
+    "content-hash": "53690ba7cfbdb38a8ee37ccd07b27266",
     "packages": [],
     "packages-dev": [
+        {
+            "name": "akunzai/joomla-stubs",
+            "version": "master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/akunzai/joomla-stubs.git",
+                "reference": "master"
+            },
+            "type": "library"
+        },
         {
             "name": "composer/pcre",
             "version": "3.1.0",
@@ -2113,7 +2123,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "akunzai/joomla-stubs": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

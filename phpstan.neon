@@ -5,6 +5,8 @@ parameters:
   level: 0
   paths:
     - src
+  scanFiles:
+    - vendor/akunzai/joomla-stubs/joomla-stubs.php
   scanDirectories:
     - vendor/joomla/joomla-cms/administrator/includes
     - vendor/joomla/joomla-cms/includes
