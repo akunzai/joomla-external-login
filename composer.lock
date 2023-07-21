@@ -4,9 +4,19 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "61cac0709f4e7c6049ee5b405c59c71b",
+    "content-hash": "53690ba7cfbdb38a8ee37ccd07b27266",
     "packages": [],
     "packages-dev": [
+        {
+            "name": "akunzai/joomla-stubs",
+            "version": "master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/akunzai/joomla-stubs.git",
+                "reference": "master"
+            },
+            "type": "library"
+        },
         {
             "name": "composer/pcre",
             "version": "3.1.0",
@@ -477,15 +487,15 @@
         },
         {
             "name": "joomla/joomla-cms",
-            "version": "3.10.12",
+            "version": "4.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/joomla/joomla-cms.git",
-                "reference": "tags/3.10.12"
+                "reference": "tags/4.3.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/joomla/joomla-cms/releases/download/3.10.12/Joomla_3.10.12-Stable-Full_Package.zip"
+                "url": "https://github.com/joomla/joomla-cms/releases/download/4.3.3/Joomla_4.3.3-Stable-Full_Package.zip"
             },
             "type": "library"
         },
@@ -2113,7 +2123,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "akunzai/joomla-stubs": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

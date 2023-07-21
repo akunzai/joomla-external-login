@@ -24,15 +24,27 @@
 			"type": "package",
 			"package": {
 				"name": "joomla/joomla-cms",
-				"version": "3.10.12",
+				"version": "4.3.3",
 				"dist": {
-					"url": "https://github.com/joomla/joomla-cms/releases/download/3.10.12/Joomla_3.10.12-Stable-Full_Package.zip",
+					"url": "https://github.com/joomla/joomla-cms/releases/download/4.3.3/Joomla_4.3.3-Stable-Full_Package.zip",
 					"type": "zip"
 				},
 				"source": {
 					"url": "https://github.com/joomla/joomla-cms.git",
 					"type": "git",
-					"reference": "tags/3.10.12"
+					"reference": "tags/4.3.3"
+				}
+			}
+		},
+		{
+			"type": "package",
+			"package": {
+				"name": "akunzai/joomla-stubs",
+				"version": "master",
+				"source": {
+					"url": "https://github.com/akunzai/joomla-stubs.git",
+					"type": "git",
+					"reference": "master"
 				}
 			}
 		}
@@ -41,8 +53,9 @@
 		"php": ">=8.1"
 	},
 	"require-dev": {
+		"akunzai/joomla-stubs": "dev-master",
 		"friendsofphp/php-cs-fixer": "v3.22.0",
-		"joomla/joomla-cms": "3.10.12",
+		"joomla/joomla-cms": "4.3.3",
 		"phpstan/phpstan": "^1.10.26"
 	},
 	"prefer-stable": true,
