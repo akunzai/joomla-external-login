@@ -93,6 +93,7 @@ class ExternalloginModelServer extends \Joomla\CMS\MVC\Model\ItemModel
             throw new Exception(Text::_('COM_EXTERNALLOGIN_ERROR_SERVER_UNPUBLISHED'));
         }
 
+        /** @var \Joomla\CMS\Application\CMSApplication */
         $app = Factory::getApplication();
         $menu = $app->getMenu()->getActive();
 

@@ -185,6 +185,7 @@ class PlgSystemCaslogin extends \Joomla\CMS\Plugin\CMSPlugin
         }
 
         // Get the application
+        /** @var \Joomla\CMS\Application\CMSApplication */
         $app = Factory::getApplication();
 
         // Get the dbo
