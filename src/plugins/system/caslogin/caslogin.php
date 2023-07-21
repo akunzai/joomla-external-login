@@ -66,13 +66,6 @@ class PlgSystemCaslogin extends \Joomla\CMS\Plugin\CMSPlugin
     protected $success;
 
     /**
-     * The object to observe
-     *
-     * @var object
-     */
-    private $subject;
-
-    /**
      * Constructor.
      *
      * @param   object  $subject  The object to observe
@@ -82,7 +75,6 @@ class PlgSystemCaslogin extends \Joomla\CMS\Plugin\CMSPlugin
      */
     public function __construct(&$subject, $config)
     {
-        $this->subject = $subject;
         parent::__construct($subject, $config);
         $this->loadLanguage();
         Log::addLogger(
@@ -163,7 +155,6 @@ class PlgSystemCaslogin extends \Joomla\CMS\Plugin\CMSPlugin
     public function onContentPrepareForm($form, $data)
     {
         if (!($form instanceof Form)) {
-            $this->subject->setError('JERROR_NOT_A_FORM');
             return false;
         }
 
