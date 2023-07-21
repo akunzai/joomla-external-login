@@ -83,7 +83,7 @@ class ExternalloginModelServer extends \Joomla\CMS\MVC\Model\ItemModel
      *
      * @since	2.0.0
      */
-    public function getItem()
+    public function getItem($pk = null)
     {
         // Load the server
         $id = $this->getState('server.id');
