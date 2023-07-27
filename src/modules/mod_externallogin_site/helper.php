@@ -43,6 +43,7 @@ abstract class ModExternalloginsiteHelper
      */
     public static function getListServersURL($params)
     {
+        /** @var \Joomla\CMS\Application\CMSApplication */
         $app = Factory::getApplication();
         $redirect = $app->input->get('redirect', $app->getUserState('users.login.form.data.return'));
 
@@ -91,6 +92,7 @@ abstract class ModExternalloginsiteHelper
      */
     public static function getLogoutUrl($params)
     {
+        /** @var \Joomla\CMS\Application\CMSApplication */
         $app = Factory::getApplication();
         $item = $app->getMenu()->getItem(
             $params->get(

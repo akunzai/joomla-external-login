@@ -67,6 +67,7 @@ class PlgSystemExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
     public function onAfterInitialise()
     {
         // Get the application
+        /** @var \Joomla\CMS\Application\CMSApplication */
         $app = Factory::getApplication();
 
         // Get the router
@@ -85,7 +86,9 @@ class PlgSystemExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
      */
     public function onAfterRender()
     {
-        Factory::getApplication()->setUserState('users.login.form.data.return', null);
+        /** @var \Joomla\CMS\Application\CMSApplication */
+        $app = Factory::getApplication();
+        $app->setUserState('users.login.form.data.return', null);
     }
 
     /**
@@ -100,6 +103,7 @@ class PlgSystemExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
      */
     public function buildRule(&$router, &$uri)
     {
+        /** @var \Joomla\CMS\Application\CMSApplication */
         $app = Factory::getApplication();
 
         if (

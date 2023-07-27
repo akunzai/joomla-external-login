@@ -213,6 +213,7 @@ abstract class ExternalloginHelper
             return urldecode($redirect);
         }
 
+        /** @var \Joomla\CMS\Application\CMSApplication */
         $app = Factory::getApplication();
         $item = $app->getMenu()->getItem($redirect);
 

@@ -38,6 +38,7 @@ function externalloginBuildRoute(&$query)
     // Get the relevant menu items if not loaded.
     if (empty($items)) {
         // Get all relevant menu items.
+        /** @var \Joomla\CMS\Application\CMSApplication */
         $app    = Factory::getApplication();
         $menu    = $app->getMenu();
         $items    = $menu->getItems('component', 'com_externallogin');
