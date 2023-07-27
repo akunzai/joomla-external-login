@@ -22,7 +22,6 @@ use Joomla\CMS\Table\Table;
 // No direct access to this file
 defined('_JEXEC') or die;
 
-JLoader::import('joomla.database.table');
 Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_externallogin/tables');
 
 JLoader::registerAlias('ExternalloginLogger', '\\Joomla\\CMS\\Log\\Logger\\ExternalloginLogger');

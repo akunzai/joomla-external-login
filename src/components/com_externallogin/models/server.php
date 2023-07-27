@@ -22,9 +22,6 @@ use Joomla\Registry\Registry;
 // No direct access to this file
 defined('_JEXEC') or die;
 
-// Import the Joomla modellist library
-JLoader::import('joomla.application.component.modelitem');
-
 /**
  * Server Model of External Login component
  *

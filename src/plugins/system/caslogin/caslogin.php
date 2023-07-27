@@ -27,10 +27,8 @@ use Joomla\Registry\Registry;
 // No direct access to this file
 defined('_JEXEC') or die;
 
-JLoader::import('joomla.database.table');
 Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_externallogin/tables');
 
-JLoader::import('joomla.application.component.model');
 BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_externallogin/models', 'ExternalloginModel');
 
 JLoader::registerAlias('ExternalloginLogger', '\\Joomla\\CMS\\Log\\Logger\\ExternalloginLogger');

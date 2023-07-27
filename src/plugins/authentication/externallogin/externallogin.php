@@ -189,7 +189,6 @@ class PlgAuthenticationExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
             );
         }
 
-        JLoader::import('joomla.application.component.helper');
         $config    = ComponentHelper::getParams('com_users');
         $defaultUserGroup = $params->get('usergroup', $config->get('new_usertype', 2));
 

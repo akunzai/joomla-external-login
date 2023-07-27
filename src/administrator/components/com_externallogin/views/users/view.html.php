@@ -20,9 +20,6 @@ use Joomla\CMS\Toolbar\ToolbarHelper;
 // No direct access to this file
 defined('_JEXEC') or die;
 
-// Import Joomla view library
-JLoader::import('joomla.application.component.view');
-
 /**
  * Users View of External Login component
  *
