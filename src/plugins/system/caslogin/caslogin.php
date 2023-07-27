@@ -32,9 +32,9 @@ Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_externallogin/table
 BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_externallogin/models', 'ExternalloginModel');
 
 JLoader::registerAlias('ExternalloginLogger', '\\Joomla\\CMS\\Log\\Logger\\ExternalloginLogger');
-JLoader::register('ExternalloginLogger', JPATH_ADMINISTRATOR . '/components/com_externallogin/log/logger.php');
-JLoader::register('ExternalloginLogEntry', JPATH_ADMINISTRATOR . '/components/com_externallogin/log/entry.php');
-JLoader::register('ExternalloginHelper', JPATH_ADMINISTRATOR . '/components/com_externallogin/helpers/externallogin.php');
+
+require_once JPATH_ADMINISTRATOR . '/components/com_externallogin/helpers/externallogin.php';
+
 /**
  * External Login - CAS plugin.
  *

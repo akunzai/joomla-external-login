@@ -25,8 +25,6 @@ use Joomla\Registry\Registry;
 defined('_JEXEC') or die;
 
 JLoader::registerAlias('ExternalloginLogger', '\\Joomla\\CMS\\Log\\Logger\\ExternalloginLogger');
-JLoader::register('ExternalloginLogger', JPATH_ADMINISTRATOR . '/components/com_externallogin/log/logger.php');
-JLoader::register('ExternalloginLogEntry', JPATH_ADMINISTRATOR . '/components/com_externallogin/log/entry.php');
 
 /**
  * External Login - External Login plugin.

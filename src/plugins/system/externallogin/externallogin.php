@@ -25,8 +25,7 @@ defined('_JEXEC') or die;
 Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_externallogin/tables');
 
 JLoader::registerAlias('ExternalloginLogger', '\\Joomla\\CMS\\Log\\Logger\\ExternalloginLogger');
-JLoader::register('ExternalloginLogger', JPATH_ADMINISTRATOR . '/components/com_externallogin/log/logger.php');
-JLoader::register('ExternalloginLogEntry', JPATH_ADMINISTRATOR . '/components/com_externallogin/log/entry.php');
+
 /**
  * External Login - External Login plugin.
  *
