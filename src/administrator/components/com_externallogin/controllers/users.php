@@ -75,10 +75,12 @@ class ExternalloginControllerUsers extends \Joomla\CMS\MVC\Controller\BaseContro
             ArrayHelper::toInteger($cid);
 
             // Publish the items.
-            if (!$model->enableJoomla($cid)) {
-                $this->setMessage($model->get('error'), 'error');
-            } else {
-                $this->setMessage(Text::plural('COM_EXTERNALLOGIN_USERS_N_USERS_JOOMLA_ENABLED', count($cid)));
+            try {
+                if ($model->enableJoomla($cid)) {
+                    $this->setMessage(Text::plural('COM_EXTERNALLOGIN_USERS_N_USERS_JOOMLA_ENABLED', count($cid)));
+                }
+            } catch (Exception $e) {
+                $this->setMessage($e->getMessage(), 'error');
             }
         }
 
@@ -110,10 +112,12 @@ class ExternalloginControllerUsers extends \Joomla\CMS\MVC\Controller\BaseContro
             ArrayHelper::toInteger($cid);
 
             // Publish the items.
-            if (!$model->disableJoomla($cid)) {
-                $this->setMessage($model->get('error'), 'error');
-            } else {
-                $this->setMessage(Text::plural('COM_EXTERNALLOGIN_USERS_N_USERS_JOOMLA_DISABLED', count($cid)));
+            try {
+                if ($model->disableJoomla($cid)) {
+                    $this->setMessage(Text::plural('COM_EXTERNALLOGIN_USERS_N_USERS_JOOMLA_DISABLED', count($cid)));
+                }
+            } catch (Exception $e) {
+                $this->setMessage($e->getMessage(), 'error');
             }
         }
 
@@ -145,10 +149,12 @@ class ExternalloginControllerUsers extends \Joomla\CMS\MVC\Controller\BaseContro
             ArrayHelper::toInteger($cid);
 
             // Publish the items.
-            if (!$model->disableExternallogin($cid)) {
-                $this->setMessage($model->get('error'), 'error');
-            } else {
-                $this->setMessage(Text::plural('COM_EXTERNALLOGIN_USERS_N_USERS_EXTERNALLOGIN_DISABLED', count($cid)));
+            try {
+                if ($model->disableExternallogin($cid)) {
+                    $this->setMessage(Text::plural('COM_EXTERNALLOGIN_USERS_N_USERS_EXTERNALLOGIN_DISABLED', count($cid)));
+                }
+            } catch (Exception $e) {
+                $this->setMessage($e->getMessage(), 'error');
             }
         }
 
@@ -212,10 +218,12 @@ class ExternalloginControllerUsers extends \Joomla\CMS\MVC\Controller\BaseContro
             ArrayHelper::toInteger($cid);
 
             // Publish the items.
-            if (!$model->enableExternallogin($cid, $sid)) {
-                $this->setMessage($model->get('error'), 'error');
-            } else {
-                $this->setMessage(Text::plural('COM_EXTERNALLOGIN_USERS_N_USERS_EXTERNALLOGIN_ENABLED', count($cid)));
+            try {
+                if ($model->enableExternallogin($cid, $sid)) {
+                    $this->setMessage(Text::plural('COM_EXTERNALLOGIN_USERS_N_USERS_EXTERNALLOGIN_ENABLED', count($cid)));
+                }
+            } catch (Exception $e) {
+                $this->setMessage($e->getMessage(), 'error');
             }
         }
 
@@ -233,21 +241,22 @@ class ExternalloginControllerUsers extends \Joomla\CMS\MVC\Controller\BaseContro
     {
         // Check for request forgeries
         Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
+        $app = Factory::getApplication();
 
         // Get server id.
-        $sid = Factory::getApplication()->input->getInt('server');
+        $sid = $app->input->getInt('server');
 
         // Get the model.
         $model = $this->getModel();
 
         // Publish the items.
-        $success = $model->enableExternalloginGlobal($sid);
-
-        // Check if enable was successful
-        if (!$success) {
-            Factory::getApplication()->enqueueMessage($model->get('error'), 'error');
-        } else {
-            $this->setMessage(Text::_('COM_EXTERNALLOGIN_USERS_ALL_USERS_JOOMLA_ENABLED'));
+        try {
+            // Check if enable was successful
+            if ($model->enableExternalloginGlobal($sid)) {
+                $this->setMessage(Text::_('COM_EXTERNALLOGIN_USERS_ALL_USERS_JOOMLA_ENABLED'));
+            }
+        } catch (Exception $e) {
+            $app->enqueueMessage($e->getMessage(), 'error');
         }
 
         // Go back to user overview
