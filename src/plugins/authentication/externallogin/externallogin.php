@@ -160,7 +160,7 @@ class PlgAuthenticationExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
             if ($isLogAutoRegister) {
                 Log::add(
                     new ExternalloginLogEntry(
-                        $user->get('error'),
+                        $user->getError(),
                         Log::ERROR,
                         'authentication-externallogin-autoregister'
                     )
