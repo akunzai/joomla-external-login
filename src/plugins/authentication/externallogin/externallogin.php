@@ -160,7 +160,7 @@ class PlgAuthenticationExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
             if ($isLogAutoRegister) {
                 Log::add(
                     new ExternalloginLogEntry(
-                        $user->get('error'),
+                        $user->getError(),
                         Log::ERROR,
                         'authentication-externallogin-autoregister'
                     )
@@ -333,7 +333,9 @@ class PlgAuthenticationExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
         $status = Authentication::STATUS_DENIED | Authentication::STATUS_UNKNOWN
     ) {
         if (!empty($redirection)) {
-            Factory::getApplication()->setUserState('com_externallogin.redirect', $redirection);
+            /** @var \Joomla\CMS\Application\CMSApplication */
+            $app = Factory::getApplication();
+            $app->setUserState('com_externallogin.redirect', $redirection);
         }
         $response->status = $status;
         return $response;

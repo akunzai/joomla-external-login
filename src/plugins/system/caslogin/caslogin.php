@@ -702,6 +702,7 @@ class PlgSystemCaslogin extends \Joomla\CMS\Plugin\CMSPlugin
      */
     public function onUserAfterLogout($options)
     {
+        /** @var \Joomla\CMS\Application\CMSApplication */
         $app = Factory::getApplication();
         $local = $app->input->get('local');
         // Local logout only?

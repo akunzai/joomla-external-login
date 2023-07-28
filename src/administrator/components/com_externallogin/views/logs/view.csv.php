@@ -46,6 +46,7 @@ class ExternalloginViewLogs extends \Joomla\CMS\MVC\View\HtmlView
 
         // Check for errors.
         if (count($errors = $this->get('Errors'))) {
+            /** @var \Joomla\CMS\Application\CMSApplication */
             $app = Factory::getApplication();
             $app->enqueueMessage(implode('<br />', $errors), 'error');
             $app->redirect('index.php');

@@ -47,6 +47,7 @@ class ExternalloginModelLogin extends \Joomla\CMS\MVC\Model\ListModel
      */
     protected function populateState($ordering = null, $direction = null)
     {
+        /** @var \Joomla\CMS\Application\CMSApplication */
         $app = Factory::getApplication();
         // Adjust the context to support modal layouts.
         if ($layout = $app->input->get('layout')) {
@@ -113,6 +114,7 @@ class ExternalloginModelLogin extends \Joomla\CMS\MVC\Model\ListModel
     public function getItems()
     {
         $items = parent::getItems();
+        /** @var \Joomla\CMS\Application\CMSApplication */
         $app = Factory::getApplication();
         $menu = $app->getMenu()->getActive();
 

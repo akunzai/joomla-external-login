@@ -45,6 +45,7 @@ class ExternalloginViewServer extends \Joomla\CMS\MVC\View\HtmlView
         // Get data from the model
         $item = $this->get('Item');
         $state = $this->get('State');
+        /** @var \Joomla\CMS\Application\CMSApplication */
         $app = Factory::getApplication();
 
         // Check for errors.

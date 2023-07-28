@@ -34,7 +34,7 @@ class ExternalloginTableServer extends \Joomla\CMS\Table\Table
      *
      * @var Registry
      */
-    protected $params;
+    public $params;
 
     /**
      * @var int

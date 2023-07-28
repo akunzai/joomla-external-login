@@ -244,6 +244,7 @@ class ExternalloginModelLogs extends \Joomla\CMS\MVC\Model\ListModel
         $db->setQuery($query);
 
         $db->execute();
+        /** @var \Joomla\CMS\Application\CMSApplication */
         $app = Factory::getApplication();
         $app->setUserState($this->context . '.filter.search', '');
         $app->setUserState($this->context . '.filter.priority', '');
