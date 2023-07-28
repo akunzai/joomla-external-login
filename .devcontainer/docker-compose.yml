@@ -1,6 +1,18 @@
 version: '2'
 
 services:
+  cas:
+    # https://hub.docker.com/r/apereo/cas
+    image: apereo/cas:6.6.9
+    environment:
+      # https://github.com/apereo/cas-overlay-template/blob/6.6/src/main/jib/docker/entrypoint.sh
+      JVM_MEM_OPTS: -Xmx1g
+      JVM_EXTRA_OPTS: -server -noverify
+        -XX:+TieredCompilation -XX:TieredStopAtLevel=1
+        -Dserver.ssl.enabled=false
+        -Dserver.port=80
+        -Dcas.authn.accept.users=user@example.org::secret
+
   joomla:
     build:
       context: .
