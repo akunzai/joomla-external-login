@@ -10,7 +10,7 @@
 	<license>GNU General Public License version 2 or later; see LICENSE</license>
 
 	<!--  The version string is recorded in the extension table -->
-	<version>4.0.2</version>
+	<version>4.0.3</version>
 
 	<!-- The description is optional and defaults to the name -->
 	<description>PLG_SYSTEM_EXTERNALLOGIN_DESCRIPTION</description>
