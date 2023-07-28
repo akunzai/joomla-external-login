@@ -18,9 +18,6 @@ use Joomla\CMS\Plugin\PluginHelper;
 // No direct access to this file
 defined('_JEXEC') or die;
 
-JLoader::import('joomla.plugin.helper');
-JLoader::import('joomla.application.component.helper');
-
 require_once dirname(__FILE__) . '/helper.php';
 
 $enabled = ComponentHelper::getComponent('com_externallogin', true)->enabled && PluginHelper::isEnabled('authentication', 'externallogin');

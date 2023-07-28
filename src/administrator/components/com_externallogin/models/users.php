@@ -16,9 +16,6 @@ use Joomla\CMS\Factory;
 // No direct access to this file
 defined('_JEXEC') or die;
 
-// Import the Joomla modellist library
-JLoader::import('joomla.application.component.modellist');
-
 /**
  * Servers Model of External Login component
  *

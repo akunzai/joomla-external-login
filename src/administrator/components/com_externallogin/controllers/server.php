@@ -19,9 +19,6 @@ use Joomla\CMS\Session\Session;
 // No direct access to this file
 defined('_JEXEC') or die;
 
-// Import Joomla controllerform library
-JLoader::import('joomla.application.component.controllerform');
-
 /**
  * Server Controller of External Login component
  *

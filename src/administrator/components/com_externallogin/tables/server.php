@@ -16,9 +16,6 @@ use Joomla\Registry\Registry;
 // No direct access
 defined('_JEXEC') or die;
 
-// Import Joomla table library
-JLoader::import('joomla.database.table');
-
 /**
  * Server Table class of External Login component
  *

@@ -20,8 +20,6 @@ use Joomla\Utilities\ArrayHelper;
 // No direct access to this file
 defined('_JEXEC') or die;
 
-// Import Joomla controller library
-JLoader::import('joomla.application.component.controller');
 /**
  * Users Controller of External Login component
  *

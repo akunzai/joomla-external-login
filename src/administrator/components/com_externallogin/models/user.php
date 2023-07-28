@@ -17,9 +17,6 @@ use Joomla\CMS\Table\Table;
 // No direct access to this file
 defined('_JEXEC') or die;
 
-// Import Joomla model library
-JLoader::import('joomla.application.component.model');
-
 /**
  * User Model of External Login component
  *

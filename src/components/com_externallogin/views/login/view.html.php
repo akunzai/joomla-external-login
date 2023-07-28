@@ -17,10 +17,6 @@ use Joomla\CMS\Component\ComponentHelper;
 // No direct access to this file
 defined('_JEXEC') or die;
 
-// Import Joomla view library
-JLoader::import('joomla.application.component.view');
-JLoader::import('joomla.application.component.helper');
-
 /**
  * Login View of External Login component
  *
