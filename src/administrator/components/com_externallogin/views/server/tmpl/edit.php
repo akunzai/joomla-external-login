@@ -34,7 +34,7 @@ $fistTabName = array_key_first($fieldSets);
 ?>
 <script type="text/javascript">
 	Joomla.submitbutton = function(task) {
-		if (task == 'server.cancel' || document.formvalidator.isValid(document.id('server-form'))) {
+		if (task == 'server.cancel' || document.formvalidator.isValid(document.getElementById('server-form'))) {
 			Joomla.submitform(task, document.getElementById('server-form'));
 		} else {
 			alert(Joomla.Text._('JGLOBAL_VALIDATION_FORM_FAILED', 'Some values are unacceptable'));
