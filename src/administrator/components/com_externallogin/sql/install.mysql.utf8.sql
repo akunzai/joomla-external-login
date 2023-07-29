@@ -8,31 +8,31 @@
 -- @link        https://github.com/akunzai/joomla-external-login
 
 CREATE TABLE IF NOT EXISTS `#__externallogin_servers` (
-	`id` INT(11) NOT NULL AUTO_INCREMENT,
-	`title` VARCHAR(128) NOT NULL,
-	`published` TINYINT(3) NOT NULL,
-	`plugin` VARCHAR(128) NOT NULL,
-	`ordering` INT(11) NOT NULL,
-	`checked_out` INT(11) NOT NULL,
-	`checked_out_time` DATETIME NOT NULL,
-	`params` TEXT NOT NULL,
+	`id` int NOT NULL AUTO_INCREMENT,
+	`title` varchar(128) NOT NULL,
+	`published` tinyint NOT NULL DEFAULT 0,
+	`plugin` varchar(128) NOT NULL,
+	`ordering` int NOT NULL DEFAULT 0,
+	`checked_out` int unsigned,
+	`checked_out_time` datetime,
+	`params` text NOT NULL,
 	PRIMARY KEY (`id`),
 	UNIQUE (`title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `#__externallogin_users` (
-	`server_id` INT(11) NOT NULL,
-	`user_id` INT(11) NOT NULL,
+	`server_id` int NOT NULL,
+	`user_id` int NOT NULL,
 	INDEX (`server_id`),
 	UNIQUE (`user_id`),
 	UNIQUE (`server_id`, `user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `#__externallogin_logs` (
-	`priority` INT(11) NOT NULL DEFAULT 0,
-	`category` VARCHAR(128) NOT NULL,
-	`date` DECIMAL(20,6) NOT NULL,
-	`message` MEDIUMTEXT NOT NULL,
+	`priority` int NOT NULL DEFAULT 0,
+	`category` varchar(128) NOT NULL,
+	`date` decimal(20, 6) NOT NULL,
+	`message` mediumtext NOT NULL,
 	INDEX (`priority`),
 	INDEX (`category`),
 	INDEX (`date`),
