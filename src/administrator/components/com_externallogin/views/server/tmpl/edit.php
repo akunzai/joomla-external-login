@@ -22,7 +22,11 @@ if (version_compare(JVERSION, '4.0.0', '<')) {
     HTMLHelper::_('behavior.tooltip');
     HTMLHelper::_('behavior.formvalidation');
 } else {
-    HTMLHelper::_('jquery.framework');
+    /** @var \Joomla\CMS\WebAsset\WebAssetManager */
+    $wa = $this->document->getWebAssetManager();
+    $wa->useScript('jquery')
+        ->useScript('jquery-noconflict')
+        ->useScript('form.validate');
 }
 
 $fieldSets = $this->form->getFieldsets();
