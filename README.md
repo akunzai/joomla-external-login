@@ -23,6 +23,21 @@ composer install
 composer build
 ```
 
+## Set up development containers
+
+> [mkcert](https://github.com/FiloSottile/mkcert) needs to be installed
+
+```sh
+# append /etc/hosts
+echo '127.0.0.1 cas.example.test www.example.test' | sudo tee -a /etc/hosts
+
+# install the local CA in the system trust store
+mkcert -install
+
+# generate locally-trusted development certificates
+mkcert -cert-file .devcontainer/cert.pem -key-file .devcontainer/key.pem '*.example.test'
+```
+
 ## History of this extension
 
 - [Christophe Demko](https://github.com/chdemko) continue the [Authentication Manager project](http://joomlacode.org/gf/project/auth_manager/), originally developed for Joomla! 1.5, and make it compatible with Joomla! 3.x.

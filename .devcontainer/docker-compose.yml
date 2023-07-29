@@ -12,22 +12,37 @@ services:
         -Dserver.ssl.enabled=false
         -Dserver.port=80
         -Dcas.authn.accept.users=user@example.org::secret
+    labels:
+      - traefik.enable=true
+      - traefik.http.middlewares.cas-login-redirect.redirectregex.regex=^https?://([\w._-]+)/?$$
+      - traefik.http.middlewares.cas-login-redirect.redirectregex.replacement=https://$${1}/cas/login
+      - traefik.http.routers.cas.middlewares=cas-login-redirect@docker
+      - traefik.http.routers.cas.entrypoints=websecure
+      - traefik.http.routers.cas.rule=Host(`cas.example.test`)
 
   joomla:
     build:
       context: .
       dockerfile: Dockerfile
       args:
-        VARIANT: "8.1-apache-bookworm"
-        JOOMLA_VERSION: "4.3.3"
+        VARIANT: '8.1-apache-bookworm'
+        JOOMLA_VERSION: '4.3.3'
     volumes:
       - ..:/workspace:cached
       - joomla-data:/var/www/html
     environment:
       JOOMLA_DB_HOST: mysql
       JOOMLA_DB_PASSWORD: secret
+    external_links:
+      - traefik:cas.example.test
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.joomla.entrypoints=websecure
+      - traefik.http.routers.joomla.rule=Host(`www.example.test`)
+      - traefik.http.services.joomla.loadbalancer.server.port=8080
     depends_on:
       - mysql
+      - cas
 
   mysql:
     # https://hub.docker.com/_/mysql
@@ -38,6 +53,32 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: secret
       MYSQL_DATABASE: joomla
+    ports:
+      - 127.0.0.1:3306:3306
+
+  traefik:
+    # https://hub.docker.com/_/traefik
+    image: traefik
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./key.pem:/etc/traefik/key.pem:ro
+      - ./cert.pem:/etc/traefik/cert.pem:ro
+      - ./tls.yml:/etc/traefik/dynamic/tls.yml:ro
+    command:
+      - --api.insecure=true
+      - --api.dashboard=true
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.websecure.http.tls=true
+      - --providers.docker=true
+      - --providers.docker.exposedByDefault=false
+      - --providers.file.directory=/etc/traefik/dynamic/
+    ports:
+      - 127.0.0.1:80:80
+      - 127.0.0.1:443:443
+      - 127.0.0.1:8080:8080
 
 volumes:
   joomla-data: null

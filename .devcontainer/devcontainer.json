@@ -2,19 +2,18 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.245.2/containers/php-mariadb
 // Update the VARIANT arg in docker-compose.yml to pick a PHP version
 {
-	"name": "Joomla",
-	"dockerComposeFile": "docker-compose.yml",
-	"service": "joomla",
-	"workspaceFolder": "/workspace",
-	"overrideCommand": false,
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"xdebug.php-debug",
-				"bmewburn.vscode-intelephense-client",
-				"redhat.vscode-xml"
-			]
-		}
-	},
-	"forwardPorts": [8080, 3306]
+  "name": "Joomla",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "joomla",
+  "workspaceFolder": "/workspace",
+  "overrideCommand": false,
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "xdebug.php-debug",
+        "bmewburn.vscode-intelephense-client",
+        "redhat.vscode-xml"
+      ]
+    }
+  }
 }
