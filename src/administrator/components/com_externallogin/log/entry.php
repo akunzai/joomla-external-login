@@ -8,7 +8,7 @@
  * @author      Alexandre Gandois <alexandre.gandois@etudiant.univ-lr.fr>
  * @copyright   Copyright (C) 2008-2018 Christophe Demko, Ioannis Barounis, Alexandre Gandois. All rights reserved.
  * @license     GNU General Public License, version 2. http://www.gnu.org/licenses/gpl-2.0.html
- * @link        http://www.chdemko.com
+ * @link        https://github.com/akunzai/joomla-external-login
  */
 
 use Joomla\CMS\Log\Log;
