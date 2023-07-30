@@ -22,7 +22,11 @@ if (version_compare(JVERSION, '4.0.0', '<')) {
     HTMLHelper::_('behavior.tooltip');
     HTMLHelper::_('behavior.formvalidation');
 } else {
-    HTMLHelper::_('jquery.framework');
+    /** @var \Joomla\CMS\WebAsset\WebAssetManager */
+    $wa = $this->document->getWebAssetManager();
+    $wa->useScript('jquery')
+        ->useScript('jquery-noconflict')
+        ->useScript('form.validate');
 }
 
 $fieldSets = $this->form->getFieldsets();
@@ -30,7 +34,7 @@ $fistTabName = array_key_first($fieldSets);
 ?>
 <script type="text/javascript">
 	Joomla.submitbutton = function(task) {
-		if (task == 'server.cancel' || document.formvalidator.isValid(document.id('server-form'))) {
+		if (task == 'server.cancel' || document.formvalidator.isValid(document.getElementById('server-form'))) {
 			Joomla.submitform(task, document.getElementById('server-form'));
 		} else {
 			alert(Joomla.Text._('JGLOBAL_VALIDATION_FORM_FAILED', 'Some values are unacceptable'));

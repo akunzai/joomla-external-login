@@ -40,7 +40,7 @@ abstract class ExternalloginHelper
      */
     public static function addSubmenu($submenu = 'servers')
     {
-        // Addsubmenu
+        // Add submenu
         JHtmlSidebar::addEntry(
             Text::_('COM_EXTERNALLOGIN_SUBMENU_SERVERS'),
             Route::_('index.php?option=com_externallogin', false),

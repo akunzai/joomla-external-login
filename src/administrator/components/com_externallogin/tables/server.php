@@ -36,7 +36,7 @@ class ExternalloginTableServer extends \Joomla\CMS\Table\Table
     /**
      * @var int
      */
-    protected $ordering;
+    public $ordering;
 
     /**
      * Constructor

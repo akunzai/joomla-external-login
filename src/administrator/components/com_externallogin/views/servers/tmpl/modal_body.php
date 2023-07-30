@@ -28,7 +28,7 @@ $plugins = ArrayHelper::pivot(ExternalloginHelper::getPlugins(), 'value');
 
 if (!count($this->items)) {
     ?>
-	<tr class="row<?php echo $i % 2; ?>">
+	<tr class="row0">
 		<td colspan="6" class="center">
 			<?php echo Text::_('COM_EXTERNALLOGIN_NO_RECORDS'); ?>
 		</td>

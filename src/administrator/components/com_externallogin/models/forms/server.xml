@@ -78,12 +78,12 @@
 
 			<field
 				name="usergroup"
-				type="usergroup"
+				type="usergrouplist"
 				default=""
 				label="COM_EXTERNALLOGIN_FIELD_SERVER_USERGROUP_LABEL"
 				description="COM_EXTERNALLOGIN_FIELD_SERVER_USERGROUP_DESC"
 			>
-				<option value="">COM_EXTERNALLOGIN_OPTION_SELECT_USERGROUP</option>
+				<option value="">JOPTION_USE_DEFAULT</option>
 			</field>
 
 			<field
