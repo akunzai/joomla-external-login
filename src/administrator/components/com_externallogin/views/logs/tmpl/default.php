@@ -23,8 +23,11 @@ HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('dropdown.init');
 HTMLHelper::_('formbehavior.chosen', 'select');
 
-$listOrder	= $this->escape($this->state->get('list.ordering'));
-$listDirn	= $this->escape($this->state->get('list.direction'));
+/** @var \Joomla\CMS\Object\CMSObject */
+$state = $this->state;
+
+$listOrder	= $this->escape($state->get('list.ordering'));
+$listDirn	= $this->escape($state->get('list.direction'));
 ?>
 <script type="text/javascript">
 	Joomla.orderTable = function() {
@@ -45,10 +48,10 @@ $listDirn	= $this->escape($this->state->get('list.direction'));
 			<?php echo $this->sidebar; ?>
 			<div class="filter-select hidden-phone">
 				<label class="filter-hide-lbl" for="filter_begin"><?php echo Text::_('COM_EXTERNALLOGIN_LABEL_BEGIN'); ?></label>
-				<?php echo HTMLHelper::_('calendar', $this->state->get('filter.begin'), 'filter_begin', 'filter_begin', '%Y-%m-%d', ['class' => 'input-medium', 'size' => 8, 'style' => 'width:146px', 'onchange' => "this.form.fireEvent('submit');this.form.submit()"]); ?>
+				<?php echo HTMLHelper::_('calendar', $state->get('filter.begin'), 'filter_begin', 'filter_begin', '%Y-%m-%d', ['class' => 'input-medium', 'size' => 8, 'style' => 'width:146px', 'onchange' => "this.form.fireEvent('submit');this.form.submit()"]); ?>
 
 				<label class="filter-hide-lbl" for="filter_end"><?php echo Text::_('COM_EXTERNALLOGIN_LABEL_END'); ?></label>
-				<?php echo HTMLHelper::_('calendar', $this->state->get('filter.end'), 'filter_end', 'filter_end', '%Y-%m-%d', ['class' => 'input-medium', 'size' => 8, 'style' => 'width:146px', 'onchange' => "this.form.fireEvent('submit');this.form.submit()"]); ?>
+				<?php echo HTMLHelper::_('calendar', $state->get('filter.end'), 'filter_end', 'filter_end', '%Y-%m-%d', ['class' => 'input-medium', 'size' => 8, 'style' => 'width:146px', 'onchange' => "this.form.fireEvent('submit');this.form.submit()"]); ?>
 			</div>
 		</div>
 		<div id="j-main-container" class="span10">
