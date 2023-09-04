@@ -1,11 +1,11 @@
 # https://mcr.microsoft.com/v2/vscode/devcontainers/php/tags/list
-ARG VARIANT=8.1-apache-bookworm
+ARG PHP_VERSION=8.1
 # https://hub.docker.com/_/joomla
 ARG JOOMLA_VERSION=4.3.4
 FROM joomla:${JOOMLA_VERSION} as joomla
 
 # https://github.com/devcontainers/images/blob/main/src/php/.devcontainer/Dockerfile
-FROM mcr.microsoft.com/vscode/devcontainers/php:${VARIANT}
+FROM mcr.microsoft.com/vscode/devcontainers/php:${PHP_VERSION}-apache-bookworm
 
 COPY --from=joomla /usr/src/joomla /usr/src/joomla
 COPY --from=joomla /entrypoint.sh /
