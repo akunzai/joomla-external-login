@@ -21,12 +21,7 @@ services:
       - traefik.http.routers.cas.rule=Host(`cas.example.test`)
 
   joomla:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        VARIANT: '8.1-apache-bookworm'
-        JOOMLA_VERSION: '4.3.3'
+    build: .
     volumes:
       - ..:/workspace:cached
       - joomla-data:/var/www/html

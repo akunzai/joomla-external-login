@@ -1,7 +1,17 @@
 # https://mcr.microsoft.com/v2/vscode/devcontainers/php/tags/list
 ARG VARIANT=8.1-apache-bookworm
+# https://hub.docker.com/_/joomla
+ARG JOOMLA_VERSION=4.3.3
+FROM joomla:${JOOMLA_VERSION} as joomla
+
 # https://github.com/devcontainers/images/blob/main/src/php/.devcontainer/Dockerfile
 FROM mcr.microsoft.com/vscode/devcontainers/php:${VARIANT}
+
+COPY --from=joomla /usr/src/joomla /usr/src/joomla
+COPY --from=joomla /entrypoint.sh /
+COPY --from=joomla /makedb.php /
+RUN chown -R www-data:www-data /usr/src/joomla; \
+    chmod -R g+w /usr/src/joomla;
 
 ENV LANG=C.UTF-8
 # Disable remote database security requirements.
@@ -69,20 +79,6 @@ RUN { \
 RUN sed -i 's/9000/9003/' /usr/local/etc/php/conf.d/xdebug.ini
 # Reset step debugging activation from yes to default (trigger)
 RUN sed -i '/xdebug.start_with_request/d' /usr/local/etc/php/conf.d/xdebug.ini
-
-# https://hub.docker.com/_/joomla
-ARG JOOMLA_VERSION=4.3.3
-# Download package and extract to web volume
-RUN set -ex; \
-	curl -o joomla.tar.bz2 -SL https://github.com/joomla/joomla-cms/releases/download/${JOOMLA_VERSION}/Joomla_${JOOMLA_VERSION}-Stable-Full_Package.tar.bz2; \
-	mkdir /usr/src/joomla; \
-	tar -xf joomla.tar.bz2 -C /usr/src/joomla; \
-	rm joomla.tar.bz2; \
-	chown -R www-data:www-data /usr/src/joomla; \
-    chmod -R g+w /usr/src/joomla;
-
-COPY --from=joomla:4.3.3 /entrypoint.sh /entrypoint.sh
-COPY --from=joomla:4.3.3 /makedb.php /makedb.php
 
 EXPOSE 8080
 ENTRYPOINT ["/entrypoint.sh"]
