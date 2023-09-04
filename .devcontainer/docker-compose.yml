@@ -3,7 +3,7 @@ version: '2'
 services:
   cas:
     # https://hub.docker.com/r/apereo/cas
-    image: apereo/cas:6.6.9
+    image: apereo/cas:6.6.11
     environment:
       # https://github.com/apereo/cas-overlay-template/blob/6.6/src/main/jib/docker/entrypoint.sh
       JVM_MEM_OPTS: -Xmx1g
