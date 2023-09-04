@@ -29,13 +29,13 @@ composer build
 
 ```sh
 # append /etc/hosts
-echo '127.0.0.1 cas.example.test www.example.test' | sudo tee -a /etc/hosts
+echo '127.0.0.1 cas.dev.local www.dev.local' | sudo tee -a /etc/hosts
 
 # install the local CA in the system trust store
 mkcert -install
 
 # generate locally-trusted development certificates
-mkcert -cert-file .devcontainer/cert.pem -key-file .devcontainer/key.pem '*.example.test'
+mkcert -cert-file .devcontainer/cert.pem -key-file .devcontainer/key.pem '*.dev.local'
 ```
 
 ## History of this extension

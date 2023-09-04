@@ -18,7 +18,7 @@ services:
       - traefik.http.middlewares.cas-login-redirect.redirectregex.replacement=https://$${1}/cas/login
       - traefik.http.routers.cas.middlewares=cas-login-redirect@docker
       - traefik.http.routers.cas.entrypoints=websecure
-      - traefik.http.routers.cas.rule=Host(`cas.example.test`)
+      - traefik.http.routers.cas.rule=Host(`cas.dev.local`)
 
   joomla:
     build: .
@@ -29,11 +29,11 @@ services:
       JOOMLA_DB_HOST: mysql
       JOOMLA_DB_PASSWORD: secret
     external_links:
-      - traefik:cas.example.test
+      - traefik:cas.dev.local
     labels:
       - traefik.enable=true
       - traefik.http.routers.joomla.entrypoints=websecure
-      - traefik.http.routers.joomla.rule=Host(`www.example.test`)
+      - traefik.http.routers.joomla.rule=Host(`www.dev.local`)
       - traefik.http.services.joomla.loadbalancer.server.port=8080
     depends_on:
       - mysql
