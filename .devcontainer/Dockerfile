@@ -1,7 +1,7 @@
 # https://mcr.microsoft.com/v2/vscode/devcontainers/php/tags/list
 ARG VARIANT=8.1-apache-bookworm
 # https://hub.docker.com/_/joomla
-ARG JOOMLA_VERSION=4.3.3
+ARG JOOMLA_VERSION=4.3.4
 FROM joomla:${JOOMLA_VERSION} as joomla
 
 # https://github.com/devcontainers/images/blob/main/src/php/.devcontainer/Dockerfile
