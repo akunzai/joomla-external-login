@@ -3,7 +3,7 @@ version: '2'
 services:
   cas:
     # https://hub.docker.com/r/apereo/cas
-    image: apereo/cas:6.6.9
+    image: apereo/cas:6.6.11
     environment:
       # https://github.com/apereo/cas-overlay-template/blob/6.6/src/main/jib/docker/entrypoint.sh
       JVM_MEM_OPTS: -Xmx1g
@@ -18,15 +18,10 @@ services:
       - traefik.http.middlewares.cas-login-redirect.redirectregex.replacement=https://$${1}/cas/login
       - traefik.http.routers.cas.middlewares=cas-login-redirect@docker
       - traefik.http.routers.cas.entrypoints=websecure
-      - traefik.http.routers.cas.rule=Host(`cas.example.test`)
+      - traefik.http.routers.cas.rule=Host(`cas.dev.local`)
 
   joomla:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        VARIANT: '8.1-apache-bookworm'
-        JOOMLA_VERSION: '4.3.3'
+    build: .
     volumes:
       - ..:/workspace:cached
       - joomla-data:/var/www/html
@@ -34,11 +29,11 @@ services:
       JOOMLA_DB_HOST: mysql
       JOOMLA_DB_PASSWORD: secret
     external_links:
-      - traefik:cas.example.test
+      - traefik:cas.dev.local
     labels:
       - traefik.enable=true
       - traefik.http.routers.joomla.entrypoints=websecure
-      - traefik.http.routers.joomla.rule=Host(`www.example.test`)
+      - traefik.http.routers.joomla.rule=Host(`www.dev.local`)
       - traefik.http.services.joomla.loadbalancer.server.port=8080
     depends_on:
       - mysql
