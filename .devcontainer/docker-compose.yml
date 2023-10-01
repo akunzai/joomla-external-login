@@ -26,6 +26,7 @@ services:
   
   joomla:
     build: .
+    image: joomla:external-login
     volumes:
       - ..:/workspace:cached
       - joomla-data:/var/www/html
@@ -60,9 +61,7 @@ services:
     image: traefik
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./key.pem:/etc/traefik/key.pem:ro
-      - ./cert.pem:/etc/traefik/cert.pem:ro
-      - ./tls.yml:/etc/traefik/dynamic/tls.yml:ro
+      - ./traefik/etc:/etc/traefik
     command:
       - --api.insecure=true
       - --api.dashboard=true
@@ -77,7 +76,7 @@ services:
     ports:
       - 127.0.0.1:80:80
       - 127.0.0.1:443:443
-      - 127.0.0.1:8080:8080
+      - 127.0.0.1:9090:8080
 
 volumes:
   joomla-data: null
