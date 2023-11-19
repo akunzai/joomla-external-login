@@ -94,7 +94,7 @@ class ExternalloginModelServer extends \Joomla\CMS\MVC\Model\ItemModel
         $app = Factory::getApplication();
         $menu = $app->getMenu()->getActive();
 
-        $params = is_null($menu) ? new Registry() : $menu->params;
+        $params = is_null($menu) ? new Registry() : $menu->getParams();
 
         // Compute the url
         $redirect = $this->getState(
