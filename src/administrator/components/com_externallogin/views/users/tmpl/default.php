@@ -28,7 +28,7 @@ $listDirn	= $this->escape($this->state->get('list.direction'));
 <script type="text/javascript">
 	function submitbutton(pressbutton) {
 		if (pressbutton) {
-			submitform(pressbutton);
+			Joomla.submitform(pressbutton);
 		}
 	}
 </script>
