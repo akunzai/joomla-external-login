@@ -23,7 +23,9 @@ defined('_JEXEC') or die;
 // Include the component HTML helpers.
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
-$user = Factory::getUser();
+$user = version_compare(JVERSION, '4.0.0', '<')
+    ? Factory::getUser()
+    : Factory::getApplication()->getIdentity();
 $ordering = $this->state->get('list.ordering') == 'a.ordering';
 $plugins = ArrayHelper::pivot(ExternalloginHelper::getPlugins(), 'value');
 ?>

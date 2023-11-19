@@ -147,6 +147,9 @@ class PlgSystemExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
         $sid = $dbo->loadResult();
         /** @var ExternalloginTable */
         $server = Table::getInstance('Server', 'ExternalloginTable');
+        $user = version_compare(JVERSION, '4.0.0', '<')
+            ? Factory::getUser()
+            : Factory::getApplication()->getIdentity();
 
         if ($server->load($sid)) {
             if (!$success) {
@@ -154,7 +157,7 @@ class PlgSystemExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
                     Log::add(
                         new ExternalloginLogEntry(
                             'Unsuccessful deletion of user "' . $user['username'] . '" by user "' .
-                                Factory::getUser()->username . '" on server ' . $sid,
+                            $user->username . '" on server ' . $sid,
                             Log::WARNING,
                             'system-externallogin-deletion'
                         )
@@ -173,7 +176,7 @@ class PlgSystemExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
                     Log::add(
                         new ExternalloginLogEntry(
                             'Successful deletion of user "' . $user['username'] . '" by user "' .
-                                Factory::getUser()->username . '" on server ' . $sid,
+                            $user->username . '" on server ' . $sid,
                             Log::INFO,
                             'system-externallogin-deletion'
                         )

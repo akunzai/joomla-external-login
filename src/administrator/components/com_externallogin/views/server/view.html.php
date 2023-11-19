@@ -104,8 +104,10 @@ class ExternalloginViewServer extends \Joomla\CMS\MVC\View\HtmlView
 
         Factory::getApplication()->input->set('hidemainmenu', true);
 
-        $user = Factory::getUser();
-        $userId = $user->get('id');
+        $user = version_compare(JVERSION, '4.0.0', '<')
+            ? Factory::getUser()
+            : $this->getCurrentUser();
+        $userId = $user->id;
         $isNew = $this->item->id == 0;
         $checkedOut = !($this->item->checked_out == 0 || $this->item->checked_out == $userId);
         $type = ($checkedOut ? 'view' : $isNew) ? 'new' : 'edit';

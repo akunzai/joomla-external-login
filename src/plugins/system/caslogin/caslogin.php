@@ -177,7 +177,10 @@ class PlgSystemCaslogin extends \Joomla\CMS\Plugin\CMSPlugin
     public function onAfterInitialise()
     {
         // If the user is not connected
-        if (!Factory::getUser()->guest) {
+        $user = version_compare(JVERSION, '4.0.0', '<')
+            ? Factory::getUser()
+            : Factory::getApplication()->getIdentity();
+        if (!$user->guest) {
             return;
         }
 

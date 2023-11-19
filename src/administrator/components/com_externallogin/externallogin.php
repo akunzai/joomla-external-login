@@ -19,7 +19,10 @@ use Joomla\CMS\MVC\Controller\BaseController;
 defined('_JEXEC') or die;
 
 // Access check.
-if (!Factory::getUser()->authorise('core.manage', 'com_externallogin')) {
+$user = version_compare(JVERSION, '4.0.0', '<')
+    ? Factory::getUser()
+    : Factory::getApplication()->getIdentity();
+if (!$user->authorise('core.manage', 'com_externallogin')) {
     return Factory::getApplication()->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'error');
 }
 
