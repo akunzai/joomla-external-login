@@ -54,9 +54,9 @@
 	},
 	"require-dev": {
 		"akunzai/joomla-stubs": "dev-master",
-		"friendsofphp/php-cs-fixer": "v3.25.1",
+		"friendsofphp/php-cs-fixer": "^v3.38.2",
 		"joomla/joomla-cms": "4.4.0",
-		"phpstan/phpstan": "^1.10.33"
+		"phpstan/phpstan": "^1.10.42"
 	},
 	"prefer-stable": true,
 	"scripts": {
