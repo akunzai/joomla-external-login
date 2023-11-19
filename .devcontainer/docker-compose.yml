@@ -33,6 +33,7 @@ services:
     volumes:
       - ..:/workspace:cached
       - joomla-data:/var/www/html
+      - ./php.ini:/usr/local/etc/php/php.ini:ro
     environment:
       JOOMLA_DB_HOST: mysql
       JOOMLA_DB_PASSWORD: secret
