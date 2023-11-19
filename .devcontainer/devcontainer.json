@@ -6,7 +6,6 @@
   "dockerComposeFile": "docker-compose.yml",
   "service": "joomla",
   "workspaceFolder": "/workspace",
-  "overrideCommand": false,
   "customizations": {
     "vscode": {
       "extensions": [

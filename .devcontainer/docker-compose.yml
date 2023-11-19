@@ -1,27 +1,32 @@
 version: '2'
 
 services:
-  cas:
-    # https://hub.docker.com/r/apereo/cas
-    image: apereo/cas:6.6.11
+  keycloak:
+    build: ./keycloak
+    image: keycloak:cas
+    restart: unless-stopped
+    volumes:
+      - keycloak-data:/opt/keycloak/data
+      - ./keycloak/export:/opt/keycloak/data/export
+      - ./keycloak/import:/opt/keycloak/data/import
+    command: start --import-realm --optimized
     environment:
-      # https://github.com/apereo/cas-overlay-template/blob/6.6/src/main/jib/docker/entrypoint.sh
-      JVM_MEM_OPTS: -Xmx1g
-      JVM_EXTRA_OPTS: -server -noverify
-        -XX:+TieredCompilation -XX:TieredStopAtLevel=1
-        -Dserver.ssl.enabled=false
-        -Dserver.port=80
-        -Dcas.authn.accept.users=user@example.org::secret
+      # https://www.keycloak.org/server/configuration
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
+      # https://www.keycloak.org/server/all-config
+      KC_HOSTNAME: auth.dev.local
+      KC_HTTP_ENABLED: 'true'
+      KC_PROXY: edge
     labels:
       - traefik.enable=true
-      - traefik.http.middlewares.cas-login-redirect.redirectregex.regex=^https?://([\w._-]+)/?$$
-      - traefik.http.middlewares.cas-login-redirect.redirectregex.replacement=https://$${1}/cas/login
-      - traefik.http.routers.cas.middlewares=cas-login-redirect@docker
-      - traefik.http.routers.cas.entrypoints=websecure
-      - traefik.http.routers.cas.rule=Host(`cas.dev.local`)
-
+      - traefik.http.routers.keycloak.entrypoints=websecure
+      - traefik.http.routers.keycloak.rule=Host(`auth.dev.local`)
+      - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
+  
   joomla:
     build: .
+    image: joomla:external-login
     volumes:
       - ..:/workspace:cached
       - joomla-data:/var/www/html
@@ -29,7 +34,7 @@ services:
       JOOMLA_DB_HOST: mysql
       JOOMLA_DB_PASSWORD: secret
     external_links:
-      - traefik:cas.dev.local
+      - traefik:auth.dev.local
     labels:
       - traefik.enable=true
       - traefik.http.routers.joomla.entrypoints=websecure
@@ -37,7 +42,7 @@ services:
       - traefik.http.services.joomla.loadbalancer.server.port=8080
     depends_on:
       - mysql
-      - cas
+      - keycloak
 
   mysql:
     # https://hub.docker.com/_/mysql
@@ -56,9 +61,7 @@ services:
     image: traefik
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./key.pem:/etc/traefik/key.pem:ro
-      - ./cert.pem:/etc/traefik/cert.pem:ro
-      - ./tls.yml:/etc/traefik/dynamic/tls.yml:ro
+      - ./traefik/etc:/etc/traefik
     command:
       - --api.insecure=true
       - --api.dashboard=true
@@ -73,8 +76,9 @@ services:
     ports:
       - 127.0.0.1:80:80
       - 127.0.0.1:443:443
-      - 127.0.0.1:8080:8080
+      - 127.0.0.1:9090:8080
 
 volumes:
   joomla-data: null
+  keycloak-data: null
   mysql-data: null
