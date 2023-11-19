@@ -116,7 +116,7 @@ class ExternalloginModelLogin extends \Joomla\CMS\MVC\Model\ListModel
         $menu = $app->getMenu()->getActive();
 
         if ($menu) {
-            $params = $menu->params;
+            $params = $menu->getParams();
         } else {
             $params = new Registry();
         }
