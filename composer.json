@@ -24,15 +24,15 @@
 			"type": "package",
 			"package": {
 				"name": "joomla/joomla-cms",
-				"version": "4.4.0",
+				"version": "5.0.0",
 				"dist": {
-					"url": "https://github.com/joomla/joomla-cms/releases/download/4.4.0/Joomla_4.4.0-Stable-Full_Package.zip",
+					"url": "https://github.com/joomla/joomla-cms/releases/download/5.0.0/Joomla_5.0.0-Stable-Full_Package.zip",
 					"type": "zip"
 				},
 				"source": {
 					"url": "https://github.com/joomla/joomla-cms.git",
 					"type": "git",
-					"reference": "tags/4.4.0"
+					"reference": "tags/5.0.0"
 				}
 			}
 		},
@@ -55,7 +55,7 @@
 	"require-dev": {
 		"akunzai/joomla-stubs": "dev-master",
 		"friendsofphp/php-cs-fixer": "^v3.38.2",
-		"joomla/joomla-cms": "4.4.0",
+		"joomla/joomla-cms": "5.0.0",
 		"phpstan/phpstan": "^1.10.42"
 	},
 	"prefer-stable": true,
