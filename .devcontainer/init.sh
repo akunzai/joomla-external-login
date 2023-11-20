@@ -14,8 +14,8 @@ for host in "$@"; do
 done
 
 CURRENTDIR=$(dirname "$0")
-CERT_FILE="${CURRENTDIR}/traefik/etc/cert.pem"
-KEY_FILE="${CURRENTDIR}/traefik/etc/key.pem"
+CERT_FILE="${CURRENTDIR}/certs/cert.pem"
+KEY_FILE="${CURRENTDIR}/certs/key.pem"
 
 if [ -e "${KEY_FILE}" ] && [ -e "${CERT_FILE}" ]; then
 	echo "Certificate already exists"
