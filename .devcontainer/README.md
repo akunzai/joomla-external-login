@@ -61,3 +61,8 @@ Upload Package File: `pkg_externallogin.zip`
 - Layout: `Default`
 - Show logout: `Yes`
 - Status: `Published`
+
+### CAS Login credentials
+
+- Username: `test`
+- Password: `test`
