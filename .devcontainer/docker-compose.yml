@@ -35,8 +35,8 @@ services:
       - joomla-data:/var/www/html
       - ./php.ini:/usr/local/etc/php/php.ini:ro
     environment:
-      JOOMLA_DB_HOST: mysql
-      JOOMLA_DB_PASSWORD: secret
+      JOOMLA_DB_HOST: ${JOOMLA_DB_HOST:-mysql}
+      JOOMLA_DB_PASSWORD: ${JOOMLA_DB_PASSWORD:-${MYSQL_ROOT_PASSWORD:-secret}}
     external_links:
       - traefik:auth.dev.local
     labels:
@@ -55,8 +55,8 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: joomla
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-secret} 
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-joomla}
     ports:
       - 127.0.0.1:3306:3306
 
