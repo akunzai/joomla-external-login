@@ -13,9 +13,18 @@
 ```sh
 # set up TLS certs and hosts in Host
 ./init.sh www.dev.local auth.dev.local
+
+# start containers
+docker compose up -d
+
+# install the Joomla!
+./install.sh
+
+# login Joomla! administrator with credentials (admin:ChangeTheP@ssw0rd)
+open https://www.dev.local/administrator/
 ```
 
-### Installation
+### Extension Installation
 
 > System->Install->Extensions
 
