@@ -15,7 +15,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Build assets
-        run: composer build
+        run: ./build.sh
       - name: Pre-release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/') && (contains(github.ref,'dev') || contains(github.ref,'beta') || contains(github.ref,'alpha') || contains(github.ref,'rc'))
@@ -23,11 +23,11 @@ jobs:
           prerelease: true
           generate_release_notes: true
           files: |
-            build/pkg_externallogin.zip
+            dist/pkg_externallogin.zip
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/') && !(contains(github.ref,'dev') || contains(github.ref,'beta') || contains(github.ref,'alpha') || contains(github.ref,'rc'))
         with:
           generate_release_notes: true
           files: |
-            build/pkg_externallogin.zip
+            dist/pkg_externallogin.zip
