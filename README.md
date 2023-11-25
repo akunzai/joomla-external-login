@@ -1,4 +1,4 @@
-# External Login extension for Joomla!
+# External Login extension for Joomla
 
 [![Build Status][ci-badge]][ci]
 
@@ -19,8 +19,8 @@ The [Joomla!](https://www.joomla.org/) authentication extension allows to login 
 # install dependencies
 composer install
 
-# build the project. The build artifacts will be stored in the `build/` directory
-composer build
+# build the project. The build artifacts will be stored in the `dist/` directory
+./build.sh
 ```
 
 ## History of this extension
