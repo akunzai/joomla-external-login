@@ -17,7 +17,7 @@
 # start containers
 docker compose up -d
 
-# install the Joomla!
+# install the Joomla! (requires Joomla! version >= 4.3)
 ./install.sh
 
 # login Joomla! administrator with credentials (admin:ChangeTheP@ssw0rd)
