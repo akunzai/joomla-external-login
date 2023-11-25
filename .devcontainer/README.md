@@ -34,9 +34,9 @@ Upload Package File: `pkg_externallogin.zip`
 
 > System->Manage->Extensions
 
-- Plugin: Authentication - External Login
-- Plugin: System - External Login
-- Plugin: System - CAS Login
+- Plugin: `Authentication - External Login`
+- Plugin: `System - External Login`
+- Plugin: `System - CAS Login`
 
 ### Add CAS Server definition
 
