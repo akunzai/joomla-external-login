@@ -20,7 +20,7 @@ if [ "$?" -ne "0" ]; then
 fi
 
 # https://docs.joomla.org/J4.x:Joomla_CLI_Installation
-docker compose exec joomla php installation/joomla.php install \
+docker compose exec --user www-data joomla php installation/joomla.php install \
   --site-name DEMO \
   --admin-user ADMIN  \
   --admin-username "${ADMIN_USERNAME:-admin}" \
@@ -32,3 +32,6 @@ docker compose exec joomla php installation/joomla.php install \
   --db-pass "${JOOMLA_DB_PASSWORD:-${MYSQL_ROOT_PASSWORD:-secret}}" \
   --db-prefix "${JOOMLA_DB_PREFIX:-vlqhe_}" \
   --no-interaction
+
+echo "Fixing permissions ..."
+docker compose exec joomla chown -R www-data:www-data /var/www/html
