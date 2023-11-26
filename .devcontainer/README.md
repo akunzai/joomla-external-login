@@ -18,60 +18,31 @@
 docker compose up -d
 
 # install the Joomla! (requires Joomla! version >= 4.3)
-./install.sh
-
-# login Joomla! administrator with credentials (admin:ChangeTheP@ssw0rd)
-open https://www.dev.local/administrator/
+./joomla/install.sh
 ```
 
-### Extension Installation
+## Admin URLs
 
-> System->Install->Extensions
+- [Joomla!](https://www.dev.local/administrator/)
+- [Keycloak](https://auth.dev.local)
 
-Upload Package File: `pkg_externallogin.zip`
+## Credentials
 
-### Enable Extensions
+### Joomla! admin
 
-> System->Manage->Extensions
+- Username: `admin`
+- Password: `ChangeTheP@ssw0rd`
 
-- Plugin: `Authentication - External Login`
-- Plugin: `System - External Login`
-- Plugin: `System - CAS Login`
+### Keycloak admin
 
-### Add CAS Server definition
+- Username: `admin`
+- Password: `admin`
 
-> Components->`External Login`->Servers->New->CAS
-
-#### Server details
-
-- Title: `Default`
-- Auto-register: `Yes`
-- Auto-update: `Yes`
-
-#### CAS parameters
-
-- URL: `auth.dev.local`
-- Path: `realms/demo/protocol/cas`
-- Use CAS 3.0 URL: `Yes`
-
-#### Attributes
-
-- Username xpath: `string(cas:attributes/cas:email)`
-- Full name xpath: `string(cas:attributes/cas:display_name)`
-- Email xpath: `string(cas:attributes/cas:email)`
-
-### Edit Module
-
-> Content->`Site Modules`->`External login`
-
-- Servers: `Default`
-- Position: `sidebar-right`
-- Menu Assignment: `On all pages`
-- Layout: `Default`
-- Show logout: `Yes`
-- Status: `Published`
-
-### CAS Login credentials
+### Keycloak user
 
 - Username: `test`
 - Password: `test`
+
+## Setup
+
+- [Joomla!](./joomla/)

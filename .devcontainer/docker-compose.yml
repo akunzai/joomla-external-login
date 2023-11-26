@@ -22,10 +22,11 @@ services:
       - traefik.enable=true
       - traefik.http.routers.keycloak.entrypoints=websecure
       - traefik.http.routers.keycloak.rule=Host(`auth.dev.local`)
-      - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
+      - traefik.http.services.keycloak.loadbalancer.server.port=8080
   
   joomla:
     build: 
+      context: ./joomla
       args:
         JOOMLA_VERSION: '5.0.0'
         PHP_VERSION: '8.2'
@@ -37,13 +38,15 @@ services:
     environment:
       JOOMLA_DB_HOST: ${JOOMLA_DB_HOST:-mysql}
       JOOMLA_DB_PASSWORD: ${JOOMLA_DB_PASSWORD:-${MYSQL_ROOT_PASSWORD:-secret}}
+      # https://xdebug.org/docs/all_settings
+      XDEBUG_CONFIG: 'client_host=localhost log=/tmp/xdebug.log'
+      XDEBUG_MODE: develop,debug
     external_links:
       - traefik:auth.dev.local
     labels:
       - traefik.enable=true
       - traefik.http.routers.joomla.entrypoints=websecure
       - traefik.http.routers.joomla.rule=Host(`www.dev.local`)
-      - traefik.http.services.joomla.loadbalancer.server.port=8080
     depends_on:
       - mysql
       - keycloak
