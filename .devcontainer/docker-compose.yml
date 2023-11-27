@@ -1,5 +1,5 @@
 version: '2'
-
+name: joomla-external-login_devcontainer
 services:
   keycloak:
     build: ./keycloak
@@ -25,7 +25,6 @@ services:
       - traefik.http.services.keycloak.loadbalancer.server.port=8080
   
   joomla:
-    container_name: external-login-joomla
     build: 
       context: ./joomla
       args:
@@ -53,7 +52,6 @@ services:
       - keycloak
 
   mysql:
-    container_name: external-login-mysql
     # https://hub.docker.com/_/mysql
     image: mysql
     restart: unless-stopped
