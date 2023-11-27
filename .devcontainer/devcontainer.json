@@ -2,7 +2,7 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.245.2/containers/php-mariadb
 // Update the PHP_VERSION arg in docker-compose.yml to pick a PHP version
 {
-  "name": "Joomla",
+  "name": "Joomla External Login",
   "dockerComposeFile": "docker-compose.yml",
   "service": "joomla",
   "workspaceFolder": "/workspace",
@@ -14,5 +14,10 @@
         "redhat.vscode-xml"
       ]
     }
+  },
+  // https://containers.dev/features
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
+    "ghcr.io/devcontainers/features/git:1": {}
   }
 }
