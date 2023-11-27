@@ -14,7 +14,7 @@
 # set up TLS certs and hosts in Host
 ./init.sh www.dev.local auth.dev.local
 
-# start containers
+# starting container or open folder in container
 docker compose up -d
 
 # install the Joomla! (requires Joomla! version >= 4.3)
