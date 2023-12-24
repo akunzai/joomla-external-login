@@ -11,13 +11,19 @@ The [Joomla!](https://www.joomla.org/) authentication extension allows to login 
 
 - PHP >= 8.1
 - [Composer](https://getcomposer.org/)
-- [Joomla!](https://www.joomla.org/) 3.10.x or 4.x
+- [Joomla!](https://www.joomla.org/) 3.10.x or 4.x or 5.0.x
 
-## Build
+## Getting Started
 
 ```sh
 # install dependencies
 composer install
+
+# check coding style
+composer run lint
+
+# static code analysis
+composer run phpstan
 
 # build the project. The build artifacts will be stored in the `dist/` directory
 ./build.sh
