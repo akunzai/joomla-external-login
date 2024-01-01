@@ -54,7 +54,7 @@
 	},
 	"require-dev": {
 		"akunzai/joomla-stubs": "dev-master",
-		"friendsofphp/php-cs-fixer": "v3.41.1",
+		"friendsofphp/php-cs-fixer": "v3.45.0",
 		"joomla/joomla-cms": "5.0.1",
 		"phpstan/phpstan": "^1.10.50"
 	},
