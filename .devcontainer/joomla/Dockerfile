@@ -1,7 +1,7 @@
 # https://mcr.microsoft.com/v2/vscode/devcontainers/php/tags/list
 ARG PHP_VERSION=8.2
 # https://hub.docker.com/_/joomla
-ARG JOOMLA_VERSION=5.0.1
+ARG JOOMLA_VERSION=5.0.2
 
 FROM joomla:${JOOMLA_VERSION}-apache AS joomla
 
