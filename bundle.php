@@ -113,7 +113,7 @@ class JoomlaArchiveBuilder
 	{
 		$path = (str_starts_with($file, $this->prefix)) ? $file : $this->joinPaths($this->prefix, $folder, $file);
 		$entry = str_replace($this->prefix, "", $path);
-		echo "adding: $path\t$entry\n";
+		echo "Adding: $path\t$entry\n";
 		$this->zip->addFile($path, $entry);
 	}
 
@@ -129,7 +129,7 @@ class JoomlaArchiveBuilder
 			}
 			if ($file->isFile()) {
 				$entry = str_replace($this->prefix, "", $file);
-				echo "adding: $path\t$entry\n";
+				echo "Adding: $path\t$entry\n";
 				$this->zip->addFile($file, $entry);
 				continue;
 			}
