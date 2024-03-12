@@ -1,4 +1,4 @@
-name: 'PHP Syntax Check'
+name: 'Linting PHP'
 
 on:
   push:
@@ -14,18 +14,18 @@ permissions:
   contents: read
 
 jobs:
-  php-syntax:
+  lint:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         php: ['8.1', '8.2']
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           coverage: none
-      - name: Check .php files
+      - name: Linting PHP files
         run: '! find . -type f -name "*.php" -exec php -d display_errors=1 -d error_reporting=-1 -l {} \; 2>&1 | grep -v ^"No syntax errors"'

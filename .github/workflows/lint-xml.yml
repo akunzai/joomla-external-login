@@ -1,4 +1,4 @@
-name: 'XML Validation'
+name: 'Linting XML'
 
 on:
   push:
@@ -14,14 +14,14 @@ permissions:
   contents: read
 
 jobs:
-  xml-validate:
+  lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
-      - name: Install xmllint
+      - name: Set up xmllint
         run: |
           sudo apt-get update
           sudo apt-get install -y libxml2-utils
-      - name: Validate XML files
+      - name: Linting XML files
         run: 'find . -type f -iname "*.xml" | xargs xmllint --noout'
