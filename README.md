@@ -1,9 +1,9 @@
 # External Login extension for Joomla!
 
-[![Build Status][ci-badge]][ci]
+[![Build Status][build-badge]][build]
 
-[ci]: https://github.com/akunzai/joomla-external-login/actions?query=workflow%3ACI
-[ci-badge]: https://github.com/akunzai/joomla-external-login/workflows/CI/badge.svg
+[build]: https://github.com/akunzai/joomla-external-login/actions?query=workflow%3ABuild
+[build-badge]: https://github.com/akunzai/joomla-external-login/workflows/Build/badge.svg
 
 The [Joomla!](https://www.joomla.org/) authentication extension allows to login to Joomla using external [CAS](https://github.com/apereo/cas) servers
 
