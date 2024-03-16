@@ -3,7 +3,7 @@
 // Update the PHP_VERSION arg in docker-compose.yml to pick a PHP version
 {
   "name": "Joomla External Login",
-  "dockerComposeFile": "docker-compose.yml",
+  "dockerComposeFile": "compose.yaml",
   "service": "joomla",
   "workspaceFolder": "/workspace",
   "customizations": {
