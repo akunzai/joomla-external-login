@@ -5,7 +5,11 @@
 [build]: https://github.com/akunzai/joomla-external-login/actions/workflows/build.yml
 [build-badge]: https://github.com/akunzai/joomla-external-login/actions/workflows/build.yml/badge.svg
 
-The [Joomla!](https://www.joomla.org/) authentication extension allows to login to Joomla using external [CAS](https://github.com/apereo/cas) servers
+The [Joomla!](https://www.joomla.org/) authentication extension allows to login to Joomla using external servers
+
+## Supported authenticaion standards
+
+- [CAS](https://apereo.github.io/cas/7.0.x/protocol/CAS-Protocol-Specification.html) 3.0
 
 ## Requirements
 
