@@ -20,7 +20,7 @@ Upload Package File: `pkg_externallogin.zip`
 
 ### Server details
 
-- Title: `Default`
+- Title: `Keycloak`
 - Auto-register: `Yes`
 - Auto-update: `Yes`
 
@@ -40,9 +40,17 @@ Upload Package File: `pkg_externallogin.zip`
 
 > Content->`Site Modules`->`External login`
 
-- Servers: `Default`
+### Module
+
+- Servers: `Keycloak`
 - Position: `sidebar-right`
-- Menu Assignment: `On all pages`
-- Layout: `Default`
-- Show logout: `Yes`
 - Status: `Published`
+
+### Menu Assignment
+
+- Menu Assignmnet: `On all pages`
+
+### Advanced
+
+- Layout: `default`
+- Show logout: `Yes`
