@@ -2,9 +2,13 @@ name: 'Linting PHP'
 
 on:
   push:
+    branches:
+      - main
     paths:
       - '**.php'
   pull_request:
+    branches:
+      - main
     paths:
       - '**.php'
   # Allow manually triggering the workflow.
