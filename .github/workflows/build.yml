@@ -22,7 +22,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.3'
           extensions: curl, dom, gd, intl, json, libxml, mbstring, pdo, simplexml, zip
           coverage: none
       - name: Validate composer.json and composer.lock

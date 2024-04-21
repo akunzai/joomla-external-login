@@ -1,5 +1,5 @@
 # https://mcr.microsoft.com/v2/vscode/devcontainers/php/tags/list
-ARG PHP_VERSION=8.2
+ARG PHP_VERSION=8.3
 # https://hub.docker.com/_/joomla
 ARG JOOMLA_VERSION=5.1.0
 
