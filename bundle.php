@@ -111,9 +111,9 @@ class JoomlaArchiveBuilder
 
 	private function addFile($file, $folder = null)
 	{
-		$path = (str_starts_with($file, $this->prefix)) ? $file : $this->joinPaths($this->prefix, $folder, $file);
+		$path = (substr($file, 0, strlen($this->prefix)) === $this->prefix) ? $file : $this->joinPaths($this->prefix, $folder, $file);
 		$entry = str_replace($this->prefix, "", $path);
-		echo "adding: $path\t$entry\n";
+		echo "Adding: $path\t$entry\n";
 		$this->zip->addFile($path, $entry);
 	}
 
@@ -122,14 +122,14 @@ class JoomlaArchiveBuilder
 		$files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::SELF_FIRST);
 		foreach ($files as $file) {
 			$filename = $file->getFilename();
-			if (str_starts_with($filename, '.')) continue;
+			if (substr($filename, 0, 1) === '.') continue;
 			if ($file->isDir()) {
 				$this->zip->addEmptyDir(str_replace($this->prefix, '', $file));
 				continue;
 			}
 			if ($file->isFile()) {
 				$entry = str_replace($this->prefix, "", $file);
-				echo "adding: $path\t$entry\n";
+				echo "Adding: $path\t$entry\n";
 				$this->zip->addFile($file, $entry);
 				continue;
 			}
