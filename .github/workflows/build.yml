@@ -1,10 +1,12 @@
-name: CI
+name: Build
 
 on:
   push:
-    branches: ['main']
+    branches:
+      - 3.2.x
   pull_request:
-    branches: ['main']
+    branches:
+      - 3.2.x
   # Allow manually triggering the workflow.
   workflow_dispatch:
 
@@ -15,13 +17,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          extensions: curl, dom, gd, intl, json, libxml, mbstring, pdo, simplexml, zip
+          coverage: none
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
       - name: Cache Composer packages
         id: composer-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: vendor
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
@@ -29,7 +37,7 @@ jobs:
             ${{ runner.os }}-php-
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
-      - name: Lint
+      - name: Linting with PHP CS Fixer
         run: composer lint
       - name: PHPStan Static Analysis
         run: composer exec phpstan -- analyse --no-progress --no-interaction

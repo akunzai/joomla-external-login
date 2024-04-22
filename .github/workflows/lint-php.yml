@@ -1,10 +1,14 @@
-name: 'PHP Syntax Check'
+name: 'Linting PHP'
 
 on:
   push:
+    branches:
+      - 3.2.x
     paths:
       - '**.php'
   pull_request:
+    branches:
+      - 3.2.x
     paths:
       - '**.php'
   # Allow manually triggering the workflow.
@@ -14,18 +18,15 @@ permissions:
   contents: read
 
 jobs:
-  php-syntax:
+  lint:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php: ['7.4', '8.0', '8.1']
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php }}
+          php-version: 7.4
           coverage: none
-      - name: Check .php files
+      - name: Linting PHP files
         run: '! find . -type f -name "*.php" -exec php -d display_errors=1 -d error_reporting=-1 -l {} \; 2>&1 | grep -v ^"No syntax errors"'
