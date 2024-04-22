@@ -24,15 +24,15 @@
 			"type": "package",
 			"package": {
 				"name": "joomla/joomla-cms",
-				"version": "3.10.11",
+				"version": "3.10.12",
 				"dist": {
-					"url": "https://github.com/joomla/joomla-cms/releases/download/3.10.11/Joomla_3.10.11-Stable-Full_Package.zip",
+					"url": "https://github.com/joomla/joomla-cms/releases/download/3.10.12/Joomla_3.10.12-Stable-Full_Package.zip",
 					"type": "zip"
 				},
 				"source": {
 					"url": "https://github.com/joomla/joomla-cms.git",
 					"type": "git",
-					"reference": "tags/3.10.11"
+					"reference": "tags/3.10.12"
 				}
 			}
 		},
@@ -54,9 +54,9 @@
 	},
 	"require-dev": {
 		"akunzai/joomla-stubs": "dev-master",
-		"friendsofphp/php-cs-fixer": "^3.12",
-		"joomla/joomla-cms": "3.10.11",
-		"phpstan/phpstan": "^1.8"
+		"friendsofphp/php-cs-fixer": "^3.54",
+		"joomla/joomla-cms": "3.10.12",
+		"phpstan/phpstan": "^1.10"
 	},
 	"prefer-stable": true,
 	"scripts": {
@@ -73,15 +73,7 @@
 			"phpstan analyse --generate-baseline"
 		],
 		"build": [
-			"php ./bundle.php ./src/administrator/modules/mod_externallogin_admin/mod_externallogin_admin.xml ./src/packages/mod_externallogin_admin.zip",
-			"php ./bundle.php ./src/com_externallogin.xml ./src/packages/com_externallogin.zip",
-			"php ./bundle.php ./src/modules/mod_externallogin_site/mod_externallogin_site.xml ./src/packages/mod_externallogin_site.zip",
-			"php ./bundle.php ./src/plugins/authentication/externallogin/externallogin.xml ./src/packages/plg_authentication_externallogin.zip",
-			"php ./bundle.php ./src/plugins/system/externallogin/externallogin.xml ./src/packages/plg_system_externallogin.zip",
-			"php ./bundle.php ./src/plugins/system/caslogin/caslogin.xml ./src/packages/plg_system_caslogin.zip",
-			"php ./bundle.php ./src/plugins/user/cbexternallogin/cbexternallogin.xml ./src/packages/plg_user_cbexternallogin.zip",
-			"php ./bundle.php ./src/pkg_externallogin.xml ./build/pkg_externallogin.zip",
-			"rm -rf ./src/packages"
+			"./build.sh"
 		]
 	}
 }

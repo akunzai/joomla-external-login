@@ -49,11 +49,11 @@ if (!count($this->items)) {
 		</td>
 		<td class="center">
 			<?php echo JHtml::_(
-        'ExternalloginHtml.Servers.state',
-        $item->published == 1 ? ($item->enabled == null ? 4 : ($item->enabled == 0 ? 3 : 1)) : $item->published,
-        $i,
-        false
-    ); ?>
+			    'ExternalloginHtml.Servers.state',
+			    $item->published == 1 ? ($item->enabled == null ? 4 : ($item->enabled == 0 ? 3 : 1)) : $item->published,
+			    $i,
+			    false
+			); ?>
 		</td>
 		<td class="right">
 			<?php echo $item->id; ?>

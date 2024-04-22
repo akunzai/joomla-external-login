@@ -1,0 +1,88 @@
+name: joomla-external-login_devcontainer
+services:
+  keycloak:
+    build: ./keycloak
+    image: keycloak:cas
+    restart: unless-stopped
+    volumes:
+      - keycloak-data:/opt/keycloak/data
+      - ./keycloak/export:/opt/keycloak/data/export
+      - ./keycloak/import:/opt/keycloak/data/import
+    command: start --import-realm --optimized
+    environment:
+      # https://www.keycloak.org/server/configuration
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
+      # https://www.keycloak.org/server/all-config
+      KC_HOSTNAME: auth.dev.local
+      KC_HTTP_ENABLED: 'true'
+      KC_PROXY: edge
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.keycloak.entrypoints=websecure
+      - traefik.http.routers.keycloak.rule=Host(`auth.dev.local`)
+      - traefik.http.services.keycloak.loadbalancer.server.port=8080
+  
+  joomla:
+    build: 
+      context: ./joomla
+    image: joomla:3.10-external-login
+    volumes:
+      - ..:/workspace:cached
+      - joomla-data:/var/www/html
+      - ./php.ini:/usr/local/etc/php/php.ini:ro
+    environment:
+      JOOMLA_DB_HOST: ${JOOMLA_DB_HOST:-mysql}
+      JOOMLA_DB_PASSWORD: ${JOOMLA_DB_PASSWORD:-${MYSQL_ROOT_PASSWORD:-secret}}
+      # https://xdebug.org/docs/all_settings
+      XDEBUG_CONFIG: 'client_host=localhost log=/tmp/xdebug.log'
+      XDEBUG_MODE: develop,debug
+    external_links:
+      - traefik:auth.dev.local
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.joomla.entrypoints=websecure
+      - traefik.http.routers.joomla.rule=Host(`www.dev.local`)
+    depends_on:
+      - mysql
+      - keycloak
+
+  mysql:
+    # https://hub.docker.com/_/mysql
+    image: mysql
+    restart: unless-stopped
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-secret} 
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-joomla}
+    ports:
+      - 127.0.0.1:3306:3306
+
+  traefik:
+    # https://hub.docker.com/_/traefik
+    image: traefik
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/etc:/etc/traefik
+      - ./certs:/etc/traefik/certs
+    command:
+      - --api.insecure=true
+      - --api.dashboard=true
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.websecure.http.tls=true
+      - --providers.docker=true
+      - --providers.docker.exposedByDefault=false
+      - --providers.file.directory=/etc/traefik/dynamic/
+    ports:
+      - 127.0.0.1:80:80
+      - 127.0.0.1:443:443
+      - 127.0.0.1:9090:8080
+
+volumes:
+  joomla-data: null
+  keycloak-data: null
+  mysql-data: null

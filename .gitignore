@@ -1,5 +1,10 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# development containers
+/.devcontainer/.env
+/.devcontainer/**/*.pem
+/.devcontainer/keycloak/export/
+
 # dependencies
 /vendor/
 
@@ -20,4 +25,4 @@ Thumbs.db
 /tmp/
 
 # misc
-/build/
+/dist/

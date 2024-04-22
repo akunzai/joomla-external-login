@@ -1,11 +1,15 @@
-# External Login extension for Joomla
+# External Login extension for Joomla!
 
-[![Build Status][ci-badge]][ci]
+[![Build Status][build-badge]][build]
 
-[ci]: https://github.com/akunzai/joomla-external-login/actions?query=workflow%3ACI
-[ci-badge]: https://github.com/akunzai/joomla-external-login/workflows/CI/badge.svg
+[build]: https://github.com/akunzai/joomla-external-login/actions/workflows/build.yml
+[build-badge]: https://github.com/akunzai/joomla-external-login/actions/workflows/build.yml/badge.svg
 
-The [Joomla!](https://www.joomla.org/) authentication extension allows to login to Joomla using external [CAS](https://github.com/apereo/cas) servers
+The [Joomla!](https://www.joomla.org/) authentication extension allows to login to Joomla using external servers
+
+## Supported authenticaion standards
+
+- [CAS](https://apereo.github.io/cas/7.0.x/protocol/CAS-Protocol-Specification.html) 3.0
 
 ## Requirements
 
@@ -19,8 +23,14 @@ The [Joomla!](https://www.joomla.org/) authentication extension allows to login 
 # install dependencies
 composer install
 
-# build the project. The build artifacts will be stored in the `build/` directory
-composer build
+# check coding style
+composer run lint
+
+# static code analysis
+composer run phpstan
+
+# build the Joomla! extension. The `pkg_externallogin.zip` can be found in the `dist/` directory
+./build.sh
 ```
 
 ## History of this extension
