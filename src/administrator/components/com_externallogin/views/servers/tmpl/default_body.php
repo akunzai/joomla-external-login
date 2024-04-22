@@ -52,11 +52,11 @@ if (!count($this->items)) {
 		</td>
 		<td class="center">
 			<?php echo JHtml::_(
-            'ExternalloginHtml.Servers.state',
-            $item->published == 1 ? ($item->enabled == null ? 4 : ($item->enabled == 0 ? 3 : 1)) : $item->published,
-            $i,
-            $canChange
-        ); ?>
+			    'ExternalloginHtml.Servers.state',
+			    $item->published == 1 ? ($item->enabled == null ? 4 : ($item->enabled == 0 ? 3 : 1)) : $item->published,
+			    $i,
+			    $canChange
+			); ?>
 		</td>
 		<td class="order center">
 <?php if ($canChange && $ordering) : ?>
