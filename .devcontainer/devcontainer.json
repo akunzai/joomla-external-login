@@ -3,7 +3,7 @@
 // Update the VARIANT arg in docker-compose.yml to pick a PHP version
 {
 	"name": "Joomla",
-	"dockerComposeFile": "docker-compose.yml",
+	"dockerComposeFile": "compose.yaml",
 	"service": "joomla",
 	"workspaceFolder": "/workspace",
 	"overrideCommand": false,

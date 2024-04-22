@@ -3,8 +3,7 @@ version: '2'
 services:
   joomla:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ./joomla
       args:
         VARIANT: "8.1-apache-bookworm"
         JOOMLA_VERSION: "3.10.11"
