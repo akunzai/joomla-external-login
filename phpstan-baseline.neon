@@ -1,6 +1,11 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Call to an undefined static method JHtmlSidebar\\:\\:addEntry\\(\\)\\.$#"
+			count: 4
+			path: src/administrator/components/com_externallogin/helpers/externallogin.php
+
+		-
 			message: "#^Access to an undefined property ExternalloginTableServer\\:\\:\\$ordering\\.$#"
 			count: 1
 			path: src/administrator/components/com_externallogin/tables/server.php
