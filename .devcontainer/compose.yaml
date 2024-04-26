@@ -16,7 +16,7 @@ services:
       # https://www.keycloak.org/server/all-config
       KC_HOSTNAME: auth.dev.local
       KC_HTTP_ENABLED: 'true'
-      KC_PROXY: edge
+      KC_PROXY_HEADERS: xforwarded
     labels:
       - traefik.enable=true
       - traefik.http.routers.keycloak.entrypoints=websecure
