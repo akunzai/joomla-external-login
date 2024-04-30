@@ -5,5 +5,5 @@ tls:
   stores:
     default:
       defaultCertificate:
-        certFile: /etc/traefik/certs/cert.pem
-        keyFile: /etc/traefik/certs/key.pem
+        certFile: /run/secrets/cert.pem
+        keyFile: /run/secrets/key.pem
