@@ -65,7 +65,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./traefik/etc:/etc/traefik
-      - ./certs:/etc/traefik/certs
     command:
       - --api.insecure=true
       - --api.dashboard=true
@@ -81,6 +80,15 @@ services:
       - 127.0.0.1:80:80
       - 127.0.0.1:443:443
       - 127.0.0.1:9090:8080
+    secrets:
+      - cert.pem
+      - key.pem
+
+secrets:
+  cert.pem:
+    file: .secrets/cert.pem
+  key.pem:
+    file: .secrets/key.pem
 
 volumes:
   joomla-data: null
