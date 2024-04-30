@@ -2,11 +2,10 @@
 ARG KEYCLOAK_VERSION=24.0.3
 
 FROM alpine as downloader
-ARG KEYCLOAK_CAS_VERSION=24.0.2
 RUN set -eux; \
     apk add curl; \
     # https://github.com/jacekkow/keycloak-protocol-cas
-    curl -Lo /tmp/keycloak-protocol-cas.jar https://github.com/jacekkow/keycloak-protocol-cas/releases/download/${KEYCLOAK_CAS_VERSION}/keycloak-protocol-cas-${KEYCLOAK_CAS_VERSION}.jar;
+    curl -Lo /tmp/keycloak-protocol-cas.jar https://github.com/jacekkow/keycloak-protocol-cas/releases/download/${KEYCLOAK_VERSION}/keycloak-protocol-cas-${KEYCLOAK_VERSION}.jar;
 
 # https://github.com/keycloak/keycloak/tree/main/quarkus/container
 # https://quay.io/repository/keycloak/keycloak?tab=tags
