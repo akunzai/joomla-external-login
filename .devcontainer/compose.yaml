@@ -22,9 +22,9 @@ services:
       - traefik.http.routers.keycloak.entrypoints=websecure
       - traefik.http.routers.keycloak.rule=Host(`auth.dev.local`)
       - traefik.http.services.keycloak.loadbalancer.server.port=8080
-  
+
   joomla:
-    build: 
+    build:
       context: ./joomla
     image: joomla:external-login
     volumes:
@@ -54,7 +54,7 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-secret} 
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-secret}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-joomla}
     ports:
       - 127.0.0.1:3306:3306
