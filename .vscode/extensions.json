@@ -1,7 +1,6 @@
 {
   "recommendations": [
-    "bmewburn.vscode-intelephense-client",
-    "streetsidesoftware.code-spell-checker",
-    "xdebug.php-debug"
+    "eamodio.gitlens",
+    "streetsidesoftware.code-spell-checker"
   ]
 }

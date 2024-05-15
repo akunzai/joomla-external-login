@@ -1,23 +1,57 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
-// https://github.com/microsoft/vscode-dev-containers/tree/v0.245.2/containers/php-mariadb
-// Update the PHP_VERSION arg in docker-compose.yml to pick a PHP version
+// https://aka.ms/devcontainer.json
 {
   "name": "Joomla External Login",
+  // https://github.com/devcontainers/images/tree/main/src/php
   "dockerComposeFile": "compose.yaml",
   "service": "joomla",
   "workspaceFolder": "/workspace",
+  "postCreateCommand": "sudo usermod -aG www-data vscode",
+  "postAttachCommand": "newgrp www-data",
+  "forwardPorts": [
+    8080
+  ],
+  "portsAttributes": {
+    "8080": {
+      "label": "Keycloak",
+      "protocol": "http"
+    },
+    "80": {
+      "label": "Joomla",
+      "protocol": "http"
+    }
+  },
+  "otherPortsAttributes": {
+    "onAutoForward": "ignore"
+  },
+  "remoteUser": "vscode",
+  "remoteEnv": {
+    "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
+  },
   "customizations": {
     "vscode": {
       "extensions": [
-        "xdebug.php-debug",
         "bmewburn.vscode-intelephense-client",
-        "redhat.vscode-xml"
-      ]
+        "mhutchie.git-graph",
+        "mrmlnc.vscode-apache",
+        "redhat.vscode-xml",
+        "xdebug.php-debug"
+      ],
+      "settings": {
+        "php.validate.executablePath": "/usr/local/bin/php"
+      }
     }
   },
   // https://containers.dev/features
   "features": {
-    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
-    "ghcr.io/devcontainers/features/git:1": {}
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "username": "vscode",
+      "userUid": "1000",
+      "userGid": "1000"
+    },
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "latest",
+      "ppa": "false"
+    },
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
   }
 }

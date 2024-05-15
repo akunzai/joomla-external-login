@@ -1,96 +1,85 @@
 name: joomla-external-login_devcontainer
 services:
+
   keycloak:
     build: ./keycloak
     image: keycloak:cas
     restart: unless-stopped
     volumes:
-      - keycloak-data:/opt/keycloak/data
-      - ./keycloak/export:/opt/keycloak/data/export
-      - ./keycloak/import:/opt/keycloak/data/import
-    command: start --import-realm --optimized
+      - type: volume
+        source: keycloak_data
+        target: /opt/keycloak/data
+      - type: bind
+        source: ${LOCAL_WORKSPACE_FOLDER:-..}/.devcontainer/keycloak/export
+        target: /opt/keycloak/data/export
+        bind:
+          create_host_path: true
+      - type: bind
+        source: ${LOCAL_WORKSPACE_FOLDER:-..}/.devcontainer/keycloak/import
+        target: /opt/keycloak/data/import
+    command: start-dev --import-realm
     environment:
       # https://www.keycloak.org/server/configuration
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
-      # https://www.keycloak.org/server/all-config
-      KC_HOSTNAME: auth.dev.local
-      KC_HTTP_ENABLED: 'true'
+      # https://www.keycloak.org/server/reverseproxy
       KC_PROXY_HEADERS: xforwarded
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.keycloak.entrypoints=websecure
-      - traefik.http.routers.keycloak.rule=Host(`auth.dev.local`)
-      - traefik.http.services.keycloak.loadbalancer.server.port=8080
+    ports:
+      - 127.0.0.1:8080:8080
+    networks:
+      default:
+        aliases:
+          - auth.dev.local
 
   joomla:
     build:
       context: ./joomla
     image: joomla:external-login
     volumes:
-      - ..:/workspace:cached
-      - joomla-data:/var/www/html
-      - ./php.ini:/usr/local/etc/php/php.ini:ro
+      - type: bind
+        source: ${LOCAL_WORKSPACE_FOLDER:-..}
+        target: /workspace
+        consistency: cached
+      - type: volume
+        source: joomla_data
+        target: /var/www/html
+      - type: bind
+        source: ${LOCAL_WORKSPACE_FOLDER:-..}/.devcontainer/php.ini
+        target: /usr/local/etc/php/php.ini
+        read_only: true
+      - type: bind
+        source: ${LOCAL_WORKSPACE_FOLDER:-..}/.vscode
+        target: /var/www/html/.vscode
+        consistency: cached
     environment:
       JOOMLA_DB_HOST: ${JOOMLA_DB_HOST:-mysql}
       JOOMLA_DB_PASSWORD: ${JOOMLA_DB_PASSWORD:-${MYSQL_ROOT_PASSWORD:-secret}}
       # https://xdebug.org/docs/all_settings
       XDEBUG_CONFIG: 'client_host=localhost log=/tmp/xdebug.log'
       XDEBUG_MODE: develop,debug
-    external_links:
-      - traefik:auth.dev.local
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.joomla.entrypoints=websecure
-      - traefik.http.routers.joomla.rule=Host(`www.dev.local`)
+    ports:
+      - 127.0.0.1:80:80
     depends_on:
       - mysql
       - keycloak
+    networks:
+      default:
+        aliases:
+          - www.dev.local
 
   mysql:
     # https://hub.docker.com/_/mysql
     image: mysql
     restart: unless-stopped
     volumes:
-      - mysql-data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-secret}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-joomla}
     ports:
       - 127.0.0.1:3306:3306
 
-  traefik:
-    # https://hub.docker.com/_/traefik
-    image: traefik
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./traefik/etc:/etc/traefik
-    command:
-      - --api.insecure=true
-      - --api.dashboard=true
-      - --entrypoints.web.address=:80
-      - --entrypoints.web.http.redirections.entryPoint.to=websecure
-      - --entrypoints.web.http.redirections.entryPoint.scheme=https
-      - --entrypoints.websecure.address=:443
-      - --entrypoints.websecure.http.tls=true
-      - --providers.docker=true
-      - --providers.docker.exposedByDefault=false
-      - --providers.file.directory=/etc/traefik/dynamic/
-    ports:
-      - 127.0.0.1:80:80
-      - 127.0.0.1:443:443
-      - 127.0.0.1:9090:8080
-    secrets:
-      - cert.pem
-      - key.pem
-
-secrets:
-  cert.pem:
-    file: .secrets/cert.pem
-  key.pem:
-    file: .secrets/key.pem
-
 volumes:
-  joomla-data: null
-  keycloak-data: null
-  mysql-data: null
+  joomla_data: null
+  keycloak_data: null
+  mysql_data: null
