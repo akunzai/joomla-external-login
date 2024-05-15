@@ -1,9 +1,0 @@
-tls:
-  options:
-    default:
-      minVersion: VersionTLS12
-  stores:
-    default:
-      defaultCertificate:
-        certFile: /run/secrets/cert.pem
-        keyFile: /run/secrets/key.pem
