@@ -1,12 +1,12 @@
-# https://mcr.microsoft.com/v2/vscode/devcontainers/php/tags/list
 ARG PHP_VERSION=8.3
+ARG PHP_EXTRA_BUILD_DEPS=""
 # https://hub.docker.com/_/joomla
 ARG JOOMLA_VERSION=5.1.0
 
 FROM joomla:${JOOMLA_VERSION}-apache AS joomla
 
 # https://hub.docker.com/_/php
-FROM php:${PHP_VERSION}-apache-bookworm
+FROM php:${PHP_VERSION}-apache
 
 ENV LANG=en_US.UTF-8
 
