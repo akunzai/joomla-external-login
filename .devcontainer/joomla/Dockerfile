@@ -22,6 +22,7 @@ RUN set -eux; \
     chmod +x /usr/local/bin/pickle;
 
 # install the PHP extensions we need
+# hadolint ignore=SC2086
 RUN set -eux; \
     savedAptMark="$(apt-mark showmanual)"; \
     apt-get update; \
@@ -54,11 +55,13 @@ RUN set -eux; \
 RUN set -eux; \
     # enable Apache2 modules
     a2enmod rewrite expires include deflate remoteip headers; \
-    # disable Apache2 server signature
-    echo 'ServerSignature Off' >> /etc/apache2/apache2.conf; \
-    echo 'ServerTokens Prod' >> /etc/apache2/apache2.conf; \
-    # enable support for TLS termination
-    echo 'SetEnvIf X-Forwarded-Proto https HTTPS=on' >> /etc/apache2/apache2.conf;
+    { \
+        # disable Apache2 server signature
+        echo 'ServerSignature Off'; \
+        echo 'ServerTokens Prod'; \
+        # enable support for TLS termination
+        echo 'SetEnvIf X-Forwarded-Proto https HTTPS=on'; \
+    } >> /etc/apache2/apache2.conf;
 
 # install composer
 # https://hub.docker.com/_/composer

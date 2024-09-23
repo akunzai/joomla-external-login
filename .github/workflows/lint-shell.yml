@@ -1,0 +1,28 @@
+name: Linting Shell script
+
+on:
+  push:
+      branches:
+      - main
+      paths:
+      - '**.sh'
+  pull_request:
+      branches:
+      - main
+      paths:
+      - '**.sh'
+  # Allow manually triggering the workflow.
+  workflow_dispatch:
+  
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Lint shell script
+        uses: reviewdog/action-shellcheck@v1
