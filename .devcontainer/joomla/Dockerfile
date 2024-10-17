@@ -49,7 +49,7 @@ RUN set -eux; \
     | sort -u \
     | xargs -r apt-mark manual; \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
-    rm -rf /var/lib/apt/lists/*;
+    rm -rf /var/lib/apt/lists/* /tmp/*;
 
 # set up Apache2
 RUN set -eux; \
@@ -77,5 +77,5 @@ RUN set -eux; \
     chown -R www-data:www-data /usr/src/joomla; \
     chmod -R g+w /usr/src/joomla;
 
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["apache2-foreground"]
+ENTRYPOINT [ "/entrypoint.sh" ]
+CMD [ "apache2-foreground" ]
