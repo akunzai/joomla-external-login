@@ -34,9 +34,9 @@ RUN set -eux; \
     docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp; \
     docker-php-ext-install -j$(nproc) opcache \
     intl gd mysqli pcntl pdo_mysql soap xsl zip; \
-    pickle install --no-interaction apcu; \
-    pickle install --no-interaction redis; \
-    pickle install --no-interaction xdebug; \
+    pickle install --no-interaction apcu-stable; \
+    pickle install --no-interaction redis-stable; \
+    pickle install --no-interaction xdebug-stable; \
     docker-php-ext-enable apcu opcache redis xdebug; \
     # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
     apt-mark auto '.*' > /dev/null; \
@@ -49,7 +49,7 @@ RUN set -eux; \
     | sort -u \
     | xargs -r apt-mark manual; \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
-    rm -rf /var/lib/apt/lists/*;
+    rm -rf /var/lib/apt/lists/* /tmp/*;
 
 # set up Apache2
 RUN set -eux; \
@@ -77,5 +77,5 @@ RUN set -eux; \
     chown -R www-data:www-data /usr/src/joomla; \
     chmod -R g+w /usr/src/joomla;
 
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["apache2-foreground"]
+ENTRYPOINT [ "/entrypoint.sh" ]
+CMD [ "apache2-foreground" ]
