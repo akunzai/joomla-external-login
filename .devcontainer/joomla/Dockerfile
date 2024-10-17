@@ -34,9 +34,9 @@ RUN set -eux; \
     docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp; \
     docker-php-ext-install -j$(nproc) opcache \
     intl gd mysqli pcntl pdo_mysql soap xsl zip; \
-    pickle install --no-interaction apcu; \
-    pickle install --no-interaction redis; \
-    pickle install --no-interaction xdebug; \
+    pickle install --no-interaction apcu-stable; \
+    pickle install --no-interaction redis-stable; \
+    pickle install --no-interaction xdebug-stable; \
     docker-php-ext-enable apcu opcache redis xdebug; \
     # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
     apt-mark auto '.*' > /dev/null; \
