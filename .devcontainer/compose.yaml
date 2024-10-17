@@ -55,8 +55,8 @@ services:
       JOOMLA_DB_HOST: ${JOOMLA_DB_HOST:-mysql}
       JOOMLA_DB_PASSWORD: ${JOOMLA_DB_PASSWORD:-${MYSQL_ROOT_PASSWORD:-secret}}
       # https://xdebug.org/docs/all_settings
-      XDEBUG_CONFIG: 'client_host=localhost log=/tmp/xdebug.log'
-      XDEBUG_MODE: develop,debug
+      # XDEBUG_CONFIG: 'client_host=localhost log=/tmp/xdebug.log'
+      # XDEBUG_MODE: develop,debug
     ports:
       - 127.0.0.1:80:80
     depends_on:
