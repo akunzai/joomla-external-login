@@ -10,25 +10,21 @@ FROM php:${PHP_VERSION}-apache
 
 ENV LANG=en_US.UTF-8
 
-# install MySQL client
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends default-mysql-client && \
-    apt-get clean -y && rm -rf /var/lib/apt/lists/*
-
-# install pickle
-# https://github.com/FriendsOfPHP/pickle
-RUN set -eux; \
-    curl -Lo /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/latest/download/pickle.phar && \
-    chmod +x /usr/local/bin/pickle;
-
 # install the PHP extensions we need
 # hadolint ignore=SC2086
-RUN set -eux; \
+RUN --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
+    --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    set -eux; \
+    curl -Lo /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/latest/download/pickle.phar && \
+    chmod +x /usr/local/bin/pickle; \
     savedAptMark="$(apt-mark showmanual)"; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
-    libfreetype6-dev libicu-dev libjpeg62-turbo-dev \
-    libpng-dev libxml2-dev libxslt1-dev libzip-dev libwebp-dev \
+    libfreetype6-dev libicu-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev libxml2-dev \
+    libxslt1-dev libzip-dev \
+    libwebp-dev mariadb-client \
     ${PHP_EXTRA_BUILD_DEPS:-}; \
     # https://www.php.net/manual/en/image.installation.php
     docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp; \
@@ -49,7 +45,7 @@ RUN set -eux; \
     | sort -u \
     | xargs -r apt-mark manual; \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
-    rm -rf /var/lib/apt/lists/* /tmp/*;
+    rm -rf /tmp/*;
 
 # set up Apache2
 RUN set -eux; \
