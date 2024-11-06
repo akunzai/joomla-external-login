@@ -36,13 +36,16 @@ services:
       context: ./joomla
     image: joomla:external-login
     volumes:
+      - type: volume
+        source: joomla_data
+        target: /var/www/html
+      - type: volume
+        source: joomla_log
+        target: /var/www/html/administrator/logs
       - type: bind
         source: ${LOCAL_WORKSPACE_FOLDER:-..}
         target: /workspace
         consistency: cached
-      - type: volume
-        source: joomla_data
-        target: /var/www/html
       - type: bind
         source: ${LOCAL_WORKSPACE_FOLDER:-..}/.devcontainer/php.ini
         target: /usr/local/etc/php/php.ini
@@ -81,5 +84,6 @@ services:
 
 volumes:
   joomla_data: null
+  joomla_log: null
   keycloak_data: null
   mysql_data: null
