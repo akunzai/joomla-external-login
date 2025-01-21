@@ -50,7 +50,7 @@ Upload Package File: `pkg_externallogin.zip`
 
 ### Menu Assignment
 
-- Menu Assignmnet: `On all pages`
+- Menu Assignment: `On all pages`
 
 ### Advanced
 

@@ -7,7 +7,7 @@
 
 The [Joomla!](https://www.joomla.org/) authentication extension allows to login to Joomla using external servers
 
-## Supported authenticaion standards
+## Supported authentication standards
 
 - [CAS](https://apereo.github.io/cas/7.0.x/protocol/CAS-Protocol-Specification.html) 3.0
 
