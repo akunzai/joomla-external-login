@@ -2,7 +2,7 @@
 
 # development containers
 /.devcontainer/.env
-/.devcontainer/**/*.pem
+/.devcontainer/.secrets
 /.devcontainer/keycloak/export/
 
 # Composer dependencies
