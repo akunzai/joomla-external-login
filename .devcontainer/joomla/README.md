@@ -26,11 +26,11 @@ Upload Package File: `pkg_externallogin.zip`
 
 ### CAS parameters
 
-- Use SSL: `No`
+- Use SSL: `Yes`
 - URL: `auth.dev.local`
 - Path: `realms/demo/protocol/cas`
 - Use CAS 3.0 URL: `Yes`
-- Port: `8080`
+- Port: `8443`
 
 ### Attributes
 

@@ -7,13 +7,10 @@
   "workspaceFolder": "/workspace",
   "postCreateCommand": "sudo usermod -aG www-data vscode",
   "postAttachCommand": "newgrp www-data",
-  "forwardPorts": [
-    8080
-  ],
   "portsAttributes": {
-    "8080": {
+    "8443": {
       "label": "Keycloak",
-      "protocol": "http"
+      "protocol": "https"
     },
     "80": {
       "label": "Joomla",
