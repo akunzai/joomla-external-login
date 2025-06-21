@@ -83,12 +83,11 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method triggerEvent\(\) of interface Joomla\\CMS\\Application\\EventAwareInterface\:
-				4\.0 will be removed in 6\.0
-				             Use the Dispatcher method instead
-				             Example\: Factory\:\:getApplication\(\)\-\>getDispatcher\(\)\-\>dispatch\(\$eventName, \$event\);$#
+				#^Call to method triggerEvent\(\) of deprecated interface Joomla\\CMS\\Application\\EventAwareInterface\:
+				4\.3 will be removed in 6\.0
+				             This interface will be removed without replacement as the Joomla 3\.x compatibility layer will be removed$#
 			'''
-			identifier: method.deprecated
+			identifier: method.deprecatedInterface
 			count: 1
 			path: src/administrator/components/com_externallogin/helpers/externallogin.php
 
@@ -153,12 +152,11 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method triggerEvent\(\) of interface Joomla\\CMS\\Application\\EventAwareInterface\:
-				4\.0 will be removed in 6\.0
-				             Use the Dispatcher method instead
-				             Example\: Factory\:\:getApplication\(\)\-\>getDispatcher\(\)\-\>dispatch\(\$eventName, \$event\);$#
+				#^Call to method triggerEvent\(\) of deprecated interface Joomla\\CMS\\Application\\EventAwareInterface\:
+				4\.3 will be removed in 6\.0
+				             This interface will be removed without replacement as the Joomla 3\.x compatibility layer will be removed$#
 			'''
-			identifier: method.deprecated
+			identifier: method.deprecatedInterface
 			count: 1
 			path: src/administrator/components/com_externallogin/models/plugins.php
 
@@ -232,11 +230,33 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method get\(\) of class Joomla\\CMS\\Object\\CMSObject\:
-				4\.3\.0 will be removed in 6\.0
-				            Create a proper getter function for the property$#
+				#^Call to deprecated method stylesheet\(\) of class Joomla\\CMS\\HTML\\HTMLHelper\:
+				5\.3\.0 will be removed in 7\.0
+				             Use WebAssetManager\:\:useStyle\(\) or WebAssetManager\:\:registerAndUseStyle\(\) instead\.$#
+			'''
+			identifier: staticMethod.deprecated
+			count: 1
+			path: src/administrator/components/com_externallogin/views/about/view.html.php
+
+		-
+			message: '''
+				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
+				5\.3\.0 will be removed in 7\.0\.
+				             Retrieve the model with \$model \= \$this\-\>getModel\(\); and call the methods
+				             to the model directly, e\.g\. \$model\-\>getItems\(\) instead of \$this\-\>get\('Items'\)\.$#
 			'''
 			identifier: method.deprecated
+			count: 3
+			path: src/administrator/components/com_externallogin/views/download/view.csv.php
+
+		-
+			message: '''
+				#^Call to method get\(\) of deprecated class Joomla\\CMS\\Object\\CMSObject\:
+				4\.3 will be removed in 6\.0
+				             Use \\stdClass or \\Joomla\\Registry\\Registry instead\.
+				             Example\: new \\Joomla\\Registry\\Registry\(\);$#
+			'''
+			identifier: method.deprecatedClass
 			count: 4
 			path: src/administrator/components/com_externallogin/views/logs/tmpl/default.php
 
@@ -264,12 +284,24 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method get\(\) of class Joomla\\CMS\\Object\\CMSObject\:
-				4\.3\.0 will be removed in 6\.0
-				            Create a proper getter function for the property$#
+				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
+				5\.3\.0 will be removed in 7\.0\.
+				             Retrieve the model with \$model \= \$this\-\>getModel\(\); and call the methods
+				             to the model directly, e\.g\. \$model\-\>getItems\(\) instead of \$this\-\>get\('Items'\)\.$#
 			'''
 			identifier: method.deprecated
-			count: 2
+			count: 3
+			path: src/administrator/components/com_externallogin/views/logs/view.csv.php
+
+		-
+			message: '''
+				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
+				5\.3\.0 will be removed in 7\.0\.
+				             Retrieve the model with \$model \= \$this\-\>getModel\(\); and call the methods
+				             to the model directly, e\.g\. \$model\-\>getItems\(\) instead of \$this\-\>get\('Items'\)\.$#
+			'''
+			identifier: method.deprecated
+			count: 4
 			path: src/administrator/components/com_externallogin/views/logs/view.html.php
 
 		-
@@ -283,6 +315,49 @@ parameters:
 			identifier: staticMethod.deprecated
 			count: 1
 			path: src/administrator/components/com_externallogin/views/logs/view.html.php
+
+		-
+			message: '''
+				#^Call to deprecated method stylesheet\(\) of class Joomla\\CMS\\HTML\\HTMLHelper\:
+				5\.3\.0 will be removed in 7\.0
+				             Use WebAssetManager\:\:useStyle\(\) or WebAssetManager\:\:registerAndUseStyle\(\) instead\.$#
+			'''
+			identifier: staticMethod.deprecated
+			count: 1
+			path: src/administrator/components/com_externallogin/views/logs/view.html.php
+
+		-
+			message: '''
+				#^Call to method get\(\) of deprecated class Joomla\\CMS\\Object\\CMSObject\:
+				4\.3 will be removed in 6\.0
+				             Use \\stdClass or \\Joomla\\Registry\\Registry instead\.
+				             Example\: new \\Joomla\\Registry\\Registry\(\);$#
+			'''
+			identifier: method.deprecatedClass
+			count: 2
+			path: src/administrator/components/com_externallogin/views/logs/view.html.php
+
+		-
+			message: '''
+				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
+				5\.3\.0 will be removed in 7\.0\.
+				             Retrieve the model with \$model \= \$this\-\>getModel\(\); and call the methods
+				             to the model directly, e\.g\. \$model\-\>getItems\(\) instead of \$this\-\>get\('Items'\)\.$#
+			'''
+			identifier: method.deprecated
+			count: 2
+			path: src/administrator/components/com_externallogin/views/plugins/view.html.php
+
+		-
+			message: '''
+				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
+				5\.3\.0 will be removed in 7\.0\.
+				             Retrieve the model with \$model \= \$this\-\>getModel\(\); and call the methods
+				             to the model directly, e\.g\. \$model\-\>getItems\(\) instead of \$this\-\>get\('Items'\)\.$#
+			'''
+			identifier: method.deprecated
+			count: 4
+			path: src/administrator/components/com_externallogin/views/server/view.html.php
 
 		-
 			message: '''
@@ -298,8 +373,18 @@ parameters:
 
 		-
 			message: '''
+				#^Call to deprecated method stylesheet\(\) of class Joomla\\CMS\\HTML\\HTMLHelper\:
+				5\.3\.0 will be removed in 7\.0
+				             Use WebAssetManager\:\:useStyle\(\) or WebAssetManager\:\:registerAndUseStyle\(\) instead\.$#
+			'''
+			identifier: staticMethod.deprecated
+			count: 1
+			path: src/administrator/components/com_externallogin/views/server/view.html.php
+
+		-
+			message: '''
 				#^Call to deprecated method addScriptDeclaration\(\) of class Joomla\\CMS\\Document\\Document\:
-				4\.3 will be removed in 6\.0
+				4\.3 will be removed in 7\.0
 				             Use WebAssetManager
 				             Example\: \$wa\-\>addInlineScript\(\.\.\.\);$#
 			'''
@@ -321,6 +406,26 @@ parameters:
 
 		-
 			message: '''
+				#^Call to deprecated method script\(\) of class Joomla\\CMS\\HTML\\HTMLHelper\:
+				5\.3\.0 will be removed in 7\.0
+				             Use WebAssetManager\:\:useScript\(\) or WebAssetManager\:\:registerAndUseScript\(\) instead\.$#
+			'''
+			identifier: staticMethod.deprecated
+			count: 1
+			path: src/administrator/components/com_externallogin/views/servers/tmpl/default.php
+
+		-
+			message: '''
+				#^Call to deprecated method stylesheet\(\) of class Joomla\\CMS\\HTML\\HTMLHelper\:
+				5\.3\.0 will be removed in 7\.0
+				             Use WebAssetManager\:\:useStyle\(\) or WebAssetManager\:\:registerAndUseStyle\(\) instead\.$#
+			'''
+			identifier: staticMethod.deprecated
+			count: 1
+			path: src/administrator/components/com_externallogin/views/servers/tmpl/default.php
+
+		-
+			message: '''
 				#^Call to deprecated method addIncludePath\(\) of class Joomla\\CMS\\HTML\\HTMLHelper\:
 				4\.0 will be removed in 6\.0
 				             Use the service registry instead$#
@@ -362,6 +467,17 @@ parameters:
 			identifier: staticMethod.deprecated
 			count: 1
 			path: src/administrator/components/com_externallogin/views/servers/tmpl/modal_body.php
+
+		-
+			message: '''
+				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
+				5\.3\.0 will be removed in 7\.0\.
+				             Retrieve the model with \$model \= \$this\-\>getModel\(\); and call the methods
+				             to the model directly, e\.g\. \$model\-\>getItems\(\) instead of \$this\-\>get\('Items'\)\.$#
+			'''
+			identifier: method.deprecated
+			count: 4
+			path: src/administrator/components/com_externallogin/views/servers/view.html.php
 
 		-
 			message: '''
@@ -377,8 +493,18 @@ parameters:
 
 		-
 			message: '''
+				#^Call to deprecated method stylesheet\(\) of class Joomla\\CMS\\HTML\\HTMLHelper\:
+				5\.3\.0 will be removed in 7\.0
+				             Use WebAssetManager\:\:useStyle\(\) or WebAssetManager\:\:registerAndUseStyle\(\) instead\.$#
+			'''
+			identifier: staticMethod.deprecated
+			count: 1
+			path: src/administrator/components/com_externallogin/views/servers/view.html.php
+
+		-
+			message: '''
 				#^Call to deprecated method addScriptDeclaration\(\) of class Joomla\\CMS\\Document\\Document\:
-				4\.3 will be removed in 6\.0
+				4\.3 will be removed in 7\.0
 				             Use WebAssetManager
 				             Example\: \$wa\-\>addInlineScript\(\.\.\.\);$#
 			'''
@@ -397,6 +523,17 @@ parameters:
 			identifier: staticMethod.deprecated
 			count: 1
 			path: src/administrator/components/com_externallogin/views/success/tmpl/default.php
+
+		-
+			message: '''
+				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
+				5\.3\.0 will be removed in 7\.0\.
+				             Retrieve the model with \$model \= \$this\-\>getModel\(\); and call the methods
+				             to the model directly, e\.g\. \$model\-\>getItems\(\) instead of \$this\-\>get\('Items'\)\.$#
+			'''
+			identifier: method.deprecated
+			count: 4
+			path: src/administrator/components/com_externallogin/views/upload/view.html.php
 
 		-
 			message: '''
@@ -422,11 +559,32 @@ parameters:
 
 		-
 			message: '''
+				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
+				5\.3\.0 will be removed in 7\.0\.
+				             Retrieve the model with \$model \= \$this\-\>getModel\(\); and call the methods
+				             to the model directly, e\.g\. \$model\-\>getItems\(\) instead of \$this\-\>get\('Items'\)\.$#
+			'''
+			identifier: method.deprecated
+			count: 4
+			path: src/administrator/components/com_externallogin/views/users/view.html.php
+
+		-
+			message: '''
 				#^Call to deprecated method getInstance\(\) of class Joomla\\CMS\\Toolbar\\Toolbar\:
 				4\.0 will be removed in 6\.0
 				             Use the ToolbarFactoryInterface instead
 				             Example\:
 				             Factory\:\:getContainer\(\)\-\>get\(ToolbarFactoryInterface\:\:class\)\-\>createToolbar\(\$name\)$#
+			'''
+			identifier: staticMethod.deprecated
+			count: 1
+			path: src/administrator/components/com_externallogin/views/users/view.html.php
+
+		-
+			message: '''
+				#^Call to deprecated method stylesheet\(\) of class Joomla\\CMS\\HTML\\HTMLHelper\:
+				5\.3\.0 will be removed in 7\.0
+				             Use WebAssetManager\:\:useStyle\(\) or WebAssetManager\:\:registerAndUseStyle\(\) instead\.$#
 			'''
 			identifier: staticMethod.deprecated
 			count: 1
@@ -455,12 +613,11 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method triggerEvent\(\) of interface Joomla\\CMS\\Application\\EventAwareInterface\:
-				4\.0 will be removed in 6\.0
-				             Use the Dispatcher method instead
-				             Example\: Factory\:\:getApplication\(\)\-\>getDispatcher\(\)\-\>dispatch\(\$eventName, \$event\);$#
+				#^Call to method triggerEvent\(\) of deprecated interface Joomla\\CMS\\Application\\EventAwareInterface\:
+				4\.3 will be removed in 6\.0
+				             This interface will be removed without replacement as the Joomla 3\.x compatibility layer will be removed$#
 			'''
-			identifier: method.deprecated
+			identifier: method.deprecatedInterface
 			count: 1
 			path: src/administrator/modules/mod_externallogin_admin/helper.php
 
@@ -532,6 +689,28 @@ parameters:
 			identifier: staticMethod.deprecated
 			count: 1
 			path: src/components/com_externallogin/views/login/tmpl/default.php
+
+		-
+			message: '''
+				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
+				5\.3\.0 will be removed in 7\.0\.
+				             Retrieve the model with \$model \= \$this\-\>getModel\(\); and call the methods
+				             to the model directly, e\.g\. \$model\-\>getItems\(\) instead of \$this\-\>get\('Items'\)\.$#
+			'''
+			identifier: method.deprecated
+			count: 3
+			path: src/components/com_externallogin/views/login/view.html.php
+
+		-
+			message: '''
+				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
+				5\.3\.0 will be removed in 7\.0\.
+				             Retrieve the model with \$model \= \$this\-\>getModel\(\); and call the methods
+				             to the model directly, e\.g\. \$model\-\>getItems\(\) instead of \$this\-\>get\('Items'\)\.$#
+			'''
+			identifier: method.deprecated
+			count: 3
+			path: src/components/com_externallogin/views/server/view.html.php
 
 		-
 			message: '''
@@ -635,12 +814,11 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method triggerEvent\(\) of interface Joomla\\CMS\\Application\\EventAwareInterface\:
-				4\.0 will be removed in 6\.0
-				             Use the Dispatcher method instead
-				             Example\: Factory\:\:getApplication\(\)\-\>getDispatcher\(\)\-\>dispatch\(\$eventName, \$event\);$#
+				#^Call to method triggerEvent\(\) of deprecated interface Joomla\\CMS\\Application\\EventAwareInterface\:
+				4\.3 will be removed in 6\.0
+				             This interface will be removed without replacement as the Joomla 3\.x compatibility layer will be removed$#
 			'''
-			identifier: method.deprecated
+			identifier: method.deprecatedInterface
 			count: 1
 			path: src/plugins/authentication/externallogin/externallogin.php
 
@@ -667,7 +845,7 @@ parameters:
 		-
 			message: '''
 				#^Call to deprecated method addStyleDeclaration\(\) of class Joomla\\CMS\\Document\\Document\:
-				4\.3 will be removed in 6\.0
+				4\.3 will be removed in 7\.0
 				             Use WebAssetManager
 				             Example\: \$wa\-\>addInlineStyle\(\.\.\.\);$#
 			'''
@@ -806,7 +984,7 @@ parameters:
 				             Inject the router or load it from the dependency injection container
 				             Example\: Factory\:\:getContainer\(\)\-\>get\(\$name\);$#
 			'''
-			identifier: method.deprecated
+			identifier: staticMethod.deprecated
 			count: 1
 			path: src/plugins/system/externallogin/externallogin.php
 
