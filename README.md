@@ -35,7 +35,7 @@ composer run phpstan
 
 ## Installation
 
-> see [here](./.devcontainer/joomla/) for details
+> see [joomla setup document](./.devcontainer/joomla/) for details
 
 Navigate to `System->Install->Extensions` in Joomla! backend and upload the package file `pkg_externallogin.zip` to install
 
