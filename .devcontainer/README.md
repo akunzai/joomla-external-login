@@ -39,11 +39,13 @@ docker compose up -d
 
 ### Keycloak admin
 
+- realm: `master`
 - Username: `admin`
 - Password: `admin`
 
 ### Keycloak user
 
+- realm: `demo`
 - Username: `test`
 - Password: `test`
 
