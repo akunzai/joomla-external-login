@@ -27,15 +27,15 @@
 			"type": "package",
 			"package": {
 				"name": "joomla/joomla-cms",
-				"version": "5.3.1",
+				"version": "5.3.2",
 				"dist": {
-					"url": "https://github.com/joomla/joomla-cms/releases/download/5.3.1/Joomla_5.3.1-Stable-Full_Package.zip",
+					"url": "https://github.com/joomla/joomla-cms/releases/download/5.3.2/Joomla_5.3.2-Stable-Full_Package.zip",
 					"type": "zip"
 				},
 				"source": {
 					"url": "https://github.com/joomla/joomla-cms.git",
 					"type": "git",
-					"reference": "tags/5.3.1"
+					"reference": "tags/5.3.2"
 				}
 			}
 		},
@@ -57,8 +57,8 @@
 	},
 	"require-dev": {
 		"akunzai/joomla-stubs": "dev-master",
-		"friendsofphp/php-cs-fixer": "^3.78",
-		"joomla/joomla-cms": "5.3.1",
+		"friendsofphp/php-cs-fixer": "^3.84",
+		"joomla/joomla-cms": "5.3.2",
 		"phpstan/extension-installer": "^1.4",
 		"phpstan/phpstan": "^2.1",
 		"phpstan/phpstan-deprecation-rules": "^2.0"
