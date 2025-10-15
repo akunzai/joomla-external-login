@@ -13,6 +13,7 @@
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\Database\DatabaseInterface;
 
 // No direct access to this file
 defined('_JEXEC') or die;
@@ -90,7 +91,7 @@ class ExternalloginModelLogs extends \Joomla\CMS\MVC\Model\ListModel
     protected function getListQuery()
     {
         // Create a new query object.
-        $db = Factory::getDBO();
+        $db = Factory::getContainer()->get(DatabaseInterface::class);
         $query = $db->getQuery(true);
 
         // Select some fields
@@ -168,7 +169,7 @@ class ExternalloginModelLogs extends \Joomla\CMS\MVC\Model\ListModel
     public function getContent()
     {
         $file = fopen('php://output', 'w');
-        $db = Factory::getDbo();
+        $db = Factory::getContainer()->get(DatabaseInterface::class);
         $db->setQuery($this->getListQuery());
         $results = $db->loadAssocList();
 
@@ -192,7 +193,7 @@ class ExternalloginModelLogs extends \Joomla\CMS\MVC\Model\ListModel
     public function delete()
     {
         // Create a new query object.
-        $db = Factory::getDBO();
+        $db = Factory::getContainer()->get(DatabaseInterface::class);
         $query = $db->getQuery(true);
 
         // Delete

@@ -12,6 +12,7 @@
  */
 
 use Joomla\CMS\Factory;
+use Joomla\Database\DatabaseInterface;
 use Joomla\Utilities\ArrayHelper;
 
 // No direct access to this file
@@ -84,7 +85,7 @@ class ExternalloginModelServers extends \Joomla\CMS\MVC\Model\ListModel
     protected function getListQuery()
     {
         // Create a new query object.
-        $db = Factory::getDBO();
+        $db = Factory::getContainer()->get(DatabaseInterface::class);
         $query = $db->getQuery(true);
 
         // Select some fields

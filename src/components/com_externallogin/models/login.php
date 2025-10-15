@@ -13,6 +13,7 @@
 
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
+use Joomla\Database\DatabaseInterface;
 use Joomla\Registry\Registry;
 
 // No direct access to this file
@@ -72,7 +73,7 @@ class ExternalloginModelLogin extends \Joomla\CMS\MVC\Model\ListModel
     protected function getListQuery()
     {
         // Create a new query object.
-        $db = Factory::getDBO();
+        $db = Factory::getContainer()->get(DatabaseInterface::class);
         $query = $db->getQuery(true);
 
         // Select some fields

@@ -12,6 +12,7 @@
  */
 
 use Joomla\CMS\Factory;
+use Joomla\Database\DatabaseInterface;
 
 // No direct access to this file
 defined('_JEXEC') or die;
@@ -89,7 +90,7 @@ class ExternalloginModelUsers extends \Joomla\CMS\MVC\Model\ListModel
     protected function getListQuery()
     {
         // Create a new query object.
-        $db = Factory::getDBO();
+        $db = Factory::getContainer()->get(DatabaseInterface::class);
         $query = $db->getQuery(true);
 
         // Select some fields

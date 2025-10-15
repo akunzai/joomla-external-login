@@ -14,6 +14,7 @@
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Table\Table;
+use Joomla\Database\DatabaseInterface;
 
 // No direct access to this file
 defined('_JEXEC') or die;
@@ -92,7 +93,7 @@ class ExternalloginModelDownload extends \Joomla\CMS\MVC\Model\BaseDatabaseModel
     public function getContent()
     {
         $file = fopen('php://output', 'w');
-        $db = Factory::getDbo();
+        $db = Factory::getContainer()->get(DatabaseInterface::class);
         $query = $db->getQuery(true);
         $query->select('a.username, a.name, a.email');
         $query->from('#__users AS a');

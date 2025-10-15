@@ -57,30 +57,6 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method getConfig\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Use the configuration object within the application
-				             Example\:
-				             Factory\:\:getApplication\(\)\-\>getConfig\(\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/models/download.php
-
-		-
-			message: '''
-				#^Call to deprecated method getDbo\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Use the database service in the DI container
-				             Example\:
-				             Factory\:\:getContainer\(\)\-\>get\(DatabaseInterface\:\:class\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/models/download.php
-
-		-
-			message: '''
 				#^Call to deprecated method getInstance\(\) of class Joomla\\CMS\\Table\\Table\:
 				4\.3 will be removed in 6\.0
 				             Use the MvcFactory instead
@@ -91,27 +67,6 @@ parameters:
 			path: src/administrator/components/com_externallogin/models/download.php
 
 		-
-			message: '''
-				#^Call to deprecated method getConfig\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Use the configuration object within the application
-				             Example\:
-				             Factory\:\:getApplication\(\)\-\>getConfig\(\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/models/logs.php
-
-		-
-			message: '''
-				#^Call to deprecated method getDbo\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Use the database service in the DI container
-				             Example\:
-				             Factory\:\:getContainer\(\)\-\>get\(DatabaseInterface\:\:class\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 3
 			path: src/administrator/components/com_externallogin/models/logs.php
 
 		-
@@ -125,7 +80,6 @@ parameters:
 			path: src/administrator/components/com_externallogin/models/plugins.php
 
 		-
-			message: '''
 				#^Call to deprecated method getInstance\(\) of class Joomla\\CMS\\Table\\Table\:
 				4\.3 will be removed in 6\.0
 				             Use the MvcFactory instead
@@ -148,13 +102,6 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method getDbo\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Use the database service in the DI container
-				             Example\:
-				             Factory\:\:getContainer\(\)\-\>get\(DatabaseInterface\:\:class\);$#
-			'''
-			identifier: staticMethod.deprecated
 			count: 1
 			path: src/administrator/components/com_externallogin/models/servers.php
 
@@ -181,14 +128,6 @@ parameters:
 			path: src/administrator/components/com_externallogin/models/user.php
 
 		-
-			message: '''
-				#^Call to deprecated method getDbo\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Use the database service in the DI container
-				             Example\:
-				             Factory\:\:getContainer\(\)\-\>get\(DatabaseInterface\:\:class\);$#
-			'''
-			identifier: staticMethod.deprecated
 			count: 1
 			path: src/administrator/components/com_externallogin/models/users.php
 
@@ -412,18 +351,6 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method getDbo\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Use the database service in the DI container
-				             Example\:
-				             Factory\:\:getContainer\(\)\-\>get\(DatabaseInterface\:\:class\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/components/com_externallogin/models/login.php
-
-		-
-			message: '''
 				#^Call to deprecated method getInstance\(\) of class Joomla\\CMS\\Table\\Table\:
 				4\.3 will be removed in 6\.0
 				             Use the MvcFactory instead
@@ -434,14 +361,6 @@ parameters:
 			path: src/components/com_externallogin/models/server.php
 
 		-
-			message: '''
-				#^Call to deprecated method getUser\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Load the user service from the dependency injection container or get from the application object
-				             Example\:
-				             Factory\:\:getApplication\(\)\-\>getIdentity\(\);$#
-			'''
-			identifier: staticMethod.deprecated
 			count: 1
 			path: src/components/com_externallogin/models/server.php
 
@@ -731,19 +650,10 @@ parameters:
 			path: src/plugins/system/externallogin/externallogin.php
 
 		-
-			message: '''
-				#^Call to deprecated method getUser\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Load the user service from the dependency injection container or get from the application object
-				             Example\:
-				             Factory\:\:getApplication\(\)\-\>getIdentity\(\);$#
-			'''
-			identifier: staticMethod.deprecated
 			count: 1
 			path: src/plugins/system/externallogin/externallogin.php
 
 		-
-			message: '''
 				#^Call to deprecated method register\(\) of class JLoader\:
 				4\.3 will be removed in 7\.0
 				             Classes should be autoloaded\. Use JLoader\:\:registerPrefix\(\) or JLoader\:\:registerNamespace\(\) to
@@ -755,12 +665,5 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method getDbo\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Use the database service in the DI container
-				             Example\:
-				             Factory\:\:getContainer\(\)\-\>get\(DatabaseInterface\:\:class\);$#
-			'''
-			identifier: staticMethod.deprecated
 			count: 1
 			path: src/plugins/user/cbexternallogin/cbexternallogin.php

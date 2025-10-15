@@ -11,6 +11,7 @@
 
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
+use Joomla\Database\DatabaseInterface;
 
 // No direct access to this file
 defined('_JEXEC') or die;
@@ -54,7 +55,7 @@ class PlgUserCbexternallogin extends \Joomla\CMS\Plugin\CMSPlugin
         // User comes from external login plugin and community builder is installed and enabled
         if (isset($user['server']) && ComponentHelper::getComponent('com_comprofiler', true)->enabled) {
             // Verify if user is stored into community builder
-            $dbo = Factory::getDbo();
+            $dbo = Factory::getContainer()->get(DatabaseInterface::class);
             $query = $dbo->getQuery(true);
             $query->select('COUNT(*)');
             $query->from('#__comprofiler');
