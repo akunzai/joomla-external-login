@@ -18,15 +18,14 @@ use Joomla\CMS\Log\Log;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Table\Table;
+use Joomla\Database\DatabaseInterface;
 
 // No direct access to this file
 defined('_JEXEC') or die;
 
-Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_externallogin/tables');
-
-JLoader::registerAlias('ExternalloginLogger', '\\Joomla\\CMS\\Log\\Logger\\ExternalloginLogger');
-JLoader::register('ExternalloginLogger', JPATH_ADMINISTRATOR . '/components/com_externallogin/log/logger.php');
-JLoader::register('ExternalloginLogEntry', JPATH_ADMINISTRATOR . '/components/com_externallogin/log/entry.php');
+// Load component classes via autoloading
+require_once JPATH_ADMINISTRATOR . '/components/com_externallogin/log/logger.php';
+require_once JPATH_ADMINISTRATOR . '/components/com_externallogin/log/entry.php';
 /**
  * External Login - External Login plugin.
  *
@@ -142,7 +141,7 @@ class PlgSystemExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
      */
     public function onUserAfterDelete($user, $success, $msg)
     {
-        $dbo = Factory::getDbo();
+        $dbo = Factory::getContainer()->get(DatabaseInterface::class);
         $dbo->setQuery($dbo->getQuery(true)->select('server_id')->from('#__externallogin_users')->where('user_id = ' . (int) $user['id']));
         $sid = $dbo->loadResult();
         /** @var ExternalloginTable */
@@ -164,7 +163,7 @@ class PlgSystemExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
 
                 return false;
             } else {
-                $dbo = Factory::getDbo();
+                $dbo = Factory::getContainer()->get(DatabaseInterface::class);
                 $query = $dbo->getQuery(true);
                 $query->delete('#__externallogin_users')->where('user_id = ' . (int) $user['id']);
                 $dbo->setQuery($query);
@@ -203,14 +202,14 @@ class PlgSystemExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
     public function onUserBeforeSave($old, $isnew, $new)
     {
         if ($new['password'] != '') {
-            $dbo = Factory::getDbo();
+            $dbo = Factory::getContainer()->get(DatabaseInterface::class);
             $dbo->setQuery($dbo->getQuery(true)->select('server_id')->from('#__externallogin_users')->where('user_id = ' . (int) $new['id']));
             $sid = $dbo->loadResult();
             /** @var ExternalloginTable */
             $server = Table::getInstance('Server', 'ExternalloginTable');
 
             if ($server->load($sid) && !$server->params->get('allow_change_password', 0)) {
-                $dbo = Factory::getDbo();
+                $dbo = Factory::getContainer()->get(DatabaseInterface::class);
                 $query = $dbo->getQuery(true);
                 $query->select('COUNT(*)');
                 $query->from('#__externallogin_users AS e');

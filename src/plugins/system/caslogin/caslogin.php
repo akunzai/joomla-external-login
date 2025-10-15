@@ -22,19 +22,16 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Session\Session;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Uri\Uri;
+use Joomla\Database\DatabaseInterface;
 use Joomla\Registry\Registry;
 
 // No direct access to this file
 defined('_JEXEC') or die;
 
-Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_externallogin/tables');
-
-BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_externallogin/models', 'ExternalloginModel');
-
-JLoader::registerAlias('ExternalloginLogger', '\\Joomla\\CMS\\Log\\Logger\\ExternalloginLogger');
-JLoader::register('ExternalloginLogger', JPATH_ADMINISTRATOR . '/components/com_externallogin/log/logger.php');
-JLoader::register('ExternalloginLogEntry', JPATH_ADMINISTRATOR . '/components/com_externallogin/log/entry.php');
-JLoader::register('ExternalloginHelper', JPATH_ADMINISTRATOR . '/components/com_externallogin/helpers/externallogin.php');
+// Load component classes via autoloading
+require_once JPATH_ADMINISTRATOR . '/components/com_externallogin/log/logger.php';
+require_once JPATH_ADMINISTRATOR . '/components/com_externallogin/log/entry.php';
+require_once JPATH_ADMINISTRATOR . '/components/com_externallogin/helpers/externallogin.php';
 /**
  * External Login - CAS plugin.
  *
@@ -187,7 +184,7 @@ class PlgSystemCaslogin extends \Joomla\CMS\Plugin\CMSPlugin
         $app = Factory::getApplication();
 
         // Get the dbo
-        $db = Factory::getDbo();
+        $db = Factory::getContainer()->get(DatabaseInterface::class);
 
         // Get the input
         $input = $app->input;
@@ -523,7 +520,7 @@ class PlgSystemCaslogin extends \Joomla\CMS\Plugin\CMSPlugin
             $url = $this->getUrl($server->params) . '/login?service=' . urlencode($service);
 
             if ($server->params->get('locale')) {
-                [$locale, $country] = explode('-', Factory::getLanguage()->getTag());
+                [$locale, $country] = explode('-', Factory::getApplication()->getLanguage()->getTag());
                 $url .= '&locale=' . $locale;
             }
 
@@ -618,7 +615,7 @@ class PlgSystemCaslogin extends \Joomla\CMS\Plugin\CMSPlugin
                     );
                 }
                 // Group is numeric
-                $dbo = Factory::getDbo();
+                $dbo = Factory::getContainer()->get(DatabaseInterface::class);
                 $query = $dbo->getQuery(true);
                 $query->select('id')->from('#__usergroups')->where('id = ' . (int) $group);
                 $dbo->setQuery($query);
@@ -709,7 +706,7 @@ class PlgSystemCaslogin extends \Joomla\CMS\Plugin\CMSPlugin
             return true;
         }
         $user = Factory::getUser($options['username']);
-        $db = Factory::getDbo();
+        $db = Factory::getContainer()->get(DatabaseInterface::class);
         $query = $db->getQuery(true);
         $query->select('*');
         $query->from('#__externallogin_servers AS a');
@@ -740,7 +737,7 @@ class PlgSystemCaslogin extends \Joomla\CMS\Plugin\CMSPlugin
         }
 
         if ($params->get('locale')) {
-            [$locale, $country] = explode('-', Factory::getLanguage()->getTag());
+            [$locale, $country] = explode('-', Factory::getApplication()->getLanguage()->getTag());
             $locale = '&locale=' . $locale;
         } else {
             $locale = '';

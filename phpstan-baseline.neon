@@ -203,61 +203,6 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method getDbo\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Use the database service in the DI container
-				             Example\:
-				             Factory\:\:getContainer\(\)\-\>get\(DatabaseInterface\:\:class\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 3
-			path: src/plugins/authentication/externallogin/externallogin.php
-
-		-
-			message: '''
-				#^Call to deprecated method getError\(\) of class Joomla\\CMS\\User\\User\:
-				3\.1\.4 will be removed in 7\.0
-				             Will be removed without replacement
-				             Catch thrown Exceptions instead of getError$#
-			'''
-			identifier: method.deprecated
-			count: 1
-			path: src/plugins/authentication/externallogin/externallogin.php
-
-		-
-			message: '''
-				#^Call to deprecated method getInstance\(\) of class Joomla\\CMS\\User\\User\:
-				4\.3 will be removed in 6\.0
-				             Load the user service from the dependency injection container or via \$app\-\>getIdentity\(\)
-				             Example\: Factory\:\:getContainer\(\)\-\>get\(UserFactoryInterface\:\:class\)\-\>loadUserById\(\$id\)$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 2
-			path: src/plugins/authentication/externallogin/externallogin.php
-
-		-
-			message: '''
-				#^Call to deprecated method register\(\) of class JLoader\:
-				4\.3 will be removed in 7\.0
-				             Classes should be autoloaded\. Use JLoader\:\:registerPrefix\(\) or JLoader\:\:registerNamespace\(\) to
-				             register an autoloader for your files\.$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 2
-			path: src/plugins/authentication/externallogin/externallogin.php
-
-		-
-			message: '''
-				#^Call to deprecated method set\(\) of class Joomla\\CMS\\User\\User\:
-				4\.3\.0 will be removed in 6\.0
-				            Create a proper setter function for the property$#
-			'''
-			identifier: method.deprecated
-			count: 5
-			path: src/plugins/authentication/externallogin/externallogin.php
-
-		-
-			message: '''
 				#^Call to method triggerEvent\(\) of deprecated interface Joomla\\CMS\\Application\\EventAwareInterface\:
 				4\.3 will be removed in 7\.0
 				             This interface will be removed without replacement as the Joomla 3\.x compatibility layer will be removed$#
@@ -265,26 +210,6 @@ parameters:
 			identifier: method.deprecatedInterface
 			count: 1
 			path: src/plugins/authentication/externallogin/externallogin.php
-
-		-
-			message: '''
-				#^Call to deprecated method addIncludePath\(\) of class Joomla\\CMS\\MVC\\Model\\BaseModel\:
-				4\.3 will be removed in 6\.0
-				             Will be removed without replacement\. Get the model through the MVCFactory \+ namespace instead$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/plugins/system/caslogin/caslogin.php
-
-		-
-			message: '''
-				#^Call to deprecated method addIncludePath\(\) of class Joomla\\CMS\\Table\\Table\:
-				4\.3 will be removed in 6\.0
-				             Should not be used anymore as tables are loaded through the MvcFactory$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/plugins/system/caslogin/caslogin.php
 
 		-
 			message: '''
@@ -305,18 +230,6 @@ parameters:
 			'''
 			identifier: method.deprecated
 			count: 1
-			path: src/plugins/system/caslogin/caslogin.php
-
-		-
-			message: '''
-				#^Call to deprecated method getDbo\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Use the database service in the DI container
-				             Example\:
-				             Factory\:\:getContainer\(\)\-\>get\(DatabaseInterface\:\:class\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 3
 			path: src/plugins/system/caslogin/caslogin.php
 
 		-
@@ -355,18 +268,6 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method getLanguage\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Use the language service in the DI container or get from the application object
-				             Example\:
-				             Factory\:\:getApplication\(\)\-\>getLanguage\(\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 2
-			path: src/plugins/system/caslogin/caslogin.php
-
-		-
-			message: '''
 				#^Call to deprecated method getUser\(\) of class Joomla\\CMS\\Factory\:
 				4\.3 will be removed in 6\.0
 				             Load the user service from the dependency injection container or get from the application object
@@ -376,39 +277,6 @@ parameters:
 			identifier: staticMethod.deprecated
 			count: 2
 			path: src/plugins/system/caslogin/caslogin.php
-
-		-
-			message: '''
-				#^Call to deprecated method register\(\) of class JLoader\:
-				4\.3 will be removed in 7\.0
-				             Classes should be autoloaded\. Use JLoader\:\:registerPrefix\(\) or JLoader\:\:registerNamespace\(\) to
-				             register an autoloader for your files\.$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 3
-			path: src/plugins/system/caslogin/caslogin.php
-
-		-
-			message: '''
-				#^Call to deprecated method addIncludePath\(\) of class Joomla\\CMS\\Table\\Table\:
-				4\.3 will be removed in 6\.0
-				             Should not be used anymore as tables are loaded through the MvcFactory$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/plugins/system/externallogin/externallogin.php
-
-		-
-			message: '''
-				#^Call to deprecated method getDbo\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Use the database service in the DI container
-				             Example\:
-				             Factory\:\:getContainer\(\)\-\>get\(DatabaseInterface\:\:class\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 4
-			path: src/plugins/system/externallogin/externallogin.php
 
 		-
 			message: '''
@@ -437,16 +305,5 @@ parameters:
 			path: src/plugins/system/externallogin/externallogin.php
 
 		-
-				#^Call to deprecated method register\(\) of class JLoader\:
-				4\.3 will be removed in 7\.0
-				             Classes should be autoloaded\. Use JLoader\:\:registerPrefix\(\) or JLoader\:\:registerNamespace\(\) to
-				             register an autoloader for your files\.$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 2
-			path: src/plugins/system/externallogin/externallogin.php
-
-		-
-			message: '''
 			count: 1
 			path: src/plugins/user/cbexternallogin/cbexternallogin.php

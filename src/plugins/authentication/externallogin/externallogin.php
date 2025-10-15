@@ -18,15 +18,17 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\User\User;
+use Joomla\CMS\User\UserFactoryInterface;
 use Joomla\CMS\User\UserHelper;
+use Joomla\Database\DatabaseInterface;
 use Joomla\Registry\Registry;
 
 // No direct access to this file
 defined('_JEXEC') or die;
 
-JLoader::registerAlias('ExternalloginLogger', '\\Joomla\\CMS\\Log\\Logger\\ExternalloginLogger');
-JLoader::register('ExternalloginLogger', JPATH_ADMINISTRATOR . '/components/com_externallogin/log/logger.php');
-JLoader::register('ExternalloginLogEntry', JPATH_ADMINISTRATOR . '/components/com_externallogin/log/entry.php');
+// Load component classes via autoloading
+require_once JPATH_ADMINISTRATOR . '/components/com_externallogin/log/logger.php';
+require_once JPATH_ADMINISTRATOR . '/components/com_externallogin/log/entry.php';
 
 /**
  * External Login - External Login plugin.
@@ -148,8 +150,9 @@ class PlgAuthenticationExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
         /** @var Registry */
         $params = $response->server->params;
         $isLogAutoRegister = boolval($params->get('log_autoregister', 0));
-        $db = Factory::getDbo();
-        $user = User::getInstance();
+        $db = Factory::getContainer()->get(DatabaseInterface::class);
+        $userFactory = Factory::getContainer()->get(UserFactoryInterface::class);
+        $user = $userFactory->loadUserById(0);
         $user->set('id', 0);
         $user->set('name', $response->fullname);
         $user->set('username', $response->username);
@@ -232,8 +235,9 @@ class PlgAuthenticationExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
 
         $isLogAutoUpdate = boolval($params->get('log_autoupdate', 0));
         $isNeedsUpdate = false;
-        $db = Factory::getDbo();
-        $user = User::getInstance();
+        $db = Factory::getContainer()->get(DatabaseInterface::class);
+        $userFactory = Factory::getContainer()->get(UserFactoryInterface::class);
+        $user = $userFactory->loadUserById(0);
 
         $user->load($userId);
         if ($user->email != $response->email) {
@@ -348,7 +352,7 @@ class PlgAuthenticationExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
      */
     private function addLoginRecord($response, $userId, $isSkipExisting = false)
     {
-        $db = Factory::getDbo();
+        $db = Factory::getContainer()->get(DatabaseInterface::class);
         if ($isSkipExisting) {
             $query = $db->getQuery(true);
             $query->select('*')->from('#__externallogin_users')->where('user_id = ' . $userId);
