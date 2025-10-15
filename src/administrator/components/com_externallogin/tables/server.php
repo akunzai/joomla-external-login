@@ -89,11 +89,12 @@ class ExternalloginTableServer extends \Joomla\CMS\Table\Table
     public function store($updateNulls = false)
     {
         if ($this->ordering == 0) {
-            $query = $this->_db->getQuery(true);
+            $db = $this->getDatabase();
+            $query = $db->getQuery(true);
             $query->select('MAX(ordering)');
             $query->from('#__externallogin_servers');
-            $this->_db->setQuery($query);
-            $this->ordering = $this->_db->loadResult() + 1;
+            $db->setQuery($query);
+            $this->ordering = $db->loadResult() + 1;
         }
 
         if (is_array($this->params)) {
