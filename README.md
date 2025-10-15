@@ -15,7 +15,7 @@ The [Joomla!](https://www.joomla.org/) authentication extension allows to login 
 
 - PHP >= 8.1
 - [Composer](https://getcomposer.org/)
-- [Joomla!](https://www.joomla.org/) 3.10.x or 4.x or 5.x
+- [Joomla!](https://www.joomla.org/) 5.x
 
 ## Getting Started
 
