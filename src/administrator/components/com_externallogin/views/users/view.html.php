@@ -15,6 +15,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Toolbar\Toolbar;
+use Joomla\CMS\Toolbar\ToolbarFactoryInterface;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
 // No direct access to this file
@@ -118,7 +119,7 @@ class ExternalloginViewUsers extends \Joomla\CMS\MVC\View\HtmlView
         $app->getDocument()->getWebAssetManager()
             ->registerAndUseStyle('com_externallogin', 'com_externallogin/administrator/externallogin.css', [], [], []);
 
-        $bar = Toolbar::getInstance('toolbar');
+        $bar = Factory::getContainer()->get(ToolbarFactoryInterface::class)->createToolbar('toolbar');
 
         // Set the toolbar
         ToolbarHelper::title(Text::_('COM_EXTERNALLOGIN_MANAGER_USERS'), 'users');

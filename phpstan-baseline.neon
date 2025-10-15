@@ -238,18 +238,6 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method getInstance\(\) of class Joomla\\CMS\\Toolbar\\Toolbar\:
-				4\.0 will be removed in 6\.0
-				             Use the ToolbarFactoryInterface instead
-				             Example\:
-				             Factory\:\:getContainer\(\)\-\>get\(ToolbarFactoryInterface\:\:class\)\-\>createToolbar\(\$name\)$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/views/logs/view.html.php
-
-		-
-			message: '''
 				#^Call to method get\(\) of deprecated class Joomla\\CMS\\Object\\CMSObject\:
 				4\.3 will be removed in 6\.0
 				             Use \\stdClass or \\Joomla\\Registry\\Registry instead\.
@@ -337,18 +325,6 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method getInstance\(\) of class Joomla\\CMS\\Toolbar\\Toolbar\:
-				4\.0 will be removed in 6\.0
-				             Use the ToolbarFactoryInterface instead
-				             Example\:
-				             Factory\:\:getContainer\(\)\-\>get\(ToolbarFactoryInterface\:\:class\)\-\>createToolbar\(\$name\)$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/views/servers/view.html.php
-
-		-
-			message: '''
 				#^Call to deprecated method addScriptDeclaration\(\) of class Joomla\\CMS\\Document\\Document\:
 				4\.3 will be removed in 7\.0
 				             Use WebAssetManager
@@ -390,18 +366,6 @@ parameters:
 			'''
 			identifier: method.deprecated
 			count: 4
-			path: src/administrator/components/com_externallogin/views/users/view.html.php
-
-		-
-			message: '''
-				#^Call to deprecated method getInstance\(\) of class Joomla\\CMS\\Toolbar\\Toolbar\:
-				4\.0 will be removed in 6\.0
-				             Use the ToolbarFactoryInterface instead
-				             Example\:
-				             Factory\:\:getContainer\(\)\-\>get\(ToolbarFactoryInterface\:\:class\)\-\>createToolbar\(\$name\)$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
 			path: src/administrator/components/com_externallogin/views/users/view.html.php
 
 		-
