@@ -21,9 +21,7 @@ use Joomla\CMS\Uri\Uri;
 // No direct access to this file
 defined('_JEXEC') or die;
 
-$user = version_compare(JVERSION, '4.0.0', '<')
-    ? Factory::getUser()
-    : Factory::getApplication()->getIdentity();
+$user = Factory::getApplication()->getIdentity();
 ?>
 <?php if ($user->guest) : ?>
 	<div class="externallogin<?php echo htmlspecialchars($params->get('moduleclass_sfx'), ENT_COMPAT, 'UTF-8'); ?>">

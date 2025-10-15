@@ -11,6 +11,7 @@
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
+use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Toolbar\ToolbarHelper;
@@ -66,7 +67,9 @@ class ExternalloginViewAbout extends \Joomla\CMS\MVC\View\HtmlView
     protected function addToolbar()
     {
         // Load specific css component
-        HTMLHelper::stylesheet('com_externallogin/administrator/externallogin.css', ['relative' => true]);
+        $app = Factory::getApplication();
+        $app->getDocument()->getWebAssetManager()
+            ->registerAndUseStyle('com_externallogin', 'com_externallogin/administrator/externallogin.css', [], [], []);
 
         // Set the title
         ToolbarHelper::title(Text::_('COM_EXTERNALLOGIN_MANAGER_ABOUT'), 'help');

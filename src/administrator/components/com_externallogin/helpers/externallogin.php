@@ -15,6 +15,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Router\Route;
+use Joomla\Database\DatabaseInterface;
 
 // No direct access to this file
 defined('_JEXEC') or die;
@@ -63,11 +64,12 @@ abstract class ExternalloginHelper
         );
 
         // Set some global property
-        $document = Factory::getDocument();
+        $app = Factory::getApplication();
+        $document = $app->getDocument();
         $document->setTitle(
             Text::sprintf(
                 'COM_EXTERNALLOGIN_PAGETITLE',
-                Factory::getConfig()->get('sitename'),
+                $app->getConfig()->get('sitename'),
                 Text::_('COM_EXTERNALLOGIN_PAGETITLE_' . $submenu)
             )
         );
@@ -139,8 +141,8 @@ abstract class ExternalloginHelper
      */
     public static function getCategories()
     {
-        $dbo = Factory::getDbo();
-        $categories = $dbo->setQuery($dbo->getQuery(true)->select('category')->from('#__externallogin_logs')->group('category'))->loadColumn();
+        $db = Factory::getContainer()->get(DatabaseInterface::class);
+        $categories = $db->setQuery($db->getQuery(true)->select('category')->from('#__externallogin_logs')->group('category'))->loadColumn();
         $options = [];
 
         foreach ($categories as $category) {
@@ -160,8 +162,8 @@ abstract class ExternalloginHelper
      */
     public static function getGroups($path, $separator = '/')
     {
-        // Get the dbo
-        $dbo = Factory::getDbo();
+        // Get the database
+        $db = Factory::getContainer()->get(DatabaseInterface::class);
 
         // Split the path
         $path = empty($separator) ? [$path] : explode($separator, $path);
@@ -174,10 +176,10 @@ abstract class ExternalloginHelper
         }
 
         // Prepare query
-        $query = $dbo->getQuery(true);
+        $query = $db->getQuery(true);
         $query->select('a' . ($count - 1) . '.id as id');
         $query->from('#__usergroups AS a' . ($count - 1));
-        $query->where('a' . ($count - 1) . '.title = ' . $dbo->quote($path[$count - 1]));
+        $query->where('a' . ($count - 1) . '.title = ' . $db->quote($path[$count - 1]));
 
         for ($i = $count - 2; $i >= 0; $i--) {
             if (empty($path[$i])) {
@@ -190,12 +192,12 @@ abstract class ExternalloginHelper
                 }
             } else {
                 $query->leftJoin('#__usergroups AS a' . $i . ' ON a' . $i . '.id = a' . ($i + 1) . '.parent_id');
-                $query->where('a' . $i . '.title LIKE ' . $dbo->quote($path[$i]));
+                $query->where('a' . $i . '.title LIKE ' . $db->quote($path[$i]));
             }
         }
 
-        $dbo->setQuery($query);
-        return $dbo->loadColumn();
+        $db->setQuery($query);
+        return $db->loadColumn();
     }
 
     /**

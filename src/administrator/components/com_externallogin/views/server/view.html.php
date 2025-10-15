@@ -100,13 +100,13 @@ class ExternalloginViewServer extends \Joomla\CMS\MVC\View\HtmlView
     protected function addToolbar()
     {
         // Load specific css component
-        HTMLHelper::stylesheet('com_externallogin/administrator/externallogin.css', ['relative' => true]);
+        $app = Factory::getApplication();
+        $app->getDocument()->getWebAssetManager()
+            ->registerAndUseStyle('com_externallogin', 'com_externallogin/administrator/externallogin.css', [], [], []);
 
-        Factory::getApplication()->input->set('hidemainmenu', true);
+        $app->input->set('hidemainmenu', true);
 
-        $user = version_compare(JVERSION, '4.0.0', '<')
-            ? Factory::getUser()
-            : $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $userId = $user->id;
         $isNew = $this->item->id == 0;
         $checkedOut = !($this->item->checked_out == 0 || $this->item->checked_out == $userId);

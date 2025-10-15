@@ -18,12 +18,7 @@ use Joomla\CMS\Language\Text;
 // No direct access to this file
 defined('_JEXEC') or die;
 
-// Include the component HTML helpers.
-HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
-
-$user = version_compare(JVERSION, '4.0.0', '<')
-    ? Factory::getUser()
-    : Factory::getApplication()->getIdentity();
+$user = Factory::getApplication()->getIdentity();
 
 if (!count($this->items)) {
     ?>

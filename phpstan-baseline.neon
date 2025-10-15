@@ -36,42 +36,6 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method getConfig\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Use the configuration object within the application
-				             Example\:
-				             Factory\:\:getApplication\(\)\-\>getConfig\(\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/helpers/externallogin.php
-
-		-
-			message: '''
-				#^Call to deprecated method getDbo\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Use the database service in the DI container
-				             Example\:
-				             Factory\:\:getContainer\(\)\-\>get\(DatabaseInterface\:\:class\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 2
-			path: src/administrator/components/com_externallogin/helpers/externallogin.php
-
-		-
-			message: '''
-				#^Call to deprecated method getDocument\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Use the document service in the DI container or get from the application object
-				             Example\:
-				             Factory\:\:getApplication\(\)\-\>getDocument\(\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/helpers/externallogin.php
-
-		-
-			message: '''
 				#^Call to deprecated method getInstance\(\) of class Joomla\\CMS\\MVC\\Model\\BaseModel\:
 				4\.3 will be removed in 6\.0
 				             Will be removed without replacement\. Get the model through the MVCFactory instead
@@ -230,16 +194,6 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method stylesheet\(\) of class Joomla\\CMS\\HTML\\HTMLHelper\:
-				5\.3\.0 will be removed in 7\.0
-				             Use WebAssetManager\:\:useStyle\(\) or WebAssetManager\:\:registerAndUseStyle\(\) instead\.$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/views/about/view.html.php
-
-		-
-			message: '''
 				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
 				5\.3\.0 will be removed in 7\.0\.
 				             Retrieve the model with \$model \= \$this\-\>getModel\(\); and call the methods
@@ -259,28 +213,6 @@ parameters:
 			identifier: method.deprecatedClass
 			count: 4
 			path: src/administrator/components/com_externallogin/views/logs/tmpl/default.php
-
-		-
-			message: '''
-				#^Call to deprecated method addIncludePath\(\) of class Joomla\\CMS\\HTML\\HTMLHelper\:
-				4\.0 will be removed in 6\.0
-				             Use the service registry instead$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/views/logs/tmpl/default_body.php
-
-		-
-			message: '''
-				#^Call to deprecated method getUser\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Load the user service from the dependency injection container or get from the application object
-				             Example\:
-				             Factory\:\:getApplication\(\)\-\>getIdentity\(\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/views/logs/tmpl/default_body.php
 
 		-
 			message: '''
@@ -318,16 +250,6 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method stylesheet\(\) of class Joomla\\CMS\\HTML\\HTMLHelper\:
-				5\.3\.0 will be removed in 7\.0
-				             Use WebAssetManager\:\:useStyle\(\) or WebAssetManager\:\:registerAndUseStyle\(\) instead\.$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/views/logs/view.html.php
-
-		-
-			message: '''
 				#^Call to method get\(\) of deprecated class Joomla\\CMS\\Object\\CMSObject\:
 				4\.3 will be removed in 6\.0
 				             Use \\stdClass or \\Joomla\\Registry\\Registry instead\.
@@ -357,28 +279,6 @@ parameters:
 			'''
 			identifier: method.deprecated
 			count: 4
-			path: src/administrator/components/com_externallogin/views/server/view.html.php
-
-		-
-			message: '''
-				#^Call to deprecated method getUser\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Load the user service from the dependency injection container or get from the application object
-				             Example\:
-				             Factory\:\:getApplication\(\)\-\>getIdentity\(\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/views/server/view.html.php
-
-		-
-			message: '''
-				#^Call to deprecated method stylesheet\(\) of class Joomla\\CMS\\HTML\\HTMLHelper\:
-				5\.3\.0 will be removed in 7\.0
-				             Use WebAssetManager\:\:useStyle\(\) or WebAssetManager\:\:registerAndUseStyle\(\) instead\.$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
 			path: src/administrator/components/com_externallogin/views/server/view.html.php
 
 		-
@@ -426,50 +326,6 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method addIncludePath\(\) of class Joomla\\CMS\\HTML\\HTMLHelper\:
-				4\.0 will be removed in 6\.0
-				             Use the service registry instead$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/views/servers/tmpl/default_body.php
-
-		-
-			message: '''
-				#^Call to deprecated method getUser\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Load the user service from the dependency injection container or get from the application object
-				             Example\:
-				             Factory\:\:getApplication\(\)\-\>getIdentity\(\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/views/servers/tmpl/default_body.php
-
-		-
-			message: '''
-				#^Call to deprecated method addIncludePath\(\) of class Joomla\\CMS\\HTML\\HTMLHelper\:
-				4\.0 will be removed in 6\.0
-				             Use the service registry instead$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/views/servers/tmpl/modal_body.php
-
-		-
-			message: '''
-				#^Call to deprecated method getUser\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Load the user service from the dependency injection container or get from the application object
-				             Example\:
-				             Factory\:\:getApplication\(\)\-\>getIdentity\(\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/views/servers/tmpl/modal_body.php
-
-		-
-			message: '''
 				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
 				5\.3\.0 will be removed in 7\.0\.
 				             Retrieve the model with \$model \= \$this\-\>getModel\(\); and call the methods
@@ -486,16 +342,6 @@ parameters:
 				             Use the ToolbarFactoryInterface instead
 				             Example\:
 				             Factory\:\:getContainer\(\)\-\>get\(ToolbarFactoryInterface\:\:class\)\-\>createToolbar\(\$name\)$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/views/servers/view.html.php
-
-		-
-			message: '''
-				#^Call to deprecated method stylesheet\(\) of class Joomla\\CMS\\HTML\\HTMLHelper\:
-				5\.3\.0 will be removed in 7\.0
-				             Use WebAssetManager\:\:useStyle\(\) or WebAssetManager\:\:registerAndUseStyle\(\) instead\.$#
 			'''
 			identifier: staticMethod.deprecated
 			count: 1
@@ -537,28 +383,6 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method addIncludePath\(\) of class Joomla\\CMS\\HTML\\HTMLHelper\:
-				4\.0 will be removed in 6\.0
-				             Use the service registry instead$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/views/users/tmpl/default_body.php
-
-		-
-			message: '''
-				#^Call to deprecated method getUser\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Load the user service from the dependency injection container or get from the application object
-				             Example\:
-				             Factory\:\:getApplication\(\)\-\>getIdentity\(\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/views/users/tmpl/default_body.php
-
-		-
-			message: '''
 				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
 				5\.3\.0 will be removed in 7\.0\.
 				             Retrieve the model with \$model \= \$this\-\>getModel\(\); and call the methods
@@ -575,16 +399,6 @@ parameters:
 				             Use the ToolbarFactoryInterface instead
 				             Example\:
 				             Factory\:\:getContainer\(\)\-\>get\(ToolbarFactoryInterface\:\:class\)\-\>createToolbar\(\$name\)$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/views/users/view.html.php
-
-		-
-			message: '''
-				#^Call to deprecated method stylesheet\(\) of class Joomla\\CMS\\HTML\\HTMLHelper\:
-				5\.3\.0 will be removed in 7\.0
-				             Use WebAssetManager\:\:useStyle\(\) or WebAssetManager\:\:registerAndUseStyle\(\) instead\.$#
 			'''
 			identifier: staticMethod.deprecated
 			count: 1
@@ -680,18 +494,6 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method getUser\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Load the user service from the dependency injection container or get from the application object
-				             Example\:
-				             Factory\:\:getApplication\(\)\-\>getIdentity\(\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/components/com_externallogin/views/login/tmpl/default.php
-
-		-
-			message: '''
 				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
 				5\.3\.0 will be removed in 7\.0\.
 				             Retrieve the model with \$model \= \$this\-\>getModel\(\); and call the methods
@@ -732,30 +534,6 @@ parameters:
 			identifier: staticMethod.deprecated
 			count: 1
 			path: src/modules/mod_externallogin_site/helper.php
-
-		-
-			message: '''
-				#^Call to deprecated method getUser\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Load the user service from the dependency injection container or get from the application object
-				             Example\:
-				             Factory\:\:getApplication\(\)\-\>getIdentity\(\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/modules/mod_externallogin_site/mod_externallogin_site.php
-
-		-
-			message: '''
-				#^Call to deprecated method getUser\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Load the user service from the dependency injection container or get from the application object
-				             Example\:
-				             Factory\:\:getApplication\(\)\-\>getIdentity\(\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/modules/mod_externallogin_site/tmpl/default.php
 
 		-
 			message: '''

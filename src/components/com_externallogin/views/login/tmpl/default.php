@@ -16,9 +16,7 @@ use Joomla\CMS\Factory;
 // No direct access to this file
 defined('_JEXEC') or die;
 
-$user = version_compare(JVERSION, '4.0.0', '<')
-    ? Factory::getUser()
-    : Factory::getApplication()->getIdentity();
+$user = Factory::getApplication()->getIdentity();
 if ($user->guest) :
     // The user is not logged in.
     echo $this->loadTemplate('login');

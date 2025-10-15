@@ -125,7 +125,9 @@ class ExternalloginViewServers extends \Joomla\CMS\MVC\View\HtmlView
     protected function addToolbar()
     {
         // Load specific css component
-        HTMLHelper::stylesheet('com_externallogin/administrator/externallogin.css', ['relative' => true]);
+        $app = Factory::getApplication();
+        $app->getDocument()->getWebAssetManager()
+            ->registerAndUseStyle('com_externallogin', 'com_externallogin/administrator/externallogin.css', [], [], []);
 
         // Set the toolbar
         ToolbarHelper::title(Text::_('COM_EXTERNALLOGIN_MANAGER_SERVERS'), 'database');

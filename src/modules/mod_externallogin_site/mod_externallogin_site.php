@@ -24,9 +24,7 @@ require_once dirname(__FILE__) . '/helper.php';
 $enabled = ComponentHelper::getComponent('com_externallogin', true)->enabled && PluginHelper::isEnabled('authentication', 'externallogin');
 $servers = ModExternalloginsiteHelper::getListServersURL($params);
 $count = count($servers);
-$user = version_compare(JVERSION, '4.0.0', '<')
-    ? Factory::getUser()
-    : Factory::getApplication()->getIdentity();
+$user = Factory::getApplication()->getIdentity();
 $return = ModExternalloginsiteHelper::getLogoutUrl($params);
 
 require ModuleHelper::getLayoutPath('mod_externallogin_site', $params->get('layout', 'default'));
