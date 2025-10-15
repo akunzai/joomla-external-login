@@ -39,7 +39,7 @@ class ExternalloginModelUser extends \Joomla\CMS\MVC\Model\BaseDatabaseModel
     public function enableJoomla(&$pks)
     {
         // Initialise variables.
-        $table = Table::getInstance('User');
+        $table = $this->getMVCFactory()->createTable('User', 'Administrator');
         $pks = (array) $pks;
 
         // Attempt to change the state of the records.
@@ -67,7 +67,7 @@ class ExternalloginModelUser extends \Joomla\CMS\MVC\Model\BaseDatabaseModel
     public function disableJoomla(&$pks)
     {
         // Initialise variables.
-        $table = Table::getInstance('User');
+        $table = $this->getMVCFactory()->createTable('User', 'Administrator');
         $pks = (array) $pks;
 
         // Attempt to change the state of the records.
@@ -105,7 +105,7 @@ class ExternalloginModelUser extends \Joomla\CMS\MVC\Model\BaseDatabaseModel
     public function disableExternallogin(&$pks)
     {
         // Initialise variables.
-        $table = Table::getInstance('User');
+        $table = $this->getMVCFactory()->createTable('User', 'Administrator');
         $pks = (array) $pks;
 
         // Attempt to change the state of the records.
@@ -192,7 +192,7 @@ class ExternalloginModelUser extends \Joomla\CMS\MVC\Model\BaseDatabaseModel
     public function enableExternallogin(&$pks, $sid)
     {
         // Initialise variables.
-        $table = Table::getInstance('User');
+        $table = $this->getMVCFactory()->createTable('User', 'Administrator');
         $pks = (array) $pks;
 
         // Attempt to change the state of the records.

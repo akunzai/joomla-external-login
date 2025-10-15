@@ -70,7 +70,7 @@ class ExternalloginModelServer extends \Joomla\CMS\MVC\Model\ItemModel
      */
     public function getTable($type = 'Server', $prefix = 'ExternalloginTable', $config = [])
     {
-        return Table::getInstance($type, $prefix, $config);
+        return $this->getMVCFactory()->createTable($type, $prefix, $config);
     }
 
     /**

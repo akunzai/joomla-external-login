@@ -23,16 +23,6 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method getInstance\(\) of class Joomla\\CMS\\Table\\Table\:
-				4\.3 will be removed in 6\.0
-				             Use the MvcFactory instead
-				             Example\: Factory\:\:getApplication\(\)\-\>bootComponent\('\.\.\.'\)\-\>getMVCFactory\(\)\-\>createTable\(\$name, \$prefix, \$config\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/models/download.php
-
-		-
 			path: src/administrator/components/com_externallogin/models/logs.php
 
 		-
@@ -46,41 +36,8 @@ parameters:
 			path: src/administrator/components/com_externallogin/models/plugins.php
 
 		-
-				#^Call to deprecated method getInstance\(\) of class Joomla\\CMS\\Table\\Table\:
-				4\.3 will be removed in 6\.0
-				             Use the MvcFactory instead
-				             Example\: Factory\:\:getApplication\(\)\-\>bootComponent\('\.\.\.'\)\-\>getMVCFactory\(\)\-\>createTable\(\$name, \$prefix, \$config\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/models/server.php
-
-		-
-			message: '''
 			count: 1
 			path: src/administrator/components/com_externallogin/models/servers.php
-
-		-
-			message: '''
-				#^Call to deprecated method getInstance\(\) of class Joomla\\CMS\\Table\\Table\:
-				4\.3 will be removed in 6\.0
-				             Use the MvcFactory instead
-				             Example\: Factory\:\:getApplication\(\)\-\>bootComponent\('\.\.\.'\)\-\>getMVCFactory\(\)\-\>createTable\(\$name, \$prefix, \$config\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/models/upload.php
-
-		-
-			message: '''
-				#^Call to deprecated method getInstance\(\) of class Joomla\\CMS\\Table\\Table\:
-				4\.3 will be removed in 6\.0
-				             Use the MvcFactory instead
-				             Example\: Factory\:\:getApplication\(\)\-\>bootComponent\('\.\.\.'\)\-\>getMVCFactory\(\)\-\>createTable\(\$name, \$prefix, \$config\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 4
-			path: src/administrator/components/com_externallogin/models/user.php
 
 		-
 			count: 1
@@ -208,16 +165,6 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method getInstance\(\) of class Joomla\\CMS\\Table\\Table\:
-				4\.3 will be removed in 6\.0
-				             Use the MvcFactory instead
-				             Example\: Factory\:\:getApplication\(\)\-\>bootComponent\('\.\.\.'\)\-\>getMVCFactory\(\)\-\>createTable\(\$name, \$prefix, \$config\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/components/com_externallogin/models/server.php
-
-		-
 			count: 1
 			path: src/components/com_externallogin/models/server.php
 
