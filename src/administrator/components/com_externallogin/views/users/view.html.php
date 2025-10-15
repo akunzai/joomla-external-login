@@ -73,18 +73,10 @@ class ExternalloginViewUsers extends \Joomla\CMS\MVC\View\HtmlView
     public function display($tpl = null)
     {
         // Get data from the model
-        $items = $this->get('Items');
-        $pagination = $this->get('Pagination');
-        $state = $this->get('State');
-
-        // Check for errors.
-        if (count($errors = $this->get('Errors'))) {
-            $app = Factory::getApplication();
-            $app->enqueueMessage(implode('<br />', $errors), 'error');
-            $app->redirect('index.php');
-
-            return false;
-        }
+        $model = $this->getModel();
+        $items = $model->getItems();
+        $pagination = $model->getPagination();
+        $state = $model->getState();
 
         // Assign data to the view
         $this->items = $items;

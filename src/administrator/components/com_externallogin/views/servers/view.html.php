@@ -80,22 +80,13 @@ class ExternalloginViewServers extends \Joomla\CMS\MVC\View\HtmlView
     public function display($tpl = null)
     {
         // Get data from the model
-        $items = $this->get('Items');
-        $pagination = $this->get('Pagination');
-        $state = $this->get('State');
+        $model = $this->getModel();
+        $items = $model->getItems();
+        $pagination = $model->getPagination();
+        $state = $model->getState();
 
         // Get global var if set
         $global = Factory::getApplication()->input->getInt('globalS');
-
-        // Check for errors.
-        if (count($errors = $this->get('Errors'))) {
-            /** @var \Joomla\CMS\Application\CMSApplication */
-            $app = Factory::getApplication();
-            $app->enqueueMessage(implode('<br />', $errors), 'error');
-            $app->redirect('index.php');
-
-            return false;
-        }
 
         // Assign data to the view
         $this->items = $items;

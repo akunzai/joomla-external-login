@@ -78,17 +78,6 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
-				5\.3\.0 will be removed in 7\.0\.
-				             Retrieve the model with \$model \= \$this\-\>getModel\(\); and call the methods
-				             to the model directly, e\.g\. \$model\-\>getItems\(\) instead of \$this\-\>get\('Items'\)\.$#
-			'''
-			identifier: method.deprecated
-			count: 4
-			path: src/administrator/components/com_externallogin/views/logs/view.html.php
-
-		-
-			message: '''
 				#^Call to method get\(\) of deprecated class Joomla\\CMS\\Object\\CMSObject\:
 				4\.3 will be removed in 6\.0
 				             Use \\stdClass or \\Joomla\\Registry\\Registry instead\.
@@ -118,40 +107,7 @@ parameters:
 			'''
 			identifier: method.deprecated
 			count: 4
-			path: src/administrator/components/com_externallogin/views/server/view.html.php
-
-		-
-			message: '''
-				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
-				5\.3\.0 will be removed in 7\.0\.
-				             Retrieve the model with \$model \= \$this\-\>getModel\(\); and call the methods
-				             to the model directly, e\.g\. \$model\-\>getItems\(\) instead of \$this\-\>get\('Items'\)\.$#
-			'''
-			identifier: method.deprecated
-			count: 4
-			path: src/administrator/components/com_externallogin/views/servers/view.html.php
-
-		-
-			message: '''
-				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
-				5\.3\.0 will be removed in 7\.0\.
-				             Retrieve the model with \$model \= \$this\-\>getModel\(\); and call the methods
-				             to the model directly, e\.g\. \$model\-\>getItems\(\) instead of \$this\-\>get\('Items'\)\.$#
-			'''
-			identifier: method.deprecated
-			count: 4
 			path: src/administrator/components/com_externallogin/views/upload/view.html.php
-
-		-
-			message: '''
-				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
-				5\.3\.0 will be removed in 7\.0\.
-				             Retrieve the model with \$model \= \$this\-\>getModel\(\); and call the methods
-				             to the model directly, e\.g\. \$model\-\>getItems\(\) instead of \$this\-\>get\('Items'\)\.$#
-			'''
-			identifier: method.deprecated
-			count: 4
-			path: src/administrator/components/com_externallogin/views/users/view.html.php
 
 		-
 			message: '''

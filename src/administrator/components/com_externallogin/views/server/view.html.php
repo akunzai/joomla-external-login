@@ -64,19 +64,10 @@ class ExternalloginViewServer extends \Joomla\CMS\MVC\View\HtmlView
     public function display($tpl = null)
     {
         // Get data from the model
-        $item = $this->get('Item');
-        $form = $this->get('Form');
-        $state = $this->get('State');
-
-        // Check for errors.
-        if (count($errors = $this->get('Errors'))) {
-            /** @var \Joomla\CMS\Application\CMSApplication */
-            $app = Factory::getApplication();
-            $app->enqueueMessage(implode('<br />', $errors), 'error');
-            $app->redirect('index.php');
-
-            return false;
-        }
+        $model = $this->getModel();
+        $item = $model->getItem();
+        $form = $model->getForm();
+        $state = $model->getState();
 
         // Assign data to the view
         $this->item = $item;
