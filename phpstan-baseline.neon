@@ -26,7 +26,7 @@ parameters:
 		-
 			message: '''
 				#^Call to deprecated method register\(\) of class JLoader\:
-				4\.3 will be removed in 6\.0
+				4\.3 will be removed in 7\.0
 				             Classes should be autoloaded\. Use JLoader\:\:registerPrefix\(\) or JLoader\:\:registerNamespace\(\) to
 				             register an autoloader for your files\.$#
 			'''
@@ -84,7 +84,7 @@ parameters:
 		-
 			message: '''
 				#^Call to method triggerEvent\(\) of deprecated interface Joomla\\CMS\\Application\\EventAwareInterface\:
-				4\.3 will be removed in 6\.0
+				4\.3 will be removed in 7\.0
 				             This interface will be removed without replacement as the Joomla 3\.x compatibility layer will be removed$#
 			'''
 			identifier: method.deprecatedInterface
@@ -153,7 +153,7 @@ parameters:
 		-
 			message: '''
 				#^Call to method triggerEvent\(\) of deprecated interface Joomla\\CMS\\Application\\EventAwareInterface\:
-				4\.3 will be removed in 6\.0
+				4\.3 will be removed in 7\.0
 				             This interface will be removed without replacement as the Joomla 3\.x compatibility layer will be removed$#
 			'''
 			identifier: method.deprecatedInterface
@@ -614,7 +614,7 @@ parameters:
 		-
 			message: '''
 				#^Call to method triggerEvent\(\) of deprecated interface Joomla\\CMS\\Application\\EventAwareInterface\:
-				4\.3 will be removed in 6\.0
+				4\.3 will be removed in 7\.0
 				             This interface will be removed without replacement as the Joomla 3\.x compatibility layer will be removed$#
 			'''
 			identifier: method.deprecatedInterface
@@ -670,7 +670,7 @@ parameters:
 		-
 			message: '''
 				#^Call to deprecated method triggerEvent\(\) of class Joomla\\CMS\\Application\\WebApplication\:
-				4\.0 will be removed in 6\.0
+				4\.0 will be removed in 7\.0
 				             Use the Dispatcher method instead
 				             Example\: Factory\:\:getApplication\(\)\-\>getDispatcher\(\)\-\>dispatch\(\$eventName, \$event\);$#
 			'''
@@ -772,7 +772,7 @@ parameters:
 		-
 			message: '''
 				#^Call to deprecated method getError\(\) of class Joomla\\CMS\\User\\User\:
-				3\.1\.4 will be removed in 6\.0
+				3\.1\.4 will be removed in 7\.0
 				             Will be removed without replacement
 				             Catch thrown Exceptions instead of getError$#
 			'''
@@ -794,7 +794,7 @@ parameters:
 		-
 			message: '''
 				#^Call to deprecated method register\(\) of class JLoader\:
-				4\.3 will be removed in 6\.0
+				4\.3 will be removed in 7\.0
 				             Classes should be autoloaded\. Use JLoader\:\:registerPrefix\(\) or JLoader\:\:registerNamespace\(\) to
 				             register an autoloader for your files\.$#
 			'''
@@ -815,7 +815,7 @@ parameters:
 		-
 			message: '''
 				#^Call to method triggerEvent\(\) of deprecated interface Joomla\\CMS\\Application\\EventAwareInterface\:
-				4\.3 will be removed in 6\.0
+				4\.3 will be removed in 7\.0
 				             This interface will be removed without replacement as the Joomla 3\.x compatibility layer will be removed$#
 			'''
 			identifier: method.deprecatedInterface
@@ -936,7 +936,7 @@ parameters:
 		-
 			message: '''
 				#^Call to deprecated method register\(\) of class JLoader\:
-				4\.3 will be removed in 6\.0
+				4\.3 will be removed in 7\.0
 				             Classes should be autoloaded\. Use JLoader\:\:registerPrefix\(\) or JLoader\:\:registerNamespace\(\) to
 				             register an autoloader for your files\.$#
 			'''
@@ -1003,7 +1003,7 @@ parameters:
 		-
 			message: '''
 				#^Call to deprecated method register\(\) of class JLoader\:
-				4\.3 will be removed in 6\.0
+				4\.3 will be removed in 7\.0
 				             Classes should be autoloaded\. Use JLoader\:\:registerPrefix\(\) or JLoader\:\:registerNamespace\(\) to
 				             register an autoloader for your files\.$#
 			'''
