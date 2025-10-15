@@ -102,7 +102,9 @@ abstract class ExternalloginHelper
     {
         $options = [];
         /** @var ExternalloginModelServers */
-        $model = BaseDatabaseModel::getInstance('Servers', 'ExternalloginModel', $config);
+        $app = Factory::getApplication();
+        $mvcFactory = $app->bootComponent('com_externallogin')->getMVCFactory();
+        $model = $mvcFactory->createModel('Servers', 'Administrator', $config);
         $model->setState('list.ordering', 'a.ordering');
         $model->setState('list.direction', 'ASC');
         $items = $model->getItems();

@@ -20,8 +20,6 @@ use Joomla\Registry\Registry;
 // No direct access to this file
 defined('_JEXEC') or die;
 
-BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_externallogin/models', 'ExternalloginModel');
-
 /**
  * Module helper class
  *
@@ -46,7 +44,8 @@ abstract class ModExternalloginadminHelper
 
         // Get an instance of the generic articles model
         /** @var ExternalloginModelServers */
-        $model = BaseDatabaseModel::getInstance('Servers', 'ExternalloginModel', ['ignore_request' => true]);
+        $mvcFactory = $app->bootComponent('com_externallogin')->getMVCFactory();
+        $model = $mvcFactory->createModel('Servers', 'Administrator', ['ignore_request' => true]);
         $model->setState('filter.published', 1);
         $model->setState('filter.enabled', 1);
         $model->setState('filter.servers', $params->get('server'));

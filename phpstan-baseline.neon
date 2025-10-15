@@ -13,17 +13,6 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method getInstance\(\) of class Joomla\\CMS\\MVC\\Model\\BaseModel\:
-				4\.3 will be removed in 6\.0
-				             Will be removed without replacement\. Get the model through the MVCFactory instead
-				             Example\: Factory\:\:getApplication\(\)\-\>bootComponent\('com_xxx'\)\-\>getMVCFactory\(\)\-\>createModel\(\$type, \$prefix, \$config\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/helpers/externallogin.php
-
-		-
-			message: '''
 				#^Call to method triggerEvent\(\) of deprecated interface Joomla\\CMS\\Application\\EventAwareInterface\:
 				4\.3 will be removed in 7\.0
 				             This interface will be removed without replacement as the Joomla 3\.x compatibility layer will be removed$#
@@ -209,27 +198,6 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method addIncludePath\(\) of class Joomla\\CMS\\MVC\\Model\\BaseModel\:
-				4\.3 will be removed in 6\.0
-				             Will be removed without replacement\. Get the model through the MVCFactory \+ namespace instead$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/modules/mod_externallogin_admin/helper.php
-
-		-
-			message: '''
-				#^Call to deprecated method getInstance\(\) of class Joomla\\CMS\\MVC\\Model\\BaseModel\:
-				4\.3 will be removed in 6\.0
-				             Will be removed without replacement\. Get the model through the MVCFactory instead
-				             Example\: Factory\:\:getApplication\(\)\-\>bootComponent\('com_xxx'\)\-\>getMVCFactory\(\)\-\>createModel\(\$type, \$prefix, \$config\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/modules/mod_externallogin_admin/helper.php
-
-		-
-			message: '''
 				#^Call to method triggerEvent\(\) of deprecated interface Joomla\\CMS\\Application\\EventAwareInterface\:
 				4\.3 will be removed in 7\.0
 				             This interface will be removed without replacement as the Joomla 3\.x compatibility layer will be removed$#
@@ -285,27 +253,6 @@ parameters:
 			identifier: method.deprecated
 			count: 3
 			path: src/components/com_externallogin/views/server/view.html.php
-
-		-
-			message: '''
-				#^Call to deprecated method addIncludePath\(\) of class Joomla\\CMS\\MVC\\Model\\BaseModel\:
-				4\.3 will be removed in 6\.0
-				             Will be removed without replacement\. Get the model through the MVCFactory \+ namespace instead$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/modules/mod_externallogin_site/helper.php
-
-		-
-			message: '''
-				#^Call to deprecated method getInstance\(\) of class Joomla\\CMS\\MVC\\Model\\BaseModel\:
-				4\.3 will be removed in 6\.0
-				             Will be removed without replacement\. Get the model through the MVCFactory instead
-				             Example\: Factory\:\:getApplication\(\)\-\>bootComponent\('com_xxx'\)\-\>getMVCFactory\(\)\-\>createModel\(\$type, \$prefix, \$config\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/modules/mod_externallogin_site/helper.php
 
 		-
 			message: '''
