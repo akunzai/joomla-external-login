@@ -23,16 +23,13 @@ HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('dropdown.init');
 HTMLHelper::_('formbehavior.chosen', 'select');
 
-if (version_compare(JVERSION, '4.0.0', '<')) {
-    HTMLHelper::_('behavior.framework', true);
-}
-HTMLHelper::script('system/modal.js', ['framework' => true, 'relative' => true]);
-HTMLHelper::stylesheet('system/modal.css', ['relative' => true]);
+$wa = Factory::getApplication()->getDocument()->getWebAssetManager();
+$wa->useScript('bootstrap.modal');
 
 $listOrder	= $this->escape($this->state->get('list.ordering'));
 $listDirn	= $this->escape($this->state->get('list.direction'));
 
-Factory::getDocument()->addScriptDeclaration("
+$wa->addInlineScript("
 Joomla.submitbutton = function(pressbutton)
 {
 	if (pressbutton == 'server.upload')

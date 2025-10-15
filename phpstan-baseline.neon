@@ -2,29 +2,6 @@ parameters:
 	ignoreErrors:
 		-
 			message: '''
-				#^Call to deprecated method getInstance\(\) of class Joomla\\CMS\\MVC\\Controller\\BaseController\:
-				4\.3 will be removed in 6\.0
-				             Get the controller through the MVCFactory instead
-				             Example\: Factory\:\:getApplication\(\)\-\>bootComponent\(\$option\)\-\>getMVCFactory\(\)\-\>createController\(\.\.\.\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/externallogin.php
-
-		-
-			message: '''
-				#^Call to deprecated method getUser\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Load the user service from the dependency injection container or get from the application object
-				             Example\:
-				             Factory\:\:getApplication\(\)\-\>getIdentity\(\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/externallogin.php
-
-		-
-			message: '''
 				#^Call to deprecated method register\(\) of class JLoader\:
 				4\.3 will be removed in 7\.0
 				             Classes should be autoloaded\. Use JLoader\:\:registerPrefix\(\) or JLoader\:\:registerNamespace\(\) to
@@ -199,49 +176,6 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method addScriptDeclaration\(\) of class Joomla\\CMS\\Document\\Document\:
-				4\.3 will be removed in 7\.0
-				             Use WebAssetManager
-				             Example\: \$wa\-\>addInlineScript\(\.\.\.\);$#
-			'''
-			identifier: method.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/views/servers/tmpl/default.php
-
-		-
-			message: '''
-				#^Call to deprecated method getDocument\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Use the document service in the DI container or get from the application object
-				             Example\:
-				             Factory\:\:getApplication\(\)\-\>getDocument\(\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/views/servers/tmpl/default.php
-
-		-
-			message: '''
-				#^Call to deprecated method script\(\) of class Joomla\\CMS\\HTML\\HTMLHelper\:
-				5\.3\.0 will be removed in 7\.0
-				             Use WebAssetManager\:\:useScript\(\) or WebAssetManager\:\:registerAndUseScript\(\) instead\.$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/views/servers/tmpl/default.php
-
-		-
-			message: '''
-				#^Call to deprecated method stylesheet\(\) of class Joomla\\CMS\\HTML\\HTMLHelper\:
-				5\.3\.0 will be removed in 7\.0
-				             Use WebAssetManager\:\:useStyle\(\) or WebAssetManager\:\:registerAndUseStyle\(\) instead\.$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/views/servers/tmpl/default.php
-
-		-
-			message: '''
 				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
 				5\.3\.0 will be removed in 7\.0\.
 				             Retrieve the model with \$model \= \$this\-\>getModel\(\); and call the methods
@@ -250,29 +184,6 @@ parameters:
 			identifier: method.deprecated
 			count: 4
 			path: src/administrator/components/com_externallogin/views/servers/view.html.php
-
-		-
-			message: '''
-				#^Call to deprecated method addScriptDeclaration\(\) of class Joomla\\CMS\\Document\\Document\:
-				4\.3 will be removed in 7\.0
-				             Use WebAssetManager
-				             Example\: \$wa\-\>addInlineScript\(\.\.\.\);$#
-			'''
-			identifier: method.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/views/success/tmpl/default.php
-
-		-
-			message: '''
-				#^Call to deprecated method getDocument\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Use the document service in the DI container or get from the application object
-				             Example\:
-				             Factory\:\:getApplication\(\)\-\>getDocument\(\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/views/success/tmpl/default.php
 
 		-
 			message: '''
@@ -326,17 +237,6 @@ parameters:
 			identifier: method.deprecatedInterface
 			count: 1
 			path: src/administrator/modules/mod_externallogin_admin/helper.php
-
-		-
-			message: '''
-				#^Call to deprecated method getInstance\(\) of class Joomla\\CMS\\MVC\\Controller\\BaseController\:
-				4\.3 will be removed in 6\.0
-				             Get the controller through the MVCFactory instead
-				             Example\: Factory\:\:getApplication\(\)\-\>bootComponent\(\$option\)\-\>getMVCFactory\(\)\-\>createController\(\.\.\.\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/components/com_externallogin/externallogin.php
 
 		-
 			message: '''

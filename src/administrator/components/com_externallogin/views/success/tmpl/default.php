@@ -16,6 +16,7 @@ use Joomla\CMS\Factory;
 // No direct access to this file
 defined('_JEXEC') or die;
 
-Factory::getDocument()->addScriptDeclaration('window.parent.addEvent(\'domready\', function() {
-	window.top.setTimeout(\'window.parent.SqueezeBox.close()\', 2000);
+$wa = Factory::getApplication()->getDocument()->getWebAssetManager();
+$wa->addInlineScript('window.parent.addEventListener(\'DOMContentLoaded\', function() {
+	window.top.setTimeout(function() { window.parent.Joomla.Modal.getCurrent().close(); }, 2000);
 });');

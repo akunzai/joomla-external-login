@@ -22,10 +22,12 @@ require_once dirname(__FILE__) . '/helpers.php';
 require_once JPATH_COMPONENT_ADMINISTRATOR . '/helpers.php';
 
 // Get an instance of the controller prefixed by Externallogin
-$controller = BaseController::getInstance('Externallogin');
+$app = Factory::getApplication();
+$mvcFactory = $app->bootComponent('com_externallogin')->getMVCFactory();
+$controller = $mvcFactory->createController('Display', 'Site', [], $app, $app->input);
 
 // Perform the Request task
-$controller->execute(Factory::getApplication()->input->get('task'));
+$controller->execute($app->input->get('task'));
 
 // Redirect if set by the controller
 $controller->redirect();
