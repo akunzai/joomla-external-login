@@ -1,13 +1,12 @@
 <?php
 
 /**
- * @package     External_Login
- * @subpackage  CAS Plugin
  * @author      Christophe Demko <chdemko@gmail.com>
  * @author      Ioannis Barounis <contact@johnbarounis.com>
  * @author      Alexandre Gandois <alexandre.gandois@etudiant.univ-lr.fr>
  * @copyright   Copyright (C) 2008-2018 Christophe Demko, Ioannis Barounis, Alexandre Gandois. All rights reserved.
  * @license     GNU General Public License, version 2. http://www.gnu.org/licenses/gpl-2.0.html
+ *
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
@@ -35,27 +34,27 @@ require_once JPATH_ADMINISTRATOR . '/components/com_externallogin/helpers/extern
 /**
  * External Login - CAS plugin.
  *
- * @package     External_Login
- * @subpackage  CAS Plugin
- *
  * @since       2.0.0
  */
-class PlgSystemCaslogin extends \Joomla\CMS\Plugin\CMSPlugin
+class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
 {
     /**
-     * @var    ExternalloginTableServer
+     * @var ExternalloginTableServer
+     *
      * @since  2.0.0
      */
     protected $server;
 
     /**
-     * @var    DOMXPath  The xpath object
+     * @var DOMXPath The xpath object
+     *
      * @since  2.0.0
      */
     protected $xpath;
 
     /**
-     * @var    DOMNode  The success node
+     * @var DOMNode The success node
+     *
      * @since  2.0.0
      */
     protected $success;
@@ -63,8 +62,8 @@ class PlgSystemCaslogin extends \Joomla\CMS\Plugin\CMSPlugin
     /**
      * Constructor.
      *
-     * @param   object  $subject  The object to observe
-     * @param   array   $config   An array that holds the plugin configuration
+     * @param object $subject The object to observe
+     * @param array $config An array that holds the plugin configuration
      *
      * @since   2.0.0
      */
@@ -89,9 +88,9 @@ class PlgSystemCaslogin extends \Joomla\CMS\Plugin\CMSPlugin
     /**
      * Get icons.
      *
-     * @param   string  $context  The calling context
+     * @param string $context The calling context
      *
-     * @return  array
+     * @return array
      *
      * @since   2.0.0
      */
@@ -123,9 +122,9 @@ class PlgSystemCaslogin extends \Joomla\CMS\Plugin\CMSPlugin
     /**
      * Get option.
      *
-     * @param   string  $context  The calling context
+     * @param string $context The calling context
      *
-     * @return  array
+     * @return array
      *
      * @since   2.0.0
      */
@@ -138,12 +137,12 @@ class PlgSystemCaslogin extends \Joomla\CMS\Plugin\CMSPlugin
     }
 
     /**
-     * Prepare Form
+     * Prepare Form.
      *
-     * @param   Form  $form  The form to be altered.
-     * @param   array  $data  The associated data for the form.
+     * @param Form $form the form to be altered
+     * @param array $data the associated data for the form
      *
-     * @return	boolean
+     * @return bool
      *
      * @since	2.0.0
      */
@@ -165,9 +164,7 @@ class PlgSystemCaslogin extends \Joomla\CMS\Plugin\CMSPlugin
     }
 
     /**
-     * After initialise event
-     *
-     * @return	void
+     * After initialise event.
      *
      * @since	2.0.0
      */
@@ -180,7 +177,7 @@ class PlgSystemCaslogin extends \Joomla\CMS\Plugin\CMSPlugin
         }
 
         // Get the application
-        /** @var \Joomla\CMS\Application\CMSApplication */
+        /** @var Joomla\CMS\Application\CMSApplication */
         $app = Factory::getApplication();
 
         // Get the dbo
@@ -504,12 +501,12 @@ class PlgSystemCaslogin extends \Joomla\CMS\Plugin\CMSPlugin
     }
 
     /**
-     * Get Login URL
+     * Get Login URL.
      *
-     * @param   object  $server   The CAS server.
-     * @param   string  $service  The asked service.
+     * @param object $server the CAS server
+     * @param string $service the asked service
      *
-     * @return	void|string
+     * @return void|string
      *
      * @since	2.0.0
      */
@@ -529,11 +526,11 @@ class PlgSystemCaslogin extends \Joomla\CMS\Plugin\CMSPlugin
     }
 
     /**
-     * External Login event
+     * External Login event.
      *
-     * @param   AuthenticationResponse  $response  Response to the login process
+     * @param AuthenticationResponse $response Response to the login process
      *
-     * @return	void|true
+     * @return void|true
      *
      * @since	2.0.0
      */
@@ -667,11 +664,11 @@ class PlgSystemCaslogin extends \Joomla\CMS\Plugin\CMSPlugin
     }
 
     /**
-     * Get server URL
+     * Get server URL.
      *
-     * @param   Registry  $params  The CAS parameters.
+     * @param Registry $params the CAS parameters
      *
-     * @return	string  The server URL
+     * @return string The server URL
      *
      * @since	2.0.0
      */
@@ -688,17 +685,17 @@ class PlgSystemCaslogin extends \Joomla\CMS\Plugin\CMSPlugin
     }
 
     /**
-     * Redirect to CAS logout URL when a user logs out
+     * Redirect to CAS logout URL when a user logs out.
      *
-     * @param   array  $options  Array holding options (username, ...).
+     * @param array $options Array holding options (username, ...).
      *
-     * @return	boolean  True on success
+     * @return bool True on success
      *
      * @since	3.2.0
      */
     public function onUserAfterLogout($options)
     {
-        /** @var \Joomla\CMS\Application\CMSApplication */
+        /** @var Joomla\CMS\Application\CMSApplication */
         $app = Factory::getApplication();
         $local = $app->input->get('local');
         // Local logout only?
@@ -760,7 +757,8 @@ class PlgSystemCaslogin extends \Joomla\CMS\Plugin\CMSPlugin
     }
 
     /**
-     * @param Registry $params The CAS parameters.
+     * @param Registry $params the CAS parameters
+     *
      * @return string|bool
      */
     private function verifyServerIsAlive($params)
@@ -783,9 +781,10 @@ class PlgSystemCaslogin extends \Joomla\CMS\Plugin\CMSPlugin
     }
 
     /**
-     * @param Registry $params The CAS parameters.
+     * @param Registry $params the CAS parameters
      * @param string $ticket
      * @param string $service
+     *
      * @return string|bool
      */
     private function verifyServiceTicket($params, $ticket, $service)

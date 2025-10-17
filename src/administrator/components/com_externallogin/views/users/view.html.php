@@ -1,13 +1,12 @@
 <?php
 
 /**
- * @package     External_Login
- * @subpackage  Component
  * @author      Christophe Demko <chdemko@gmail.com>
  * @author      Ioannis Barounis <contact@johnbarounis.com>
  * @author      Alexandre Gandois <alexandre.gandois@etudiant.univ-lr.fr>
  * @copyright   Copyright (C) 2008-2018 Christophe Demko, Ioannis Barounis, Alexandre Gandois. All rights reserved.
  * @license     GNU General Public License, version 2. http://www.gnu.org/licenses/gpl-2.0.html
+ *
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
@@ -22,17 +21,14 @@ use Joomla\CMS\Toolbar\ToolbarHelper;
 defined('_JEXEC') or die;
 
 /**
- * Users View of External Login component
- *
- * @package     External_Login
- * @subpackage  Component
+ * Users View of External Login component.
  *
  * @since       2.1.0
  */
-class ExternalloginViewUsers extends \Joomla\CMS\MVC\View\HtmlView
+class ExternalloginViewUsers extends Joomla\CMS\MVC\View\HtmlView
 {
     /**
-     * The model state
+     * The model state.
      *
      * @var object
      */
@@ -46,28 +42,27 @@ class ExternalloginViewUsers extends \Joomla\CMS\MVC\View\HtmlView
     protected $items;
 
     /**
-     * The pagination object
+     * The pagination object.
      *
-     * @var \Joomla\CMS\Pagination\Pagination
+     * @var Joomla\CMS\Pagination\Pagination
      */
     protected $pagination;
 
     /**
-     * The HTML for displaying sidebar
+     * The HTML for displaying sidebar.
      *
-     * @var    string
+     * @var string
      */
     protected $sidebar;
 
     /**
      * Execute and display a layout script.
      *
-     * @param   string  $tpl  The name of the layout file to parse.
+     * @param string $tpl the name of the layout file to parse
      *
-     * @return  void|bool
+     * @return void|bool
      *
      * @see     Overload JViewLegacy::display
-     *
      * @since   2.1.0
      */
     public function display($tpl = null)
@@ -98,9 +93,7 @@ class ExternalloginViewUsers extends \Joomla\CMS\MVC\View\HtmlView
     }
 
     /**
-     * Setting the toolbar
-     *
-     * @return  void
+     * Setting the toolbar.
      *
      * @since   2.1.0
      */
@@ -218,9 +211,9 @@ class ExternalloginViewUsers extends \Joomla\CMS\MVC\View\HtmlView
     }
 
     /**
-     * Returns an array of fields the table can be sorted by
+     * Returns an array of fields the table can be sorted by.
      *
-     * @return  array  Array containing the field name to sort by as the key and display text as value
+     * @return array Array containing the field name to sort by as the key and display text as value
      *
      * @since   3.0
      */

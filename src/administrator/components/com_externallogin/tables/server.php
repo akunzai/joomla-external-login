@@ -1,13 +1,12 @@
 <?php
 
 /**
- * @package     External_Login
- * @subpackage  Component
  * @author      Christophe Demko <chdemko@gmail.com>
  * @author      Ioannis Barounis <contact@johnbarounis.com>
  * @author      Alexandre Gandois <alexandre.gandois@etudiant.univ-lr.fr>
  * @copyright   Copyright (C) 2008-2018 Christophe Demko, Ioannis Barounis, Alexandre Gandois. All rights reserved.
  * @license     GNU General Public License, version 2. http://www.gnu.org/licenses/gpl-2.0.html
+ *
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
@@ -17,17 +16,14 @@ use Joomla\Registry\Registry;
 defined('_JEXEC') or die;
 
 /**
- * Server Table class of External Login component
- *
- * @package     External_Login
- * @subpackage  Component
+ * Server Table class of External Login component.
  *
  * @since       0.0.1
  */
-class ExternalloginTableServer extends \Joomla\CMS\Table\Table
+class ExternalloginTableServer extends Joomla\CMS\Table\Table
 {
     /**
-     * The parameter object
+     * The parameter object.
      *
      * @var Registry
      */
@@ -39,12 +35,11 @@ class ExternalloginTableServer extends \Joomla\CMS\Table\Table
     public $ordering;
 
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param   object  $db  Database connector object
+     * @param object $db Database connector object
      *
      * @see     JTable::__construct
-     *
      * @since   2.0.0
      */
     public function __construct(&$db)
@@ -55,14 +50,13 @@ class ExternalloginTableServer extends \Joomla\CMS\Table\Table
     /**
      * Overloaded load function.
      *
-     * @param   mixed    $keys   An optional primary key value to load the row by, or an array of fields to match.  If not
-     * set the instance property value is used.
-     * @param   boolean  $reset  True to reset the default values before loading the new row.
+     * @param mixed $keys An optional primary key value to load the row by, or an array of fields to match.  If not
+     *                    set the instance property value is used.
+     * @param bool $reset true to reset the default values before loading the new row
      *
-     * @return  boolean  True on success.
+     * @return bool true on success
      *
      * @see     JTable::load
-     *
      * @since   2.0.0
      */
     public function load($keys = null, $reset = true)
@@ -79,9 +73,9 @@ class ExternalloginTableServer extends \Joomla\CMS\Table\Table
     /**
      * Overloaded store function.
      *
-     * @param   boolean  $updateNulls  True to update fields even if they are null.
+     * @param bool $updateNulls true to update fields even if they are null
      *
-     * @return  boolean  True on success.
+     * @return bool true on success
      *
      * @link	http://docs.joomla.org/JTable/store
      * @since   2.0.0

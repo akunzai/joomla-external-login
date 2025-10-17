@@ -1,13 +1,12 @@
 <?php
 
 /**
- * @package     External_Login
- * @subpackage  Component
  * @author      Christophe Demko <chdemko@gmail.com>
  * @author      Ioannis Barounis <contact@johnbarounis.com>
  * @author      Alexandre Gandois <alexandre.gandois@etudiant.univ-lr.fr>
  * @copyright   Copyright (C) 2008-2018 Christophe Demko, Ioannis Barounis, Alexandre Gandois. All rights reserved.
  * @license     GNU General Public License, version 2. http://www.gnu.org/licenses/gpl-2.0.html
+ *
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
@@ -23,9 +22,6 @@ defined('_JEXEC') or die;
 /**
  * External Login component helper.
  *
- * @package     External_Login
- * @subpackage  Component
- *
  * @since       2.0.0
  */
 abstract class ExternalloginHelper
@@ -33,9 +29,7 @@ abstract class ExternalloginHelper
     /**
      * Configure the Linkbar.
      *
-     * @param   string  $submenu  the name of the current submenu
-     *
-     * @return  void
+     * @param string $submenu the name of the current submenu
      *
      * @since  0.0.1
      */
@@ -76,9 +70,9 @@ abstract class ExternalloginHelper
     }
 
     /**
-     * Get a list of enabled plugins
+     * Get a list of enabled plugins.
      *
-     * @return  array  array of plugins
+     * @return array array of plugins
      *
      * @since  2.0.0
      */
@@ -90,11 +84,11 @@ abstract class ExternalloginHelper
     }
 
     /**
-     * Get a list of servers
+     * Get a list of servers.
      *
-     * @param   array  $config  Array of options
+     * @param array $config Array of options
      *
-     * @return  array  array of servers
+     * @return array array of servers
      *
      * @since  2.1.0
      */
@@ -117,9 +111,9 @@ abstract class ExternalloginHelper
     }
 
     /**
-     * Get a list of priorities
+     * Get a list of priorities.
      *
-     * @return  array  array of priorities
+     * @return array array of priorities
      *
      * @since  2.1.0
      */
@@ -135,9 +129,9 @@ abstract class ExternalloginHelper
     }
 
     /**
-     * Get a list of categories
+     * Get a list of categories.
      *
-     * @return  array  array of categories
+     * @return array array of categories
      *
      * @since  2.1.0
      */
@@ -155,12 +149,12 @@ abstract class ExternalloginHelper
     }
 
     /**
-     * Get a list of groups from a string
+     * Get a list of groups from a string.
      *
-     * @param   string  $path       Group path
-     * @param   string  $separator  Separator string
+     * @param string $path Group path
+     * @param string $separator Separator string
      *
-     * @return  array   Array of groups
+     * @return array Array of groups
      */
     public static function getGroups($path, $separator = '/')
     {
@@ -205,9 +199,9 @@ abstract class ExternalloginHelper
     /**
      * Compute a redirect URL.
      *
-     * @param   string|integer  $redirect  An menu item id or an urlencoded url.
+     * @param string|int $redirect an menu item id or an urlencoded url
      *
-     * @return  string  The url from the $redirect parameter
+     * @return string The url from the $redirect parameter
      *
      * @since  3.1.0
      */
@@ -217,7 +211,7 @@ abstract class ExternalloginHelper
             return urldecode($redirect);
         }
 
-        /** @var \Joomla\CMS\Application\CMSApplication */
+        /** @var Joomla\CMS\Application\CMSApplication */
         $app = Factory::getApplication();
         $item = $app->getMenu()->getItem($redirect);
 

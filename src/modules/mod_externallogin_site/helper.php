@@ -1,13 +1,12 @@
 <?php
 
 /**
- * @package     External_Login
- * @subpackage  External Login Module
  * @author      Christophe Demko <chdemko@gmail.com>
  * @author      Ioannis Barounis <contact@johnbarounis.com>
  * @author      Alexandre Gandois <alexandre.gandois@etudiant.univ-lr.fr>
  * @copyright   Copyright (C) 2008-2018 Christophe Demko, Ioannis Barounis, Alexandre Gandois. All rights reserved.
  * @license     GNU General Public License, version 2. http://www.gnu.org/licenses/gpl-2.0.html
+ *
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
@@ -23,25 +22,22 @@ use Joomla\Registry\Registry;
 defined('_JEXEC') or die;
 
 /**
- * Module helper class
- *
- * @package     External_Login
- * @subpackage  External Login Module
+ * Module helper class.
  *
  * @since       2.0.0
  */
 abstract class ModExternalloginsiteHelper
 {
     /**
-     * Get the URLs of servers
+     * Get the URLs of servers.
      *
-     * @param   Registry  $params  Module parameters
+     * @param Registry $params Module parameters
      *
-     * @return  array  Array of URL
+     * @return array Array of URL
      */
     public static function getListServersURL($params)
     {
-        /** @var \Joomla\CMS\Application\CMSApplication */
+        /** @var Joomla\CMS\Application\CMSApplication */
         $app = Factory::getApplication();
         $redirect = $app->input->get('redirect', $app->getUserState('users.login.form.data.return'));
 
@@ -83,15 +79,15 @@ abstract class ModExternalloginsiteHelper
     }
 
     /**
-     * Retrieve the url where the user should be returned after logging out
+     * Retrieve the url where the user should be returned after logging out.
      *
-     * @param   \Joomla\Registry\Registry  $params  module parameters
+     * @param Registry $params module parameters
      *
      * @return string
      */
     public static function getLogoutUrl($params)
     {
-        /** @var \Joomla\CMS\Application\CMSApplication */
+        /** @var Joomla\CMS\Application\CMSApplication */
         $app = Factory::getApplication();
         $item = $app->getMenu()->getItem(
             $params->get(

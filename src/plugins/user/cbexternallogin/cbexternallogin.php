@@ -1,11 +1,10 @@
 <?php
 
 /**
- * @package     External_Login
- * @subpackage  CAS Plugin
  * @author      Christophe Demko <chdemko@gmail.com>
  * @copyright   Copyright (C) 2008-2018 Christophe Demko. All rights reserved.
  * @license     GNU General Public License, version 2. http://www.gnu.org/licenses/gpl-2.0.html
+ *
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
@@ -19,18 +18,15 @@ defined('_JEXEC') or die;
 /**
  * External Login - Community Builder External Login Plugin.
  *
- * @package     External_Login
- * @subpackage  Community Builder External Login Plugin
- *
  * @since       2.0.0
  */
-class PlgUserCbexternallogin extends \Joomla\CMS\Plugin\CMSPlugin
+class PlgUserCbexternallogin extends Joomla\CMS\Plugin\CMSPlugin
 {
     /**
      * Constructor.
      *
-     * @param   object  $subject  The object to observe
-     * @param   array   $config   An array that holds the plugin configuration
+     * @param object $subject The object to observe
+     * @param array $config An array that holds the plugin configuration
      *
      * @since   2.0.0
      */
@@ -41,12 +37,12 @@ class PlgUserCbexternallogin extends \Joomla\CMS\Plugin\CMSPlugin
     }
 
     /**
-     * This method should handle any login logic and report back to the subject
+     * This method should handle any login logic and report back to the subject.
      *
-     * @param   array  $user     Holds the user data
-     * @param   array  $options  Array holding options (remember, autoregister, group)
+     * @param array $user Holds the user data
+     * @param array $options Array holding options (remember, autoregister, group)
      *
-     * @return	boolean	True on success
+     * @return bool True on success
      *
      * @since	2.0.0
      */

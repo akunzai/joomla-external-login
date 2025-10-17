@@ -1,13 +1,12 @@
 <?php
 
 /**
- * @package     External_Login
- * @subpackage  Component
  * @author      Christophe Demko <chdemko@gmail.com>
  * @author      Ioannis Barounis <contact@johnbarounis.com>
  * @author      Alexandre Gandois <alexandre.gandois@etudiant.univ-lr.fr>
  * @copyright   Copyright (C) 2008-2018 Christophe Demko, Ioannis Barounis, Alexandre Gandois. All rights reserved.
  * @license     GNU General Public License, version 2. http://www.gnu.org/licenses/gpl-2.0.html
+ *
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
@@ -19,9 +18,9 @@ defined('_JEXEC') or die;
 /**
  * Function to build a External Login URL route.
  *
- * @param   array  $query  The array of query string values for which to build a route.
+ * @param array $query the array of query string values for which to build a route
  *
- * @return  array  The URL route with segments represented as an array.
+ * @return array the URL route with segments represented as an array
  *
  * @since	2.0.0
  */
@@ -38,7 +37,7 @@ function externalloginBuildRoute(&$query)
     // Get the relevant menu items if not loaded.
     if (empty($items)) {
         // Get all relevant menu items.
-        /** @var \Joomla\CMS\Application\CMSApplication */
+        /** @var Joomla\CMS\Application\CMSApplication */
         $app    = Factory::getApplication();
         $menu    = $app->getMenu();
         $items    = $menu->getItems('component', 'com_externallogin');
@@ -73,9 +72,9 @@ function externalloginBuildRoute(&$query)
 /**
  * Function to parse a External Login URL route.
  *
- * @param   array  $segments  The URL route with segments represented as an array.
+ * @param array $segments the URL route with segments represented as an array
  *
- * @return  array|void  The array of variables to set in the request.
+ * @return array|void the array of variables to set in the request
  *
  * @since	2.0.0
  */

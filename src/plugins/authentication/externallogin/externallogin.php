@@ -1,13 +1,12 @@
 <?php
 
 /**
- * @package     External_Login
- * @subpackage  External Login Plugin
  * @author      Christophe Demko <chdemko@gmail.com>
  * @author      Ioannis Barounis <contact@johnbarounis.com>
  * @author      Alexandre Gandois <alexandre.gandois@etudiant.univ-lr.fr>
  * @copyright   Copyright (C) 2008-2018 Christophe Demko, Ioannis Barounis, Alexandre Gandois. All rights reserved.
  * @license     GNU General Public License, version 2. http://www.gnu.org/licenses/gpl-2.0.html
+ *
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
@@ -33,18 +32,15 @@ require_once JPATH_ADMINISTRATOR . '/components/com_externallogin/log/entry.php'
 /**
  * External Login - External Login plugin.
  *
- * @package     External_Login
- * @subpackage  External Login Plugin
- *
  * @since       2.0.0
  */
-class PlgAuthenticationExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
+class PlgAuthenticationExternallogin extends Joomla\CMS\Plugin\CMSPlugin
 {
     /**
      * Constructor.
      *
-     * @param   object  $subject  The object to observe
-     * @param   array   $config   An array that holds the plugin configuration
+     * @param object $subject The object to observe
+     * @param array $config An array that holds the plugin configuration
      *
      * @since   2.0.0
      */
@@ -60,12 +56,12 @@ class PlgAuthenticationExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
     }
 
     /**
-     * This method should handle any authorisation and report back to the subject
+     * This method should handle any authorisation and report back to the subject.
      *
-     * @param   AuthenticationResponse  $response  Authentication response object
-     * @param   array            $options   Array of extra options
+     * @param AuthenticationResponse $response Authentication response object
+     * @param array $options Array of extra options
      *
-     * @return  AuthenticationResponse  The response
+     * @return AuthenticationResponse The response
      *
      * @since   3.1.1.0
      */
@@ -120,13 +116,13 @@ class PlgAuthenticationExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
     }
 
     /**
-     * This method should handle any authentication and report back to the subject
+     * This method should handle any authentication and report back to the subject.
      *
-     * @param   array            $credentials  Array holding the user credentials
-     * @param   array            $options      Array of extra options
-     * @param   AuthenticationResponse  $response     Authentication response object
+     * @param array $credentials Array holding the user credentials
+     * @param array $options Array of extra options
+     * @param AuthenticationResponse $response Authentication response object
      *
-     * @return	boolean
+     * @return bool
      */
     public function onUserAuthenticate($credentials, $options, &$response)
     {
@@ -143,6 +139,7 @@ class PlgAuthenticationExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
 
     /**
      * @param AuthenticationResponse $response
+     *
      * @return AuthenticationResponse
      */
     private function createNewUser($response)
@@ -226,6 +223,7 @@ class PlgAuthenticationExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
     /**
      * @param AuthenticationResponse $response
      * @param int $userId
+     *
      * @return AuthenticationResponse
      */
     private function updateUser($response, $userId)
@@ -308,10 +306,10 @@ class PlgAuthenticationExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
     }
 
     /**
-     *
      * @param Registry $params
      * @param string $username
      * @param string $email
+     *
      * @return bool
      */
     private function isUserBlocked($params, $username, $email)
@@ -324,10 +322,10 @@ class PlgAuthenticationExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
     }
 
     /**
-     *
      * @param AuthenticationResponse $response
      * @param string|null $redirection
      * @param int $status
+     *
      * @return AuthenticationResponse
      */
     private function userLoginFail(
@@ -336,7 +334,7 @@ class PlgAuthenticationExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
         $status = Authentication::STATUS_DENIED | Authentication::STATUS_UNKNOWN
     ) {
         if (!empty($redirection)) {
-            /** @var \Joomla\CMS\Application\CMSApplication */
+            /** @var Joomla\CMS\Application\CMSApplication */
             $app = Factory::getApplication();
             $app->setUserState('com_externallogin.redirect', $redirection);
         }
@@ -348,7 +346,6 @@ class PlgAuthenticationExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
      * @param AuthenticationResponse $response
      * @param int $userId
      * @param bool $isSkipExisting
-     * @return void
      */
     private function addLoginRecord($response, $userId, $isSkipExisting = false)
     {

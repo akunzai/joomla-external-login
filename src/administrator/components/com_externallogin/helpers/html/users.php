@@ -1,13 +1,12 @@
 <?php
 
 /**
- * @package     External_Login
- * @subpackage  Component
  * @author      Christophe Demko <chdemko@gmail.com>
  * @author      Ioannis Barounis <contact@johnbarounis.com>
  * @author      Alexandre Gandois <alexandre.gandois@etudiant.univ-lr.fr>
  * @copyright   Copyright (C) 2008-2018 Christophe Demko, Ioannis Barounis, Alexandre Gandois. All rights reserved.
  * @license     GNU General Public License, version 2. http://www.gnu.org/licenses/gpl-2.0.html
+ *
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
@@ -19,24 +18,20 @@ defined('_JEXEC') or die;
 /**
  * External Login component Html helper.
  *
- * @package     External_Login
- * @subpackage  Component
- *
  * @since       2.1.0
  */
 abstract class ExternalloginHtmlUsers
 {
     /**
-     * Returns a published state on a grid
+     * Returns a published state on a grid.
      *
-     * @param   integer  $value    The state value.
-     * @param   integer  $i        The row index
-     * @param   boolean  $enabled  An optional setting for access control on the action.
+     * @param int $value the state value
+     * @param int $i The row index
+     * @param bool $enabled an optional setting for access control on the action
      *
-     * @return  string  The Html code
+     * @return string The Html code
      *
      * @see JHtmlJGrid::state
-     *
      * @since   2.1.0
      */
     public static function joomla($value, $i, $enabled = true)
@@ -66,16 +61,15 @@ abstract class ExternalloginHtmlUsers
     }
 
     /**
-     * Returns a published state on a grid
+     * Returns a published state on a grid.
      *
-     * @param   integer  $value    The state value.
-     * @param   integer  $i        The row index
-     * @param   boolean  $enabled  An optional setting for access control on the action.
+     * @param int $value the state value
+     * @param int $i The row index
+     * @param bool $enabled an optional setting for access control on the action
      *
-     * @return  string  The Html code
+     * @return string The Html code
      *
      * @see JHtmlJGrid::state
-     *
      * @since   2.1.0
      */
     public static function externallogin($value, $i, $enabled = true)

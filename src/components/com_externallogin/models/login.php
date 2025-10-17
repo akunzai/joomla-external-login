@@ -1,13 +1,12 @@
 <?php
 
 /**
- * @package     External_Login
- * @subpackage  Component
  * @author      Christophe Demko <chdemko@gmail.com>
  * @author      Ioannis Barounis <contact@johnbarounis.com>
  * @author      Alexandre Gandois <alexandre.gandois@etudiant.univ-lr.fr>
  * @copyright   Copyright (C) 2008-2018 Christophe Demko, Ioannis Barounis, Alexandre Gandois. All rights reserved.
  * @license     GNU General Public License, version 2. http://www.gnu.org/licenses/gpl-2.0.html
+ *
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
@@ -20,32 +19,26 @@ use Joomla\Registry\Registry;
 defined('_JEXEC') or die;
 
 /**
- * Login Model of External Login component
- *
- * @package     External_Login
- * @subpackage  Component
+ * Login Model of External Login component.
  *
  * @since       2.0.0
  */
-class ExternalloginModelLogin extends \Joomla\CMS\MVC\Model\ListModel
+class ExternalloginModelLogin extends Joomla\CMS\MVC\Model\ListModel
 {
     /**
      * Method to auto-populate the model state.
      *
-     * @param   string|null  $ordering   Column for ordering
-     * @param   string|null  $direction  Direction of ordering
-     *
-     * @return  void
+     * @param string|null $ordering Column for ordering
+     * @param string|null $direction Direction of ordering
      *
      * @note  Calling getState in this method will result in recursion.
      *
      * @see  JModelList::populateState
-     *
      * @since  2.0.0
      */
     protected function populateState($ordering = null, $direction = null)
     {
-        /** @var \Joomla\CMS\Application\CMSApplication */
+        /** @var Joomla\CMS\Application\CMSApplication */
         $app = Factory::getApplication();
         // Adjust the context to support modal layouts.
         if ($layout = $app->input->get('layout')) {
@@ -64,10 +57,9 @@ class ExternalloginModelLogin extends \Joomla\CMS\MVC\Model\ListModel
     /**
      * Method to get a JDatabaseQuery object for retrieving the data set from a database.
      *
-     * @return  object  A JDatabaseQuery object to retrieve the data set.
+     * @return object a JDatabaseQuery object to retrieve the data set
      *
      * @see  JModelList::getListQuery
-     *
      * @since  2.0.0
      */
     protected function getListQuery()
@@ -105,14 +97,14 @@ class ExternalloginModelLogin extends \Joomla\CMS\MVC\Model\ListModel
     /**
      * Method to get a list of servers.
      *
-     * @return  array  A list of servers.
+     * @return array a list of servers
      *
      * @since  2.0.0
      */
     public function getItems()
     {
         $items = parent::getItems();
-        /** @var \Joomla\CMS\Application\CMSApplication */
+        /** @var Joomla\CMS\Application\CMSApplication */
         $app = Factory::getApplication();
         $menu = $app->getMenu()->getActive();
 

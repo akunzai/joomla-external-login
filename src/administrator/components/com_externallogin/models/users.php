@@ -1,13 +1,12 @@
 <?php
 
 /**
- * @package     External_Login
- * @subpackage  Component
  * @author      Christophe Demko <chdemko@gmail.com>
  * @author      Ioannis Barounis <contact@johnbarounis.com>
  * @author      Alexandre Gandois <alexandre.gandois@etudiant.univ-lr.fr>
  * @copyright   Copyright (C) 2008-2018 Christophe Demko, Ioannis Barounis, Alexandre Gandois. All rights reserved.
  * @license     GNU General Public License, version 2. http://www.gnu.org/licenses/gpl-2.0.html
+ *
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
@@ -18,22 +17,18 @@ use Joomla\Database\DatabaseInterface;
 defined('_JEXEC') or die;
 
 /**
- * Servers Model of External Login component
- *
- * @package     External_Login
- * @subpackage  Component
+ * Servers Model of External Login component.
  *
  * @since       2.1.0
  */
-class ExternalloginModelUsers extends \Joomla\CMS\MVC\Model\ListModel
+class ExternalloginModelUsers extends Joomla\CMS\MVC\Model\ListModel
 {
     /**
      * Valid filter fields or ordering.
      *
-     * @var  array
+     * @var array
      *
      * @see  JModelList::$filter_fields
-     *
      * @since  2.1.0
      */
     protected $filter_fields = ['a.id', 'a.username', 'a.name', 'a.email', 's.title', 'e.ordering'];
@@ -41,15 +36,12 @@ class ExternalloginModelUsers extends \Joomla\CMS\MVC\Model\ListModel
     /**
      * Method to auto-populate the model state.
      *
-     * @param   string  $ordering   Table name for ordering
-     * @param   string  $direction  Direction for ordering
-     *
-     * @return  void
+     * @param string $ordering Table name for ordering
+     * @param string $direction Direction for ordering
      *
      * @note  Calling getState in this method will result in recursion.
      *
      * @see  JModelList::populateState
-     *
      * @since  2.1.0
      */
     protected function populateState($ordering = null, $direction = null)
@@ -81,10 +73,9 @@ class ExternalloginModelUsers extends \Joomla\CMS\MVC\Model\ListModel
     /**
      * Method to get a JDatabaseQuery object for retrieving the data set from a database.
      *
-     * @return  object  A JDatabaseQuery object to retrieve the data set.
+     * @return object a JDatabaseQuery object to retrieve the data set
      *
      * @see  JModelList::getListQuery
-     *
      * @since  2.1.0
      */
     protected function getListQuery()

@@ -1,13 +1,12 @@
 <?php
 
 /**
- * @package     External_Login
- * @subpackage  Component
  * @author      Christophe Demko <chdemko@gmail.com>
  * @author      Ioannis Barounis <contact@johnbarounis.com>
  * @author      Alexandre Gandois <alexandre.gandois@etudiant.univ-lr.fr>
  * @copyright   Copyright (C) 2008-2018 Christophe Demko, Ioannis Barounis, Alexandre Gandois. All rights reserved.
  * @license     GNU General Public License, version 2. http://www.gnu.org/licenses/gpl-2.0.html
+ *
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
@@ -23,24 +22,18 @@ use Joomla\Registry\Registry;
 defined('_JEXEC') or die;
 
 /**
- * Server Model of External Login component
- *
- * @package     External_Login
- * @subpackage  Component
+ * Server Model of External Login component.
  *
  * @since       2.0.0
  */
-class ExternalloginModelServer extends \Joomla\CMS\MVC\Model\ItemModel
+class ExternalloginModelServer extends Joomla\CMS\MVC\Model\ItemModel
 {
     /**
      * Method to auto-populate the model state.
      *
-     * @return  void
-     *
      * @note  Calling getState in this method will result in recursion.
      *
      * @see  JModel::populateState
-     *
      * @since  2.0.0
      */
     protected function populateState()
@@ -58,14 +51,13 @@ class ExternalloginModelServer extends \Joomla\CMS\MVC\Model\ItemModel
     /**
      * Returns a reference to the a Table object, always creating it.
      *
-     * @param   type    $type    The table type to instantiate
-     * @param   string  $prefix  A prefix for the table class name. Optional.
-     * @param   array   $config  Configuration array for model. Optional.
+     * @param type $type The table type to instantiate
+     * @param string $prefix A prefix for the table class name. Optional.
+     * @param array $config Configuration array for model. Optional.
      *
-     * @return	Table  A database object
+     * @return Table A database object
      *
      * @see     JModel::getTable
-     *
      * @since	2.0.0
      */
     public function getTable($type = 'Server', $prefix = 'ExternalloginTable', $config = [])
@@ -74,9 +66,9 @@ class ExternalloginModelServer extends \Joomla\CMS\MVC\Model\ItemModel
     }
 
     /**
-     * Returns the server
+     * Returns the server.
      *
-     * @return	Uri|string  the service URI
+     * @return Uri|string the service URI
      *
      * @since	2.0.0
      */
@@ -90,7 +82,7 @@ class ExternalloginModelServer extends \Joomla\CMS\MVC\Model\ItemModel
             throw new Exception(Text::_('COM_EXTERNALLOGIN_ERROR_SERVER_UNPUBLISHED'));
         }
 
-        /** @var \Joomla\CMS\Application\CMSApplication */
+        /** @var Joomla\CMS\Application\CMSApplication */
         $app = Factory::getApplication();
         $menu = $app->getMenu()->getActive();
 

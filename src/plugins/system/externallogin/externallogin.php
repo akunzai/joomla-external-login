@@ -1,13 +1,12 @@
 <?php
 
 /**
- * @package     External_Login
- * @subpackage  External Login Plugin
  * @author      Christophe Demko <chdemko@gmail.com>
  * @author      Ioannis Barounis <contact@johnbarounis.com>
  * @author      Alexandre Gandois <alexandre.gandois@etudiant.univ-lr.fr>
  * @copyright   Copyright (C) 2008-2018 Christophe Demko, Ioannis Barounis, Alexandre Gandois. All rights reserved.
  * @license     GNU General Public License, version 2. http://www.gnu.org/licenses/gpl-2.0.html
+ *
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
@@ -29,18 +28,15 @@ require_once JPATH_ADMINISTRATOR . '/components/com_externallogin/log/entry.php'
 /**
  * External Login - External Login plugin.
  *
- * @package     External_Login
- * @subpackage  External Login Plugin
- *
  * @since       2.0.0
  */
-class PlgSystemExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
+class PlgSystemExternallogin extends Joomla\CMS\Plugin\CMSPlugin
 {
     /**
      * Constructor.
      *
-     * @param   object  $subject  The object to observe
-     * @param   array   $config   An array that holds the plugin configuration
+     * @param object $subject The object to observe
+     * @param array $config An array that holds the plugin configuration
      *
      * @since   2.0.0
      */
@@ -56,16 +52,14 @@ class PlgSystemExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
     }
 
     /**
-     * After initialise event
-     *
-     * @return  void
+     * After initialise event.
      *
      * @since   2.0.0
      */
     public function onAfterInitialise()
     {
         // Get the application
-        /** @var \Joomla\CMS\Application\CMSApplication */
+        /** @var Joomla\CMS\Application\CMSApplication */
         $app = Factory::getApplication();
 
         // Get the router
@@ -76,32 +70,28 @@ class PlgSystemExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
     }
 
     /**
-     * After render event
-     *
-     * @return  void
+     * After render event.
      *
      * @since   3.1.0
      */
     public function onAfterRender()
     {
-        /** @var \Joomla\CMS\Application\CMSApplication */
+        /** @var Joomla\CMS\Application\CMSApplication */
         $app = Factory::getApplication();
         $app->setUserState('users.login.form.data.return', null);
     }
 
     /**
-     * Redirect to com_externallogin in case of login view
+     * Redirect to com_externallogin in case of login view.
      *
-     * @param   \Joomla\CMS\Router\Router  $router  Router
-     * @param   \Joomla\CMS\Uri\Uri     $uri     URI
-     *
-     * @return  void
+     * @param Joomla\CMS\Router\Router $router Router
+     * @param Joomla\CMS\Uri\Uri $uri URI
      *
      * @since   2.0.0
      */
     public function buildRule(&$router, &$uri)
     {
-        /** @var \Joomla\CMS\Application\CMSApplication */
+        /** @var Joomla\CMS\Application\CMSApplication */
         $app = Factory::getApplication();
 
         if (
@@ -127,15 +117,15 @@ class PlgSystemExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
     }
 
     /**
-     * Remove server information about a user
+     * Remove server information about a user.
      *
      * Method is called after user data is deleted from the database
      *
-     * @param   array    $user     Holds the user data
-     * @param   boolean  $success  True if user was successfully stored in the database
-     * @param   string   $msg      Message
+     * @param array $user Holds the user data
+     * @param bool $success True if user was successfully stored in the database
+     * @param string $msg Message
      *
-     * @return  boolean
+     * @return bool
      *
      * @since   2.0.0
      */
@@ -191,11 +181,11 @@ class PlgSystemExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
      *
      * This method sends a registration email to new users created in the backend.
      *
-     * @param   array    $old    Holds the old user data.
-     * @param   boolean  $isnew  True if a new user is stored.
-     * @param   array    $new    Holds the new user data.
+     * @param array $old holds the old user data
+     * @param bool $isnew true if a new user is stored
+     * @param array $new holds the new user data
      *
-     * @return  boolean
+     * @return bool
      *
      * @since   2.0.0
      */

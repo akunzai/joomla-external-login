@@ -1,13 +1,12 @@
 <?php
 
 /**
- * @package     External_Login
- * @subpackage  Component
  * @author      Christophe Demko <chdemko@gmail.com>
  * @author      Ioannis Barounis <contact@johnbarounis.com>
  * @author      Alexandre Gandois <alexandre.gandois@etudiant.univ-lr.fr>
  * @copyright   Copyright (C) 2008-2018 Christophe Demko, Ioannis Barounis, Alexandre Gandois. All rights reserved.
  * @license     GNU General Public License, version 2. http://www.gnu.org/licenses/gpl-2.0.html
+ *
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
@@ -18,45 +17,41 @@ use Joomla\CMS\Component\ComponentHelper;
 defined('_JEXEC') or die;
 
 /**
- * Login View of External Login component
- *
- * @package     External_Login
- * @subpackage  Component
+ * Login View of External Login component.
  *
  * @since       2.0.0
  */
-class ExternalloginViewLogin extends \Joomla\CMS\MVC\View\HtmlView
+class ExternalloginViewLogin extends Joomla\CMS\MVC\View\HtmlView
 {
     /**
-     * The model state
+     * The model state.
      *
      * @var object
      */
     protected $state;
 
     /**
-     * An array of items
+     * An array of items.
      *
      * @var array
      */
     protected $items;
 
     /**
-     * The parameter object
+     * The parameter object.
      *
-     * @var \Joomla\Registry\Registry
+     * @var Joomla\Registry\Registry
      */
     protected $params;
 
     /**
      * Execute and display a layout script.
      *
-     * @param   string  $tpl  The name of the layout file to parse.
+     * @param string $tpl the name of the layout file to parse
      *
-     * @return  void|bool
+     * @return void|bool
      *
      * @see     Overload JViewLegacy::display
-     *
      * @since   2.0.0
      */
     public function display($tpl = null)
@@ -68,7 +63,7 @@ class ExternalloginViewLogin extends \Joomla\CMS\MVC\View\HtmlView
 
         // Check for errors.
         if (count($errors = $this->get('Errors'))) {
-            /** @var \Joomla\CMS\Application\CMSApplication */
+            /** @var Joomla\CMS\Application\CMSApplication */
             $app = Factory::getApplication();
             $app->enqueueMessage(implode('<br />', $errors), 'error');
             $app->redirect('index.php');

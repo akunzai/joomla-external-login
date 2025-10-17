@@ -1,13 +1,12 @@
 <?php
 
 /**
- * @package     External_Login
- * @subpackage  Component
  * @author      Christophe Demko <chdemko@gmail.com>
  * @author      Ioannis Barounis <contact@johnbarounis.com>
  * @author      Alexandre Gandois <alexandre.gandois@etudiant.univ-lr.fr>
  * @copyright   Copyright (C) 2008-2018 Christophe Demko, Ioannis Barounis, Alexandre Gandois. All rights reserved.
  * @license     GNU General Public License, version 2. http://www.gnu.org/licenses/gpl-2.0.html
+ *
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
@@ -20,25 +19,21 @@ use Joomla\CMS\Session\Session;
 defined('_JEXEC') or die;
 
 /**
- * Server Controller of External Login component
- *
- * @package     External_Login
- * @subpackage  Component
+ * Server Controller of External Login component.
  *
  * @since       2.0.0
  */
-class ExternalloginControllerServer extends \Joomla\CMS\MVC\Controller\FormController
+class ExternalloginControllerServer extends Joomla\CMS\MVC\Controller\FormController
 {
     /**
      * Gets the URL arguments to append to an item redirect.
      *
-     * @param   integer  $recordId  The primary key id for the item.
-     * @param   string   $urlVar    The name of the URL variable for the id.
+     * @param int $recordId the primary key id for the item
+     * @param string $urlVar the name of the URL variable for the id
      *
-     * @return  string  The arguments to append to the redirect URL.
+     * @return string the arguments to append to the redirect URL
      *
      * @see  JControllerForm::getRedirectToItemAppend
-     *
      * @since   2.0.0
      */
     protected function getRedirectToItemAppend($recordId = null, $urlVar = 'id')
@@ -54,9 +49,9 @@ class ExternalloginControllerServer extends \Joomla\CMS\MVC\Controller\FormContr
     }
 
     /**
-     * Download users
+     * Download users.
      *
-     * @return  boolean  True on success
+     * @return bool True on success
      */
     public function download()
     {
@@ -72,9 +67,7 @@ class ExternalloginControllerServer extends \Joomla\CMS\MVC\Controller\FormContr
     }
 
     /**
-     * Upload users
-     *
-     * @return  void
+     * Upload users.
      */
     public function upload()
     {

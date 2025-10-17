@@ -1,13 +1,12 @@
 <?php
 
 /**
- * @package     External_Login
- * @subpackage  Component
  * @author      Christophe Demko <chdemko@gmail.com>
  * @author      Ioannis Barounis <contact@johnbarounis.com>
  * @author      Alexandre Gandois <alexandre.gandois@etudiant.univ-lr.fr>
  * @copyright   Copyright (C) 2008-2018 Christophe Demko, Ioannis Barounis, Alexandre Gandois. All rights reserved.
  * @license     GNU General Public License, version 2. http://www.gnu.org/licenses/gpl-2.0.html
+ *
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
@@ -20,16 +19,14 @@ use Joomla\CMS\Toolbar\ToolbarHelper;
 defined('_JEXEC') or die;
 
 /**
- * About View of External Login component
+ * About View of External Login component.
  *
- * @package     External_Login
- * @subpackage  Component
  * @since       2.0.0
  */
-class ExternalloginViewAbout extends \Joomla\CMS\MVC\View\HtmlView
+class ExternalloginViewAbout extends Joomla\CMS\MVC\View\HtmlView
 {
     /**
-     * The HTML for displaying sidebar
+     * The HTML for displaying sidebar.
      *
      * @var string
      */
@@ -38,12 +35,11 @@ class ExternalloginViewAbout extends \Joomla\CMS\MVC\View\HtmlView
     /**
      * Execute and display a layout script.
      *
-     * @param   string  $tpl  The name of the layout file to parse.
+     * @param string $tpl the name of the layout file to parse
      *
-     * @return  void|bool
+     * @return void|bool
      *
      * @see     Overload JViewLegacy::display
-     *
      * @since   2.0.0
      */
     public function display($tpl = null)
@@ -58,9 +54,7 @@ class ExternalloginViewAbout extends \Joomla\CMS\MVC\View\HtmlView
     }
 
     /**
-     * Setting the toolbar
-     *
-     * @return  void
+     * Setting the toolbar.
      *
      * @since   2.0.0
      */

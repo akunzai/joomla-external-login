@@ -1,13 +1,12 @@
 <?php
 
 /**
- * @package     External_Login
- * @subpackage  Component
  * @author      Christophe Demko <chdemko@gmail.com>
  * @author      Ioannis Barounis <contact@johnbarounis.com>
  * @author      Alexandre Gandois <alexandre.gandois@etudiant.univ-lr.fr>
  * @copyright   Copyright (C) 2008-2018 Christophe Demko, Ioannis Barounis, Alexandre Gandois. All rights reserved.
  * @license     GNU General Public License, version 2. http://www.gnu.org/licenses/gpl-2.0.html
+ *
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
@@ -19,19 +18,17 @@ use Joomla\CMS\Session\Session;
 defined('_JEXEC') or die;
 
 /**
- * Logs Controller of External Login component
- *
- * @package     External_Login
- * @subpackage  Component
+ * Logs Controller of External Login component.
  *
  * @since       2.1.0
  */
-class ExternalloginControllerLogs extends \Joomla\CMS\MVC\Controller\AdminController
+class ExternalloginControllerLogs extends Joomla\CMS\MVC\Controller\AdminController
 {
     /**
      * The prefix to use with controller messages.
      *
-     * @var    string
+     * @var string
+     *
      * @since  2.1.0
      */
     protected $text_prefix = 'COM_EXTERNALLOGIN_LOGS';
@@ -39,14 +36,13 @@ class ExternalloginControllerLogs extends \Joomla\CMS\MVC\Controller\AdminContro
     /**
      * Proxy for getModel.
      *
-     * @param   string      $name    Model name
-     * @param   string      $prefix  Model prefix
-     * @param   array|null  $config  Array of options
+     * @param string $name Model name
+     * @param string $prefix Model prefix
+     * @param array|null $config Array of options
      *
-     * @return  \Joomla\CMS\MVC\Model\BaseDatabaseModel
+     * @return Joomla\CMS\MVC\Model\BaseDatabaseModel
      *
      * @see     JControllerAdmin::getModel
-     *
      * @since   2.1.0
      */
     public function getModel($name = 'Log', $prefix = 'ExternalloginModel', $config = null)
@@ -55,9 +51,7 @@ class ExternalloginControllerLogs extends \Joomla\CMS\MVC\Controller\AdminContro
     }
 
     /**
-     * Delete logs
-     *
-     * @return  void
+     * Delete logs.
      *
      * @since   2.1.0
      */

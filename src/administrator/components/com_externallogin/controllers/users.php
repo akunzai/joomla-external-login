@@ -1,13 +1,12 @@
 <?php
 
 /**
- * @package     External_Login
- * @subpackage  Component
  * @author      Christophe Demko <chdemko@gmail.com>
  * @author      Ioannis Barounis <contact@johnbarounis.com>
  * @author      Alexandre Gandois <alexandre.gandois@etudiant.univ-lr.fr>
  * @copyright   Copyright (C) 2008-2018 Christophe Demko, Ioannis Barounis, Alexandre Gandois. All rights reserved.
  * @license     GNU General Public License, version 2. http://www.gnu.org/licenses/gpl-2.0.html
+ *
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
@@ -21,26 +20,22 @@ use Joomla\Utilities\ArrayHelper;
 defined('_JEXEC') or die;
 
 /**
- * Users Controller of External Login component
- *
- * @package     External_Login
- * @subpackage  Component
+ * Users Controller of External Login component.
  *
  * @since       2.1.0
  */
-class ExternalloginControllerUsers extends \Joomla\CMS\MVC\Controller\BaseController
+class ExternalloginControllerUsers extends Joomla\CMS\MVC\Controller\BaseController
 {
     /**
      * Proxy for getModel.
      *
-     * @param   string      $name    Model name
-     * @param   string      $prefix  Model prefix
-     * @param   array|null  $config  Array of options
+     * @param string $name Model name
+     * @param string $prefix Model prefix
+     * @param array|null $config Array of options
      *
-     * @return  ExternalloginModelUser
+     * @return ExternalloginModelUser
      *
      * @see     JControllerLegacy::getModel
-     *
      * @since   2.1.0
      */
     public function getModel($name = 'User', $prefix = 'ExternalloginModel', $config = null)
@@ -49,9 +44,7 @@ class ExternalloginControllerUsers extends \Joomla\CMS\MVC\Controller\BaseContro
     }
 
     /**
-     * Enable external login users to login using classical Joomla! method
-     *
-     * @return  void
+     * Enable external login users to login using classical Joomla! method.
      *
      * @since   2.1.0
      */
@@ -86,9 +79,7 @@ class ExternalloginControllerUsers extends \Joomla\CMS\MVC\Controller\BaseContro
     }
 
     /**
-     * Enable external login users to login using classical Joomla! method
-     *
-     * @return  void
+     * Enable external login users to login using classical Joomla! method.
      *
      * @since   2.1.0
      */
@@ -123,9 +114,7 @@ class ExternalloginControllerUsers extends \Joomla\CMS\MVC\Controller\BaseContro
     }
 
     /**
-     * Disable Joomla! users to login using external login method
-     *
-     * @return  void
+     * Disable Joomla! users to login using external login method.
      *
      * @since   2.1.0
      */
@@ -160,9 +149,7 @@ class ExternalloginControllerUsers extends \Joomla\CMS\MVC\Controller\BaseContro
     }
 
     /**
-     * Disable all Joomla! users to login using external login method for the selected server
-     *
-     * @return  void
+     * Disable all Joomla! users to login using external login method for the selected server.
      *
      * @since   2.1.0
      */
@@ -190,9 +177,7 @@ class ExternalloginControllerUsers extends \Joomla\CMS\MVC\Controller\BaseContro
     }
 
     /**
-     * Enable Joomla! users to login using external login method
-     *
-     * @return  void
+     * Enable Joomla! users to login using external login method.
      *
      * @since   2.1.0
      */
@@ -229,9 +214,7 @@ class ExternalloginControllerUsers extends \Joomla\CMS\MVC\Controller\BaseContro
     }
 
     /**
-     * Enable all Joomla! users to login using selected external login method
-     *
-     * @return  void
+     * Enable all Joomla! users to login using selected external login method.
      *
      * @since   2.1.1
      */
