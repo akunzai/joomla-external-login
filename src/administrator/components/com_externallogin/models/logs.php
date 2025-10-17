@@ -154,7 +154,8 @@ class ExternalloginModelLogs extends \Joomla\CMS\MVC\Model\ListModel
      */
     public function getBaseName()
     {
-        return Factory::getConfig()->get('sitename') . '_externallogin-logs_' . Factory::getDate();
+        $app = Factory::getApplication();
+        return $app->getConfig()->get('sitename') . '_externallogin-logs_' . Factory::getDate();
     }
 
     /**
