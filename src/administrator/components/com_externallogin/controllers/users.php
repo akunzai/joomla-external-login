@@ -33,7 +33,7 @@ class ExternalloginControllerUsers extends Joomla\CMS\MVC\Controller\BaseControl
      * @param string $prefix Model prefix
      * @param array|null $config Array of options
      *
-     * @return ExternalloginModelUser
+     * @return ExternalloginModelUser|bool
      *
      * @see     JControllerLegacy::getModel
      * @since   2.1.0

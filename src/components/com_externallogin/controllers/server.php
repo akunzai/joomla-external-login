@@ -31,7 +31,7 @@ class ExternalloginControllerServer extends Joomla\CMS\MVC\Controller\BaseContro
      * @param string $prefix Model prefix
      * @param array|null $config Options
      *
-     * @return ExternalloginModelServer
+     * @return ExternalloginModelServer|bool
      *
      * @see     JControllerLegacy::getModel
      * @since   2.3.0

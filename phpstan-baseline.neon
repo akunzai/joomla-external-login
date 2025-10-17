@@ -19,12 +19,6 @@ parameters:
 			path: src/administrator/components/com_externallogin/controllers/users.php
 
 		-
-			message: '#^Method ExternalloginControllerUsers\:\:getModel\(\) should return ExternalloginModelUser but returns bool\|Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\.$#'
-			identifier: return.type
-			count: 1
-			path: src/administrator/components/com_externallogin/controllers/users.php
-
-		-
 			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
 			identifier: property.notFound
 			count: 2
@@ -616,12 +610,6 @@ parameters:
 			identifier: variable.undefined
 			count: 2
 			path: src/administrator/modules/mod_externallogin_admin/tmpl/title.php
-
-		-
-			message: '#^Method ExternalloginControllerServer\:\:getModel\(\) should return ExternalloginModelServer but returns bool\|Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\.$#'
-			identifier: return.type
-			count: 1
-			path: src/components/com_externallogin/controllers/server.php
 
 		-
 			message: '#^Parameter \#1 \$url of static method Joomla\\CMS\\Router\\Route\:\:_\(\) expects string, stdClass\|false given\.$#'
