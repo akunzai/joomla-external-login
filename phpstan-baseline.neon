@@ -1,6 +1,48 @@
 parameters:
 	ignoreErrors:
 		-
+			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
+			identifier: property.notFound
+			count: 3
+			path: src/administrator/components/com_externallogin/controllers/server.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:upload\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/controllers/server.php
+
+		-
+			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
+			identifier: property.notFound
+			count: 3
+			path: src/administrator/components/com_externallogin/controllers/users.php
+
+		-
+			message: '#^Method ExternalloginControllerUsers\:\:getModel\(\) should return ExternalloginModelUser but returns bool\|Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\.$#'
+			identifier: return.type
+			count: 1
+			path: src/administrator/components/com_externallogin/controllers/users.php
+
+		-
+			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/administrator/components/com_externallogin/externallogin.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\Extension\\ComponentInterface\:\:getMVCFactory\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/externallogin.php
+
+		-
+			message: '#^Result of method Joomla\\CMS\\Application\\CMSApplicationInterface\:\:enqueueMessage\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: src/administrator/components/com_externallogin/externallogin.php
+
+		-
 			message: '''
 				#^Call to deprecated method register\(\) of class JLoader\:
 				4\.3 will be removed in 7\.0
@@ -10,6 +52,30 @@ parameters:
 			identifier: staticMethod.deprecated
 			count: 1
 			path: src/administrator/components/com_externallogin/helpers.php
+
+		-
+			message: '#^Access to protected property Joomla\\CMS\\Menu\\MenuItem\:\:\$params\.$#'
+			identifier: property.protected
+			count: 2
+			path: src/administrator/components/com_externallogin/helpers/externallogin.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\Application\\CMSApplicationInterface\:\:getConfig\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/helpers/externallogin.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\Application\\CMSApplicationInterface\:\:getDocument\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/helpers/externallogin.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\Extension\\ComponentInterface\:\:getMVCFactory\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/helpers/externallogin.php
 
 		-
 			message: '''
@@ -22,7 +88,74 @@ parameters:
 			path: src/administrator/components/com_externallogin/helpers/externallogin.php
 
 		-
-			message: '''
+			identifier: method.protected
+			count: 1
+			path: src/administrator/components/com_externallogin/helpers/externallogin.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between int\<1, max\> and 0 will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: src/administrator/components/com_externallogin/helpers/externallogin.php
+
+		-
+			message: '#^Default value of the parameter \#2 \$priority \(int\) of method ExternalloginLogEntry\:\:__construct\(\) is incompatible with type string\.$#'
+			identifier: parameter.defaultValue
+			count: 1
+			path: src/administrator/components/com_externallogin/log/entry.php
+
+		-
+			message: '#^Parameter \#2 \$priority of method Joomla\\CMS\\Log\\LogEntry\:\:__construct\(\) expects int, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/administrator/components/com_externallogin/log/entry.php
+
+		-
+			message: '#^Parameter \#2 \$timestamp of function date expects int\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/administrator/components/com_externallogin/log/entry.php
+
+		-
+			message: '#^Property Joomla\\CMS\\Log\\LogEntry\:\:\$date \(Joomla\\CMS\\Date\\Date\) does not accept string\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/administrator/components/com_externallogin/log/logger.php
+
+		-
+			message: '#^Property Joomla\\CMS\\Log\\Logger\\DatabaseLogger\:\:\$db \(Joomla\\Database\\DatabaseDriver\) in empty\(\) is not falsy\.$#'
+			identifier: empty.property
+			count: 1
+			path: src/administrator/components/com_externallogin/log/logger.php
+
+		-
+			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/models/download.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\Application\\CMSApplicationInterface\:\:getConfig\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/models/download.php
+
+		-
+			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/models/logs.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\Application\\CMSApplicationInterface\:\:getConfig\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/models/logs.php
+
+		-
+			message: '#^Parameter \#2 \$timestamp of function date expects int\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
 			path: src/administrator/components/com_externallogin/models/logs.php
 
 		-
@@ -36,12 +169,100 @@ parameters:
 			path: src/administrator/components/com_externallogin/models/plugins.php
 
 		-
+			message: '#^Access to an undefined property ExternalloginModelServer\:\:\$_db\.$#'
+			identifier: property.notFound
+			count: 8
+			path: src/administrator/components/com_externallogin/models/server.php
+
+		-
+			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/administrator/components/com_externallogin/models/server.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\Application\\CMSApplicationInterface\:\:getUserState\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/models/server.php
+
+		-
+			message: '#^Variable \$form in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: src/administrator/components/com_externallogin/models/server.php
+
+		-
+			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
+			identifier: property.notFound
 			count: 1
 			path: src/administrator/components/com_externallogin/models/servers.php
 
 		-
+			message: '#^Variable \$form in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: src/administrator/components/com_externallogin/models/upload.php
+
+		-
+			message: '#^Access to an undefined property ExternalloginModelUser\:\:\$_db\.$#'
+			identifier: property.notFound
+			count: 30
+			path: src/administrator/components/com_externallogin/models/user.php
+
+		-
+			message: '#^Part \$sid \(array\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 2
+			path: src/administrator/components/com_externallogin/models/user.php
+
+		-
+			message: '#^Variable \$column might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: src/administrator/components/com_externallogin/models/user.php
+
+		-
+			message: '#^Variable \$success might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: src/administrator/components/com_externallogin/models/user.php
+
+		-
+			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
+			identifier: property.notFound
 			count: 1
 			path: src/administrator/components/com_externallogin/models/users.php
+
+		-
+			message: '#^Call to function is_array\(\) with Joomla\\Registry\\Registry will always evaluate to false\.$#'
+			identifier: function.impossibleType
+			count: 1
+			path: src/administrator/components/com_externallogin/tables/server.php
+
+		-
+			message: '#^Property ExternalloginTableServer\:\:\$params \(Joomla\\Registry\\Registry\) does not accept string\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/administrator/components/com_externallogin/tables/server.php
+
+		-
+			message: '#^Property ExternalloginTableServer\:\:\$params \(Joomla\\Registry\\Registry\) in isset\(\) is not nullable\.$#'
+			identifier: isset.property
+			count: 1
+			path: src/administrator/components/com_externallogin/tables/server.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: src/administrator/components/com_externallogin/views/about/tmpl/default.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\Application\\CMSApplicationInterface\:\:getDocument\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/views/about/view.html.php
 
 		-
 			message: '''
@@ -66,6 +287,36 @@ parameters:
 			path: src/administrator/components/com_externallogin/views/logs/tmpl/default.php
 
 		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 7
+			path: src/administrator/components/com_externallogin/views/logs/tmpl/default.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 5
+			path: src/administrator/components/com_externallogin/views/logs/tmpl/default_body.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 9
+			path: src/administrator/components/com_externallogin/views/logs/tmpl/default_filter.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: src/administrator/components/com_externallogin/views/logs/tmpl/default_foot.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 4
+			path: src/administrator/components/com_externallogin/views/logs/tmpl/default_head.php
+
+		-
 			message: '''
 				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
 				5\.3\.0 will be removed in 7\.0\.
@@ -75,6 +326,24 @@ parameters:
 			identifier: method.deprecated
 			count: 3
 			path: src/administrator/components/com_externallogin/views/logs/view.csv.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\Application\\CMSApplicationInterface\:\:getDocument\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/views/logs/view.html.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getItems\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/views/logs/view.html.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getPagination\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/views/logs/view.html.php
 
 		-
 			message: '''
@@ -99,6 +368,144 @@ parameters:
 			path: src/administrator/components/com_externallogin/views/plugins/view.html.php
 
 		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 5
+			path: src/administrator/components/com_externallogin/views/server/tmpl/edit.php
+
+		-
+			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/views/server/view.html.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\Application\\CMSApplicationInterface\:\:getDocument\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/views/server/view.html.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getForm\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/views/server/view.html.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getItem\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/views/server/view.html.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\Application\\CMSApplicationInterface\:\:getDocument\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/views/servers/tmpl/default.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 8
+			path: src/administrator/components/com_externallogin/views/servers/tmpl/default.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 8
+			path: src/administrator/components/com_externallogin/views/servers/tmpl/default_body.php
+
+		-
+			message: '#^Variable \$userId might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: src/administrator/components/com_externallogin/views/servers/tmpl/default_body.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 9
+			path: src/administrator/components/com_externallogin/views/servers/tmpl/default_filter.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: src/administrator/components/com_externallogin/views/servers/tmpl/default_foot.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 5
+			path: src/administrator/components/com_externallogin/views/servers/tmpl/default_head.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 8
+			path: src/administrator/components/com_externallogin/views/servers/tmpl/modal.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 5
+			path: src/administrator/components/com_externallogin/views/servers/tmpl/modal_body.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 5
+			path: src/administrator/components/com_externallogin/views/servers/tmpl/modal_filter.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: src/administrator/components/com_externallogin/views/servers/tmpl/modal_foot.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 4
+			path: src/administrator/components/com_externallogin/views/servers/tmpl/modal_head.php
+
+		-
+			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/views/servers/view.html.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\Application\\CMSApplicationInterface\:\:getDocument\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/views/servers/view.html.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getItems\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/views/servers/view.html.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getPagination\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/views/servers/view.html.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\Application\\CMSApplicationInterface\:\:getDocument\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/views/success/tmpl/default.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: src/administrator/components/com_externallogin/views/upload/tmpl/default.php
+
+		-
 			message: '''
 				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
 				5\.3\.0 will be removed in 7\.0\.
@@ -108,6 +515,66 @@ parameters:
 			identifier: method.deprecated
 			count: 4
 			path: src/administrator/components/com_externallogin/views/upload/view.html.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 8
+			path: src/administrator/components/com_externallogin/views/users/tmpl/default.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 7
+			path: src/administrator/components/com_externallogin/views/users/tmpl/default_body.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 9
+			path: src/administrator/components/com_externallogin/views/users/tmpl/default_filter.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: src/administrator/components/com_externallogin/views/users/tmpl/default_foot.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 4
+			path: src/administrator/components/com_externallogin/views/users/tmpl/default_head.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\Application\\CMSApplicationInterface\:\:getDocument\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/views/users/view.html.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getItems\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/views/users/view.html.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getPagination\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/views/users/view.html.php
+
+		-
+			message: '#^Call to an undefined method ExternalloginModelServers\:\:createModel\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/modules/mod_externallogin_admin/helper.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\Extension\\ComponentInterface\:\:getMVCFactory\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/modules/mod_externallogin_admin/helper.php
 
 		-
 			message: '''
@@ -120,8 +587,92 @@ parameters:
 			path: src/administrator/modules/mod_externallogin_admin/helper.php
 
 		-
-			message: '''
+			identifier: variable.undefined
+			count: 2
+			path: src/administrator/modules/mod_externallogin_admin/mod_externallogin_admin.php
+
+		-
+			message: '#^Variable \$servers might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: src/administrator/modules/mod_externallogin_admin/tmpl/alone.php
+
+		-
+			message: '#^Variable \$count might not be defined\.$#'
+			identifier: variable.undefined
 			count: 1
+			path: src/administrator/modules/mod_externallogin_admin/tmpl/default.php
+
+		-
+			message: '#^Variable \$enabled might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: src/administrator/modules/mod_externallogin_admin/tmpl/default.php
+
+		-
+			message: '#^Variable \$params might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: src/administrator/modules/mod_externallogin_admin/tmpl/default.php
+
+		-
+			message: '#^Variable \$module might not be defined\.$#'
+			identifier: variable.undefined
+			count: 4
+			path: src/administrator/modules/mod_externallogin_admin/tmpl/form.php
+
+		-
+			message: '#^Variable \$servers might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: src/administrator/modules/mod_externallogin_admin/tmpl/form.php
+
+		-
+			message: '#^Variable \$module might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: src/administrator/modules/mod_externallogin_admin/tmpl/title.php
+
+		-
+			message: '#^Method ExternalloginControllerServer\:\:getModel\(\) should return ExternalloginModelServer but returns bool\|Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\.$#'
+			identifier: return.type
+			count: 1
+			path: src/components/com_externallogin/controllers/server.php
+
+		-
+			message: '#^Parameter \#1 \$url of static method Joomla\\CMS\\Router\\Route\:\:_\(\) expects string, stdClass\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/components/com_externallogin/controllers/server.php
+
+		-
+			message: '#^Parameter \#2 \$msg of method Joomla\\CMS\\MVC\\Controller\\BaseController\:\:setRedirect\(\) expects string\|null, false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/components/com_externallogin/controllers/server.php
+
+		-
+			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/components/com_externallogin/externallogin.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\Extension\\ComponentInterface\:\:getMVCFactory\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/components/com_externallogin/externallogin.php
+
+		-
+			message: '#^Constant JPATH_COMPONENT_ADMINISTRATOR not found\.$#'
+			identifier: constant.notFound
+			count: 1
+			path: src/components/com_externallogin/externallogin.php
+
+		-
+			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
+			identifier: property.notFound
+			count: 3
 			path: src/components/com_externallogin/models/server.php
 
 		-
@@ -134,6 +685,60 @@ parameters:
 			identifier: method.deprecated
 			count: 1
 			path: src/components/com_externallogin/models/server.php
+
+		-
+			message: '#^Default value of the parameter \#1 \$type \(string\) of method ExternalloginModelServer\:\:getTable\(\) is incompatible with type type\.$#'
+			identifier: parameter.defaultValue
+			count: 1
+			path: src/components/com_externallogin/models/server.php
+
+		-
+			message: '#^Parameter \#1 \$name of method Joomla\\CMS\\MVC\\Factory\\MVCFactoryInterface\:\:createTable\(\) expects string, type given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/components/com_externallogin/models/server.php
+
+		-
+			message: '#^Parameter \#1 \$type \(type\) of method ExternalloginModelServer\:\:getTable\(\) should be compatible with parameter \$name \(string\) of method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getTable\(\)$#'
+			identifier: method.childParameterType
+			count: 1
+			path: src/components/com_externallogin/models/server.php
+
+		-
+			message: '#^Parameter \#3 \$tls of static method Joomla\\CMS\\Router\\Route\:\:_\(\) expects int, bool given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/components/com_externallogin/models/server.php
+
+		-
+			message: '#^Parameter \$type of method ExternalloginModelServer\:\:getTable\(\) has invalid type type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/components/com_externallogin/models/server.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: src/components/com_externallogin/views/login/tmpl/default.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 16
+			path: src/components/com_externallogin/views/login/tmpl/default_login.php
+
+		-
+			message: '#^Function trim invoked with 3 parameters, 1\-2 required\.$#'
+			identifier: arguments.count
+			count: 2
+			path: src/components/com_externallogin/views/login/tmpl/default_logout.php
+
+		-
+			message: '#^Variable \$this might not be defined\.$#'
+			identifier: variable.undefined
+			count: 16
+			path: src/components/com_externallogin/views/login/tmpl/default_logout.php
 
 		-
 			message: '''
@@ -158,6 +763,108 @@ parameters:
 			path: src/components/com_externallogin/views/server/view.html.php
 
 		-
+			message: '#^Access to protected property Joomla\\CMS\\Component\\ComponentRecord\:\:\$params\.$#'
+			identifier: property.protected
+			count: 1
+			path: src/modules/mod_externallogin_site/helper.php
+
+		-
+			message: '#^Call to an undefined method ExternalloginModelServers\:\:createModel\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/modules/mod_externallogin_site/helper.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\Extension\\ComponentInterface\:\:getMVCFactory\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/modules/mod_externallogin_site/helper.php
+
+		-
+			message: '#^Parameter \#2 \$xhtml of static method Joomla\\CMS\\Router\\Route\:\:_\(\) expects bool, int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/modules/mod_externallogin_site/helper.php
+
+		-
+			message: '#^Variable \$params might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: src/modules/mod_externallogin_site/mod_externallogin_site.php
+
+		-
+			message: '#^Variable \$params might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: src/modules/mod_externallogin_site/tmpl/alone.php
+
+		-
+			message: '#^Variable \$servers might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: src/modules/mod_externallogin_site/tmpl/alone.php
+
+		-
+			message: '#^Variable \$count might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: src/modules/mod_externallogin_site/tmpl/default.php
+
+		-
+			message: '#^Variable \$enabled might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: src/modules/mod_externallogin_site/tmpl/default.php
+
+		-
+			message: '#^Variable \$params might not be defined\.$#'
+			identifier: variable.undefined
+			count: 6
+			path: src/modules/mod_externallogin_site/tmpl/default.php
+
+		-
+			message: '#^Variable \$module might not be defined\.$#'
+			identifier: variable.undefined
+			count: 4
+			path: src/modules/mod_externallogin_site/tmpl/form.php
+
+		-
+			message: '#^Variable \$servers might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: src/modules/mod_externallogin_site/tmpl/form.php
+
+		-
+			message: '#^Variable \$params might not be defined\.$#'
+			identifier: variable.undefined
+			count: 3
+			path: src/modules/mod_externallogin_site/tmpl/logout.php
+
+		-
+			message: '#^Variable \$return might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: src/modules/mod_externallogin_site/tmpl/logout.php
+
+		-
+			message: '#^Variable \$user might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: src/modules/mod_externallogin_site/tmpl/logout.php
+
+		-
+			message: '#^Access to an undefined property Joomla\\CMS\\Authentication\\AuthenticationResponse\:\:\$server\.$#'
+			identifier: property.notFound
+			count: 9
+			path: src/plugins/authentication/externallogin/externallogin.php
+
+		-
+			message: '#^Access to an undefined property Joomla\\CMS\\Authentication\\AuthenticationResponse\:\:\$subtype\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/plugins/authentication/externallogin/externallogin.php
+
+		-
 			message: '''
 				#^Call to method triggerEvent\(\) of deprecated interface Joomla\\CMS\\Application\\EventAwareInterface\:
 				4\.3 will be removed in 7\.0
@@ -166,6 +873,54 @@ parameters:
 			identifier: method.deprecatedInterface
 			count: 1
 			path: src/plugins/authentication/externallogin/externallogin.php
+
+		-
+			message: '#^Parameter \#1 \$config of method Joomla\\CMS\\Plugin\\CMSPlugin\:\:__construct\(\) expects array, object given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/plugins/authentication/externallogin/externallogin.php
+
+		-
+			message: '#^Parameter \#2 \$priority of class ExternalloginLogEntry constructor expects string, int given\.$#'
+			identifier: argument.type
+			count: 7
+			path: src/plugins/authentication/externallogin/externallogin.php
+
+		-
+			message: '#^Property Joomla\\CMS\\Authentication\\AuthenticationResponse\:\:\$status \(string\) does not accept int\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/plugins/authentication/externallogin/externallogin.php
+
+		-
+			message: '#^Ternary operator condition is always true\.$#'
+			identifier: ternary.alwaysTrue
+			count: 1
+			path: src/plugins/authentication/externallogin/externallogin.php
+
+		-
+			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/plugins/system/caslogin/caslogin.php
+
+		-
+			message: '#^Access to an undefined property Joomla\\CMS\\Authentication\\AuthenticationResponse\:\:\$groups\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/plugins/system/caslogin/caslogin.php
+
+		-
+			message: '#^Access to an undefined property Joomla\\CMS\\Authentication\\AuthenticationResponse\:\:\$message\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/plugins/system/caslogin/caslogin.php
+
+		-
+			message: '#^Access to an undefined property Joomla\\CMS\\Authentication\\AuthenticationResponse\:\:\$server\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/plugins/system/caslogin/caslogin.php
 
 		-
 			message: '''
@@ -231,8 +986,86 @@ parameters:
 				             Factory\:\:getApplication\(\)\-\>getIdentity\(\);$#
 			'''
 			identifier: staticMethod.deprecated
+			count: 1
+			path: src/plugins/system/caslogin/caslogin.php
+
+		-
+			message: '#^Cannot access property \$params on ExternalloginTable\|true\.$#'
+			identifier: property.nonObject
 			count: 2
 			path: src/plugins/system/caslogin/caslogin.php
+
+		-
+			message: '#^Cannot access property \$plugin on ExternalloginTable\|true\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: src/plugins/system/caslogin/caslogin.php
+
+		-
+			message: '#^Cannot call method load\(\) on ExternalloginTable\|true\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/plugins/system/caslogin/caslogin.php
+
+		-
+			message: '#^Instanceof between Joomla\\CMS\\Form\\Form and Joomla\\CMS\\Form\\Form will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: src/plugins/system/caslogin/caslogin.php
+
+		-
+			message: '#^PHPDoc tag @var contains unknown class ExternalloginTable\.$#'
+			identifier: class.notFound
+			count: 2
+			path: src/plugins/system/caslogin/caslogin.php
+
+		-
+			message: '#^Parameter \#1 \$config of method Joomla\\CMS\\Plugin\\CMSPlugin\:\:__construct\(\) expects array, object given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/plugins/system/caslogin/caslogin.php
+
+		-
+			message: '#^Parameter \#2 \$priority of class ExternalloginLogEntry constructor expects string, int given\.$#'
+			identifier: argument.type
+			count: 20
+			path: src/plugins/system/caslogin/caslogin.php
+
+		-
+			message: '#^Property Joomla\\CMS\\Authentication\\AuthenticationResponse\:\:\$status \(string\) does not accept int\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/plugins/system/caslogin/caslogin.php
+
+		-
+			message: '#^Property PlgSystemCaslogin\:\:\$server \(ExternalloginTableServer\) does not accept ExternalloginTable\|true\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/plugins/system/caslogin/caslogin.php
+
+		-
+			message: '#^Property PlgSystemCaslogin\:\:\$success \(DOMNode\) in isset\(\) is not nullable\.$#'
+			identifier: isset.property
+			count: 1
+			path: src/plugins/system/caslogin/caslogin.php
+
+		-
+			message: '#^Variable \$return in empty\(\) is never defined\.$#'
+			identifier: empty.variable
+			count: 1
+			path: src/plugins/system/caslogin/caslogin.php
+
+		-
+			message: '#^Variable \$serverID in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: src/plugins/system/caslogin/caslogin.php
+
+		-
+			message: '#^Access to property \$params on an unknown class ExternalloginTable\.$#'
+			identifier: class.notFound
+			count: 4
+			path: src/plugins/system/externallogin/externallogin.php
 
 		-
 			message: '''
@@ -257,9 +1090,31 @@ parameters:
 			path: src/plugins/system/externallogin/externallogin.php
 
 		-
+			message: '#^Call to method load\(\) on an unknown class ExternalloginTable\.$#'
+			identifier: class.notFound
+			count: 2
+			path: src/plugins/system/externallogin/externallogin.php
+
+		-
+			message: '#^PHPDoc tag @var contains unknown class ExternalloginTable\.$#'
+			identifier: class.notFound
+			count: 2
+			path: src/plugins/system/externallogin/externallogin.php
+
+		-
+			message: '#^Parameter \#1 \$config of method Joomla\\CMS\\Plugin\\CMSPlugin\:\:__construct\(\) expects array, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/plugins/system/externallogin/externallogin.php
 
 		-
+			message: '#^Parameter \#2 \$priority of class ExternalloginLogEntry constructor expects string, int given\.$#'
+			identifier: argument.type
+			count: 3
+			path: src/plugins/system/externallogin/externallogin.php
+
+		-
+			message: '#^Parameter \#1 \$config of method Joomla\\CMS\\Plugin\\CMSPlugin\:\:__construct\(\) expects array, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/plugins/user/cbexternallogin/cbexternallogin.php
