@@ -69,7 +69,7 @@
 			"php-cs-fixer fix --diff --dry-run"
 		],
 		"fix": [
-			"php-cs-fixer -- fix"
+			"php-cs-fixer fix"
 		],
 		"phpstan": [
 			"phpstan analyse"
