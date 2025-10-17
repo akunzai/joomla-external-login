@@ -18,16 +18,11 @@ use Joomla\CMS\Router\Route;
 // No direct access to this file
 defined('_JEXEC') or die;
 
-if (version_compare(JVERSION, '4.0.0', '<')) {
-    HTMLHelper::_('behavior.tooltip');
-    HTMLHelper::_('behavior.formvalidation');
-} else {
-    /** @var \Joomla\CMS\WebAsset\WebAssetManager */
-    $wa = $this->document->getWebAssetManager();
-    $wa->useScript('jquery')
-        ->useScript('jquery-noconflict')
-        ->useScript('form.validate');
-}
+/** @var \Joomla\CMS\WebAsset\WebAssetManager */
+$wa = $this->document->getWebAssetManager();
+$wa->useScript('jquery')
+	->useScript('jquery-noconflict')
+	->useScript('form.validate');
 
 $fieldSets = $this->form->getFieldsets();
 $fistTabName = array_key_first($fieldSets);

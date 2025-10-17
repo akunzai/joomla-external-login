@@ -129,9 +129,7 @@ class ExternalloginModelServer extends \Joomla\CMS\MVC\Model\ItemModel
         $uri = Uri::getInstance($url);
 
         // Return the service/URL
-        $user = $user = version_compare(JVERSION, '4.0.0', '<')
-            ? Factory::getUser()
-            : $this->getCurrentUser();
+        $user = $user = $this->getCurrentUser();
         if (!$user->guest) {
             return $uri;
         }

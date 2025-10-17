@@ -147,9 +147,7 @@ class PlgSystemExternallogin extends \Joomla\CMS\Plugin\CMSPlugin
         $sid = $dbo->loadResult();
         /** @var ExternalloginTable */
         $server = Table::getInstance('Server', 'ExternalloginTable');
-        $user = version_compare(JVERSION, '4.0.0', '<')
-            ? Factory::getUser()
-            : Factory::getApplication()->getIdentity();
+        $user = Factory::getApplication()->getIdentity();
 
         if ($server->load($sid)) {
             if (!$success) {
