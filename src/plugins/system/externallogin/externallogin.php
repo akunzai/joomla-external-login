@@ -134,7 +134,7 @@ class PlgSystemExternallogin extends Joomla\CMS\Plugin\CMSPlugin
         $dbo = Factory::getContainer()->get(DatabaseInterface::class);
         $dbo->setQuery($dbo->getQuery(true)->select('server_id')->from('#__externallogin_users')->where('user_id = ' . (int) $user['id']));
         $sid = $dbo->loadResult();
-        /** @var ExternalloginTable */
+        /** @var ExternalloginTableServer */
         $server = Table::getInstance('Server', 'ExternalloginTable');
         $user = Factory::getApplication()->getIdentity();
 
@@ -195,7 +195,7 @@ class PlgSystemExternallogin extends Joomla\CMS\Plugin\CMSPlugin
             $dbo = Factory::getContainer()->get(DatabaseInterface::class);
             $dbo->setQuery($dbo->getQuery(true)->select('server_id')->from('#__externallogin_users')->where('user_id = ' . (int) $new['id']));
             $sid = $dbo->loadResult();
-            /** @var ExternalloginTable */
+            /** @var ExternalloginTableServer */
             $server = Table::getInstance('Server', 'ExternalloginTable');
 
             if ($server->load($sid) && !$server->params->get('allow_change_password', 0)) {

@@ -88,6 +88,7 @@ parameters:
 			path: src/administrator/components/com_externallogin/helpers/externallogin.php
 
 		-
+			message: '#^Call to protected method bootComponent\(\) of class Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\.$#'
 			identifier: method.protected
 			count: 1
 			path: src/administrator/components/com_externallogin/helpers/externallogin.php
@@ -587,6 +588,7 @@ parameters:
 			path: src/administrator/modules/mod_externallogin_admin/helper.php
 
 		-
+			message: '#^Variable \$params might not be defined\.$#'
 			identifier: variable.undefined
 			count: 2
 			path: src/administrator/modules/mod_externallogin_admin/mod_externallogin_admin.php
@@ -990,33 +992,9 @@ parameters:
 			path: src/plugins/system/caslogin/caslogin.php
 
 		-
-			message: '#^Cannot access property \$params on ExternalloginTable\|true\.$#'
-			identifier: property.nonObject
-			count: 2
-			path: src/plugins/system/caslogin/caslogin.php
-
-		-
-			message: '#^Cannot access property \$plugin on ExternalloginTable\|true\.$#'
-			identifier: property.nonObject
-			count: 2
-			path: src/plugins/system/caslogin/caslogin.php
-
-		-
-			message: '#^Cannot call method load\(\) on ExternalloginTable\|true\.$#'
-			identifier: method.nonObject
-			count: 2
-			path: src/plugins/system/caslogin/caslogin.php
-
-		-
 			message: '#^Instanceof between Joomla\\CMS\\Form\\Form and Joomla\\CMS\\Form\\Form will always evaluate to true\.$#'
 			identifier: instanceof.alwaysTrue
 			count: 1
-			path: src/plugins/system/caslogin/caslogin.php
-
-		-
-			message: '#^PHPDoc tag @var contains unknown class ExternalloginTable\.$#'
-			identifier: class.notFound
-			count: 2
 			path: src/plugins/system/caslogin/caslogin.php
 
 		-
@@ -1033,12 +1011,6 @@ parameters:
 
 		-
 			message: '#^Property Joomla\\CMS\\Authentication\\AuthenticationResponse\:\:\$status \(string\) does not accept int\.$#'
-			identifier: assign.propertyType
-			count: 1
-			path: src/plugins/system/caslogin/caslogin.php
-
-		-
-			message: '#^Property PlgSystemCaslogin\:\:\$server \(ExternalloginTableServer\) does not accept ExternalloginTable\|true\.$#'
 			identifier: assign.propertyType
 			count: 1
 			path: src/plugins/system/caslogin/caslogin.php
@@ -1062,12 +1034,6 @@ parameters:
 			path: src/plugins/system/caslogin/caslogin.php
 
 		-
-			message: '#^Access to property \$params on an unknown class ExternalloginTable\.$#'
-			identifier: class.notFound
-			count: 4
-			path: src/plugins/system/externallogin/externallogin.php
-
-		-
 			message: '''
 				#^Call to deprecated method getInstance\(\) of class Joomla\\CMS\\Table\\Table\:
 				4\.3 will be removed in 6\.0
@@ -1087,18 +1053,6 @@ parameters:
 			'''
 			identifier: staticMethod.deprecated
 			count: 1
-			path: src/plugins/system/externallogin/externallogin.php
-
-		-
-			message: '#^Call to method load\(\) on an unknown class ExternalloginTable\.$#'
-			identifier: class.notFound
-			count: 2
-			path: src/plugins/system/externallogin/externallogin.php
-
-		-
-			message: '#^PHPDoc tag @var contains unknown class ExternalloginTable\.$#'
-			identifier: class.notFound
-			count: 2
 			path: src/plugins/system/externallogin/externallogin.php
 
 		-

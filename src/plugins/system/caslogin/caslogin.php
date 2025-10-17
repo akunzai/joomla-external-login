@@ -253,7 +253,7 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
             return;
         }
         if (empty($ticket) && !empty($serverID)) {
-            /** @var ExternalloginTable|bool */
+            /** @var ExternalloginTableServer|bool */
             $server = Table::getInstance('Server', 'ExternalloginTable');
             if ($server && $server->load($serverID) && $server->plugin == 'system.caslogin') {
                 // Log message
@@ -271,7 +271,7 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
         }
 
         // both ticket and server exist
-        /** @var ExternalloginTable|bool */
+        /** @var ExternalloginTableServer|bool */
         $server = Table::getInstance('Server', 'ExternalloginTable');
 
         if (!$server || !$server->load($serverID) || $server->plugin != 'system.caslogin') {
