@@ -88,12 +88,6 @@ parameters:
 			path: src/administrator/components/com_externallogin/helpers/externallogin.php
 
 		-
-			message: '#^Strict comparison using \=\=\= between int\<1, max\> and 0 will always evaluate to false\.$#'
-			identifier: identical.alwaysFalse
-			count: 1
-			path: src/administrator/components/com_externallogin/helpers/externallogin.php
-
-		-
 			message: '#^Parameter \#2 \$timestamp of function date expects int\|null, string given\.$#'
 			identifier: argument.type
 			count: 1
@@ -216,18 +210,6 @@ parameters:
 			identifier: property.notFound
 			count: 1
 			path: src/administrator/components/com_externallogin/models/users.php
-
-		-
-			message: '#^Call to function is_array\(\) with Joomla\\Registry\\Registry\|string will always evaluate to false\.$#'
-			identifier: function.impossibleType
-			count: 1
-			path: src/administrator/components/com_externallogin/tables/server.php
-
-		-
-			message: '#^Property ExternalloginTableServer\:\:\$params \(Joomla\\Registry\\Registry\|string\) in isset\(\) is not nullable\.$#'
-			identifier: isset.property
-			count: 1
-			path: src/administrator/components/com_externallogin/tables/server.php
 
 		-
 			message: '#^Variable \$this might not be defined\.$#'
@@ -855,12 +837,6 @@ parameters:
 		-
 			message: '#^Property Joomla\\CMS\\Authentication\\AuthenticationResponse\:\:\$status \(string\) does not accept int\.$#'
 			identifier: assign.propertyType
-			count: 1
-			path: src/plugins/authentication/externallogin/externallogin.php
-
-		-
-			message: '#^Ternary operator condition is always true\.$#'
-			identifier: ternary.alwaysTrue
 			count: 1
 			path: src/plugins/authentication/externallogin/externallogin.php
 

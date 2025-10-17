@@ -166,8 +166,8 @@ abstract class ExternalloginHelper
 
         $count = count($path);
 
-        // Path is incorrect
-        if ($count === 0 || empty($path[$count - 1])) {
+        // Path is incorrect (last element must not be empty)
+        if (empty($path[$count - 1])) {
             return [];
         }
 

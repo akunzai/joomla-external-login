@@ -25,7 +25,7 @@ class ExternalloginTableServer extends Joomla\CMS\Table\Table
     /**
      * The parameter object.
      *
-     * @var Registry|string
+     * @var Registry|string|array<string, mixed>
      */
     public $params;
 
@@ -64,7 +64,7 @@ class ExternalloginTableServer extends Joomla\CMS\Table\Table
         if (!parent::load($keys, $reset)) {
             return false;
         }
-        $this->params = isset($this->params)
+        $this->params = !empty($this->params)
             ? new Registry($this->params)
             : new Registry();
         return true;

@@ -83,7 +83,7 @@ class PlgAuthenticationExternallogin extends Joomla\CMS\Plugin\CMSPlugin
             if (boolval($params->get('log_blocked', 0))) {
                 Log::add(
                     new ExternalloginLogEntry(
-                        'User "' . $response->username . '" is trying to ' . $isUserNotFound ? 'register' : 'login' . ' while he is blocked',
+                        'User "' . $response->username . '" is trying to ' . ($isUserNotFound ? 'register' : 'login') . ' while he is blocked',
                         Log::ERROR,
                         'authentication-externallogin-blocked'
                     )
