@@ -91,17 +91,6 @@ parameters:
 
 		-
 			message: '''
-				#^Call to deprecated method getInstance\(\) of class Joomla\\CMS\\User\\User\:
-				4\.3 will be removed in 6\.0
-				             Load the user service from the dependency injection container or via \$app\-\>getIdentity\(\)
-				             Example\: Factory\:\:getContainer\(\)\-\>get\(UserFactoryInterface\:\:class\)\-\>loadUserById\(\$id\)$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/models/server.php
-
-		-
-			message: '''
 			count: 1
 			path: src/administrator/components/com_externallogin/models/servers.php
 

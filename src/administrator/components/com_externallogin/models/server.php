@@ -15,6 +15,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\User\User;
+use Joomla\CMS\User\UserFactoryInterface;
 use Joomla\CMS\User\UserHelper;
 use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
@@ -172,7 +173,8 @@ class ExternalloginModelServer extends \Joomla\CMS\MVC\Model\AdminModel
             if ($data && count($data) != 4) {
                 continue;
             }
-            $user = User::getInstance();
+            $userFactory = Factory::getContainer()->get(UserFactoryInterface::class);
+            $user = $userFactory->loadUserById(0);
 
             if ($id = intval(UserHelper::getUserId($data[0]))) {
                 $user->load($id);
