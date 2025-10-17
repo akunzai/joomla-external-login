@@ -25,7 +25,7 @@ class ExternalloginTableServer extends Joomla\CMS\Table\Table
     /**
      * The parameter object.
      *
-     * @var Registry
+     * @var Registry|string
      */
     public $params;
 

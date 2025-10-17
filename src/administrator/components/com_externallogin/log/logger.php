@@ -35,7 +35,7 @@ class ExternalloginLogger extends Joomla\CMS\Log\Logger\DatabaseLogger
                 $this->connect();
             }
 
-            // Convert the date.
+            // Convert the date to timestamp string for database storage
             $entry->date = $entry->date->format('U.u');
 
             $this->db->insertObject($this->table, $entry);

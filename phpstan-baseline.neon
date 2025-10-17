@@ -100,18 +100,6 @@ parameters:
 			path: src/administrator/components/com_externallogin/helpers/externallogin.php
 
 		-
-			message: '#^Default value of the parameter \#2 \$priority \(int\) of method ExternalloginLogEntry\:\:__construct\(\) is incompatible with type string\.$#'
-			identifier: parameter.defaultValue
-			count: 1
-			path: src/administrator/components/com_externallogin/log/entry.php
-
-		-
-			message: '#^Parameter \#2 \$priority of method Joomla\\CMS\\Log\\LogEntry\:\:__construct\(\) expects int, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/administrator/components/com_externallogin/log/entry.php
-
-		-
 			message: '#^Parameter \#2 \$timestamp of function date expects int\|null, string given\.$#'
 			identifier: argument.type
 			count: 1
@@ -236,19 +224,13 @@ parameters:
 			path: src/administrator/components/com_externallogin/models/users.php
 
 		-
-			message: '#^Call to function is_array\(\) with Joomla\\Registry\\Registry will always evaluate to false\.$#'
+			message: '#^Call to function is_array\(\) with Joomla\\Registry\\Registry\|string will always evaluate to false\.$#'
 			identifier: function.impossibleType
 			count: 1
 			path: src/administrator/components/com_externallogin/tables/server.php
 
 		-
-			message: '#^Property ExternalloginTableServer\:\:\$params \(Joomla\\Registry\\Registry\) does not accept string\.$#'
-			identifier: assign.propertyType
-			count: 1
-			path: src/administrator/components/com_externallogin/tables/server.php
-
-		-
-			message: '#^Property ExternalloginTableServer\:\:\$params \(Joomla\\Registry\\Registry\) in isset\(\) is not nullable\.$#'
+			message: '#^Property ExternalloginTableServer\:\:\$params \(Joomla\\Registry\\Registry\|string\) in isset\(\) is not nullable\.$#'
 			identifier: isset.property
 			count: 1
 			path: src/administrator/components/com_externallogin/tables/server.php
@@ -883,12 +865,6 @@ parameters:
 			path: src/plugins/authentication/externallogin/externallogin.php
 
 		-
-			message: '#^Parameter \#2 \$priority of class ExternalloginLogEntry constructor expects string, int given\.$#'
-			identifier: argument.type
-			count: 7
-			path: src/plugins/authentication/externallogin/externallogin.php
-
-		-
 			message: '#^Property Joomla\\CMS\\Authentication\\AuthenticationResponse\:\:\$status \(string\) does not accept int\.$#'
 			identifier: assign.propertyType
 			count: 1
@@ -1004,12 +980,6 @@ parameters:
 			path: src/plugins/system/caslogin/caslogin.php
 
 		-
-			message: '#^Parameter \#2 \$priority of class ExternalloginLogEntry constructor expects string, int given\.$#'
-			identifier: argument.type
-			count: 20
-			path: src/plugins/system/caslogin/caslogin.php
-
-		-
 			message: '#^Property Joomla\\CMS\\Authentication\\AuthenticationResponse\:\:\$status \(string\) does not accept int\.$#'
 			identifier: assign.propertyType
 			count: 1
@@ -1059,12 +1029,6 @@ parameters:
 			message: '#^Parameter \#1 \$config of method Joomla\\CMS\\Plugin\\CMSPlugin\:\:__construct\(\) expects array, object given\.$#'
 			identifier: argument.type
 			count: 1
-			path: src/plugins/system/externallogin/externallogin.php
-
-		-
-			message: '#^Parameter \#2 \$priority of class ExternalloginLogEntry constructor expects string, int given\.$#'
-			identifier: argument.type
-			count: 3
 			path: src/plugins/system/externallogin/externallogin.php
 
 		-

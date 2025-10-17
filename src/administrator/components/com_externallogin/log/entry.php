@@ -26,9 +26,9 @@ class ExternalloginLogEntry extends Joomla\CMS\Log\LogEntry
      * Constructor.
      *
      * @param string $message the message to log
-     * @param string $priority message priority based on {$this->priorities}
+     * @param int $priority message priority based on {$this->priorities}
      * @param string $category Type of entry
-     * @param string $date Date of entry (defaults to now if not specified or blank)
+     * @param string|null $date Date of entry (defaults to now if not specified or blank)
      *
      * @since   11.1
      */
