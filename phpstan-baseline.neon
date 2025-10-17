@@ -31,12 +31,6 @@ parameters:
 			path: src/administrator/components/com_externallogin/externallogin.php
 
 		-
-			message: '#^Result of method Joomla\\CMS\\Application\\CMSApplicationInterface\:\:enqueueMessage\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: src/administrator/components/com_externallogin/externallogin.php
-
-		-
 			message: '''
 				#^Call to deprecated method register\(\) of class JLoader\:
 				4\.3 will be removed in 7\.0
@@ -641,32 +635,8 @@ parameters:
 			path: src/components/com_externallogin/models/server.php
 
 		-
-			message: '#^Default value of the parameter \#1 \$type \(string\) of method ExternalloginModelServer\:\:getTable\(\) is incompatible with type type\.$#'
-			identifier: parameter.defaultValue
-			count: 1
-			path: src/components/com_externallogin/models/server.php
-
-		-
-			message: '#^Parameter \#1 \$name of method Joomla\\CMS\\MVC\\Factory\\MVCFactoryInterface\:\:createTable\(\) expects string, type given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/components/com_externallogin/models/server.php
-
-		-
-			message: '#^Parameter \#1 \$type \(type\) of method ExternalloginModelServer\:\:getTable\(\) should be compatible with parameter \$name \(string\) of method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getTable\(\)$#'
-			identifier: method.childParameterType
-			count: 1
-			path: src/components/com_externallogin/models/server.php
-
-		-
 			message: '#^Parameter \#3 \$tls of static method Joomla\\CMS\\Router\\Route\:\:_\(\) expects int, bool given\.$#'
 			identifier: argument.type
-			count: 1
-			path: src/components/com_externallogin/models/server.php
-
-		-
-			message: '#^Parameter \$type of method ExternalloginModelServer\:\:getTable\(\) has invalid type type\.$#'
-			identifier: class.notFound
 			count: 1
 			path: src/components/com_externallogin/models/server.php
 

@@ -22,7 +22,8 @@ defined('_JEXEC') or die;
 $app = Factory::getApplication();
 $user = $app->getIdentity();
 if (!$user->authorise('core.manage', 'com_externallogin')) {
-    return $app->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'error');
+    $app->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'error');
+    return;
 }
 
 // Require helpers file
