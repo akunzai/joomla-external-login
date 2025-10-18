@@ -11,6 +11,7 @@
  */
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\Helpers\Sidebar;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Router\Route;
@@ -36,22 +37,22 @@ abstract class ExternalloginHelper
     public static function addSubmenu($submenu = 'servers')
     {
         // Add submenu
-        JHtmlSidebar::addEntry(
+        Sidebar::addEntry(
             Text::_('COM_EXTERNALLOGIN_SUBMENU_SERVERS'),
             Route::_('index.php?option=com_externallogin', false),
             $submenu == 'servers'
         );
-        JHtmlSidebar::addEntry(
+        Sidebar::addEntry(
             Text::_('COM_EXTERNALLOGIN_SUBMENU_USERS'),
             Route::_('index.php?option=com_externallogin&view=users', false),
             $submenu == 'users'
         );
-        JHtmlSidebar::addEntry(
+        Sidebar::addEntry(
             Text::_('COM_EXTERNALLOGIN_SUBMENU_LOGS'),
             Route::_('index.php?option=com_externallogin&view=logs', false),
             $submenu == 'logs'
         );
-        JHtmlSidebar::addEntry(
+        Sidebar::addEntry(
             Text::_('COM_EXTERNALLOGIN_SUBMENU_ABOUT'),
             Route::_('index.php?option=com_externallogin&view=about', false),
             $submenu == 'about'
