@@ -83,7 +83,7 @@ class ExternalloginModelServer extends Joomla\CMS\MVC\Model\AdminModel
 
         $form = $this->loadForm('com_externallogin.server.' . $plugin, 'server', ['control' => 'jform', 'load_data' => $loadData]);
 
-        if (empty($form)) {
+        if (!$form) {
             return false;
         }
 

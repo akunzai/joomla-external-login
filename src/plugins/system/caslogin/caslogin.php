@@ -193,7 +193,7 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
         // Get the ticket and the server
         $ticket = $input->get('ticket');
         $serverID = $app->isClient('administrator') ? $input->get('server') : $app->getUserState('com_externallogin.server');
-        if (empty($ticket) && empty($serverID)) {
+        if (!$ticket && !$serverID) {
             // Get CAS servers
             /** @var ExternalloginModelServers|false */
             $model = BaseDatabaseModel::getInstance('Servers', 'ExternalloginModel', ['ignore_request' => true]);
@@ -253,7 +253,7 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
             }
             return;
         }
-        if (empty($ticket) && !empty($serverID)) {
+        if (!$ticket && $serverID) {
             /** @var ExternalloginTableServer|bool */
             $server = Table::getInstance('Server', 'ExternalloginTable');
             if ($server && $server->load($serverID) && $server->plugin == 'system.caslogin') {
@@ -453,8 +453,9 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
         // If the return url is for an Itemid, we look it up in the menu
         // in case it is a redirect to an external source
         $query = $service->getQuery(true);
+        $return = '';
 
-        if (empty($return) && !empty($query) && count($query) === 1 && array_key_exists('Itemid', $query)) {
+        if (!empty($query) && count($query) === 1 && array_key_exists('Itemid', $query)) {
             $menu      = $app->getMenu();
             $menuEntry = $menu->getItem($query['Itemid']);
 
@@ -463,7 +464,7 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
             }
         }
 
-        if (empty($return)) {
+        if (!$return) {
             // Original way of determining the return url
             $return = 'index.php' . $service->toString(['query']);
         }

@@ -93,14 +93,14 @@ parameters:
 			path: src/administrator/components/com_externallogin/models/server.php
 
 		-
-			message: '#^Variable \$form in empty\(\) always exists and is not falsy\.$#'
-			identifier: empty.variable
+			message: '#^Negated boolean expression is always false\.$#'
+			identifier: booleanNot.alwaysFalse
 			count: 1
 			path: src/administrator/components/com_externallogin/models/server.php
 
 		-
-			message: '#^Variable \$form in empty\(\) always exists and is not falsy\.$#'
-			identifier: empty.variable
+			message: '#^Negated boolean expression is always false\.$#'
+			identifier: booleanNot.alwaysFalse
 			count: 1
 			path: src/administrator/components/com_externallogin/models/upload.php
 
@@ -651,14 +651,8 @@ parameters:
 			path: src/plugins/system/caslogin/caslogin.php
 
 		-
-			message: '#^Variable \$return in empty\(\) is never defined\.$#'
-			identifier: empty.variable
-			count: 1
-			path: src/plugins/system/caslogin/caslogin.php
-
-		-
-			message: '#^Variable \$serverID in empty\(\) always exists and is not falsy\.$#'
-			identifier: empty.variable
+			message: '#^Right side of && is always true\.$#'
+			identifier: booleanAnd.rightAlwaysTrue
 			count: 1
 			path: src/plugins/system/caslogin/caslogin.php
 

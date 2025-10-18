@@ -55,7 +55,7 @@ class ExternalloginModelUpload extends Joomla\CMS\MVC\Model\AdminModel
         // Get the form.
         $form = $this->loadForm('com_externallogin.upload', 'upload', ['control' => 'jform', 'load_data' => $loadData]);
 
-        if (empty($form)) {
+        if (!$form) {
             return false;
         }
 
