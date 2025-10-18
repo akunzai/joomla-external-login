@@ -22,11 +22,11 @@ use Joomla\Registry\Registry;
 defined('_JEXEC') or die;
 
 /**
- * Server Model of External Login component.
+ * Login Server Model of External Login component.
  *
  * @since       2.0.0
  */
-class ExternalloginModelServer extends Joomla\CMS\MVC\Model\ItemModel
+class ExternalloginModelLoginServer extends Joomla\CMS\MVC\Model\ItemModel
 {
     /**
      * Method to auto-populate the model state.

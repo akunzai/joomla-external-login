@@ -31,12 +31,12 @@ class ExternalloginControllerServer extends Joomla\CMS\MVC\Controller\BaseContro
      * @param string $prefix Model prefix
      * @param array|null $config Options
      *
-     * @return ExternalloginModelServer|bool
+     * @return ExternalloginModelLoginServer|bool
      *
      * @see     JControllerLegacy::getModel
      * @since   2.3.0
      */
-    public function getModel($name = 'Server', $prefix = 'ExternalloginModel', $config = null)
+    public function getModel($name = 'LoginServer', $prefix = 'ExternalloginModel', $config = null)
     {
         return parent::getModel($name, $prefix, $config ?? ['ignore_request' => true]);
     }

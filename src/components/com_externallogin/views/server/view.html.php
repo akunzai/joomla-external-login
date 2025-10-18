@@ -35,7 +35,7 @@ class ExternalloginViewServer extends Joomla\CMS\MVC\View\HtmlView
     public function display($tpl = null)
     {
         // Get data from the model
-        /** @var ExternalloginModelServer $model */
+        /** @var ExternalloginModelLoginServer $model */
         $model = $this->getModel();
         $item = $model->getItem();
         $state = $model->getState();
