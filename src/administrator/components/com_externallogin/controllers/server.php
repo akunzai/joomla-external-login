@@ -78,6 +78,7 @@ class ExternalloginControllerServer extends Joomla\CMS\MVC\Controller\FormContro
         $form = Factory::getApplication()->getInput()->get('jform', [], 'array');
         $id = (int) $form['id'];
 
+        /** @var ExternalloginModelServer $model */
         $model = $this->getModel();
 
         try {

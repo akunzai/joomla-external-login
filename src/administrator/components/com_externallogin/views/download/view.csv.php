@@ -35,6 +35,7 @@ class ExternalloginViewDownload extends Joomla\CMS\MVC\View\HtmlView
      */
     public function display($tpl = null)
     {
+        /** @var ExternalloginModelDownload $model */
         $model = $this->getModel();
         $basename = $model->getBaseName();
 

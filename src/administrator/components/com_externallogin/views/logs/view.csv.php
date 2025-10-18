@@ -34,6 +34,7 @@ class ExternalloginViewLogs extends Joomla\CMS\MVC\View\HtmlView
      */
     public function display($tpl = null)
     {
+        /** @var ExternalloginModelLogs $model */
         $model = $this->getModel();
         $basename = $model->getBaseName();
 

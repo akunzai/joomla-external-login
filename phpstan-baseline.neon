@@ -1,12 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:upload\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/administrator/components/com_externallogin/controllers/server.php
-
-		-
 			message: '#^Parameter \#1 \$sid of method ExternalloginModelUser\:\:disableExternalloginGlobal\(\) expects array, int given\.$#'
 			identifier: argument.type
 			count: 1
@@ -153,18 +147,6 @@ parameters:
 			path: src/administrator/components/com_externallogin/views/about/view.html.php
 
 		-
-			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getBaseName\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/administrator/components/com_externallogin/views/download/view.csv.php
-
-		-
-			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getContent\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/administrator/components/com_externallogin/views/download/view.csv.php
-
-		-
 			message: '''
 				#^Call to deprecated method getErrors\(\) of class Joomla\\CMS\\MVC\\Model\\BaseModel\:
 				3\.1\.4 will be removed in 7\.0
@@ -215,18 +197,6 @@ parameters:
 			identifier: variable.undefined
 			count: 4
 			path: src/administrator/components/com_externallogin/views/logs/tmpl/default_head.php
-
-		-
-			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getBaseName\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/administrator/components/com_externallogin/views/logs/view.csv.php
-
-		-
-			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getContent\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/administrator/components/com_externallogin/views/logs/view.csv.php
 
 		-
 			message: '''
