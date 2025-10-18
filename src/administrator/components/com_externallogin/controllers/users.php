@@ -54,7 +54,7 @@ class ExternalloginControllerUsers extends Joomla\CMS\MVC\Controller\BaseControl
         Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
 
         // Get items to publish from the request.
-        $cid = $this->input->get('cid', [], 'array');
+        $cid = Factory::getApplication()->getInput()->get('cid', [], 'array');
 
         if (empty($cid)) {
             $this->setMessage(Text::_('COM_EXTERNALLOGIN_USERS_NO_ITEM_SELECTED'), 'warning');
@@ -89,7 +89,7 @@ class ExternalloginControllerUsers extends Joomla\CMS\MVC\Controller\BaseControl
         Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
 
         // Get items to publish from the request.
-        $cid = $this->input->get('cid', [], 'array');
+        $cid = Factory::getApplication()->getInput()->get('cid', [], 'array');
 
         if (empty($cid)) {
             $this->setMessage(Text::_('COM_EXTERNALLOGIN_USERS_NO_ITEM_SELECTED'), 'warning');
@@ -124,7 +124,7 @@ class ExternalloginControllerUsers extends Joomla\CMS\MVC\Controller\BaseControl
         Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
 
         // Get items to publish from the request.
-        $cid = $this->input->get('cid', [], 'array');
+        $cid = Factory::getApplication()->getInput()->get('cid', [], 'array');
 
         if (empty($cid)) {
             $this->setMessage(Text::_('COM_EXTERNALLOGIN_USERS_NO_ITEM_SELECTED'), 'warning');
@@ -159,7 +159,7 @@ class ExternalloginControllerUsers extends Joomla\CMS\MVC\Controller\BaseControl
         Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
 
         // Get server id.
-        $sid = Factory::getApplication()->input->getInt('server');
+        $sid = Factory::getApplication()->getInput()->getInt('server');
 
         // Get the model.
         $model = $this->getModel();
@@ -185,7 +185,7 @@ class ExternalloginControllerUsers extends Joomla\CMS\MVC\Controller\BaseControl
     {
         // Check for request forgeries
         Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
-        $input = Factory::getApplication()->input;
+        $input = Factory::getApplication()->getInput();
 
         // Get items to publish from the request.
         $cid  = $input->get('cid', [], 'array');
@@ -225,7 +225,7 @@ class ExternalloginControllerUsers extends Joomla\CMS\MVC\Controller\BaseControl
         $app = Factory::getApplication();
 
         // Get server id.
-        $sid = $app->input->getInt('server');
+        $sid = $app->getInput()->getInt('server');
 
         // Get the model.
         $model = $this->getModel();

@@ -23,10 +23,11 @@ require_once JPATH_COMPONENT_ADMINISTRATOR . '/helpers.php';
 // Get an instance of the controller prefixed by Externallogin
 $app = Factory::getApplication();
 $mvcFactory = $app->bootComponent('com_externallogin')->getMVCFactory();
-$controller = $mvcFactory->createController('Display', 'Site', [], $app, $app->input);
+$input = $app->getInput();
+$controller = $mvcFactory->createController('Display', 'Site', [], $app, $input);
 
 // Perform the Request task
-$controller->execute($app->input->get('task'));
+$controller->execute($input->get('task'));
 
 // Redirect if set by the controller
 $controller->redirect();

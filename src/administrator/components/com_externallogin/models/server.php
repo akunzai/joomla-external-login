@@ -39,7 +39,7 @@ class ExternalloginModelServer extends Joomla\CMS\MVC\Model\AdminModel
         parent::populateState();
 
         // Get the plugin from the request.
-        $plugin = Factory::getApplication()->input->get('plugin');
+        $plugin = Factory::getApplication()->getInput()->get('plugin');
         $this->setState($this->getName() . '.plugin', $plugin);
     }
 
@@ -149,7 +149,7 @@ class ExternalloginModelServer extends Joomla\CMS\MVC\Model\AdminModel
      */
     public function upload($form)
     {
-        $files = Factory::getApplication()->input->files->get('jform', null, 'array');
+        $files = Factory::getApplication()->getInput()->files->get('jform', null, 'array');
         $sid = (int) $form['id'];
 
         if ($files['file']['type'] != 'text/csv') {

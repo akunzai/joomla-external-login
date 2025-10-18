@@ -1,28 +1,16 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
-			identifier: property.notFound
-			count: 3
-			path: src/administrator/components/com_externallogin/controllers/server.php
-
-		-
 			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:upload\(\)\.$#'
 			identifier: method.notFound
 			count: 1
 			path: src/administrator/components/com_externallogin/controllers/server.php
 
 		-
-			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
-			identifier: property.notFound
-			count: 3
+			message: '#^Parameter \#1 \$sid of method ExternalloginModelUser\:\:disableExternalloginGlobal\(\) expects array, int given\.$#'
+			identifier: argument.type
+			count: 1
 			path: src/administrator/components/com_externallogin/controllers/users.php
-
-		-
-			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
-			identifier: property.notFound
-			count: 2
-			path: src/administrator/components/com_externallogin/externallogin.php
 
 		-
 			message: '#^Call to an undefined method Joomla\\CMS\\Extension\\ComponentInterface\:\:getMVCFactory\(\)\.$#'
@@ -89,22 +77,10 @@ parameters:
 			path: src/administrator/components/com_externallogin/log/logger.php
 
 		-
-			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/administrator/components/com_externallogin/models/download.php
-
-		-
 			message: '#^Call to an undefined method Joomla\\CMS\\Application\\CMSApplicationInterface\:\:getConfig\(\)\.$#'
 			identifier: method.notFound
 			count: 1
 			path: src/administrator/components/com_externallogin/models/download.php
-
-		-
-			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/administrator/components/com_externallogin/models/logs.php
 
 		-
 			message: '#^Call to an undefined method Joomla\\CMS\\Application\\CMSApplicationInterface\:\:getConfig\(\)\.$#'
@@ -135,12 +111,6 @@ parameters:
 			path: src/administrator/components/com_externallogin/models/server.php
 
 		-
-			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
-			identifier: property.notFound
-			count: 2
-			path: src/administrator/components/com_externallogin/models/server.php
-
-		-
 			message: '#^Call to an undefined method Joomla\\CMS\\Application\\CMSApplicationInterface\:\:getUserState\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -151,12 +121,6 @@ parameters:
 			identifier: empty.variable
 			count: 1
 			path: src/administrator/components/com_externallogin/models/server.php
-
-		-
-			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/administrator/components/com_externallogin/models/servers.php
 
 		-
 			message: '#^Variable \$form in empty\(\) always exists and is not falsy\.$#'
@@ -175,12 +139,6 @@ parameters:
 			identifier: encapsedStringPart.nonString
 			count: 2
 			path: src/administrator/components/com_externallogin/models/user.php
-
-		-
-			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/administrator/components/com_externallogin/models/users.php
 
 		-
 			message: '#^Variable \$this might not be defined\.$#'
@@ -334,12 +292,6 @@ parameters:
 			path: src/administrator/components/com_externallogin/views/server/tmpl/edit.php
 
 		-
-			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/administrator/components/com_externallogin/views/server/view.html.php
-
-		-
 			message: '#^Call to an undefined method Joomla\\CMS\\Application\\CMSApplicationInterface\:\:getDocument\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -428,12 +380,6 @@ parameters:
 			identifier: variable.undefined
 			count: 4
 			path: src/administrator/components/com_externallogin/views/servers/tmpl/modal_head.php
-
-		-
-			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/administrator/components/com_externallogin/views/servers/view.html.php
 
 		-
 			message: '#^Call to an undefined method Joomla\\CMS\\Application\\CMSApplicationInterface\:\:getDocument\(\)\.$#'
@@ -619,12 +565,6 @@ parameters:
 			path: src/components/com_externallogin/controllers/server.php
 
 		-
-			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
-			identifier: property.notFound
-			count: 2
-			path: src/components/com_externallogin/externallogin.php
-
-		-
 			message: '#^Call to an undefined method Joomla\\CMS\\Extension\\ComponentInterface\:\:getMVCFactory\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -635,12 +575,6 @@ parameters:
 			identifier: constant.notFound
 			count: 1
 			path: src/components/com_externallogin/externallogin.php
-
-		-
-			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
-			identifier: property.notFound
-			count: 3
-			path: src/components/com_externallogin/models/server.php
 
 		-
 			message: '#^Parameter \#3 \$tls of static method Joomla\\CMS\\Router\\Route\:\:_\(\) expects int, bool given\.$#'

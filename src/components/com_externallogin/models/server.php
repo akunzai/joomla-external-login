@@ -39,11 +39,12 @@ class ExternalloginModelServer extends Joomla\CMS\MVC\Model\ItemModel
     protected function populateState()
     {
         $app = Factory::getApplication();
-        $id = $app->input->get('server', 0, 'uint');
+        $input = $app->getInput();
+        $id = $input->get('server', 0, 'uint');
         $this->setState('server.id', $id);
-        $redirect = $app->input->get('redirect', '', 'RAW');
+        $redirect = $input->get('redirect', '', 'RAW');
         $this->setState('server.redirect', $redirect);
-        $noredirect = $app->input->get('noredirect');
+        $noredirect = $input->get('noredirect');
         $this->setState('server.noredirect', $noredirect);
         parent::populateState();
     }
@@ -110,7 +111,7 @@ class ExternalloginModelServer extends Joomla\CMS\MVC\Model\ItemModel
         if (!empty($redirect) && !$noredirect) {
             $url = ExternalloginHelper::url($redirect);
         } else {
-            $url = $app->input->server->getString('HTTP_REFERER');
+            $url = $app->getInput()->server->getString('HTTP_REFERER');
 
             if (empty($url) || !Uri::isInternal($url)) {
                 $url = Route::_('index.php', true, $app->get('force_ssl') == 2);

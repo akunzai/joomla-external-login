@@ -40,14 +40,15 @@ class ExternalloginModelLogin extends Joomla\CMS\MVC\Model\ListModel
     {
         /** @var Joomla\CMS\Application\CMSApplication */
         $app = Factory::getApplication();
+        $input = $app->getInput();
         // Adjust the context to support modal layouts.
-        if ($layout = $app->input->get('layout')) {
+        if ($layout = $input->get('layout')) {
             $this->context .= '.' . $layout;
         }
 
-        $redirect = $app->input->get('redirect', $app->getUserState('users.login.form.data.return'));
+        $redirect = $input->get('redirect', $app->getUserState('users.login.form.data.return'));
         $this->setState('server.redirect', $redirect);
-        $noredirect = $app->input->get('noredirect');
+        $noredirect = $input->get('noredirect');
         $this->setState('server.noredirect', $noredirect);
 
         // List state information.

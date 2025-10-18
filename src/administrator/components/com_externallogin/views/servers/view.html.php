@@ -81,7 +81,7 @@ class ExternalloginViewServers extends Joomla\CMS\MVC\View\HtmlView
         $state = $model->getState();
 
         // Get global var if set
-        $global = Factory::getApplication()->input->getInt('globalS');
+        $global = Factory::getApplication()->getInput()->getInt('globalS');
 
         // Assign data to the view
         $this->items = $items;

@@ -48,7 +48,7 @@ class ExternalloginModelLogs extends Joomla\CMS\MVC\Model\ListModel
     protected function populateState($ordering = null, $direction = null)
     {
         // Adjust the context to support modal layouts.
-        if ($layout = Factory::getApplication()->input->get('layout')) {
+        if ($layout = Factory::getApplication()->getInput()->get('layout')) {
             $this->context .= '.' . $layout;
         }
 

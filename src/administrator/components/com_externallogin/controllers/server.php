@@ -38,7 +38,7 @@ class ExternalloginControllerServer extends Joomla\CMS\MVC\Controller\FormContro
      */
     protected function getRedirectToItemAppend($recordId = null, $urlVar = 'id')
     {
-        $plugin = Factory::getApplication()->input->get('plugin', '');
+        $plugin = Factory::getApplication()->getInput()->get('plugin', '');
         $append = parent::getRedirectToItemAppend($recordId, $urlVar);
 
         if (!empty($plugin)) {
@@ -59,7 +59,7 @@ class ExternalloginControllerServer extends Joomla\CMS\MVC\Controller\FormContro
         Session::checkToken() or exit(Text::_('JINVALID_TOKEN'));
 
         // Initialise variables.
-        $cid = Factory::getApplication()->input->get('cid', [], 'array');
+        $cid = Factory::getApplication()->getInput()->get('cid', [], 'array');
 
         $this->setRedirect(Route::_('index.php?option=com_externallogin&view=download&format=csv&id=' . $cid[0], false));
 
@@ -75,7 +75,7 @@ class ExternalloginControllerServer extends Joomla\CMS\MVC\Controller\FormContro
         Session::checkToken() or exit(Text::_('JINVALID_TOKEN'));
 
         // Initialise variables.
-        $form = Factory::getApplication()->input->get('jform', [], 'array');
+        $form = Factory::getApplication()->getInput()->get('jform', [], 'array');
         $id = (int) $form['id'];
 
         $model = $this->getModel();

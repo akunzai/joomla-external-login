@@ -36,7 +36,7 @@ class ExternalloginModelDownload extends Joomla\CMS\MVC\Model\BaseDatabaseModel
     protected function populateState()
     {
         // Get the pk of the record from the request.
-        $pk = Factory::getApplication()->input->getInt('id');
+        $pk = Factory::getApplication()->getInput()->getInt('id');
         $this->setState($this->getName() . '.id', $pk);
     }
 

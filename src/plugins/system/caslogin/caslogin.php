@@ -185,7 +185,7 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
         $db = Factory::getContainer()->get(DatabaseInterface::class);
 
         // Get the input
-        $input = $app->input;
+        $input = $app->getInput();
 
         // Get the service
         $service = Uri::getInstance();

@@ -88,7 +88,7 @@ class ExternalloginViewServer extends Joomla\CMS\MVC\View\HtmlView
         $app->getDocument()->getWebAssetManager()
             ->registerAndUseStyle('com_externallogin', 'com_externallogin/administrator/externallogin.css', [], [], []);
 
-        $app->input->set('hidemainmenu', true);
+        $app->getInput()->set('hidemainmenu', true);
 
         $user = $this->getCurrentUser();
         $userId = $user->id;
