@@ -114,7 +114,7 @@ class ExternalloginModelServer extends Joomla\CMS\MVC\Model\ItemModel
             $url = $app->getInput()->server->getString('HTTP_REFERER');
 
             if (empty($url) || !Uri::isInternal($url)) {
-                $url = Route::_('index.php', true, $app->get('force_ssl') == 2);
+                $url = Route::_('index.php', true, $app->get('force_ssl') == 2 ? 1 : 0);
             }
         }
 

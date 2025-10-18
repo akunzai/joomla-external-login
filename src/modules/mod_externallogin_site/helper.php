@@ -106,7 +106,7 @@ abstract class ModExternalloginsiteHelper
                 $lang = '&lang=' . $item->language;
             }
 
-            $url = Route::_('index.php?Itemid=' . $item->id . $lang, $app->get('force_ssl') === 2 ? 1 : 2);
+            $url = Route::_('index.php?Itemid=' . $item->id . $lang, false, $app->get('force_ssl') === 2 ? 1 : 0);
         }
 
         // We are forced to encode the url in base64 as com_users uses this encoding

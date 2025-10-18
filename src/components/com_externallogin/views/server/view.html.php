@@ -50,6 +50,6 @@ class ExternalloginViewServer extends Joomla\CMS\MVC\View\HtmlView
             return false;
         }
 
-        $app->redirect($item);
+        $app->redirect((string) $item);
     }
 }

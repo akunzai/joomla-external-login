@@ -56,10 +56,10 @@ class ExternalloginControllerServer extends Joomla\CMS\MVC\Controller\BaseContro
         try {
             // Get the uri
             $uri = $model->getItem();
-            $this->setRedirect(Route::_($uri, false));
+            $this->setRedirect(Route::_((string) $uri, false));
         } catch (Exception $e) {
             $this->setMessage($e->getMessage(), 'warning');
-            $this->setRedirect('index.php', false);
+            $this->setRedirect('index.php');
         }
     }
 }

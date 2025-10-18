@@ -1,12 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Parameter \#1 \$sid of method ExternalloginModelUser\:\:disableExternalloginGlobal\(\) expects array, int given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/administrator/components/com_externallogin/controllers/users.php
-
-		-
 			message: '#^Call to an undefined method Joomla\\CMS\\Extension\\ComponentInterface\:\:getMVCFactory\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -53,12 +47,6 @@ parameters:
 			path: src/administrator/components/com_externallogin/helpers/externallogin.php
 
 		-
-			message: '#^Parameter \#2 \$timestamp of function date expects int\|null, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/administrator/components/com_externallogin/log/entry.php
-
-		-
 			message: '#^Property Joomla\\CMS\\Log\\LogEntry\:\:\$date \(Joomla\\CMS\\Date\\Date\) does not accept string\.$#'
 			identifier: assign.propertyType
 			count: 1
@@ -79,12 +67,6 @@ parameters:
 		-
 			message: '#^Call to an undefined method Joomla\\CMS\\Application\\CMSApplicationInterface\:\:getConfig\(\)\.$#'
 			identifier: method.notFound
-			count: 1
-			path: src/administrator/components/com_externallogin/models/logs.php
-
-		-
-			message: '#^Parameter \#2 \$timestamp of function date expects int\|null, string given\.$#'
-			identifier: argument.type
 			count: 1
 			path: src/administrator/components/com_externallogin/models/logs.php
 
@@ -126,12 +108,6 @@ parameters:
 			message: '#^Access to an undefined property ExternalloginModelUser\:\:\$_db\.$#'
 			identifier: property.notFound
 			count: 30
-			path: src/administrator/components/com_externallogin/models/user.php
-
-		-
-			message: '#^Part \$sid \(array\) of encapsed string cannot be cast to string\.$#'
-			identifier: encapsedStringPart.nonString
-			count: 2
 			path: src/administrator/components/com_externallogin/models/user.php
 
 		-
@@ -457,18 +433,6 @@ parameters:
 			path: src/administrator/modules/mod_externallogin_admin/tmpl/title.php
 
 		-
-			message: '#^Parameter \#1 \$url of static method Joomla\\CMS\\Router\\Route\:\:_\(\) expects string, stdClass\|false given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/components/com_externallogin/controllers/server.php
-
-		-
-			message: '#^Parameter \#2 \$msg of method Joomla\\CMS\\MVC\\Controller\\BaseController\:\:setRedirect\(\) expects string\|null, false given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/components/com_externallogin/controllers/server.php
-
-		-
 			message: '#^Call to an undefined method Joomla\\CMS\\Extension\\ComponentInterface\:\:getMVCFactory\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -479,12 +443,6 @@ parameters:
 			identifier: constant.notFound
 			count: 1
 			path: src/components/com_externallogin/externallogin.php
-
-		-
-			message: '#^Parameter \#3 \$tls of static method Joomla\\CMS\\Router\\Route\:\:_\(\) expects int, bool given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/components/com_externallogin/models/server.php
 
 		-
 			message: '#^Variable \$this might not be defined\.$#'
@@ -533,12 +491,6 @@ parameters:
 			path: src/components/com_externallogin/views/server/view.html.php
 
 		-
-			message: '#^Parameter \#1 \$url of method Joomla\\CMS\\Application\\CMSApplication\:\:redirect\(\) expects string, stdClass\|false given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/components/com_externallogin/views/server/view.html.php
-
-		-
 			message: '#^Access to protected property Joomla\\CMS\\Component\\ComponentRecord\:\:\$params\.$#'
 			identifier: property.protected
 			count: 1
@@ -553,12 +505,6 @@ parameters:
 		-
 			message: '#^Call to an undefined method Joomla\\CMS\\Extension\\ComponentInterface\:\:getMVCFactory\(\)\.$#'
 			identifier: method.notFound
-			count: 1
-			path: src/modules/mod_externallogin_site/helper.php
-
-		-
-			message: '#^Parameter \#2 \$xhtml of static method Joomla\\CMS\\Router\\Route\:\:_\(\) expects bool, int given\.$#'
-			identifier: argument.type
 			count: 1
 			path: src/modules/mod_externallogin_site/helper.php
 

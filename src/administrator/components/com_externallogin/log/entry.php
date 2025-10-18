@@ -36,7 +36,7 @@ class ExternalloginLogEntry extends Joomla\CMS\Log\LogEntry
     {
         if (empty($date)) {
             [$microtime, $time] = explode(' ', microtime());
-            $date = date('Y-m-d H:i:s', $time) . trim($microtime, '0');
+            $date = date('Y-m-d H:i:s', (int) $time) . trim($microtime, '0');
         }
 
         parent::__construct($message, $priority, $category, $date);

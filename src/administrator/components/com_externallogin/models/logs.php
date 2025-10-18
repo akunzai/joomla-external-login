@@ -165,7 +165,7 @@ class ExternalloginModelLogs extends Joomla\CMS\MVC\Model\ListModel
         foreach ($results as $result) {
             $result['priority'] = Text::_('COM_EXTERNALLOGIN_GRID_LOG_PRIORITY_' . $result['priority']);
             [$time, $microtime] = explode('.', $result['date']);
-            $result['date'] = date('Y-m-d H:i:s', $time) . '.' . $microtime;
+            $result['date'] = date('Y-m-d H:i:s', (int) $time) . '.' . $microtime;
             fputcsv($file, $result);
         }
 

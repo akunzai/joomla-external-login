@@ -134,7 +134,7 @@ class ExternalloginModelUser extends Joomla\CMS\MVC\Model\BaseDatabaseModel
     /**
      * Method to disable the external login for a set of user.
      *
-     * @param array $sid server id
+     * @param int $sid server id
      *
      * @return bool true on success
      *
