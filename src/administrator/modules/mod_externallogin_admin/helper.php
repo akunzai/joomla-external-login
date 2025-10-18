@@ -54,7 +54,7 @@ abstract class ModExternalloginadminHelper
         foreach ($items as $i => $item) {
             $item->params = new Registry($item->params);
             $uri->setVar('server', $item->id);
-            $results = $app->triggerEvent('onGetLoginUrl', [$item, Route::_($uri, true)]);
+            $results = $app->getDispatcher()->dispatch('onGetLoginUrl', new Joomla\Event\Event('onGetLoginUrl', [$item, Route::_($uri, true)]))->getArgument('result', []);
 
             if (!empty($results)) {
                 $item->url = $results[0];

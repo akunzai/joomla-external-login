@@ -126,7 +126,8 @@ class PlgAuthenticationExternallogin extends Joomla\CMS\Plugin\CMSPlugin
      */
     public function onUserAuthenticate($credentials, $options, &$response)
     {
-        $results = Factory::getApplication()->triggerEvent('onExternalLogin', [&$response]);
+        $app = Factory::getApplication();
+        $results = $app->getDispatcher()->dispatch('onExternalLogin', new Joomla\Event\Event('onExternalLogin', ['response' => &$response]))->getArgument('result', []);
 
         if (count($results) === 0) {
             return false;

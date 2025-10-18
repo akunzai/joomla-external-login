@@ -30,7 +30,7 @@ class ExternalloginViewLogs extends Joomla\CMS\MVC\View\HtmlView
     /**
      * The model state.
      *
-     * @var Joomla\CMS\Object\CMSObject
+     * @var Joomla\Registry\Registry
      */
     protected $state;
 

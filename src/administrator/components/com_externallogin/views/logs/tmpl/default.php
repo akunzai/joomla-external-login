@@ -22,7 +22,7 @@ HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('dropdown.init');
 HTMLHelper::_('formbehavior.chosen', 'select');
 
-/** @var Joomla\CMS\Object\CMSObject */
+/** @var Joomla\Registry\Registry */
 $state = $this->state;
 
 $listOrder	= $this->escape($state->get('list.ordering'));

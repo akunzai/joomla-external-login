@@ -35,7 +35,7 @@ class ExternalloginModelPlugins extends Joomla\CMS\MVC\Model\BaseDatabaseModel
 
         // Include buttons defined by published external login plugins
         $app = Factory::getApplication();
-        $arrays = (array) $app->triggerEvent('onGetIcons', ['com_externallogin']);
+        $arrays = (array) $app->getDispatcher()->dispatch('onGetIcons', new Joomla\Event\Event('onGetIcons', ['com_externallogin']))->getArgument('result', []);
 
         foreach ($arrays as $response) {
             foreach ($response as $plugin) {

@@ -80,7 +80,7 @@ abstract class ExternalloginHelper
     {
         $app = Factory::getApplication();
 
-        return (array) $app->triggerEvent('onGetOption', ['com_externallogin']);
+        return (array) $app->getDispatcher()->dispatch('onGetOption', new Joomla\Event\Event('onGetOption', ['com_externallogin']))->getArgument('result', []);
     }
 
     /**
