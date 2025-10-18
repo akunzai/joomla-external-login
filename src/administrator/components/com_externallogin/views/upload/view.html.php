@@ -56,6 +56,7 @@ class ExternalloginViewUpload extends Joomla\CMS\MVC\View\HtmlView
     public function display($tpl = null)
     {
         // Get data from the model
+        /** @var ExternalloginModelServer $model */
         $model = $this->getModel();
         $form = $model->getForm();
         $state = $model->getState();

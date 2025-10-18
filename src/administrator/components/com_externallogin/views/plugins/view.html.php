@@ -42,6 +42,7 @@ class ExternalloginViewPlugins extends Joomla\CMS\MVC\View\HtmlView
     public function display($tpl = null)
     {
         // Get data from the model
+        /** @var ExternalloginModelPlugins $model */
         $model = $this->getModel();
         $items = $model->getItems();
 

@@ -68,6 +68,7 @@ class ExternalloginViewUsers extends Joomla\CMS\MVC\View\HtmlView
     public function display($tpl = null)
     {
         // Get data from the model
+        /** @var ExternalloginModelUsers $model */
         $model = $this->getModel();
         $items = $model->getItems();
         $pagination = $model->getPagination();

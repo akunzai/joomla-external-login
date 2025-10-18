@@ -246,18 +246,6 @@ parameters:
 			path: src/administrator/components/com_externallogin/views/logs/view.html.php
 
 		-
-			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getItems\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/administrator/components/com_externallogin/views/logs/view.html.php
-
-		-
-			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getPagination\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/administrator/components/com_externallogin/views/logs/view.html.php
-
-		-
 			message: '''
 				#^Call to method get\(\) of deprecated class Joomla\\CMS\\Object\\CMSObject\:
 				4\.3 will be removed in 6\.0
@@ -267,12 +255,6 @@ parameters:
 			identifier: method.deprecatedClass
 			count: 2
 			path: src/administrator/components/com_externallogin/views/logs/view.html.php
-
-		-
-			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getItems\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/administrator/components/com_externallogin/views/plugins/view.html.php
 
 		-
 			message: '''
@@ -293,18 +275,6 @@ parameters:
 
 		-
 			message: '#^Call to an undefined method Joomla\\CMS\\Application\\CMSApplicationInterface\:\:getDocument\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/administrator/components/com_externallogin/views/server/view.html.php
-
-		-
-			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getForm\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/administrator/components/com_externallogin/views/server/view.html.php
-
-		-
-			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getItem\(\)\.$#'
 			identifier: method.notFound
 			count: 1
 			path: src/administrator/components/com_externallogin/views/server/view.html.php
@@ -388,18 +358,6 @@ parameters:
 			path: src/administrator/components/com_externallogin/views/servers/view.html.php
 
 		-
-			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getItems\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/administrator/components/com_externallogin/views/servers/view.html.php
-
-		-
-			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getPagination\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/administrator/components/com_externallogin/views/servers/view.html.php
-
-		-
 			message: '#^Call to an undefined method Joomla\\CMS\\Application\\CMSApplicationInterface\:\:getDocument\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -410,18 +368,6 @@ parameters:
 			identifier: variable.undefined
 			count: 3
 			path: src/administrator/components/com_externallogin/views/upload/tmpl/default.php
-
-		-
-			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getForm\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/administrator/components/com_externallogin/views/upload/view.html.php
-
-		-
-			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getItem\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/administrator/components/com_externallogin/views/upload/view.html.php
 
 		-
 			message: '''
@@ -466,18 +412,6 @@ parameters:
 
 		-
 			message: '#^Call to an undefined method Joomla\\CMS\\Application\\CMSApplicationInterface\:\:getDocument\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/administrator/components/com_externallogin/views/users/view.html.php
-
-		-
-			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getItems\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/administrator/components/com_externallogin/views/users/view.html.php
-
-		-
-			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getPagination\(\)\.$#'
 			identifier: method.notFound
 			count: 1
 			path: src/administrator/components/com_externallogin/views/users/view.html.php
@@ -607,12 +541,6 @@ parameters:
 			path: src/components/com_externallogin/views/login/tmpl/default_logout.php
 
 		-
-			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getItems\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/components/com_externallogin/views/login/view.html.php
-
-		-
 			message: '''
 				#^Call to deprecated method getErrors\(\) of class Joomla\\CMS\\MVC\\Model\\BaseModel\:
 				3\.1\.4 will be removed in 7\.0
@@ -624,19 +552,19 @@ parameters:
 			path: src/components/com_externallogin/views/login/view.html.php
 
 		-
-			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getItem\(\)\.$#'
-			identifier: method.notFound
+			message: '''
+				#^Call to deprecated method getErrors\(\) of class Joomla\\CMS\\MVC\\Model\\BaseModel\:
+				3\.1\.4 will be removed in 7\.0
+				             Will be removed without replacement
+				             Catch thrown Exceptions instead of getErrors$#
+			'''
+			identifier: method.deprecated
 			count: 1
 			path: src/components/com_externallogin/views/server/view.html.php
 
 		-
-			message: '''
-				#^Call to deprecated method getErrors\(\) of class Joomla\\CMS\\MVC\\Model\\BaseModel\:
-				3\.1\.4 will be removed in 7\.0
-				             Will be removed without replacement
-				             Catch thrown Exceptions instead of getErrors$#
-			'''
-			identifier: method.deprecated
+			message: '#^Parameter \#1 \$url of method Joomla\\CMS\\Application\\CMSApplication\:\:redirect\(\) expects string, stdClass\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/components/com_externallogin/views/server/view.html.php
 
