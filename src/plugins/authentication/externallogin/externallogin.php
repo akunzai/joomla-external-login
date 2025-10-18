@@ -339,7 +339,7 @@ class PlgAuthenticationExternallogin extends Joomla\CMS\Plugin\CMSPlugin
             $app = Factory::getApplication();
             $app->setUserState('com_externallogin.redirect', $redirection);
         }
-        $response->status = $status;
+        $response->status = (string) $status;
         return $response;
     }
 

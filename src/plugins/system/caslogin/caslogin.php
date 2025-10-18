@@ -545,7 +545,7 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
         $server = $this->server;
         $params = $server->params;
         $sid = $server->id;
-        $response->status = Authentication::STATUS_SUCCESS;
+        $response->status = (string) Authentication::STATUS_SUCCESS;
         $response->server = $server;
         $response->type = 'system.caslogin';
         $response->message = '';

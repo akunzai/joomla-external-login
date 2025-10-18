@@ -581,12 +581,6 @@ parameters:
 			path: src/plugins/authentication/externallogin/externallogin.php
 
 		-
-			message: '#^Property Joomla\\CMS\\Authentication\\AuthenticationResponse\:\:\$status \(string\) does not accept int\.$#'
-			identifier: assign.propertyType
-			count: 1
-			path: src/plugins/authentication/externallogin/externallogin.php
-
-		-
 			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
 			identifier: property.notFound
 			count: 1
@@ -647,12 +641,6 @@ parameters:
 		-
 			message: '#^Parameter \#1 \$config of method Joomla\\CMS\\Plugin\\CMSPlugin\:\:__construct\(\) expects array, object given\.$#'
 			identifier: argument.type
-			count: 1
-			path: src/plugins/system/caslogin/caslogin.php
-
-		-
-			message: '#^Property Joomla\\CMS\\Authentication\\AuthenticationResponse\:\:\$status \(string\) does not accept int\.$#'
-			identifier: assign.propertyType
 			count: 1
 			path: src/plugins/system/caslogin/caslogin.php
 
