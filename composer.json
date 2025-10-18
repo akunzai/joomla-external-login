@@ -38,25 +38,12 @@
 					"reference": "tags/5.4.0"
 				}
 			}
-		},
-		{
-			"type": "package",
-			"package": {
-				"name": "akunzai/joomla-stubs",
-				"version": "master",
-				"source": {
-					"url": "https://github.com/akunzai/joomla-stubs.git",
-					"type": "git",
-					"reference": "master"
-				}
-			}
 		}
 	],
 	"require": {
 		"php": ">=8.1"
 	},
 	"require-dev": {
-		"akunzai/joomla-stubs": "dev-master",
 		"friendsofphp/php-cs-fixer": "^3.88",
 		"joomla/joomla-cms": "5.4.0",
 		"phpstan/extension-installer": "^1.4",

@@ -4,19 +4,9 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f25a954e74718090727d3fc880ca40f4",
+    "content-hash": "7ae3bd49ad730f67c503b917518feef4",
     "packages": [],
     "packages-dev": [
-        {
-            "name": "akunzai/joomla-stubs",
-            "version": "master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/akunzai/joomla-stubs.git",
-                "reference": "master"
-            },
-            "type": "library"
-        },
         {
             "name": "clue/ndjson-react",
             "version": "v1.3.0",
@@ -2839,9 +2829,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "akunzai/joomla-stubs": 20
-    },
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
