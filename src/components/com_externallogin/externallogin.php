@@ -18,7 +18,9 @@ defined('_JEXEC') or die;
 
 // Require helpers file
 require_once dirname(__FILE__) . '/helpers.php';
-require_once JPATH_COMPONENT_ADMINISTRATOR . '/helpers.php';
+if (defined('JPATH_COMPONENT_ADMINISTRATOR')) {
+    require_once JPATH_COMPONENT_ADMINISTRATOR . '/helpers.php';
+}
 
 // Get an instance of the controller prefixed by Externallogin
 $app = Factory::getApplication();

@@ -417,12 +417,6 @@ parameters:
 			path: src/components/com_externallogin/externallogin.php
 
 		-
-			message: '#^Constant JPATH_COMPONENT_ADMINISTRATOR not found\.$#'
-			identifier: constant.notFound
-			count: 1
-			path: src/components/com_externallogin/externallogin.php
-
-		-
 			message: '#^Variable \$this might not be defined\.$#'
 			identifier: variable.undefined
 			count: 2
