@@ -42,10 +42,11 @@ class ExternalloginViewPlugins extends Joomla\CMS\MVC\View\HtmlView
     public function display($tpl = null)
     {
         // Get data from the model
-        $items = $this->get('Items');
+        $model = $this->getModel();
+        $items = $model->getItems();
 
         // Check for errors.
-        if (count($errors = $this->get('Errors'))) {
+        if (count($errors = $model->getErrors())) {
             /** @var Joomla\CMS\Application\CMSApplication */
             $app = Factory::getApplication();
             $app->enqueueMessage(implode('<br />', $errors), 'error');

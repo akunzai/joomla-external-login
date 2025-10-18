@@ -126,7 +126,7 @@ class ExternalloginModelServer extends Joomla\CMS\MVC\Model\ItemModel
             return $uri;
         }
         $app->setUserState('com_externallogin.server', $item->id);
-        $results = $app->triggerEvent('onGetLoginUrl', [$item, $uri]);
+        $results = $app->getDispatcher()->dispatch('onGetLoginUrl', new Joomla\Event\Event('onGetLoginUrl', [$item, $uri]))->getArgument('result', []);
 
         if (empty($results)) {
             throw new Exception(Text::_('COM_EXTERNALLOGIN_ERROR_OCCURS'));

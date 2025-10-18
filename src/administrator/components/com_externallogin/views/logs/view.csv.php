@@ -34,10 +34,11 @@ class ExternalloginViewLogs extends Joomla\CMS\MVC\View\HtmlView
      */
     public function display($tpl = null)
     {
-        $basename = $this->get('BaseName');
+        $model = $this->getModel();
+        $basename = $model->getBaseName();
 
         // Check for errors.
-        if (count($errors = $this->get('Errors'))) {
+        if (count($errors = $model->getErrors())) {
             /** @var Joomla\CMS\Application\CMSApplication */
             $app = Factory::getApplication();
             $app->enqueueMessage(implode('<br />', $errors), 'error');
@@ -50,7 +51,7 @@ class ExternalloginViewLogs extends Joomla\CMS\MVC\View\HtmlView
         header('Content-Disposition: attachment; filename="' . $basename . '".csv');
         header('Pragma: no-cache');
         header('Expires: 0');
-        $this->get('Content');
+        $model->getContent();
         exit();
     }
 }

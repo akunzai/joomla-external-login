@@ -56,12 +56,13 @@ class ExternalloginViewUpload extends Joomla\CMS\MVC\View\HtmlView
     public function display($tpl = null)
     {
         // Get data from the model
-        $form = $this->get('Form');
-        $state = $this->get('State');
-        $item = $this->get('Item');
+        $model = $this->getModel();
+        $form = $model->getForm();
+        $state = $model->getState();
+        $item = $model->getItem();
 
         // Check for errors.
-        if (count($errors = $this->get('Errors'))) {
+        if (count($errors = $model->getErrors())) {
             /** @var Joomla\CMS\Application\CMSApplication */
             $app = Factory::getApplication();
             $app->enqueueMessage(implode('<br />', $errors), 'error');

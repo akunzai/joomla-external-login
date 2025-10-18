@@ -35,13 +35,14 @@ class ExternalloginViewServer extends Joomla\CMS\MVC\View\HtmlView
     public function display($tpl = null)
     {
         // Get data from the model
-        $item = $this->get('Item');
-        $state = $this->get('State');
+        $model = $this->getModel();
+        $item = $model->getItem();
+        $state = $model->getState();
         /** @var Joomla\CMS\Application\CMSApplication */
         $app = Factory::getApplication();
 
         // Check for errors.
-        if (count($errors = $this->get('Errors'))) {
+        if (count($errors = $model->getErrors())) {
             $app->enqueueMessage(implode('<br />', $errors), 'error');
             $app->redirect('index.php');
 

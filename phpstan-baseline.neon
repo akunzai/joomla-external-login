@@ -218,14 +218,26 @@ parameters:
 			path: src/administrator/components/com_externallogin/views/about/view.html.php
 
 		-
+			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getBaseName\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/views/download/view.csv.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getContent\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/views/download/view.csv.php
+
+		-
 			message: '''
-				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
-				5\.3\.0 will be removed in 7\.0\.
-				             Retrieve the model with \$model \= \$this\-\>getModel\(\); and call the methods
-				             to the model directly, e\.g\. \$model\-\>getItems\(\) instead of \$this\-\>get\('Items'\)\.$#
+				#^Call to deprecated method getErrors\(\) of class Joomla\\CMS\\MVC\\Model\\BaseModel\:
+				3\.1\.4 will be removed in 7\.0
+				             Will be removed without replacement
+				             Catch thrown Exceptions instead of getErrors$#
 			'''
 			identifier: method.deprecated
-			count: 3
+			count: 1
 			path: src/administrator/components/com_externallogin/views/download/view.csv.php
 
 		-
@@ -270,14 +282,26 @@ parameters:
 			path: src/administrator/components/com_externallogin/views/logs/tmpl/default_head.php
 
 		-
+			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getBaseName\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/views/logs/view.csv.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getContent\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/views/logs/view.csv.php
+
+		-
 			message: '''
-				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
-				5\.3\.0 will be removed in 7\.0\.
-				             Retrieve the model with \$model \= \$this\-\>getModel\(\); and call the methods
-				             to the model directly, e\.g\. \$model\-\>getItems\(\) instead of \$this\-\>get\('Items'\)\.$#
+				#^Call to deprecated method getErrors\(\) of class Joomla\\CMS\\MVC\\Model\\BaseModel\:
+				3\.1\.4 will be removed in 7\.0
+				             Will be removed without replacement
+				             Catch thrown Exceptions instead of getErrors$#
 			'''
 			identifier: method.deprecated
-			count: 3
+			count: 1
 			path: src/administrator/components/com_externallogin/views/logs/view.csv.php
 
 		-
@@ -310,14 +334,20 @@ parameters:
 			path: src/administrator/components/com_externallogin/views/logs/view.html.php
 
 		-
+			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getItems\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/views/plugins/view.html.php
+
+		-
 			message: '''
-				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
-				5\.3\.0 will be removed in 7\.0\.
-				             Retrieve the model with \$model \= \$this\-\>getModel\(\); and call the methods
-				             to the model directly, e\.g\. \$model\-\>getItems\(\) instead of \$this\-\>get\('Items'\)\.$#
+				#^Call to deprecated method getErrors\(\) of class Joomla\\CMS\\MVC\\Model\\BaseModel\:
+				3\.1\.4 will be removed in 7\.0
+				             Will be removed without replacement
+				             Catch thrown Exceptions instead of getErrors$#
 			'''
 			identifier: method.deprecated
-			count: 2
+			count: 1
 			path: src/administrator/components/com_externallogin/views/plugins/view.html.php
 
 		-
@@ -459,14 +489,26 @@ parameters:
 			path: src/administrator/components/com_externallogin/views/upload/tmpl/default.php
 
 		-
+			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getForm\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/views/upload/view.html.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getItem\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/administrator/components/com_externallogin/views/upload/view.html.php
+
+		-
 			message: '''
-				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
-				5\.3\.0 will be removed in 7\.0\.
-				             Retrieve the model with \$model \= \$this\-\>getModel\(\); and call the methods
-				             to the model directly, e\.g\. \$model\-\>getItems\(\) instead of \$this\-\>get\('Items'\)\.$#
+				#^Call to deprecated method getErrors\(\) of class Joomla\\CMS\\MVC\\Model\\BaseModel\:
+				3\.1\.4 will be removed in 7\.0
+				             Will be removed without replacement
+				             Catch thrown Exceptions instead of getErrors$#
 			'''
 			identifier: method.deprecated
-			count: 4
+			count: 1
 			path: src/administrator/components/com_externallogin/views/upload/view.html.php
 
 		-
@@ -624,17 +666,6 @@ parameters:
 			path: src/components/com_externallogin/models/server.php
 
 		-
-			message: '''
-				#^Call to deprecated method triggerEvent\(\) of class Joomla\\CMS\\Application\\WebApplication\:
-				4\.0 will be removed in 7\.0
-				             Use the Dispatcher method instead
-				             Example\: Factory\:\:getApplication\(\)\-\>getDispatcher\(\)\-\>dispatch\(\$eventName, \$event\);$#
-			'''
-			identifier: method.deprecated
-			count: 1
-			path: src/components/com_externallogin/models/server.php
-
-		-
 			message: '#^Parameter \#3 \$tls of static method Joomla\\CMS\\Router\\Route\:\:_\(\) expects int, bool given\.$#'
 			identifier: argument.type
 			count: 1
@@ -665,25 +696,37 @@ parameters:
 			path: src/components/com_externallogin/views/login/tmpl/default_logout.php
 
 		-
-			message: '''
-				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
-				5\.3\.0 will be removed in 7\.0\.
-				             Retrieve the model with \$model \= \$this\-\>getModel\(\); and call the methods
-				             to the model directly, e\.g\. \$model\-\>getItems\(\) instead of \$this\-\>get\('Items'\)\.$#
-			'''
-			identifier: method.deprecated
-			count: 3
+			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getItems\(\)\.$#'
+			identifier: method.notFound
+			count: 1
 			path: src/components/com_externallogin/views/login/view.html.php
 
 		-
 			message: '''
-				#^Call to deprecated method get\(\) of class Joomla\\CMS\\MVC\\View\\AbstractView\:
-				5\.3\.0 will be removed in 7\.0\.
-				             Retrieve the model with \$model \= \$this\-\>getModel\(\); and call the methods
-				             to the model directly, e\.g\. \$model\-\>getItems\(\) instead of \$this\-\>get\('Items'\)\.$#
+				#^Call to deprecated method getErrors\(\) of class Joomla\\CMS\\MVC\\Model\\BaseModel\:
+				3\.1\.4 will be removed in 7\.0
+				             Will be removed without replacement
+				             Catch thrown Exceptions instead of getErrors$#
 			'''
 			identifier: method.deprecated
-			count: 3
+			count: 1
+			path: src/components/com_externallogin/views/login/view.html.php
+
+		-
+			message: '#^Call to an undefined method Joomla\\CMS\\MVC\\Model\\BaseDatabaseModel\:\:getItem\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/components/com_externallogin/views/server/view.html.php
+
+		-
+			message: '''
+				#^Call to deprecated method getErrors\(\) of class Joomla\\CMS\\MVC\\Model\\BaseModel\:
+				3\.1\.4 will be removed in 7\.0
+				             Will be removed without replacement
+				             Catch thrown Exceptions instead of getErrors$#
+			'''
+			identifier: method.deprecated
+			count: 1
 			path: src/components/com_externallogin/views/server/view.html.php
 
 		-

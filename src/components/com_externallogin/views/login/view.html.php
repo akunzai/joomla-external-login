@@ -57,12 +57,13 @@ class ExternalloginViewLogin extends Joomla\CMS\MVC\View\HtmlView
     public function display($tpl = null)
     {
         // Get data from the model
-        $items = $this->get('Items');
-        $state = $this->get('State');
+        $model = $this->getModel();
+        $items = $model->getItems();
+        $state = $model->getState();
         $params = ComponentHelper::getParams('com_externallogin');
 
         // Check for errors.
-        if (count($errors = $this->get('Errors'))) {
+        if (count($errors = $model->getErrors())) {
             /** @var Joomla\CMS\Application\CMSApplication */
             $app = Factory::getApplication();
             $app->enqueueMessage(implode('<br />', $errors), 'error');
