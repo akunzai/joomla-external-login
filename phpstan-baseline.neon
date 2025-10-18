@@ -177,18 +177,6 @@ parameters:
 			path: src/administrator/components/com_externallogin/models/user.php
 
 		-
-			message: '#^Variable \$column might not be defined\.$#'
-			identifier: variable.undefined
-			count: 1
-			path: src/administrator/components/com_externallogin/models/user.php
-
-		-
-			message: '#^Variable \$success might not be defined\.$#'
-			identifier: variable.undefined
-			count: 1
-			path: src/administrator/components/com_externallogin/models/user.php
-
-		-
 			message: '#^Access to an undefined property Joomla\\CMS\\Application\\CMSApplicationInterface\:\:\$input\.$#'
 			identifier: property.notFound
 			count: 1

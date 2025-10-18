@@ -247,6 +247,7 @@ class ExternalloginModelUser extends Joomla\CMS\MVC\Model\BaseDatabaseModel
             $column = $this->_db->loadColumn();
         } catch (Exception $exc) {
             $app->enqueueMessage($exc->getMessage(), 'error');
+            return false;
         }
 
         // Check if user is already activated and update/insert value
@@ -262,6 +263,7 @@ class ExternalloginModelUser extends Joomla\CMS\MVC\Model\BaseDatabaseModel
                 $success = $this->_db->loadResult();
             } catch (Exception $exc) {
                 $app->enqueueMessage($exc->getMessage(), 'error');
+                continue;
             }
 
             $query = $this->_db->getQuery(true);
