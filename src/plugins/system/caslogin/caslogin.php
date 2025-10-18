@@ -21,6 +21,7 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Session\Session;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\User\UserFactoryInterface;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Registry\Registry;
 
@@ -97,7 +98,7 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
     public function onGetIcons($context)
     {
         if ($context == 'com_externallogin') {
-            Factory::getDocument()->addStyleDeclaration(
+            Factory::getApplication()->getDocument()->addStyleDeclaration(
                 '.icon-caslogin {'
                     . 'width: 48px;'
                     . 'height: 48px;'
@@ -702,7 +703,7 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
         if (isset($local)) {
             return true;
         }
-        $user = Factory::getUser($options['username']);
+        $user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserByUsername($options['username']);
         $db = Factory::getContainer()->get(DatabaseInterface::class);
         $query = $db->getQuery(true);
         $query->select('*');

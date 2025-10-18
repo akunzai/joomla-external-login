@@ -31,17 +31,6 @@ parameters:
 			path: src/administrator/components/com_externallogin/externallogin.php
 
 		-
-			message: '''
-				#^Call to deprecated method register\(\) of class JLoader\:
-				4\.3 will be removed in 7\.0
-				             Classes should be autoloaded\. Use JLoader\:\:registerPrefix\(\) or JLoader\:\:registerNamespace\(\) to
-				             register an autoloader for your files\.$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
-			path: src/administrator/components/com_externallogin/helpers.php
-
-		-
 			message: '#^Access to protected property Joomla\\CMS\\Menu\\MenuItem\:\:\$params\.$#'
 			identifier: property.protected
 			count: 2
@@ -878,35 +867,8 @@ parameters:
 			path: src/plugins/system/caslogin/caslogin.php
 
 		-
-			message: '''
-				#^Call to deprecated method addStyleDeclaration\(\) of class Joomla\\CMS\\Document\\Document\:
-				4\.3 will be removed in 7\.0
-				             Use WebAssetManager
-				             Example\: \$wa\-\>addInlineStyle\(\.\.\.\);$#
-			'''
-			identifier: method.deprecated
-			count: 1
-			path: src/plugins/system/caslogin/caslogin.php
-
-		-
-			message: '''
-				#^Call to deprecated method get\(\) of class Joomla\\CMS\\User\\User\:
-				4\.3\.0 will be removed in 6\.0
-				            Create a proper getter function for the property$#
-			'''
-			identifier: method.deprecated
-			count: 1
-			path: src/plugins/system/caslogin/caslogin.php
-
-		-
-			message: '''
-				#^Call to deprecated method getDocument\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Use the document service in the DI container or get from the application object
-				             Example\:
-				             Factory\:\:getApplication\(\)\-\>getDocument\(\);$#
-			'''
-			identifier: staticMethod.deprecated
+			message: '#^Call to an undefined method Joomla\\CMS\\Application\\CMSApplicationInterface\:\:getDocument\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: src/plugins/system/caslogin/caslogin.php
 
@@ -930,18 +892,6 @@ parameters:
 			'''
 			identifier: staticMethod.deprecated
 			count: 2
-			path: src/plugins/system/caslogin/caslogin.php
-
-		-
-			message: '''
-				#^Call to deprecated method getUser\(\) of class Joomla\\CMS\\Factory\:
-				4\.3 will be removed in 6\.0
-				             Load the user service from the dependency injection container or get from the application object
-				             Example\:
-				             Factory\:\:getApplication\(\)\-\>getIdentity\(\);$#
-			'''
-			identifier: staticMethod.deprecated
-			count: 1
 			path: src/plugins/system/caslogin/caslogin.php
 
 		-

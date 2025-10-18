@@ -13,5 +13,5 @@
 // No direct access to this file
 defined('_JEXEC') or die;
 
-// Register classes to files
-JLoader::register('ExternalloginHelper', dirname(__FILE__) . '/helpers/externallogin.php');
+// Load helper class
+require_once dirname(__FILE__) . '/helpers/externallogin.php';
