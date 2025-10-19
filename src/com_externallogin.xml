@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="component" version="3" method="upgrade">
+<extension type="component" version="4" method="upgrade">
 
 	<name>COM_EXTERNALLOGIN</name>
 
+	<namespace path="src">Joomla\Component\Externallogin</namespace>
+
 	<!-- The following elements are optional and free of formatting conttraints -->
-	<creationDate>July 2008</creationDate>
+	<creationDate>Oct 2025</creationDate>
 	<author>Christophe Demko, Ioannis Barounis, Alexandre Gandois, others, see contributor page</author>
 	<authorUrl>https://github.com/akunzai/joomla-external-login</authorUrl>
 	<license>GNU General Public License version 2 or later; see LICENSE</license>
@@ -39,12 +41,8 @@
 		to copy FROM in the package to install therefore files copied
 		in this section are copied from /site/ in the package -->
 	<files folder="components/com_externallogin">
-		<filename>externallogin.php</filename>
-		<filename>controller.php</filename>
-		<filename>helpers.php</filename>
-		<filename>router.php</filename>
-		<folder>models</folder>
-		<folder>views</folder>
+		<folder>tmpl</folder>
+		<folder>src</folder>
 	</files>
 
 	<languages>
@@ -82,23 +80,16 @@
 			<!-- Admin Main File Copy Section -->
 			<filename>config.xml</filename>
 			<filename>access.xml</filename>
-			<filename>externallogin.php</filename>
-			<filename>controller.php</filename>
-			<filename>helpers.php</filename>
 			<!-- SQL files section -->
 			<folder>sql</folder>
-			<!-- tables files section -->
-			<folder>tables</folder>
-			<!-- models files section -->
-			<folder>models</folder>
-			<!-- views files section -->
-			<folder>views</folder>
-			<!-- controllers files section -->
-			<folder>controllers</folder>
-			<!-- helpers files section -->
-			<folder>helpers</folder>
-			<!-- Logger files section -->
-			<folder>log</folder>
+			<!-- View templates -->
+			<folder>tmpl</folder>
+			<!-- Service provider for DI container -->
+			<folder>services</folder>
+			<!-- Forms -->
+			<folder>forms</folder>
+			<!-- Modern MVC structure (contains Controller, Model, Table, View, Helper, Service, etc) -->
+			<folder>src</folder>
 		</files>
 
 		<languages folder="administrator">
