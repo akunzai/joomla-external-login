@@ -1,12 +1,16 @@
-includes:
-  - phpstan-baseline.neon
-
 parameters:
   level: 5
   paths:
     - src
   scanDirectories:
     - vendor/joomla/joomla-cms/administrator/includes
+    - vendor/joomla/joomla-cms/administrator/components
+    - vendor/joomla/joomla-cms/components
     - vendor/joomla/joomla-cms/includes
     - vendor/joomla/joomla-cms/libraries
+  scanFiles:
+    - vendor/joomla/joomla-cms/libraries/src/Language/Text.php
   tmpDir: tmp
+  treatPhpDocTypesAsCertain: false
+  tips:
+    discoveringSymbols: false
