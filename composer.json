@@ -64,8 +64,8 @@
 		"phpstan-baseline": [
 			"phpstan analyse --generate-baseline"
 		],
-		"build": [
-			"./build.sh"
+		"bundle": [
+			"./bundle.sh"
 		]
 	}
 }

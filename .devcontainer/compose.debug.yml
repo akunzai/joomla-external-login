@@ -1,0 +1,6 @@
+services:
+  joomla:
+    environment:
+      # https://xdebug.org/docs/all_settings
+      XDEBUG_CONFIG: 'client_host=localhost log=/tmp/xdebug.log'
+      XDEBUG_MODE: develop,debug

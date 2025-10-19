@@ -2,7 +2,7 @@
 {
   "name": "Joomla External Login",
   // https://github.com/devcontainers/images/tree/main/src/php
-  "dockerComposeFile": "compose.yaml",
+  "dockerComposeFile": "compose.yml",
   "service": "joomla",
   "workspaceFolder": "/workspace",
   "portsAttributes": {
@@ -21,13 +21,16 @@
   "remoteEnv": {
     "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
   },
+  "mounts": [
+    "source=${localEnv:HOME}/.local/share/opencode/auth.json,target=/tmp/opencode-auth.json,type=bind,consistency=cached"
+  ],
   "customizations": {
     "vscode": {
       "extensions": [
         "bmewburn.vscode-intelephense-client",
+        "fill-labs.dependi",
         "mhutchie.git-graph",
-        "mrmlnc.vscode-apache",
-        "pflannery.vscode-versionlens",
+        "ms-azuretools.vscode-containers",
         "redhat.vscode-xml",
         "xdebug.php-debug"
       ],
@@ -38,7 +41,12 @@
   },
   // https://containers.dev/features
   "features": {
-    "ghcr.io/devcontainers/features/git:1": {},
-    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+    "ghcr.io/danzilberdan/devcontainers/opencode:0": {},
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "system"
+    },
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+      "moby": false
+    }
   }
 }

@@ -14,8 +14,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
-      - name: Build package
-        run: ./build.sh
+      - name: Bundle extension
+        run: ./bundle.sh
       - name: Pre-release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/') && (contains(github.ref,'dev') || contains(github.ref,'beta') || contains(github.ref,'alpha') || contains(github.ref,'rc'))
