@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="package" version="3" method="upgrade">
+<extension type="package" version="4" method="upgrade">
 
 	<name>pkg_externallogin</name>
 
 	<!-- The following elements are optional and free of formatting conttraints -->
-	<creationDate>May 2012</creationDate>
+	<creationDate>Oct 2025</creationDate>
 	<author>Christophe Demko, Ioannis Barounis, Alexandre Gandois, others, see contributor page</author>
 	<authorUrl>https://github.com/akunzai/joomla-external-login</authorUrl>
 	<license>GNU General Public License version 2 or later; see LICENSE</license>
