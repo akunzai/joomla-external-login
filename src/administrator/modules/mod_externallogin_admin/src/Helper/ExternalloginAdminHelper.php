@@ -10,37 +10,43 @@
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
-use Joomla\CMS\Factory;
-use Joomla\CMS\MVC\Model\BaseDatabaseModel;
-use Joomla\CMS\Uri\Uri;
-use Joomla\CMS\Router\Route;
-use Joomla\Registry\Registry;
+namespace Joomla\Module\ExternalloginAdmin\Administrator\Helper;
 
-// No direct access to this file
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Event\Content\ContentPrepareEvent;
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Factory\MVCFactoryServiceInterface;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+use Joomla\Component\Externallogin\Administrator\Model\ServersModel;
+use Joomla\Event\DispatcherInterface;
+use Joomla\Registry\Registry;
+
 /**
- * Module helper class.
+ * Helper providing data for the administrator module.
  *
- * @since       2.0.0
+ * @since 5.0.0
  */
-abstract class ModExternalloginadminHelper
+class ExternalloginAdminHelper
 {
     /**
-     * Get the URLs of servers.
+     * Retrieve enabled external login servers for the module.
      *
      * @param Registry $params Module parameters
      *
-     * @return array Array of URL
+     * @return array<int, object>
      */
-    public static function getListServersURL($params)
+    public function getServers(Registry $params): array
     {
         $app = Factory::getApplication();
         $uri = Uri::getInstance();
 
-        // Get an instance of the generic articles model
-        /** @var ExternalloginModelServers */
-        $mvcFactory = $app->bootComponent('com_externallogin')->getMVCFactory();
+        /** @var MVCFactoryServiceInterface $component */
+        $component = $app->bootComponent('com_externallogin');
+        $mvcFactory = $component->getMVCFactory();
+
+        /** @var ServersModel $model */
         $model = $mvcFactory->createModel('Servers', 'Administrator', ['ignore_request' => true]);
         $model->setState('filter.published', 1);
         $model->setState('filter.enabled', 1);
@@ -49,20 +55,35 @@ abstract class ModExternalloginadminHelper
         $model->setState('list.limit', 0);
         $model->setState('list.ordering', 'a.ordering');
         $model->setState('list.direction', 'ASC');
+
         $items = $model->getItems();
 
         foreach ($items as $i => $item) {
             $item->params = new Registry($item->params);
+
             $uri->setVar('server', $item->id);
-            $results = $app->getDispatcher()->dispatch('onGetLoginUrl', new Joomla\Event\Event('onGetLoginUrl', [$item, Route::_($uri, true)]))->getArgument('result', []);
+
+            $dispatcher = Factory::getContainer()->get(DispatcherInterface::class);
+            $event = new ContentPrepareEvent(
+                'onGetLoginUrl',
+                [
+                    'context' => 'com_externallogin',
+                    'subject' => $item,
+                ]
+            );
+            $event->setArgument('service', Route::_($uri, true));
+            $dispatcher->dispatch('onGetLoginUrl', $event);
+
+            $results = $event->getArgument('result', []);
 
             if (!empty($results)) {
-                $item->url = $results[0];
+                $result = is_array($results) ? $results[0] : $results;
+                $item->url = $result;
             } else {
                 unset($items[$i]);
             }
         }
 
-        return $items;
+        return array_values($items);
     }
 }

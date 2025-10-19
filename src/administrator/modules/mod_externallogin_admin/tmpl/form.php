@@ -14,6 +14,11 @@ use Joomla\CMS\Language\Text;
 
 // No direct access to this file
 defined('_JEXEC') or die;
+
+/** @var object $module */
+/** @var array<int, object> $servers */
+$module ??= (object) ['id' => 0, 'showtitle' => 0, 'title' => ''];
+$servers ??= [];
 ?>
 <label for="mod-server-login-<?php echo $module->id; ?>"><?php echo Text::_('MOD_EXTERNALLOGIN_ADMIN_SERVER_LABEL'); ?></label>
 <select id="mod-server-login-<?php echo $module->id; ?>">

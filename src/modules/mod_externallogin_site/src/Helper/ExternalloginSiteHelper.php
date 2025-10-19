@@ -10,49 +10,56 @@
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
+namespace Joomla\Module\ExternalloginSite\Site\Helper;
+
+defined('_JEXEC') or die;
+
+use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Multilanguage;
-use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\MVC\Factory\MVCFactoryServiceInterface;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
+use Joomla\Component\Externallogin\Administrator\Model\ServersModel;
 use Joomla\Registry\Registry;
 
-// No direct access to this file
-defined('_JEXEC') or die;
-
 /**
- * Module helper class.
+ * Helper providing data for the site module.
  *
- * @since       2.0.0
+ * @since 5.0.0
  */
-abstract class ModExternalloginsiteHelper
+class ExternalloginSiteHelper
 {
     /**
-     * Get the URLs of servers.
+     * Retrieve enabled external login servers for the module.
      *
      * @param Registry $params Module parameters
      *
-     * @return array Array of URL
+     * @return array<int, object>
      */
-    public static function getListServersURL($params)
+    public function getServers(Registry $params): array
     {
-        /** @var Joomla\CMS\Application\CMSApplication */
+        /** @var CMSApplication $app */
         $app = Factory::getApplication();
-        $redirect = $app->input->get('redirect', $app->getUserState('users.login.form.data.return'));
+        $redirect = $app->getInput()->get('redirect', $app->getUserState('users.login.form.data.return'));
 
         $redirect = $redirect ? urlencode($redirect) : $params->get('redirect');
 
-        $isHome = in_array(substr((string)Uri::getInstance(), strlen(Uri::base())), ['', 'index.php']);
+        $isHome = in_array(substr((string) Uri::getInstance(), strlen(Uri::base())), ['', 'index.php']);
         $noRedirect = $params->get('noredirect');
 
-        // Get an instance of the generic articles model
-        /** @var ExternalloginModelServers */
-        $mvcFactory = $app->bootComponent('com_externallogin')->getMVCFactory();
+        /** @var MVCFactoryServiceInterface $component */
+        $component = $app->bootComponent('com_externallogin');
+        $mvcFactory = $component->getMVCFactory();
+
+        /** @var ServersModel $model */
         $model = $mvcFactory->createModel('Servers', 'Administrator', ['ignore_request' => true]);
+
         if (!$model) {
             return [];
         }
+
         $model->setState('filter.published', 1);
         $model->setState('filter.enabled', 1);
         $model->setState('filter.servers', $params->get('server'));
@@ -60,9 +67,10 @@ abstract class ModExternalloginsiteHelper
         $model->setState('list.limit', 0);
         $model->setState('list.ordering', 'a.ordering');
         $model->setState('list.direction', 'ASC');
+
         $items = $model->getItems();
 
-        foreach ($items as $i => $item) {
+        foreach ($items as $item) {
             $item->params = new Registry($item->params);
             $url = 'index.php?option=com_externallogin&view=server&server=' . $item->id;
 
@@ -81,22 +89,19 @@ abstract class ModExternalloginsiteHelper
     /**
      * Retrieve the url where the user should be returned after logging out.
      *
-     * @param Registry $params module parameters
-     *
-     * @return string
+     * @param Registry $params Module parameters
      */
-    public static function getLogoutUrl($params)
+    public function getLogoutReturn(Registry $params): string
     {
-        /** @var Joomla\CMS\Application\CMSApplication */
+        /** @var CMSApplication $app */
         $app = Factory::getApplication();
         $item = $app->getMenu()->getItem(
             $params->get(
                 'logout_redirect_menuitem',
-                ComponentHelper::getComponent('com_externallogin', true)->params->get('logout_redirect_menuitem')
+                ComponentHelper::getParams('com_externallogin')->get('logout_redirect_menuitem')
             )
         );
 
-        // Stay on the same page
         $url = Uri::getInstance()->toString();
 
         if ($item) {
@@ -109,7 +114,6 @@ abstract class ModExternalloginsiteHelper
             $url = Route::_('index.php?Itemid=' . $item->id . $lang, false, $app->get('force_ssl') === 2 ? 1 : 0);
         }
 
-        // We are forced to encode the url in base64 as com_users uses this encoding
         return base64_encode($url);
     }
 }

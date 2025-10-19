@@ -14,6 +14,12 @@ use Joomla\CMS\Language\Text;
 
 // No direct access to this file
 defined('_JEXEC') or die;
+
+$servers ??= [];
+
+if ($servers === []) {
+    return;
+}
 ?>
 <h4><?php echo $servers[0]->title; ?></h4>
 <div class="control-group">

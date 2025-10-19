@@ -10,10 +10,9 @@
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
-use Joomla\CMS\Language\Text;
-
 // No direct access to this file
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Language\Text;
 
 echo Text::_('MOD_EXTERNALLOGIN_ADMIN_DISABLED');

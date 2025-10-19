@@ -13,9 +13,15 @@
 use Joomla\CMS\Helper\ModuleHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
+use Joomla\Registry\Registry;
 
 // No direct access to this file
 defined('_JEXEC') or die;
+
+/** @var Registry $params */
+$params ??= new Registry();
+$enabled = (bool) ($enabled ?? false);
+$count = (int) ($count ?? 0);
 ?>
 <form action="<?php echo Route::_('index.php', true, $params->get('usesecure')); ?>" method="post" id="external-login">
     <?php require ModuleHelper::getLayoutPath('mod_externallogin_admin', 'title'); ?>

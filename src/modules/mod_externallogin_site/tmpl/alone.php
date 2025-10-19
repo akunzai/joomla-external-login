@@ -11,9 +11,19 @@
  */
 
 use Joomla\CMS\Language\Text;
+use Joomla\Registry\Registry;
 
 // No direct access to this file
 defined('_JEXEC') or die;
+
+/** @var Registry $params */
+/** @var array<int, object> $servers */
+$params ??= new Registry();
+$servers ??= [];
+
+if ($servers === []) {
+    return;
+}
 ?>
 <?php if ($params->get('show_title', 0)) : ?>
 	<h4><?php echo $servers[0]->title; ?></h4>
