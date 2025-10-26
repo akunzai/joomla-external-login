@@ -10,68 +10,68 @@
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
+namespace Joomla\Plugin\System\Caslogin\Extension;
+
+defined('_JEXEC') or die;
+
+use DOMDocument;
+use DOMXPath;
+use Exception;
+use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Authentication\Authentication;
 use Joomla\CMS\Authentication\AuthenticationResponse;
+use Joomla\CMS\Event\Model\PrepareFormEvent;
+use Joomla\CMS\Event\Result\ResultAwareInterface;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Log\Log;
-use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Session\Session;
-use Joomla\CMS\Table\Table;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\User\UserFactoryInterface;
+use Joomla\CMS\MVC\Factory\MVCFactoryServiceInterface;
+use Joomla\Component\Externallogin\Administrator\Helper\ExternalloginHelper;
+use Joomla\Component\Externallogin\Administrator\Model\ServersModel;
+use Joomla\Component\Externallogin\Administrator\Service\Logger\ExternalloginLogEntry;
+use Joomla\Component\Externallogin\Administrator\Table\ServerTable;
 use Joomla\Database\DatabaseInterface;
+use Joomla\Event\Event;
 use Joomla\Registry\Registry;
 
-// No direct access to this file
-defined('_JEXEC') or die;
-
-// Load component classes via autoloading
-require_once JPATH_ADMINISTRATOR . '/components/com_externallogin/log/logger.php';
-require_once JPATH_ADMINISTRATOR . '/components/com_externallogin/log/entry.php';
-require_once JPATH_ADMINISTRATOR . '/components/com_externallogin/helpers/externallogin.php';
 /**
  * External Login - CAS plugin.
  *
- * @since       2.0.0
+ * @since 2.0.0
  */
-class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
+class Caslogin extends CMSPlugin
 {
     /**
-     * @var ExternalloginTableServer
-     *
-     * @since  2.0.0
+     * @var ServerTable
      */
     protected $server;
 
     /**
      * @var DOMXPath The xpath object
-     *
-     * @since  2.0.0
      */
     protected $xpath;
 
     /**
-     * @var DOMNode The success node
-     *
-     * @since  2.0.0
+     * @var \DOMNode|\DOMNameSpaceNode|null The success node
      */
     protected $success;
 
     /**
      * Constructor.
      *
-     * @param object $subject The object to observe
      * @param array $config An array that holds the plugin configuration
-     *
-     * @since   2.0.0
      */
-    public function __construct(&$subject, $config)
+    public function __construct($config)
     {
-        parent::__construct($subject, $config);
+        parent::__construct($config);
         $this->loadLanguage();
+        require_once JPATH_ADMINISTRATOR . '/components/com_externallogin/src/Service/Logger/ExternalloginLogger.php';
         Log::addLogger(
             ['logger' => 'externallogin', 'db_table' => '#__externallogin_logs', 'plugin' => 'system-caslogin'],
             Log::ALL,
@@ -88,17 +88,15 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
 
     /**
      * Get icons.
-     *
-     * @param string $context The calling context
-     *
-     * @return array
-     *
-     * @since   2.0.0
      */
-    public function onGetIcons($context)
+    public function onGetIcons(Event $event): void
     {
+        /** @var CMSApplication */
+        $app = Factory::getApplication();
+        $context = $event->getArgument('context');
         if ($context == 'com_externallogin') {
-            Factory::getApplication()->getDocument()->addStyleDeclaration(
+            $wa = $app->getDocument()->getWebAssetManager();
+            $wa->addInlineStyle(
                 '.icon-caslogin {'
                     . 'width: 48px;'
                     . 'height: 48px;'
@@ -106,100 +104,89 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
                     . 'background-position: center center;'
                     . '}'
             );
-
-            return [
+            $result   = $event->getArgument('result', []);
+            $result[] = [
                 [
-                    'image' => 'icon-caslogin',
-                    'link' => Route::_('index.php?option=com_externallogin&task=server.add&plugin=system.caslogin'),
-                    'alt' => Text::_('PLG_SYSTEM_CASLOGIN_ALT'),
-                    'text' => Text::_('PLG_SYSTEM_CASLOGIN_TEXT'),
+                    'image'  => 'icon-caslogin',
+                    'link'   => Route::_('index.php?option=com_externallogin&task=server.add&plugin=system.caslogin'),
+                    'alt'    => Text::_('PLG_SYSTEM_CASLOGIN_ALT'),
+                    'text'   => Text::_('PLG_SYSTEM_CASLOGIN_TEXT'),
                     'target' => '_parent',
                 ],
             ];
+
+            if ($event instanceof ResultAwareInterface) {
+                $event->addResult($result);
+            } else {
+                $event->setArgument('result', $result);
+            }
         }
-        return [];
     }
 
     /**
      * Get option.
-     *
-     * @param string $context The calling context
-     *
-     * @return array
-     *
-     * @since   2.0.0
      */
-    public function onGetOption($context)
+    public function onGetOption(Event $event): void
     {
+        $context = $event->getArgument('context');
+
         if ($context == 'com_externallogin') {
-            return ['value' => 'system.caslogin', 'text' => 'PLG_SYSTEM_CASLOGIN_OPTION'];
+            $result   = $event->getArgument('result', []);
+            $result[] = ['value' => 'system.caslogin', 'text' => 'PLG_SYSTEM_CASLOGIN_OPTION'];
+
+            if ($event instanceof ResultAwareInterface) {
+                $event->addResult($result);
+            } else {
+                $event->setArgument('result', $result);
+            }
         }
-        return [];
     }
 
     /**
      * Prepare Form.
-     *
-     * @param Form $form the form to be altered
-     * @param array $data the associated data for the form
-     *
-     * @return bool
-     *
-     * @since	2.0.0
      */
-    public function onContentPrepareForm($form, $data)
+    public function onContentPrepareForm(PrepareFormEvent $event): void
     {
-        if (!($form instanceof Form)) {
-            return false;
-        }
+        $form = $event->getForm();
 
-        // Check we are manipulating a valid form.
         if ($form->getName() != 'com_externallogin.server.system.caslogin') {
-            return true;
+            return;
         }
 
-        // Add the registration fields to the form.
-        Form::addFormPath(dirname(__FILE__) . '/forms');
+        Form::addFormPath(dirname(__DIR__, 2) . '/forms');
         $form->loadFile('cas', false);
-        return true;
     }
 
     /**
      * After initialise event.
-     *
-     * @since	2.0.0
      */
-    public function onAfterInitialise()
+    public function onAfterInitialise(): void
     {
-        // If the user is not connected
-        $user = Factory::getApplication()->getIdentity();
+        /** @var CMSApplication */
+        $app = Factory::getApplication();
+        $user = $app->getIdentity();
+
         if (!$user->guest) {
             return;
         }
 
-        // Get the application
-        /** @var Joomla\CMS\Application\CMSApplication */
-        $app = Factory::getApplication();
-
-        // Get the dbo
-        $db = Factory::getContainer()->get(DatabaseInterface::class);
-
-        // Get the input
+        $db  = Factory::getContainer()->get(DatabaseInterface::class);
         $input = $app->getInput();
-
-        // Get the service
         $service = Uri::getInstance();
-
-        // Get the ticket and the server
         $ticket = $input->get('ticket');
         $serverID = $app->isClient('administrator') ? $input->get('server') : $app->getUserState('com_externallogin.server');
+        /** @var MVCFactoryServiceInterface */
+        $component = $app->bootComponent('com_externallogin');
+        $mvcFactory = $component->getMVCFactory();
+
         if (!$ticket && !$serverID) {
-            // Get CAS servers
-            /** @var ExternalloginModelServers|false */
-            $model = BaseDatabaseModel::getInstance('Servers', 'ExternalloginModel', ['ignore_request' => true]);
+            /** @var ServersModel $model */
+            $model = $mvcFactory->createModel('Servers', 'Administrator', ['ignore_request' => true]);
+
             if (!$model) {
                 return;
             }
+
             $model->setState('filter.published', 1);
             $model->setState('filter.plugin', 'system.caslogin');
             $model->setState('list.start', 0);
@@ -208,13 +195,13 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
             $model->setState('list.direction', 'ASC');
             $servers = $model->getItems();
 
-            // Try to auto-login for some servers
             foreach ($servers as $server) {
                 $params = new Registry($server->params);
                 $serverID = $server->id;
+
                 if (boolval($params->get('autologin')) && !$app->getUserState('system.caslogin.autologin.' . $server->id)) {
                     $response = $this->verifyServerIsAlive($params);
-                    // response is empty
+
                     if (empty($response)) {
                         if ($params->get('log_verify', 0)) {
                             Log::add(
@@ -225,8 +212,10 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
                                 )
                             );
                         }
+
                         continue;
                     }
+
                     if ($params->get('log_verify', 0)) {
                         Log::add(
                             new ExternalloginLogEntry(
@@ -236,6 +225,7 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
                             )
                         );
                     }
+
                     if ($params->get('log_autologin', 0)) {
                         Log::add(
                             new ExternalloginLogEntry(
@@ -245,19 +235,22 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
                             )
                         );
                     }
+
                     $app->setUserState('com_externallogin.server', $server->id);
                     $app->setUserState('system.caslogin.autologin.' . $server->id, 1);
-                    $app->redirect($this->getUrl($params) . '/login?service=' . urlencode($service) . '&gateway=true');
+                    $app->redirect($this->getUrl($params) . '/login?service=' . urlencode($service) . '&gateway=true', 302);
                     break;
                 }
             }
+
             return;
         }
-        if (!$ticket && $serverID) {
-            /** @var ExternalloginTableServer|bool */
-            $server = Table::getInstance('Server', 'ExternalloginTable');
+
+        if (!$ticket && $serverID !== null) {
+            /** @var ServerTable|bool $server */
+            $server = $mvcFactory->createTable('Server', 'Administrator');
+
             if ($server && $server->load($serverID) && $server->plugin == 'system.caslogin') {
-                // Log message
                 if ($server->params->get('log_autologin', 0)) {
                     Log::add(
                         new ExternalloginLogEntry(
@@ -268,16 +261,17 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
                     );
                 }
             }
+
             return;
         }
 
-        // both ticket and server exist
-        /** @var ExternalloginTableServer|bool */
-        $server = Table::getInstance('Server', 'ExternalloginTable');
+        /** @var ServerTable|bool */
+        $server = $mvcFactory->createTable('Server', 'Administrator');
 
         if (!$server || !$server->load($serverID) || $server->plugin != 'system.caslogin') {
             return;
         }
+
         $params = $server->params;
 
         if ($params->get('log_login', 0)) {
@@ -291,7 +285,6 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
         }
 
         $service->delVar('ticket');
-
         $response = $this->verifyServiceTicket($params, $ticket, $service);
 
         if (empty($response)) {
@@ -304,8 +297,10 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
                     )
                 );
             }
+
             return;
         }
+
         if ($params->get('log_verify', 0)) {
             Log::add(
                 new ExternalloginLogEntry(
@@ -315,6 +310,7 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
                 )
             );
         }
+
         if ($params->get('log_xml', 0)) {
             Log::add(
                 new ExternalloginLogEntry(
@@ -335,8 +331,10 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
                     'system-caslogin-xml'
                 )
             );
+
             return;
         }
+
         if ($params->get('log_xml', 0)) {
             Log::add(
                 new ExternalloginLogEntry(
@@ -361,18 +359,14 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
                     )
                 );
             }
+
             return;
         }
-        // Store the xpath
+
         $this->xpath = $xpath;
-
-        // Store the success node
         $this->success = $success->item(0);
-
-        // Store the server
         $this->server = $server;
 
-        // Get username
         $userName = $this->xpath->evaluate('string(cas:user)', $this->success);
 
         if ($params->get('log_xml', 0)) {
@@ -386,11 +380,10 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
             );
         }
 
-        // Check if user is enabled for cas login. Deny if not
         $query = $db->getQuery(true);
-        $query->select("id");
-        $query->from("#__users");
-        $query->where($db->quoteName("username") . ' = ' . $db->quote($userName));
+        $query->select('id')
+            ->from('#__users')
+            ->where($db->quoteName('username') . ' = ' . $db->quote($userName));
         $db->setQuery($query);
 
         try {
@@ -399,37 +392,31 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
             $app->enqueueMessage($e->getMessage(), 'error');
         }
 
-        // After check: true if user is activated for current server, else false
         $access = false;
 
-        // Check if server is active for registered user, unregistered users should pass for reg.
         if (empty($userID)) {
-            // User from CAS is a new user on this Joomla! instance
             $access = true;
         } else {
             $query = $db->getQuery(true);
-            $query->select("server_id");
-            $query->from("#__externallogin_users");
-            $query->where("user_id = '$userID'");
+            $query->select('server_id')
+                ->from('#__externallogin_users')
+                ->where('user_id = ' . (int) $userID);
             $db->setQuery($query);
 
-            // Load the servers assigned to the user
             try {
                 $servers = $db->loadColumn();
-                // Check if current server is activated for the user
+
                 if (empty($servers)) {
-                    // No server is activated for this user - no access
                     $app->enqueueMessage(Text::_('PLG_SYSTEM_CASLOGIN_NO_ACTIVATED_SERVER'), 'error');
                     $access = false;
                 } else {
                     foreach ($servers as $server) {
                         if ($server == $serverID) {
-                            // Server is activated for this user - access granted
                             $access = true;
                             break;
                         }
                     }
-                    // Current server is not activated for this user - no access
+
                     if (!$access) {
                         $app->enqueueMessage(Text::_('PLG_SYSTEM_CASLOGIN_NO_ACTIVATED_SERVER'), 'error');
                     }
@@ -439,7 +426,6 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
             }
         }
 
-        // Log that access was denied
         if (!$access) {
             Log::add(
                 new ExternalloginLogEntry(
@@ -448,10 +434,10 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
                     'system-caslogin-xml'
                 )
             );
+
             return;
         }
-        // If the return url is for an Itemid, we look it up in the menu
-        // in case it is a redirect to an external source
+
         $query = $service->getQuery(true);
         $return = '';
 
@@ -465,7 +451,6 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
         }
 
         if (!$return) {
-            // Original way of determining the return url
             $return = 'index.php' . $service->toString(['query']);
         }
 
@@ -473,20 +458,17 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
             $return = 'index.php';
         }
 
-        $request = Factory::getApplication()->input->getInputForRequestMethod();
+        $request = $input->getInputForRequestMethod();
 
-        // Prepare the connection process
         if ($app->isClient('administrator')) {
             $input->set('option', 'com_login');
             $input->set('task', 'login');
             $input->set(Session::getFormToken(), 1);
-
-            // We are forced to encode the url in base64 as com_login uses this encoding
             $request->set('return', base64_encode($return));
+
             return;
         }
 
-        // Detect redirect menu item from the params
         $redirect = $params->get('redirect');
 
         if (!empty($redirect) && (!$params->get('noredirect') || $return != 'index.php')) {
@@ -497,80 +479,88 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
         $input->set('task', 'user.login');
         $request->set('Itemid', 0);
         $input->post->set(Session::getFormToken(), 1);
-
-        // We are forced to encode the url in base64 as com_users uses this encoding
         $request->set('return', base64_encode($return));
     }
 
     /**
      * Get Login URL.
-     *
-     * @param object $server the CAS server
-     * @param string $service the asked service
-     *
-     * @return void|string
-     *
-     * @since	2.0.0
      */
-    public function onGetLoginUrl($server, $service)
+    public function onGetLoginUrl(Event $event): void
     {
-        if ($server->plugin == 'system.caslogin') {
-            // Return the login URL
+        $server = $event->getArgument('subject');
+        $service = $event->getArgument('service');
+
+        if ($server && $server->plugin == 'system.caslogin') {
+            if ($service instanceof Uri) {
+                $service = (string) $service;
+            }
+
             $url = $this->getUrl($server->params) . '/login?service=' . urlencode($service);
 
             if ($server->params->get('locale')) {
-                [$locale, $country] = explode('-', Factory::getApplication()->getLanguage()->getTag());
+                [$locale] = explode('-', Factory::getApplication()->getLanguage()->getTag());
                 $url .= '&locale=' . $locale;
             }
 
-            return $url;
+            if ($event instanceof ResultAwareInterface) {
+                $event->addResult($url);
+            } else {
+                $event->setArgument('result', $url);
+            }
         }
     }
 
     /**
      * External Login event.
-     *
-     * @param AuthenticationResponse $response Response to the login process
-     *
-     * @return void|true
-     *
-     * @since	2.0.0
      */
-    public function onExternalLogin(&$response)
+    public function onExternalLogin(Event $event): void
     {
-        if (!isset($this->success)) {
+        /** @var AuthenticationResponse */
+        $response = $event->getArgument('response');
+
+        if (!$response || !isset($this->success)) {
             return;
         }
 
-        // Prepare response
         $server = $this->server;
         $params = $server->params;
         $sid = $server->id;
-        $response->status = (string) Authentication::STATUS_SUCCESS;
+        // @phpstan-ignore assign.propertyType
+        $response->status = Authentication::STATUS_SUCCESS;
+        // @phpstan-ignore property.notFound
         $response->server = $server;
         $response->type = 'system.caslogin';
+        // @phpstan-ignore property.notFound
         $response->message = '';
 
-        // Compute sanitized username. See libraries/src/Table/User.php (check function)
         $response->username = str_replace(
             ['<', '>', '"', "'", '%', ';', '(', ')', '&', '\\'],
             '',
             $this->xpath->evaluate($params->get('username_xpath'), $this->success)
         );
 
-        // Compute sanitized email. See libraries/src/Table/User.php (check function)
         $response->email = str_replace(
             ['<', '>', '"', "'", '%', ';', '(', ')', '&', '\\'],
             '',
             $this->xpath->evaluate($params->get('email_xpath'), $this->success)
         );
 
-        // Compute name
         $response->fullname = $this->xpath->evaluate($params->get('name_xpath'), $this->success);
 
-        // Compute groups
+
+        // Set the modified response back to the event
+        $event->setArgument('response', $response);
+
         if (empty($params->get('group_xpath'))) {
-            return true;
+            // Add result to the result array
+            if ($event instanceof ResultAwareInterface) {
+                $event->addResult(true);
+            } else {
+                $results = $event->getArgument('result', []);
+                $results[] = true;
+                $event->setArgument('result', $results);
+            }
+            return;
         }
 
         $groups = $this->xpath->query($params->get('group_xpath'), $this->success);
@@ -585,8 +575,18 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
                     )
                 );
             }
-            return true;
+
+            // Add result to the result array
+            if ($event instanceof ResultAwareInterface) {
+                $event->addResult(true);
+            } else {
+                $results = $event->getArgument('result', []);
+                $results[] = true;
+                $event->setArgument('result', $results);
+            }
+            return;
         }
+
         if ($params->get('log_groups', 0)) {
             Log::add(
                 new ExternalloginLogEntry(
@@ -596,10 +596,9 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
                 )
             );
         }
-
+        // @phpstan-ignore property.notFound
         $response->groups = [];
 
-        // Loop on each group attribute
         for ($i = 0; $i < $groups->length; $i++) {
             $group = (string) $groups->item($i)->nodeValue;
 
@@ -613,10 +612,12 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
                         )
                     );
                 }
-                // Group is numeric
+
                 $dbo = Factory::getContainer()->get(DatabaseInterface::class);
                 $query = $dbo->getQuery(true);
-                $query->select('id')->from('#__usergroups')->where('id = ' . (int) $group);
+                $query->select('id')
+                    ->from('#__usergroups')
+                    ->where('id = ' . (int) $group);
                 $dbo->setQuery($query);
 
                 if ($dbo->loadResult()) {
@@ -629,7 +630,6 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
                             )
                         );
                     }
-
                     $response->groups[] = $group;
                 }
             } else {
@@ -643,7 +643,6 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
                     );
                 }
 
-                // Group is not numeric, extract the groups
                 $newGroups = (array) ExternalloginHelper::getGroups($group, $params->get('group_separator', ''));
                 $response->groups = array_merge($response->groups, $newGroups);
 
@@ -662,69 +661,67 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
             }
         }
 
-        return true;
+        $event->setArgument('response', $response);
+
+        // Add result to the result array
+        if ($event instanceof ResultAwareInterface) {
+            $event->addResult(true);
+        } else {
+            $results = $event->getArgument('result', []);
+            $results[] = true;
+            $event->setArgument('result', $results);
+        }
     }
 
     /**
      * Get server URL.
      *
-     * @param Registry $params the CAS parameters
-     *
-     * @return string The server URL
-     *
-     * @since	2.0.0
+     * @param Registry $params The server parameters
      */
     protected function getUrl($params)
     {
-        // Get the parameters
         $ssl = $params->get('ssl', 1);
         $url = $params->get('url');
         $dir = $params->get('dir');
         $port = (int) $params->get('port');
 
-        // Return the server URL
         return 'http' . ($ssl == 1 ? 's' : '') . '://' . $url . ($port && $port != 443 ? (':' . $port) : '') . ($dir ? ('/' . $dir) : '');
     }
 
     /**
      * Redirect to CAS logout URL when a user logs out.
-     *
-     * @param array $options Array holding options (username, ...).
-     *
-     * @return bool True on success
-     *
-     * @since	3.2.0
      */
     public function onUserAfterLogout($options)
     {
-        /** @var Joomla\CMS\Application\CMSApplication */
+        /** @var CMSApplication */
         $app = Factory::getApplication();
-        $local = $app->input->get('local');
-        // Local logout only?
+        $local = $app->getInput()->get('local');
+
         if (isset($local)) {
             return true;
         }
+
         $user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserByUsername($options['username']);
         $db = Factory::getContainer()->get(DatabaseInterface::class);
         $query = $db->getQuery(true);
-        $query->select('*');
-        $query->from('#__externallogin_servers AS a');
-        $query->leftJoin('#__externallogin_users AS e ON e.server_id = a.id');
-        $query->where('a.plugin = ' . $db->quote('system.caslogin'));
-        $query->where('e.user_id = ' . (int) $user->get('id'));
+        $query->select('*')
+            ->from('#__externallogin_servers AS a')
+            ->leftJoin('#__externallogin_users AS e ON e.server_id = a.id')
+            ->where('a.plugin = ' . $db->quote('system.caslogin'))
+            ->where('e.user_id = ' . (int) $user->get('id'));
         $db->setQuery($query);
         $server = $db->loadObject();
 
         if (is_null($server)) {
             return true;
         }
+
         $params = new Registry($server->params);
 
         if (!boolval($params->get('autologout'))) {
             return true;
         }
 
-        // Logout from CAS
         if ($params->get('log_logout', 0)) {
             Log::add(
                 new ExternalloginLogEntry(
@@ -736,7 +733,7 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
         }
 
         if ($params->get('locale')) {
-            [$locale, $country] = explode('-', Factory::getApplication()->getLanguage()->getTag());
+            [$locale] = explode('-', Factory::getApplication()->getLanguage()->getTag());
             $locale = '&locale=' . $locale;
         } else {
             $locale = '';
@@ -744,31 +741,31 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
 
         if ($params->get('logouturl')) {
             $redirect = $this->getUrl($params) . '/logout?service=' . urlencode($params->get('logouturl')) . $locale;
-        } elseif ($app->input->get('return')) {
-            $return = base64_decode($app->input->get('return', '', 'base64'));
+        } elseif ($app->getInput()->get('return')) {
+            $return = base64_decode($app->getInput()->get('return', '', 'base64'));
+
             if (is_numeric($return)) {
                 $return = ExternalloginHelper::url($return);
             }
+
             $redirect = $this->getUrl($params) . '/logout?service=' . urlencode($return) . $locale;
         } else {
             $redirect = $this->getUrl($params) . '/logout' . str_replace('&', '?', $locale);
         }
 
-        $app->redirect($redirect);
+        $app->redirect($redirect, 302);
+
         return true;
     }
 
     /**
-     * @param Registry $params the CAS parameters
-     *
-     * @return string|bool
+     * Verify server availability.
      */
     private function verifyServerIsAlive($params)
     {
-        // Get the certificate information
         $certificateFile = $params->get('certificate_file', '');
         $certificatePath = $params->get('certificate_path', '');
-        // Verify the service
+
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
@@ -779,23 +776,18 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
         curl_setopt($curl, CURLOPT_CAPATH, $certificatePath);
         $result = curl_exec($curl);
         curl_close($curl);
+
         return $result;
     }
 
     /**
-     * @param Registry $params the CAS parameters
-     * @param string $ticket
-     * @param string $service
-     *
-     * @return string|bool
+     * Verify service ticket.
      */
     private function verifyServiceTicket($params, $ticket, $service)
     {
-        // Get the certificate information
         $certificateFile = $params->get('certificate_file', '');
         $certificatePath = $params->get('certificate_path', '');
 
-        // Verify the service
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt(
@@ -810,6 +802,7 @@ class PlgSystemCaslogin extends Joomla\CMS\Plugin\CMSPlugin
         curl_setopt($curl, CURLOPT_CAPATH, $certificatePath);
         $response = curl_exec($curl);
         curl_close($curl);
+
         return $response;
     }
 }

@@ -10,44 +10,47 @@
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
+namespace Joomla\Plugin\Authentication\Externallogin\Extension;
+
+defined('_JEXEC') or die;
+
+use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Access\Access;
 use Joomla\CMS\Authentication\Authentication;
 use Joomla\CMS\Authentication\AuthenticationResponse;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Event\User\AuthenticationEvent;
+use Joomla\CMS\Event\User\AuthorisationEvent;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Log\Log;
-use Joomla\CMS\User\User;
+use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\User\UserFactoryInterface;
 use Joomla\CMS\User\UserHelper;
+use Joomla\Component\Externallogin\Administrator\Service\Logger\ExternalloginLogEntry;
 use Joomla\Database\DatabaseInterface;
+use Joomla\Event\DispatcherInterface;
+use Joomla\Event\Event;
 use Joomla\Registry\Registry;
-
-// No direct access to this file
-defined('_JEXEC') or die;
-
-// Load component classes via autoloading
-require_once JPATH_ADMINISTRATOR . '/components/com_externallogin/log/logger.php';
-require_once JPATH_ADMINISTRATOR . '/components/com_externallogin/log/entry.php';
 
 /**
  * External Login - External Login plugin.
  *
  * @since       2.0.0
  */
-class PlgAuthenticationExternallogin extends Joomla\CMS\Plugin\CMSPlugin
+class Externallogin extends CMSPlugin
 {
     /**
      * Constructor.
      *
-     * @param object $subject The object to observe
      * @param array $config An array that holds the plugin configuration
      *
      * @since   2.0.0
      */
-    public function __construct(&$subject, $config)
+    public function __construct($config)
     {
-        parent::__construct($subject, $config);
+        parent::__construct($config);
         $this->loadLanguage();
+        require_once JPATH_ADMINISTRATOR . '/components/com_externallogin/src/Service/Logger/ExternalloginLogger.php';
         Log::addLogger(
             ['logger' => 'externallogin', 'db_table' => '#__externallogin_logs', 'plugin' => 'authentication-externallogin'],
             Log::ALL,
@@ -58,22 +61,23 @@ class PlgAuthenticationExternallogin extends Joomla\CMS\Plugin\CMSPlugin
     /**
      * This method should handle any authorisation and report back to the subject.
      *
-     * @param AuthenticationResponse $response Authentication response object
-     * @param array $options Array of extra options
+     * @param AuthorisationEvent $event Authorisation event
      *
-     * @return AuthenticationResponse The response
-     *
-     * @since   3.1.1.0
+     * @since   5.0.0
      */
-    public function onUserAuthorisation($response, $options)
+    public function onUserAuthorisation(AuthorisationEvent $event): void
     {
+        $response = $event->getAuthenticationResponse();
+        $options = $event->getOptions();
+
         if ($response->type != 'externallogin') {
-            return $response;
+            return;
         }
 
         // Clone the response
         $response = clone $response;
         /** @var Registry */
+        /** @phpstan-ignore-next-line */
         $params = $response->server->params;
         $userId = intval(UserHelper::getUserId($response->username));
         $isUserNotFound = $userId === 0;
@@ -83,18 +87,22 @@ class PlgAuthenticationExternallogin extends Joomla\CMS\Plugin\CMSPlugin
             if (boolval($params->get('log_blocked', 0))) {
                 Log::add(
                     new ExternalloginLogEntry(
-                        'User "' . $response->username . '" is trying to ' . ($isUserNotFound ? 'register' : 'login') . ' while he is blocked',
+                        'User "' . $response->username . '" is trying to ' . ($isUserNotFound ? 'register' : 'login') . ' while the user is blocked',
                         Log::ERROR,
                         'authentication-externallogin-blocked'
                     )
                 );
             }
-            return $this->userLoginFail($response, $params->get('blocked_redirect_menuitem'), Authentication::STATUS_DENIED);
+            $response = $this->userLoginFail($response, $params->get('blocked_redirect_menuitem'), Authentication::STATUS_DENIED);
+            $event->addResult($response);
+            return;
         }
 
         if ($isUserNotFound) {
             if (boolval($params->get('autoregister', 0))) {
-                return $this->createNewUser($response);
+                $response = $this->createNewUser($response);
+                $event->addResult($response);
+                return;
             }
             if (boolval($params->get('log_autoregister', 0))) {
                 Log::add(
@@ -105,37 +113,49 @@ class PlgAuthenticationExternallogin extends Joomla\CMS\Plugin\CMSPlugin
                     )
                 );
             }
-            return $this->userLoginFail($response, $params->get('unknown_redirect_menuitem'));
+            $response = $this->userLoginFail($response, $params->get('unknown_redirect_menuitem'));
+            $event->addResult($response);
+            return;
         }
 
         if (boolval($params->get('autoupdate', 0))) {
-            return $this->updateUser($response, $userId);
+            $response = $this->updateUser($response, $userId);
+            $event->addResult($response);
+            return;
         }
 
-        return $response;
+        $event->addResult($response);
     }
 
     /**
      * This method should handle any authentication and report back to the subject.
      *
-     * @param array $credentials Array holding the user credentials
-     * @param array $options Array of extra options
-     * @param AuthenticationResponse $response Authentication response object
+     * @param AuthenticationEvent $event Authentication event
      *
-     * @return bool
+     * @since 5.0.0
      */
-    public function onUserAuthenticate($credentials, $options, &$response)
+    public function onUserAuthenticate(AuthenticationEvent $event): void
     {
-        $app = Factory::getApplication();
-        $results = $app->getDispatcher()->dispatch('onExternalLogin', new Joomla\Event\Event('onExternalLogin', ['response' => &$response]))->getArgument('result', []);
+        $response = $event->getAuthenticationResponse();
+        $dispatcher = Factory::getContainer()->get(DispatcherInterface::class);
+        $externalEvent = new Event('onExternalLogin', ['response' => &$response]);
+        $dispatcher->dispatch('onExternalLogin', $externalEvent);
+
+        // Get the modified response back from the event
+        $response = $externalEvent->getArgument('response');
+        $results = $externalEvent->getArgument('result', []);
 
         if (count($results) === 0) {
-            return false;
+            return;
         }
 
         $response->subtype = $response->type;
         $response->type = 'externallogin';
-        return true;
+
+        // Stop event propagation to prevent other authentication plugins from running
+        if ($response->status === Authentication::STATUS_SUCCESS) {
+            $event->stopPropagation();
+        }
     }
 
     /**
@@ -145,8 +165,8 @@ class PlgAuthenticationExternallogin extends Joomla\CMS\Plugin\CMSPlugin
      */
     private function createNewUser($response)
     {
-        /** @var Registry */
-        $params = $response->server->params;
+        /** @var Registry $params */
+        $params = $response->server->params; // @phpstan-ignore property.notFound
         $isLogAutoRegister = boolval($params->get('log_autoregister', 0));
         $db = Factory::getContainer()->get(DatabaseInterface::class);
         $userFactory = Factory::getContainer()->get(UserFactoryInterface::class);
@@ -159,6 +179,8 @@ class PlgAuthenticationExternallogin extends Joomla\CMS\Plugin\CMSPlugin
 
         if (!$user->save()) {
             if ($isLogAutoRegister) {
+                /** @phpstan-ignore-next-line */
+                $serverId = $response->server->id;
                 Log::add(
                     new ExternalloginLogEntry(
                         $user->getError(),
@@ -183,6 +205,7 @@ class PlgAuthenticationExternallogin extends Joomla\CMS\Plugin\CMSPlugin
                         . '" and email "'
                         . $response->email
                         . '" on server '
+                        /** @phpstan-ignore-next-line */
                         . $response->server->id,
                     Log::INFO,
                     'authentication-externallogin-autoregister'
@@ -206,9 +229,11 @@ class PlgAuthenticationExternallogin extends Joomla\CMS\Plugin\CMSPlugin
         $db->execute();
 
         if ($isLogAutoRegister) {
+            /** @phpstan-ignore-next-line */
+            $serverId = $response->server->id;
             $message = empty($response->groups)
-                ? 'Auto-register default group "' . $defaultUserGroup . '" for user "' . $user->username . '" on server ' . $response->server->id
-                : 'Auto-register new groups for user "' . $user->username . '" with groups (' . implode(',', $groups) . ') on server ' . $response->server->id;
+                ? 'Auto-register default group "' . $defaultUserGroup . '" for user "' . $user->username . '" on server ' . $serverId
+                : 'Auto-register new groups for user "' . $user->username . '" with groups (' . implode(',', $groups) . ') on server ' . $serverId;
             Log::add(
                 new ExternalloginLogEntry(
                     $message,
@@ -230,6 +255,7 @@ class PlgAuthenticationExternallogin extends Joomla\CMS\Plugin\CMSPlugin
     private function updateUser($response, $userId)
     {
         /** @var Registry */
+        /** @phpstan-ignore-next-line */
         $params = $response->server->params;
 
         $isLogAutoUpdate = boolval($params->get('log_autoupdate', 0));
@@ -268,11 +294,14 @@ class PlgAuthenticationExternallogin extends Joomla\CMS\Plugin\CMSPlugin
             $db->execute();
 
             if ($isLogAutoUpdate) {
+                /** @phpstan-ignore-next-line */
+                $serverId = $response->server->id;
+                $groups = $response->groups;
                 Log::add(
                     new ExternalloginLogEntry(
                         'Auto-update new groups of user "' . $user->username .
-                            '" with groups (' . implode(',', $response->groups) . ') on server ' .
-                            $response->server->id,
+                            '" with groups (' . implode(',', $groups) . ') on server ' .
+                            $serverId,
                         Log::INFO,
                         'authentication-externallogin-autoupdate'
                     )
@@ -286,6 +315,8 @@ class PlgAuthenticationExternallogin extends Joomla\CMS\Plugin\CMSPlugin
 
         // Attempt to update the user
         if ($user->save() && $isLogAutoUpdate) {
+            /** @phpstan-ignore-next-line */
+            $serverId = $response->server->id;
             Log::add(
                 new ExternalloginLogEntry(
                     'Auto-update of user "'
@@ -295,7 +326,7 @@ class PlgAuthenticationExternallogin extends Joomla\CMS\Plugin\CMSPlugin
                         . '" and email "'
                         . $response->email
                         . '" on server '
-                        . $response->server->id,
+                        . $serverId,
                     Log::INFO,
                     'authentication-externallogin-autoupdate'
                 )
@@ -335,11 +366,12 @@ class PlgAuthenticationExternallogin extends Joomla\CMS\Plugin\CMSPlugin
         $status = Authentication::STATUS_DENIED | Authentication::STATUS_UNKNOWN
     ) {
         if (!empty($redirection)) {
-            /** @var Joomla\CMS\Application\CMSApplication */
+            /** @var CMSApplication */
             $app = Factory::getApplication();
             $app->setUserState('com_externallogin.redirect', $redirection);
         }
-        $response->status = (string) $status;
+        /** @phpstan-ignore assign.propertyType */
+        $response->status = $status;
         return $response;
     }
 
@@ -362,12 +394,14 @@ class PlgAuthenticationExternallogin extends Joomla\CMS\Plugin\CMSPlugin
         }
 
         $query = $db->getQuery(true);
+        /** @phpstan-ignore-next-line */
+        $serverId = intval($response->server->id);
         $query->insert(
             '#__externallogin_users'
         )->columns(
             'server_id, user_id'
         )->values(
-            intval($response->server->id) . ',' . $userId
+            $serverId . ',' . $userId
         );
         $db->setQuery($query);
         $db->execute();

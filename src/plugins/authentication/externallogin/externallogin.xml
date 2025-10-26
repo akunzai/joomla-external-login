@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension version="3" type="plugin" group="authentication" method="upgrade">
+<extension version="4" type="plugin" group="authentication" method="upgrade">
 
 	<name>PLG_AUTHENTICATION_EXTERNALLOGIN</name>
 
 	<!-- The following elements are optional and free of formatting conttraints -->
-	<creationDate>July 2008</creationDate>
+	<creationDate>Oct 2025</creationDate>
 	<author>Christophe Demko, Ioannis Barounis, Alexandre Gandois, others, see contributor page</author>
 	<authorUrl>https://github.com/akunzai/joomla-external-login</authorUrl>
 	<license>GNU General Public License version 2 or later; see LICENSE</license>
@@ -15,8 +15,11 @@
 	<!-- The description is optional and defaults to the name -->
 	<description>PLG_AUTHENTICATION_EXTERNALLOGIN_DESCRIPTION</description>
 
+	<namespace path="src">Joomla\Plugin\Authentication\Externallogin</namespace>
+
 	<files>
-		<filename plugin="externallogin">externallogin.php</filename>
+		<folder plugin="externallogin">services</folder>
+		<folder>src</folder>
 	</files>
 
 	<languages>

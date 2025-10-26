@@ -8,31 +8,32 @@
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
+namespace Joomla\Plugin\User\Cbexternallogin\Extension;
+
+defined('_JEXEC') or die;
+
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\Database\DatabaseInterface;
-
-// No direct access to this file
-defined('_JEXEC') or die;
 
 /**
  * External Login - Community Builder External Login Plugin.
  *
  * @since       2.0.0
  */
-class PlgUserCbexternallogin extends Joomla\CMS\Plugin\CMSPlugin
+class Cbexternallogin extends CMSPlugin
 {
     /**
      * Constructor.
      *
-     * @param object $subject The object to observe
      * @param array $config An array that holds the plugin configuration
      *
      * @since   2.0.0
      */
-    public function __construct(&$subject, $config)
+    public function __construct($config)
     {
-        parent::__construct($subject, $config);
+        parent::__construct($config);
         $this->loadLanguage();
     }
 

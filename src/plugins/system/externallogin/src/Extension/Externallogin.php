@@ -10,40 +10,36 @@
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
+namespace Joomla\Plugin\System\Externallogin\Extension;
+
+defined('_JEXEC') or die;
+
+use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Log\Log;
+use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Router\Route;
-use Joomla\CMS\Table\Table;
+use Joomla\CMS\Router\SiteRouter;
+use Joomla\Component\Externallogin\Administrator\Service\Logger\ExternalloginLogEntry;
+use Joomla\Component\Externallogin\Administrator\Table\ServerTable;
 use Joomla\Database\DatabaseInterface;
 
-// No direct access to this file
-defined('_JEXEC') or die;
-
-// Load component classes via autoloading
-require_once JPATH_ADMINISTRATOR . '/components/com_externallogin/log/logger.php';
-require_once JPATH_ADMINISTRATOR . '/components/com_externallogin/log/entry.php';
 /**
- * External Login - External Login plugin.
- *
- * @since       2.0.0
+ * External Login - System plugin.
  */
-class PlgSystemExternallogin extends Joomla\CMS\Plugin\CMSPlugin
+class Externallogin extends CMSPlugin
 {
     /**
      * Constructor.
-     *
-     * @param object $subject The object to observe
-     * @param array $config An array that holds the plugin configuration
-     *
-     * @since   2.0.0
      */
-    public function __construct(&$subject, $config)
+    public function __construct($config)
     {
-        parent::__construct($subject, $config);
+        parent::__construct($config);
         $this->loadLanguage();
+        require_once JPATH_ADMINISTRATOR . '/components/com_externallogin/src/Service/Logger/ExternalloginLogger.php';
         Log::addLogger(
             ['logger' => 'externallogin', 'db_table' => '#__externallogin_logs', 'plugin' => 'system-externallogin'],
             Log::ALL,
@@ -53,45 +49,29 @@ class PlgSystemExternallogin extends Joomla\CMS\Plugin\CMSPlugin
 
     /**
      * After initialise event.
-     *
-     * @since   2.0.0
      */
-    public function onAfterInitialise()
+    public function onAfterInitialise(): void
     {
-        // Get the application
-        /** @var Joomla\CMS\Application\CMSApplication */
-        $app = Factory::getApplication();
-
-        // Get the router
-        $router = $app->getRouter();
-
-        // Attach build rules for language SEF
+        $router = Factory::getContainer()->get(SiteRouter::class);
         $router->attachBuildRule([$this, 'buildRule']);
     }
 
     /**
      * After render event.
-     *
-     * @since   3.1.0
      */
-    public function onAfterRender()
+    public function onAfterRender(): void
     {
-        /** @var Joomla\CMS\Application\CMSApplication */
+        /** @var CMSApplication */
         $app = Factory::getApplication();
         $app->setUserState('users.login.form.data.return', null);
     }
 
     /**
      * Redirect to com_externallogin in case of login view.
-     *
-     * @param Joomla\CMS\Router\Router $router Router
-     * @param Joomla\CMS\Uri\Uri $uri URI
-     *
-     * @since   2.0.0
      */
-    public function buildRule(&$router, &$uri)
+    public function buildRule(&$router, &$uri): void
     {
-        /** @var Joomla\CMS\Application\CMSApplication */
+        /** @var CMSApplication */
         $app = Factory::getApplication();
 
         if (
@@ -103,40 +83,35 @@ class PlgSystemExternallogin extends Joomla\CMS\Plugin\CMSPlugin
             $redirect = $app->getUserState('com_externallogin.redirect');
 
             if ($redirect) {
-                $app->redirect(Route::_('index.php?Itemid=' . $redirect, true));
+                $app->redirect(Route::_('index.php?Itemid=' . $redirect, true), 302);
                 return;
             }
+
             $item = ComponentHelper::getParams('com_externallogin')->get('unauthorized_redirect_menuitem');
 
             if ($item == -1) {
                 $uri->setVar('option', 'com_externallogin');
             } elseif ($item) {
-                $app->redirect(Route::_('index.php?Itemid=' . $item, true));
+                $app->redirect(Route::_('index.php?Itemid=' . $item, true), 302);
             }
         }
     }
 
     /**
-     * Remove server information about a user.
-     *
-     * Method is called after user data is deleted from the database
-     *
-     * @param array $user Holds the user data
-     * @param bool $success True if user was successfully stored in the database
-     * @param string $msg Message
-     *
-     * @return bool
-     *
-     * @since   2.0.0
+     * Remove server information about a user after deletion.
      */
     public function onUserAfterDelete($user, $success, $msg)
     {
         $dbo = Factory::getContainer()->get(DatabaseInterface::class);
-        $dbo->setQuery($dbo->getQuery(true)->select('server_id')->from('#__externallogin_users')->where('user_id = ' . (int) $user['id']));
+        $dbo->setQuery(
+            $dbo->getQuery(true)
+                ->select('server_id')
+                ->from('#__externallogin_users')
+                ->where('user_id = ' . (int) $user['id'])
+        );
         $sid = $dbo->loadResult();
-        /** @var ExternalloginTableServer */
-        $server = Table::getInstance('Server', 'ExternalloginTable');
-        $user = Factory::getApplication()->getIdentity();
+        $server = new ServerTable($dbo);
+        $currentUser = Factory::getApplication()->getIdentity();
 
         if ($server->load($sid)) {
             if (!$success) {
@@ -144,7 +119,7 @@ class PlgSystemExternallogin extends Joomla\CMS\Plugin\CMSPlugin
                     Log::add(
                         new ExternalloginLogEntry(
                             'Unsuccessful deletion of user "' . $user['username'] . '" by user "' .
-                            $user->username . '" on server ' . $sid,
+                            $currentUser->username . '" on server ' . $sid,
                             Log::WARNING,
                             'system-externallogin-deletion'
                         )
@@ -152,60 +127,56 @@ class PlgSystemExternallogin extends Joomla\CMS\Plugin\CMSPlugin
                 }
 
                 return false;
-            } else {
-                $dbo = Factory::getContainer()->get(DatabaseInterface::class);
-                $query = $dbo->getQuery(true);
-                $query->delete('#__externallogin_users')->where('user_id = ' . (int) $user['id']);
-                $dbo->setQuery($query);
-                $dbo->execute();
-
-                if ($server->params->get('log_user_delete', 0)) {
-                    Log::add(
-                        new ExternalloginLogEntry(
-                            'Successful deletion of user "' . $user['username'] . '" by user "' .
-                            $user->username . '" on server ' . $sid,
-                            Log::INFO,
-                            'system-externallogin-deletion'
-                        )
-                    );
-                }
-
-                return true;
             }
+
+            $dbo = Factory::getContainer()->get(DatabaseInterface::class);
+            $query = $dbo->getQuery(true);
+            $query->delete('#__externallogin_users')->where('user_id = ' . (int) $user['id']);
+            $dbo->setQuery($query);
+            $dbo->execute();
+
+            if ($server->params->get('log_user_delete', 0)) {
+                Log::add(
+                    new ExternalloginLogEntry(
+                        'Successful deletion of user "' . $user['username'] . '" by user "' .
+                        $currentUser->username . '" on server ' . $sid,
+                        Log::INFO,
+                        'system-externallogin-deletion'
+                    )
+                );
+            }
+
+            return true;
         }
+
         return false;
     }
 
     /**
-     * Utility method to act on a user after it has been saved.
-     *
-     * This method sends a registration email to new users created in the backend.
-     *
-     * @param array $old holds the old user data
-     * @param bool $isnew true if a new user is stored
-     * @param array $new holds the new user data
-     *
-     * @return bool
-     *
-     * @since   2.0.0
+     * Utility method to act on a user before saving.
      */
     public function onUserBeforeSave($old, $isnew, $new)
     {
         if ($new['password'] != '') {
             $dbo = Factory::getContainer()->get(DatabaseInterface::class);
-            $dbo->setQuery($dbo->getQuery(true)->select('server_id')->from('#__externallogin_users')->where('user_id = ' . (int) $new['id']));
+            $dbo->setQuery(
+                $dbo->getQuery(true)
+                    ->select('server_id')
+                    ->from('#__externallogin_users')
+                    ->where('user_id = ' . (int) $new['id'])
+            );
             $sid = $dbo->loadResult();
-            /** @var ExternalloginTableServer */
-            $server = Table::getInstance('Server', 'ExternalloginTable');
+            $dbo = Factory::getContainer()->get(DatabaseInterface::class);
+            $server = new ServerTable($dbo);
 
             if ($server->load($sid) && !$server->params->get('allow_change_password', 0)) {
                 $dbo = Factory::getContainer()->get(DatabaseInterface::class);
                 $query = $dbo->getQuery(true);
-                $query->select('COUNT(*)');
-                $query->from('#__externallogin_users AS e');
-                $query->where('e.user_id = ' . (int) $new['id']);
-                $query->leftJoin('#__users AS u ON u.id = e.user_id');
-                $query->where('u.password = ' . $dbo->quote(''));
+                $query->select('COUNT(*)')
+                    ->from('#__externallogin_users AS e')
+                    ->where('e.user_id = ' . (int) $new['id'])
+                    ->leftJoin('#__users AS u ON u.id = e.user_id')
+                    ->where('u.password = ' . $dbo->quote(''));
                 $dbo->setQuery($query);
 
                 if ($dbo->loadResult() > 0) {
