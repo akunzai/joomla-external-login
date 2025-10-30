@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension version="3" type="plugin" group="system" method="upgrade">
+<extension version="4" type="plugin" group="system" method="upgrade">
 
 	<name>PLG_SYSTEM_CASLOGIN</name>
 
 	<!-- The following elements are optional and free of formatting conttraints -->
-	<creationDate>July 2008</creationDate>
+	<creationDate>Oct 2025</creationDate>
 	<author>Christophe Demko, Ioannis Barounis, Alexandre Gandois, others, see contributor page</author>
 	<authorUrl>https://github.com/akunzai/joomla-external-login</authorUrl>
 	<license>GNU General Public License version 2 or later; see LICENSE</license>
 
 	<!--  The version string is recorded in the extension table -->
-	<version>4.0.6</version>
+	<version>5.0.0</version>
 
 	<!-- The description is optional and defaults to the name -->
 	<description>PLG_SYSTEM_CASLOGIN_DESCRIPTION</description>
 
+	<namespace path="src">Joomla\Plugin\System\Caslogin</namespace>
+
 	<files>
-		<filename plugin="caslogin">caslogin.php</filename>
+		<folder plugin="caslogin">services</folder>
+		<folder>src</folder>
 		<folder>forms</folder>
 	</files>
 

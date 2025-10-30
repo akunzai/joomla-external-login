@@ -18,11 +18,18 @@ mkcert -cert-file .secrets/cert.pem -key-file .secrets/key.pem 'auth.dev.local'
 # set up hosts in Host
 echo "127.0.0.1 auth.dev.local www.dev.local" | sudo tee -a /etc/hosts
 
-# starting container or open folder in container
+# starting container
 docker compose up -d
 
-# install the Joomla! (requires Joomla! version >= 4.3)
+# starting container with for debug
+# > use VSCode to attach running joomla container for Xdebug
+docker compose -f compose.yml -f compose.debug.yml up -d
+
+# install or update the Joomla extension
 ./joomla/install.sh
+
+# force re-install the Joomla extension
+./joomla/install.sh --force
 ```
 
 ## URLs

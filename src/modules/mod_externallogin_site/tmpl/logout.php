@@ -1,21 +1,27 @@
 <?php
 
 /**
- * @package     External_Login
- * @subpackage  External Login Module
  * @author      Christophe Demko <chdemko@gmail.com>
  * @author      Ioannis Barounis <contact@johnbarounis.com>
  * @author      Alexandre Gandois <alexandre.gandois@etudiant.univ-lr.fr>
  * @copyright   Copyright (C) 2008-2018 Christophe Demko, Ioannis Barounis, Alexandre Gandois. All rights reserved.
  * @license     GNU General Public License, version 2. http://www.gnu.org/licenses/gpl-2.0.html
+ *
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
+use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
+use Joomla\Registry\Registry;
 
 defined('_JEXEC') or die;
+
+/** @var Registry $params */
+$params ??= new Registry();
+$user ??= Factory::getApplication()->getIdentity();
+$return = (string) ($return ?? '');
 
 HTMLHelper::_('behavior.keepalive');
 ?>
@@ -23,9 +29,9 @@ HTMLHelper::_('behavior.keepalive');
 	<?php if ($params->get('greeting')) : ?>
 		<div class="login-greeting">
 			<?php if ($params->get('name') == 0) : ?>
-				<?php echo Text::sprintf('MOD_EXTERNALLOGIN_SITE_HINAME', htmlspecialchars($user->get('name'), ENT_COMPAT, 'UTF-8')); ?>
+				<?php echo sprintf(Text::_('MOD_EXTERNALLOGIN_SITE_HINAME'), htmlspecialchars((string) $user->get('name'), ENT_COMPAT, 'UTF-8')); ?>
 			<?php else : ?>
-				<?php echo Text::sprintf('MOD_EXTERNALLOGIN_SITE_HINAME', htmlspecialchars($user->get('username'), ENT_COMPAT, 'UTF-8')); ?>
+				<?php echo sprintf(Text::_('MOD_EXTERNALLOGIN_SITE_HINAME'), htmlspecialchars((string) $user->get('username'), ENT_COMPAT, 'UTF-8')); ?>
 			<?php endif; ?>
 		</div>
 	<?php endif; ?>

@@ -1,13 +1,12 @@
 <?php
 
 /**
- * @package     External_Login
- * @subpackage  External Login Module
  * @author      Christophe Demko <chdemko@gmail.com>
  * @author      Ioannis Barounis <contact@johnbarounis.com>
  * @author      Alexandre Gandois <alexandre.gandois@etudiant.univ-lr.fr>
  * @copyright   Copyright (C) 2008-2018 Christophe Demko, Ioannis Barounis, Alexandre Gandois. All rights reserved.
  * @license     GNU General Public License, version 2. http://www.gnu.org/licenses/gpl-2.0.html
+ *
  * @link        https://github.com/akunzai/joomla-external-login
  */
 
@@ -17,16 +16,20 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
+use Joomla\Registry\Registry;
 
 // No direct access to this file
 defined('_JEXEC') or die;
 
-$user = version_compare(JVERSION, '4.0.0', '<')
-    ? Factory::getUser()
-    : Factory::getApplication()->getIdentity();
+/** @var Registry $params */
+$params ??= new Registry();
+$enabled = (bool) ($enabled ?? false);
+$count = (int) ($count ?? 0);
+$servers ??= [];
+$user = Factory::getApplication()->getIdentity();
 ?>
 <?php if ($user->guest) : ?>
-	<div class="externallogin<?php echo htmlspecialchars($params->get('moduleclass_sfx'), ENT_COMPAT, 'UTF-8'); ?>">
+	<div class="externallogin<?php echo htmlspecialchars((string) $params->get('moduleclass_sfx', ''), ENT_COMPAT, 'UTF-8'); ?>">
 		<form action="<?php echo Route::_('index.php', true, $params->get('usesecure')); ?>" method="post" id="external-login">
 			<fieldset class="loginform">
 				<?php
@@ -51,11 +54,11 @@ $user = version_compare(JVERSION, '4.0.0', '<')
 		<div class="clr"></div>
 	</div>
 <?php elseif ($params->get('show_logout', 0)) : ?>
-	<div class="externallogin<?php echo htmlspecialchars($params->get('moduleclass_sfx'), ENT_COMPAT, 'UTF-8'); ?>">
+	<div class="externallogin<?php echo htmlspecialchars((string) $params->get('moduleclass_sfx', ''), ENT_COMPAT, 'UTF-8'); ?>">
 		<?php require ModuleHelper::getLayoutPath('mod_externallogin_site', 'logout'); ?>
 	</div>
 	<?php if ($params->get('show_logout_local', 0)) : ?>
-		<div class="externallogin<?php echo htmlspecialchars($params->get('moduleclass_sfx'), ENT_COMPAT, 'UTF-8'); ?>">
+		<div class="externallogin<?php echo htmlspecialchars((string) $params->get('moduleclass_sfx', ''), ENT_COMPAT, 'UTF-8'); ?>">
 			<form action="<?php echo Route::_('index.php?option=com_users&task=user.logout'); ?>" method="post">
 				<div>
 					<input type="submit" class="button" value="<?php echo htmlspecialchars(Text::_('MOD_EXTERNALLOGIN_SITE_LOGOUT_LOCAL'), ENT_COMPAT, 'UTF-8'); ?>" />

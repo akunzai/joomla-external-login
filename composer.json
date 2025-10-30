@@ -27,27 +27,15 @@
 			"type": "package",
 			"package": {
 				"name": "joomla/joomla-cms",
-				"version": "5.3.4",
+				"version": "5.4.0",
 				"dist": {
-					"url": "https://github.com/joomla/joomla-cms/releases/download/5.3.4/Joomla_5.3.4-Stable-Full_Package.zip",
+					"url": "https://github.com/joomla/joomla-cms/releases/download/5.4.0/Joomla_5.4.0-Stable-Full_Package.zip",
 					"type": "zip"
 				},
 				"source": {
 					"url": "https://github.com/joomla/joomla-cms.git",
 					"type": "git",
-					"reference": "tags/5.3.4"
-				}
-			}
-		},
-		{
-			"type": "package",
-			"package": {
-				"name": "akunzai/joomla-stubs",
-				"version": "master",
-				"source": {
-					"url": "https://github.com/akunzai/joomla-stubs.git",
-					"type": "git",
-					"reference": "master"
+					"reference": "tags/5.4.0"
 				}
 			}
 		}
@@ -56,9 +44,8 @@
 		"php": ">=8.1"
 	},
 	"require-dev": {
-		"akunzai/joomla-stubs": "dev-master",
-		"friendsofphp/php-cs-fixer": "^3.88",
-		"joomla/joomla-cms": "5.3.4",
+		"friendsofphp/php-cs-fixer": "^3.89",
+		"joomla/joomla-cms": "5.4.0",
 		"phpstan/extension-installer": "^1.4",
 		"phpstan/phpstan": "^2.1",
 		"phpstan/phpstan-deprecation-rules": "^2.0"
@@ -69,7 +56,7 @@
 			"php-cs-fixer fix --diff --dry-run"
 		],
 		"fix": [
-			"php-cs-fixer -- fix"
+			"php-cs-fixer fix"
 		],
 		"phpstan": [
 			"phpstan analyse"
@@ -77,8 +64,8 @@
 		"phpstan-baseline": [
 			"phpstan analyse --generate-baseline"
 		],
-		"build": [
-			"./build.sh"
+		"bundle": [
+			"./bundle.sh"
 		]
 	}
 }

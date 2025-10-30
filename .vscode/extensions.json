@@ -1,6 +1,9 @@
 {
   "recommendations": [
+    "bmewburn.vscode-intelephense-client",
     "mhutchie.git-graph",
+    "ms-azuretools.vscode-containers",
+    "sst-dev.opencode",
     "streetsidesoftware.code-spell-checker"
   ]
 }

@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension version="3" type="plugin" group="user" method="upgrade">
+<extension version="4" type="plugin" group="user" method="upgrade">
 
 	<name>PLG_USER_CBEXTERNALLOGIN</name>
 
 	<!-- The following elements are optional and free of formatting conttraints -->
-	<creationDate>May 2012</creationDate>
+	<creationDate>Oct 2025</creationDate>
 	<author>Christophe Demko, Charley Wu, others, see contributor page</author>
 	<authorUrl>https://github.com/akunzai/joomla-external-login</authorUrl>
 	<license>GNU General Public License version 2 or later; see LICENSE</license>
 
 	<!--  The version string is recorded in the extension table -->
-	<version>4.0.6</version>
+	<version>5.0.0</version>
 
 	<!-- The description is optional and defaults to the name -->
 	<description>PLG_USER_CBEXTERNALLOGIN_DESCRIPTION</description>
 
+	<namespace path="src">Joomla\Plugin\User\Cbexternallogin</namespace>
+
 	<files>
-		<filename plugin="cbexternallogin">cbexternallogin.php</filename>
+		<folder plugin="cbexternallogin">services</folder>
+		<folder>src</folder>
 	</files>
 
 	<languages>

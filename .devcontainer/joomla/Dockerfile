@@ -1,7 +1,7 @@
 ARG PHP_VERSION=8.3.24
 ARG PHP_EXTRA_BUILD_DEPS=""
 # https://hub.docker.com/_/joomla
-ARG JOOMLA_VERSION=5.3.4
+ARG JOOMLA_VERSION=5.4.0
 
 FROM joomla:${JOOMLA_VERSION}-apache AS joomla
 
@@ -16,7 +16,7 @@ RUN --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     set -eux; \
     apt-get update; \
     # install the system tools we need
-    apt-get install -y --no-install-recommends mariadb-client; \
+    apt-get install -y --no-install-recommends mariadb-client unzip; \
     # install the PHP extensions we need
     savedAptMark="$(apt-mark showmanual)"; \
     apt-get install -y --no-install-recommends \

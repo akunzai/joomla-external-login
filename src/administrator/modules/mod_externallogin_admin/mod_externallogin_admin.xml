@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="module" version="3" client="administrator" method="upgrade">
+<extension type="module" version="4" client="administrator" method="upgrade">
 
 	<name>MOD_EXTERNALLOGIN_ADMIN</name>
 
 	<!-- The following elements are optional and free of formatting conttraints -->
-	<creationDate>July 2008</creationDate>
+	<creationDate>Oct 2025</creationDate>
 	<author>Christophe Demko, Ioannis Barounis, Alexandre Gandois, others, see contributor page</author>
 	<authorUrl>https://github.com/akunzai/joomla-external-login</authorUrl>
 	<license>GNU General Public License version 2 or later; see LICENSE</license>
 
 	<!--  The version string is recorded in the extension table -->
-	<version>4.0.6</version>
+	<version>5.0.0</version>
 
 	<!-- The description is optional and defaults to the name -->
 	<description>MOD_EXTERNALLOGIN_ADMIN_DESCRIPTION</description>
 
+	<namespace path="src">Joomla\Module\ExternalloginAdmin</namespace>
+
 	<files>
-		<filename module="mod_externallogin_admin">mod_externallogin_admin.php</filename>
-		<filename>helper.php</filename>
+		<folder module="mod_externallogin_admin">services</folder>
+		<folder>language</folder>
+		<folder>src</folder>
 		<folder>tmpl</folder>
 	</files>
 
