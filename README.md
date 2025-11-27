@@ -13,7 +13,7 @@ The [Joomla!](https://www.joomla.org/) authentication extension allows to login 
 
 ## Requirements
 
-- PHP >= 8.1
+- PHP >= 8.3
 - [Composer](https://getcomposer.org/)
 - [Joomla!](https://www.joomla.org/) 5.x
 
