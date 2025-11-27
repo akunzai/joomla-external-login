@@ -12,7 +12,7 @@ return $config
 	->setParallelConfig(ParallelConfigFactory::detect())
 	->setRules([
 		'@PSR12' => true,
-		'@PHP81Migration' => true,
+		'@PHP83Migration' => true,
 
 		// PHPDoc rules
 		'phpdoc_align' => ['align' => 'left'],
