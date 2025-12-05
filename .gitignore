@@ -3,6 +3,7 @@
 # development containers
 /.devcontainer/.env
 /.devcontainer/.secrets
+/.devcontainer/**/logs/
 /.devcontainer/keycloak/export/
 
 # Composer dependencies
@@ -27,3 +28,4 @@ Thumbs.db
 # misc
 /dist/
 .claude/
+.agent/

@@ -1,23 +1,9 @@
 // https://aka.ms/devcontainer.json
 {
   "name": "Joomla External Login",
-  // https://github.com/devcontainers/images/tree/main/src/php
   "dockerComposeFile": "compose.yml",
   "service": "joomla",
   "workspaceFolder": "/workspace",
-  "portsAttributes": {
-    "8443": {
-      "label": "Keycloak",
-      "protocol": "https"
-    },
-    "80": {
-      "label": "Joomla",
-      "protocol": "http"
-    }
-  },
-  "otherPortsAttributes": {
-    "onAutoForward": "ignore"
-  },
   "remoteEnv": {
     "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
   },
@@ -42,9 +28,6 @@
   // https://containers.dev/features
   "features": {
     "ghcr.io/danzilberdan/devcontainers/opencode:0": {},
-    "ghcr.io/devcontainers/features/git:1": {
-      "version": "system"
-    },
     "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
       "moby": false
     }

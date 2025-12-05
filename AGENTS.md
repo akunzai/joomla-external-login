@@ -3,7 +3,7 @@
 ## Environment Quick Facts
 
 - Use the VS Code dev container; see `.devcontainer/README.md` for full setup.
-- Services expose Joomla `80`, Keycloak `8443`, and MySQL `3306`.
+- Services expose Traefik `443`, and MySQL `3306`.
 
 ## Essential Commands
 

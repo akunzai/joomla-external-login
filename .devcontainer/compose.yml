@@ -1,43 +1,5 @@
 name: joomla-external-login_devcontainer
 services:
-
-  keycloak:
-    build: ./keycloak
-    image: keycloak:cas
-    restart: unless-stopped
-    volumes:
-      - type: volume
-        source: keycloak_data
-        target: /opt/keycloak/data
-      - type: bind
-        source: ${LOCAL_WORKSPACE_FOLDER:-..}/.devcontainer/keycloak/export
-        target: /opt/keycloak/data/export
-        bind:
-          create_host_path: true
-      - type: bind
-        source: ${LOCAL_WORKSPACE_FOLDER:-..}/.devcontainer/keycloak/import
-        target: /opt/keycloak/data/import
-    command: start --optimized --import-realm
-    environment:
-      # https://www.keycloak.org/server/configuration
-      KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME:-admin}
-      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD:-admin}
-      # https://www.keycloak.org/server/reverseproxy
-      KC_PROXY_HEADERS: xforwarded
-      # https://www.keycloak.org/server/all-config
-      KC_HOSTNAME: auth.dev.local
-      KC_HTTPS_CERTIFICATE_FILE: /run/secrets/cert.pem
-      KC_HTTPS_CERTIFICATE_KEY_FILE: /run/secrets/key.pem
-    ports:
-      - 127.0.0.1:8443:8443
-    secrets:
-      - cert.pem
-      - key.pem
-    networks:
-      default:
-        aliases:
-          - auth.dev.local
-
   joomla:
     build:
       context: ./joomla
@@ -46,8 +8,8 @@ services:
       - type: volume
         source: joomla_data
         target: /var/www/html
-      - type: volume
-        source: joomla_log
+      - type: bind
+        source: ${LOCAL_WORKSPACE_FOLDER:-..}/.devcontainer/joomla/logs
         target: /var/www/html/administrator/logs
       - type: bind
         source: ${LOCAL_WORKSPACE_FOLDER:-..}
@@ -64,29 +26,108 @@ services:
     environment:
       JOOMLA_DB_HOST: ${JOOMLA_DB_HOST:-mysql}
       JOOMLA_DB_PASSWORD: ${JOOMLA_DB_PASSWORD:-${MYSQL_ROOT_PASSWORD:-secret}}
-    ports:
-      - 127.0.0.1:80:80
+      SSL_CERT_FILE: /run/secrets/ca.pem
+    secrets:
+      - ca.pem
     depends_on:
       - mysql
-      - keycloak
-    networks:
-      default:
-        aliases:
-          - www.dev.local
+      - traefik
+    external_links:
+      - traefik:store.dev.local
+      - traefik:www.dev.local
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.joomla.entrypoints=websecure
+      - traefik.http.routers.joomla.rule=Host(`www.dev.local`)
+
+  keycloak:
+    build: ./keycloak
+    image: keycloak:cas
+    volumes:
+      - type: volume
+        source: keycloak_data
+        target: /opt/keycloak/data
+      - type: bind
+        source: ${LOCAL_WORKSPACE_FOLDER:-..}/.devcontainer/keycloak/export
+        target: /opt/keycloak/data/export
+        bind:
+          create_host_path: true
+      - type: bind
+        source: ${LOCAL_WORKSPACE_FOLDER:-..}/.devcontainer/keycloak/import
+        target: /opt/keycloak/data/import
+    # https://www.keycloak.org/server/configuration#_starting_keycloak
+    command:
+      - start-dev
+      - --import-realm
+    environment:
+      # https://www.keycloak.org/server/configuration
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME:-admin}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD:-admin}
+      # https://www.keycloak.org/server/reverseproxy
+      KC_PROXY_HEADERS: xforwarded
+      # https://www.keycloak.org/server/all-config
+      KC_HOSTNAME: auth.dev.local
+      SSL_CERT_FILE: /run/secrets/ca.pem
+    secrets:
+      - ca.pem
+    depends_on:
+      - mysql
+      - traefik
+    external_links:
+      - traefik:www.dev.local
+      - traefik:auth.dev.local
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.openmage.entrypoints=websecure
+      - traefik.http.routers.openmage.rule=Host(`auth.dev.local`)
+      - traefik.http.services.openmage.loadbalancer.server.port=8080
 
   mysql:
     # https://hub.docker.com/_/mysql
     image: mysql
-    restart: unless-stopped
     volumes:
-      - mysql_data:/var/lib/mysql
+      - type: volume
+        source: mysql_data
+        target: /var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-secret}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-joomla}
     ports:
       - 127.0.0.1:3306:3306
 
+  traefik:
+    # https://hub.docker.com/_/traefik
+    image: traefik
+    networks:
+      default:
+        aliases:
+          - auth.dev.local
+          - www.dev.local
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/etc:/etc/traefik
+    command:
+      - --api.insecure=true
+      - --api.dashboard=true
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.websecure.http.tls=true
+      - --providers.docker=true
+      - --providers.docker.exposedByDefault=false
+      - --providers.file.directory=/etc/traefik/dynamic/
+    ports:
+      - 127.0.0.1:80:80
+      - 127.0.0.1:443:443
+      - 127.0.0.1:9090:8080
+    secrets:
+      - cert.pem
+      - key.pem
+
 secrets:
+  ca.pem:
+    file: .secrets/ca.pem
   cert.pem:
     file: .secrets/cert.pem
   key.pem:
@@ -94,6 +135,5 @@ secrets:
 
 volumes:
   joomla_data: null
-  joomla_log: null
-  keycloak_data: null
   mysql_data: null
+  keycloak_data: null
