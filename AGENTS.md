@@ -3,7 +3,10 @@
 ## Environment Quick Facts
 
 - Use the VS Code dev container; see `.devcontainer/README.md` for full setup.
-- Services expose Joomla `80`, Keycloak `8443`, and MySQL `3306`.
+- Services expose Traefik `443`, and MySQL `3306`.
+- TLS certificates required: run `.devcontainer/generate-certs.sh .devcontainer/.secrets` to generate certs with mkcert.
+- All services now use HTTPS through Traefik reverse proxy.
+- Access URLs: Joomla at `https://www.dev.local`, Keycloak at `https://auth.dev.local`.
 
 ## Essential Commands
 
@@ -24,6 +27,12 @@
 - Diagnose issues
   - Joomla errors: `tail -20 /tmp/everything.php`
   - Container logs: `docker compose -f .devcontainer/compose.yml logs --tail 100 joomla`
+- E2E tests (Playwright-based)
+  - Install dependencies: `cd e2e && pnpm install`
+  - Run tests: `pnpm test` (headless), `pnpm test:headed` (browser visible)
+  - Debug tests: `pnpm test:debug` or `pnpm test:ui` (interactive UI mode)
+  - View reports: `pnpm report`
+  - Tests require services running with HTTPS enabled
 
 ## Code Style Highlights
 

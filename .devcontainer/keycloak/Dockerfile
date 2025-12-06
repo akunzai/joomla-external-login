@@ -1,9 +1,13 @@
 # https://github.com/keycloak/keycloak/releases
-ARG KEYCLOAK_VERSION=26.4.6
-ARG KEYCLOAK_CAS_VERSION=26.4.6
+ARG KEYCLOAK_VERSION=26.4.7
+ARG KEYCLOAK_CAS_VERSION=26.4.7
 FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}
 ARG KEYCLOAK_VERSION
 ARG KEYCLOAK_CAS_VERSION
+
+# Install microcheck for healthcheck
+# https://github.com/tarampampam/microcheck
+COPY --from=ghcr.io/tarampampam/microcheck:1 /bin/httpscheck /bin/httpscheck
 
 # add CAS protocol for Keycloak
 # https://github.com/jacekkow/keycloak-protocol-cas
@@ -11,4 +15,4 @@ ADD --chown=keycloak:keycloak https://github.com/jacekkow/keycloak-protocol-cas/
 
 WORKDIR /opt/keycloak
 
-RUN /opt/keycloak/bin/kc.sh build
+RUN /opt/keycloak/bin/kc.sh build --health-enabled=true

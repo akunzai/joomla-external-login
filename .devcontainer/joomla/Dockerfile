@@ -16,19 +16,19 @@ RUN --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     set -eux; \
     apt-get update; \
     # install the system tools we need
-    apt-get install -y --no-install-recommends mariadb-client unzip; \
+    apt-get install -y --no-install-recommends git mariadb-client unzip rsync; \
     # install the PHP extensions we need
     savedAptMark="$(apt-mark showmanual)"; \
     apt-get install -y --no-install-recommends \
-    libfreetype6-dev libicu-dev \
+    libfreetype6-dev libicu-dev libssl-dev \
     libjpeg62-turbo-dev libpng-dev \
     libxml2-dev libxslt1-dev \
     libzip-dev libwebp-dev \
     ${PHP_EXTRA_BUILD_DEPS:-}; \
     # https://www.php.net/manual/en/image.installation.php
     docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp; \
-    docker-php-ext-install -j$(nproc) opcache \
-    intl gd mysqli pcntl pdo_mysql soap xsl zip; \
+    docker-php-ext-install -j$(nproc) ftp \
+    gd intl mysqli opcache pcntl pdo_mysql soap xsl zip; \
     curl -Lo /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/latest/download/pickle.phar && \
     chmod +x /usr/local/bin/pickle; \
     pickle install --no-interaction apcu-stable; \

@@ -4,7 +4,7 @@
 /**
  * Create Joomla! extension zip from manifest file
  * 
- * @see https://docs.joomla.org/Manifest_files
+ * @see https://manual.joomla.org/docs/building-extensions/install-update/installation/manifest/
  * @author      Charley Wu <akunzai@gmail.com>
  */
 
