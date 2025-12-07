@@ -36,11 +36,13 @@
   - Joomla errors: `tail -20 /www/html/administrator/logs/everything.php`
   - Container logs: `docker compose -f .devcontainer/compose.yml logs --tail 100 joomla`
 - E2E tests (Playwright-based)
+  - **IMPORTANT: Always use `pnpm`, NOT `npm` for E2E tests**
   - Install dependencies: `cd e2e && pnpm install`
-  - Run tests: `pnpm test` (headless), `pnpm test:headed` (browser visible)
-  - Debug tests: `pnpm test:debug` or `pnpm test:ui` (interactive UI mode)
-  - View reports: `pnpm report`
-  - Tests require services running with HTTPS enabled (note: use pnpm, not npm)
+  - Run tests: `cd e2e && pnpm test` (headless), `pnpm test:headed` (browser visible)
+  - Run specific tests: `cd e2e && pnpm test -- --grep translation`
+  - Debug tests: `cd e2e && pnpm test:debug` or `pnpm test:ui` (interactive UI mode)
+  - View reports: `cd e2e && pnpm report`
+  - Tests require services running with HTTPS enabled
 
 ## Code Style Highlights
 
