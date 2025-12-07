@@ -44,10 +44,10 @@ $fistTabName = array_key_first($fieldSets);
 <form action="<?php echo Route::_('index.php?option=com_externallogin&id=' . $this->item->id); ?>" method="post" name="adminForm" id="server-form" class="form-validate form-horizontal">
 	<div class="row-fluid">
 		<div class="span10">
-			<?php echo HTMLHelper::_('bootstrap.startTabSet', 'configTabs', ['active' => $fistTabName]); ?>
+			<?php echo HTMLHelper::_('uitab.startTabSet', 'configTabs', ['active' => $fistTabName]); ?>
 			<?php foreach ($fieldSets as $name => $fieldSet) : ?>
 				<?php $label = empty($fieldSet->label) ? 'COM_CONFIG_' . $name . '_FIELDSET_LABEL' : $fieldSet->label; ?>
-				<?php echo HTMLHelper::_('bootstrap.addTab', 'configTabs', $name, Text::_($label)); ?>
+				<?php echo HTMLHelper::_('uitab.addTab', 'configTabs', $name, Text::_($label)); ?>
 				<?php if (isset($fieldSet->description) && !empty($fieldSet->description)) : ?>
 					<p class="tab-description"><?php echo Text::_($fieldSet->description); ?></p>
 				<?php endif; ?>
@@ -62,8 +62,9 @@ $fistTabName = array_key_first($fieldSets);
 				    echo $field->renderField($options);
 				    ?>
 				<?php endforeach; ?>
-				<?php echo HTMLHelper::_('bootstrap.endTab'); ?>
+				<?php echo HTMLHelper::_('uitab.endTab'); ?>
 			<?php endforeach; ?>
+			<?php echo HTMLHelper::_('uitab.endTabSet'); ?>
 		</div>
 	</div>
 	<div>

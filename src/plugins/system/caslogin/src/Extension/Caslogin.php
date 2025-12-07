@@ -131,6 +131,8 @@ class Caslogin extends CMSPlugin
         $context = $event->getArgument('context');
 
         if ($context == 'com_externallogin') {
+            // Ensure language is loaded for translation
+            $this->loadLanguage();
             $result   = $event->getArgument('result', []);
             $result[] = ['value' => 'system.caslogin', 'text' => 'PLG_SYSTEM_CASLOGIN_OPTION'];
 
@@ -153,6 +155,8 @@ class Caslogin extends CMSPlugin
             return;
         }
 
+        // Ensure language is loaded for form labels
+        $this->loadLanguage();
         Form::addFormPath(dirname(__DIR__, 2) . '/forms');
         $form->loadFile('cas', false);
     }
