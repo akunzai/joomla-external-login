@@ -32,7 +32,7 @@
   - Run tests: `pnpm test` (headless), `pnpm test:headed` (browser visible)
   - Debug tests: `pnpm test:debug` or `pnpm test:ui` (interactive UI mode)
   - View reports: `pnpm report`
-  - Tests require services running with HTTPS enabled
+  - Tests require services running with HTTPS enabled (note: use pnpm, not npm)
 
 ## Code Style Highlights
 
@@ -44,3 +44,13 @@
 - Maintain Joomla MVC inheritance patterns.
 - Include `defined('_JEXEC') or die;` at PHP entry points.
 - Use Joomla exceptions and `Text` for user-facing messages.
+
+## Language Requirements
+
+**All code comments, documentation, and project descriptions MUST be written in English.**
+
+- PHP comments (inline, block, PHPDoc) must be in English.
+- Git commit messages must be in English.
+- Variable, function, and class names must follow English naming conventions.
+- README files and documentation must be in English.
+- This ensures consistency and global community understanding across the project.
