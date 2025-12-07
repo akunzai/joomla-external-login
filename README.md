@@ -9,13 +9,13 @@ The [Joomla!](https://www.joomla.org/) authentication extension allows to login 
 
 ## Supported authentication standards
 
-- [CAS](https://apereo.github.io/cas/7.0.x/protocol/CAS-Protocol-Specification.html) 3.0
+- [CAS](https://apereo.github.io/cas/development/protocol/CAS-Protocol-Specification.html) 3.0
 
 ## Requirements
 
 - PHP >= 8.3
 - [Composer](https://getcomposer.org/)
-- [Joomla!](https://www.joomla.org/) 5.x
+- [Joomla!](https://www.joomla.org/) 5.x or 6.x
 
 ## Getting Started
 
