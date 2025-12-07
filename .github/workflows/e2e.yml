@@ -49,7 +49,9 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .devcontainer/joomla
-          build-args: ${{ matrix.joomla.joomla-version != '' && format('JOOMLA_VERSION={0}\nPHP_VERSION={1}', matrix.joomla.joomla-version, matrix.joomla.php-version) || '' }}
+          build-args: |
+            ${{ matrix.joomla.joomla-version != '' && format('JOOMLA_VERSION={0}', matrix.joomla.joomla-version) || '' }}
+            ${{ matrix.joomla.php-version != '' && format('PHP_VERSION={0}', matrix.joomla.php-version) || '' }}
           load: true
           tags: joomla:external-login
           cache-from: type=gha,scope=joomla-${{ matrix.joomla.version }}
