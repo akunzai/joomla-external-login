@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="package" version="4" method="upgrade">
+<extension type="package" version="5" method="upgrade">
 
 	<name>pkg_externallogin</name>
 
