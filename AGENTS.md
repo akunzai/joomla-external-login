@@ -27,6 +27,11 @@
   - Install: `php /var/www/html/cli/joomla.php extension:install --path /workspace/dist/pkg_externallogin.zip`
   - List: `php /var/www/html/cli/joomla.php extension:list | grep -iE '(external|caslogin)'`
   - Remove: `bash -c "php /var/www/html/cli/joomla.php extension:list | grep -iE '(external|caslogin)' | awk '{print $2}' | xargs -I{} php /var/www/html/cli/joomla.php extension:remove -n {}"`
+- Quick file copy for rapid testing (skip full reinstall)
+  - Copy single PHP file: `docker compose -f .devcontainer/compose.yml cp src/plugins/system/caslogin/src/Extension/Caslogin.php joomla:/var/www/html/plugins/system/caslogin/src/Extension/Caslogin.php`
+  - Copy directory: `docker compose -f .devcontainer/compose.yml cp src/plugins/system/caslogin/language joomla:/var/www/html/plugins/system/caslogin/`
+  - Copy component template: `docker compose -f .devcontainer/compose.yml cp src/administrator/components/com_externallogin/tmpl/servers/default.php joomla:/var/www/html/administrator/components/com_externallogin/tmpl/servers/default.php`
+  - After copying, clear cache: `docker compose -f .devcontainer/compose.yml exec joomla php /var/www/html/cli/joomla.php cache:clean`
 - Diagnose issues
   - Joomla errors: `tail -20 /www/html/administrator/logs/everything.php`
   - Container logs: `docker compose -f .devcontainer/compose.yml logs --tail 100 joomla`
