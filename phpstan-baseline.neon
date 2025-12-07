@@ -1,0 +1,25 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Parameter \#1 \$config of method Joomla\\CMS\\Plugin\\CMSPlugin\:\:__construct\(\) expects array, Joomla\\Event\\DispatcherInterface given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/plugins/authentication/externallogin/src/Extension/Externallogin.php
+
+		-
+			message: '#^Parameter \#1 \$config of method Joomla\\CMS\\Plugin\\CMSPlugin\:\:__construct\(\) expects array, Joomla\\Event\\DispatcherInterface given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/plugins/system/caslogin/src/Extension/Caslogin.php
+
+		-
+			message: '#^Parameter \#1 \$config of method Joomla\\CMS\\Plugin\\CMSPlugin\:\:__construct\(\) expects array, Joomla\\Event\\DispatcherInterface given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/plugins/system/externallogin/src/Extension/Externallogin.php
+
+		-
+			message: '#^Parameter \#1 \$config of method Joomla\\CMS\\Plugin\\CMSPlugin\:\:__construct\(\) expects array, Joomla\\Event\\DispatcherInterface given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/plugins/user/cbexternallogin/src/Extension/Cbexternallogin.php

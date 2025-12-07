@@ -16,6 +16,7 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\Database\DatabaseInterface;
+use Joomla\Event\DispatcherInterface;
 
 /**
  * External Login - Community Builder External Login Plugin.
@@ -27,13 +28,14 @@ class Cbexternallogin extends CMSPlugin
     /**
      * Constructor.
      *
+     * @param DispatcherInterface $dispatcher The event dispatcher
      * @param array $config An array that holds the plugin configuration
      *
      * @since   2.0.0
      */
-    public function __construct($config)
+    public function __construct(DispatcherInterface $dispatcher, array $config = [])
     {
-        parent::__construct($config);
+        parent::__construct($dispatcher, $config);
         $this->loadLanguage();
     }
 

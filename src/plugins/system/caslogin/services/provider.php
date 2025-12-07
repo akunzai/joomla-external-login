@@ -7,6 +7,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
+use Joomla\Event\DispatcherInterface;
 use Joomla\Plugin\System\Caslogin\Extension\Caslogin;
 
 return new class () implements ServiceProviderInterface {
@@ -15,10 +16,10 @@ return new class () implements ServiceProviderInterface {
         $container->set(
             PluginInterface::class,
             function (Container $container) {
-                $app = Factory::getApplication();
+                $dispatcher = $container->get(DispatcherInterface::class);
                 $config = (array) PluginHelper::getPlugin('system', 'caslogin');
-                $plugin = new Caslogin($config);
-                $plugin->setApplication($app);
+                $plugin = new Caslogin($dispatcher, $config);
+                $plugin->setApplication(Factory::getApplication());
                 return $plugin;
             }
         );
