@@ -15,9 +15,10 @@ namespace Joomla\Component\Externallogin\Administrator\View\About;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Installer\Installer;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
 // No direct access to this file
 defined('_JEXEC') or die;
@@ -26,6 +27,7 @@ defined('_JEXEC') or die;
  * About View of External Login component.
  *
  * @property string $sidebar The HTML for displaying sidebar
+ * @property string $version The component version
  *
  * @since       2.0.0
  */
@@ -37,6 +39,13 @@ class HtmlView extends BaseHtmlView
      * @var string
      */
     protected $sidebar;
+
+    /**
+     * The component version.
+     *
+     * @var string
+     */
+    protected $version;
 
     /**
      * Execute and display a layout script.
@@ -53,6 +62,10 @@ class HtmlView extends BaseHtmlView
         $this->addToolBar();
 
         $this->sidebar = HTMLHelper::_('sidebar.render');
+
+        // Get version from manifest
+        $manifest = Installer::parseXMLInstallFile(JPATH_ADMINISTRATOR . '/components/com_externallogin/com_externallogin.xml');
+        $this->version = $manifest['version'] ?? '';
 
         // Display the template
         parent::display($tpl);

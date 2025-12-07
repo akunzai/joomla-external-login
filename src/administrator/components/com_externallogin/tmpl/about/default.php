@@ -13,17 +13,26 @@
 // No direct access to this file
 defined('_JEXEC') or die;
 
-use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 
 /** @var \Joomla\Component\Externallogin\Administrator\View\About\HtmlView $this */
-echo '<div id="j-sidebar-container" class="span2">' . $this->sidebar . '</div>';
-
-echo sprintf(
-    Text::_('COM_EXTERNALLOGIN_ABOUT'),
-    'http://www.univ-montp2.fr',
-    HTMLHelper::_('image', 'com_externallogin/administrator/logo_um2.png', 'logo_um2', null, true)
-);
 ?>
-<br>
-<h2 style="text-align: center;">...and upgraded to Joomla! 3.x by <a href="http://www.ninjaforge.com/" target="_blank">Ninja Forge</a> and <a href="http://www.pdxfixit.com/" target="_blank">PDXfixIT</a> with the help and the final validation of Christophe Demko.</h2>
+<div id="j-sidebar-container" class="span2"><?php echo $this->sidebar; ?></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h2><?php echo Text::_('COM_EXTERNALLOGIN'); ?></h2>
+                    <p class="lead"><?php echo Text::sprintf('COM_EXTERNALLOGIN_ABOUT_VERSION', $this->version); ?></p>
+                    <p>
+                        <a href="https://github.com/akunzai/joomla-external-login" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                            <span class="icon-github" aria-hidden="true"></span>
+                            GitHub
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
