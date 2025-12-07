@@ -16,6 +16,19 @@ jobs:
   e2e:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        joomla:
+          - version: "5"
+            compose-override: "compose.joomla5.yml"
+            php-version: "8.3"
+            joomla-version: "5.4.1"
+          - version: "6"
+            compose-override: ""
+            php-version: ""
+            joomla-version: ""
+    name: E2E (Joomla ${{ matrix.joomla.version }})
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -36,10 +49,11 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .devcontainer/joomla
+          build-args: ${{ matrix.joomla.joomla-version != '' && format('JOOMLA_VERSION={0}\nPHP_VERSION={1}', matrix.joomla.joomla-version, matrix.joomla.php-version) || '' }}
           load: true
           tags: joomla:external-login
-          cache-from: type=gha,scope=joomla
-          cache-to: type=gha,mode=max,scope=joomla
+          cache-from: type=gha,scope=joomla-${{ matrix.joomla.version }}
+          cache-to: type=gha,mode=max,scope=joomla-${{ matrix.joomla.version }}
 
       - name: Build Keycloak image
         uses: docker/build-push-action@v6
@@ -53,7 +67,12 @@ jobs:
       # Start services and install applications
       - name: Start Docker Compose services
         working-directory: .devcontainer
-        run: docker compose up -d --no-build
+        run: |
+          if [ -n "${{ matrix.joomla.compose-override }}" ]; then
+            docker compose -f compose.yml -f ${{ matrix.joomla.compose-override }} up -d --no-build
+          else
+            docker compose up -d --no-build
+          fi
 
       - name: Setup Joomla and install extension
         run: .devcontainer/joomla/install.sh
@@ -113,14 +132,14 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: playwright-report
+          name: playwright-report-joomla-${{ matrix.joomla.version }}
           path: e2e/playwright-report/
           retention-days: 7
       - name: Upload test results
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: test-results
+          name: test-results-joomla-${{ matrix.joomla.version }}
           path: e2e/test-results/
           retention-days: 7
 
@@ -129,7 +148,7 @@ jobs:
         working-directory: .devcontainer
         run: |
           echo "=================================================="
-          echo "Diagnostic Information Collection"
+          echo "Diagnostic Information Collection (Joomla ${{ matrix.joomla.version }})"
           echo "=================================================="
 
           echo ""
@@ -161,7 +180,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: diagnostic-logs
+          name: diagnostic-logs-joomla-${{ matrix.joomla.version }}
           path: |
             .devcontainer/joomla/logs/
           retention-days: 7

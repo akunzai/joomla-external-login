@@ -10,9 +10,12 @@
 
 ## Essential Commands
 
-- Start / stop stack
+- Start / stop stack (Joomla 6, default)
   - `docker compose -f .devcontainer/compose.yml up -d`
   - `docker compose -f .devcontainer/compose.yml down`
+- Start / stop stack (Joomla 5)
+  - `docker compose -f .devcontainer/compose.yml -f .devcontainer/compose.joomla5.yml up -d`
+  - `docker compose -f .devcontainer/compose.yml -f .devcontainer/compose.joomla5.yml down`
 - Work inside the container
   - Prefix project tasks with `docker compose -f .devcontainer/compose.yml exec -w /workspace joomla`
   - Install / update dependencies: `composer install`, `composer update`
