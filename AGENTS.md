@@ -25,7 +25,7 @@
   - List: `php /var/www/html/cli/joomla.php extension:list | grep -iE '(external|caslogin)'`
   - Remove: `bash -c "php /var/www/html/cli/joomla.php extension:list | grep -iE '(external|caslogin)' | awk '{print $2}' | xargs -I{} php /var/www/html/cli/joomla.php extension:remove -n {}"`
 - Diagnose issues
-  - Joomla errors: `tail -20 /tmp/everything.php`
+  - Joomla errors: `tail -20 /www/html/administrator/logs/everything.php`
   - Container logs: `docker compose -f .devcontainer/compose.yml logs --tail 100 joomla`
 - E2E tests (Playwright-based)
   - Install dependencies: `cd e2e && pnpm install`
