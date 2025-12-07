@@ -20,11 +20,6 @@ use Joomla\Registry\Registry;
 
 /** @var \Joomla\Component\Externallogin\Administrator\View\Logs\HtmlView $this */
 
-// load tooltip behavior
-HTMLHelper::_('bootstrap.tooltip');
-HTMLHelper::_('dropdown.init');
-HTMLHelper::_('formbehavior.chosen', 'select');
-
 /** @var \Joomla\Registry\Registry $state */
 $state = $this->state;
 

@@ -7,6 +7,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
+use Joomla\Event\DispatcherInterface;
 use Joomla\Plugin\System\Externallogin\Extension\Externallogin;
 
 return new class () implements ServiceProviderInterface {
@@ -15,10 +16,10 @@ return new class () implements ServiceProviderInterface {
         $container->set(
             PluginInterface::class,
             function (Container $container) {
+                $dispatcher = $container->get(DispatcherInterface::class);
                 $config = (array) PluginHelper::getPlugin('system', 'externallogin');
-                $app = Factory::getApplication();
-                $plugin = new Externallogin($config);
-                $plugin->setApplication($app);
+                $plugin = new Externallogin($dispatcher, $config);
+                $plugin->setApplication(Factory::getApplication());
                 return $plugin;
             }
         );

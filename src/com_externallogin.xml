@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="component" version="4" method="upgrade">
+<extension type="component" version="5" method="upgrade">
 
 	<name>COM_EXTERNALLOGIN</name>
 
@@ -12,7 +12,7 @@
 	<license>GNU General Public License version 2 or later; see LICENSE</license>
 
 	<!--  The version string is recorded in the extension table -->
-	<version>5.0.0</version>
+	<version>5.1.0</version>
 
 	<!-- The description is optional and defaults to the name -->
 	<description>COM_EXTERNALLOGIN_DESCRIPTION</description>
@@ -51,7 +51,6 @@
 
 	<media destination="com_externallogin" folder="media/com_externallogin">
 		<folder>css</folder>
-		<folder>images</folder>
 	</media>
 
 	<administration>

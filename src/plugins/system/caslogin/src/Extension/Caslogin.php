@@ -37,6 +37,7 @@ use Joomla\Component\Externallogin\Administrator\Model\ServersModel;
 use Joomla\Component\Externallogin\Administrator\Service\Logger\ExternalloginLogEntry;
 use Joomla\Component\Externallogin\Administrator\Table\ServerTable;
 use Joomla\Database\DatabaseInterface;
+use Joomla\Event\DispatcherInterface;
 use Joomla\Event\Event;
 use Joomla\Registry\Registry;
 
@@ -65,11 +66,12 @@ class Caslogin extends CMSPlugin
     /**
      * Constructor.
      *
+     * @param DispatcherInterface $dispatcher The event dispatcher
      * @param array $config An array that holds the plugin configuration
      */
-    public function __construct($config)
+    public function __construct(DispatcherInterface $dispatcher, array $config = [])
     {
-        parent::__construct($config);
+        parent::__construct($dispatcher, $config);
         $this->loadLanguage();
         require_once JPATH_ADMINISTRATOR . '/components/com_externallogin/src/Service/Logger/ExternalloginLogger.php';
         Log::addLogger(
@@ -131,6 +133,8 @@ class Caslogin extends CMSPlugin
         $context = $event->getArgument('context');
 
         if ($context == 'com_externallogin') {
+            // Ensure language is loaded for translation
+            $this->loadLanguage();
             $result   = $event->getArgument('result', []);
             $result[] = ['value' => 'system.caslogin', 'text' => 'PLG_SYSTEM_CASLOGIN_OPTION'];
 
@@ -153,6 +157,8 @@ class Caslogin extends CMSPlugin
             return;
         }
 
+        // Ensure language is loaded for form labels
+        $this->loadLanguage();
         Form::addFormPath(dirname(__DIR__, 2) . '/forms');
         $form->loadFile('cas', false);
     }

@@ -42,13 +42,14 @@ class Externallogin extends CMSPlugin
     /**
      * Constructor.
      *
+     * @param DispatcherInterface $dispatcher The event dispatcher
      * @param array $config An array that holds the plugin configuration
      *
      * @since   2.0.0
      */
-    public function __construct($config)
+    public function __construct(DispatcherInterface $dispatcher, array $config = [])
     {
-        parent::__construct($config);
+        parent::__construct($dispatcher, $config);
         $this->loadLanguage();
         require_once JPATH_ADMINISTRATOR . '/components/com_externallogin/src/Service/Logger/ExternalloginLogger.php';
         Log::addLogger(

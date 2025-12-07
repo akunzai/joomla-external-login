@@ -19,8 +19,11 @@ cp "$(mkcert -CAROOT)/rootCA.pem" .secrets/ca.pem
 # set up hosts in Host
 echo "127.0.0.1 auth.dev.local www.dev.local" | sudo tee -a /etc/hosts
 
-# starting container
+# starting container (Joomla 6, default)
 docker compose up -d
+
+# starting container (Joomla 5)
+docker compose -f compose.yml -f compose.joomla5.yml up -d
 
 # starting container for debug
 # > use VSCode to attach running joomla container for Xdebug

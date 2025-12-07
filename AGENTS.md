@@ -10,9 +10,12 @@
 
 ## Essential Commands
 
-- Start / stop stack
+- Start / stop stack (Joomla 6, default)
   - `docker compose -f .devcontainer/compose.yml up -d`
   - `docker compose -f .devcontainer/compose.yml down`
+- Start / stop stack (Joomla 5)
+  - `docker compose -f .devcontainer/compose.yml -f .devcontainer/compose.joomla5.yml up -d`
+  - `docker compose -f .devcontainer/compose.yml -f .devcontainer/compose.joomla5.yml down`
 - Work inside the container
   - Prefix project tasks with `docker compose -f .devcontainer/compose.yml exec -w /workspace joomla`
   - Install / update dependencies: `composer install`, `composer update`
@@ -24,14 +27,21 @@
   - Install: `php /var/www/html/cli/joomla.php extension:install --path /workspace/dist/pkg_externallogin.zip`
   - List: `php /var/www/html/cli/joomla.php extension:list | grep -iE '(external|caslogin)'`
   - Remove: `bash -c "php /var/www/html/cli/joomla.php extension:list | grep -iE '(external|caslogin)' | awk '{print $2}' | xargs -I{} php /var/www/html/cli/joomla.php extension:remove -n {}"`
+- Quick file copy for rapid testing (skip full reinstall)
+  - Copy single PHP file: `docker compose -f .devcontainer/compose.yml cp src/plugins/system/caslogin/src/Extension/Caslogin.php joomla:/var/www/html/plugins/system/caslogin/src/Extension/Caslogin.php`
+  - Copy directory: `docker compose -f .devcontainer/compose.yml cp src/plugins/system/caslogin/language joomla:/var/www/html/plugins/system/caslogin/`
+  - Copy component template: `docker compose -f .devcontainer/compose.yml cp src/administrator/components/com_externallogin/tmpl/servers/default.php joomla:/var/www/html/administrator/components/com_externallogin/tmpl/servers/default.php`
+  - After copying, clear cache: `docker compose -f .devcontainer/compose.yml exec joomla php /var/www/html/cli/joomla.php cache:clean`
 - Diagnose issues
-  - Joomla errors: `tail -20 /tmp/everything.php`
+  - Joomla errors: `tail -20 /www/html/administrator/logs/everything.php`
   - Container logs: `docker compose -f .devcontainer/compose.yml logs --tail 100 joomla`
 - E2E tests (Playwright-based)
+  - **IMPORTANT: Always use `pnpm`, NOT `npm` for E2E tests**
   - Install dependencies: `cd e2e && pnpm install`
-  - Run tests: `pnpm test` (headless), `pnpm test:headed` (browser visible)
-  - Debug tests: `pnpm test:debug` or `pnpm test:ui` (interactive UI mode)
-  - View reports: `pnpm report`
+  - Run tests: `cd e2e && pnpm test` (headless), `pnpm test:headed` (browser visible)
+  - Run specific tests: `cd e2e && pnpm test -- --grep translation`
+  - Debug tests: `cd e2e && pnpm test:debug` or `pnpm test:ui` (interactive UI mode)
+  - View reports: `cd e2e && pnpm report`
   - Tests require services running with HTTPS enabled
 
 ## Code Style Highlights
@@ -44,3 +54,13 @@
 - Maintain Joomla MVC inheritance patterns.
 - Include `defined('_JEXEC') or die;` at PHP entry points.
 - Use Joomla exceptions and `Text` for user-facing messages.
+
+## Language Requirements
+
+**All code comments, documentation, and project descriptions MUST be written in English.**
+
+- PHP comments (inline, block, PHPDoc) must be in English.
+- Git commit messages must be in English.
+- Variable, function, and class names must follow English naming conventions.
+- README files and documentation must be in English.
+- This ensures consistency and global community understanding across the project.

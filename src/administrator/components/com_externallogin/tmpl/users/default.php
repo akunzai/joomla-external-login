@@ -17,12 +17,6 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
 
 /** @var \Joomla\Component\Externallogin\Administrator\View\Users\HtmlView $this */
-
-// load tooltip behavior
-HTMLHelper::_('bootstrap.tooltip');
-HTMLHelper::_('dropdown.init');
-HTMLHelper::_('formbehavior.chosen', 'select');
-
 $listOrder	= $this->escape($this->state->get('list.ordering'));
 $listDirn	= $this->escape($this->state->get('list.direction'));
 ?>

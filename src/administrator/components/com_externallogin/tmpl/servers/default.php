@@ -19,10 +19,6 @@ use Joomla\CMS\Router\Route;
 
 /** @var \Joomla\Component\Externallogin\Administrator\View\Servers\HtmlView $this */
 
-// load tooltip behavior
-HTMLHelper::_('bootstrap.tooltip');
-HTMLHelper::_('dropdown.init');
-HTMLHelper::_('formbehavior.chosen', 'select');
 /** @var \Joomla\CMS\Application\CMSApplication $app */
 $app = Factory::getApplication();
 $wa = $app->getDocument()->getWebAssetManager();

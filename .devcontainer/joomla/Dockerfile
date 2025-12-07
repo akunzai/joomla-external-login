@@ -1,7 +1,7 @@
 ARG PHP_VERSION=8.4
 ARG PHP_EXTRA_BUILD_DEPS=""
 # https://hub.docker.com/_/joomla
-ARG JOOMLA_VERSION=5.4.1
+ARG JOOMLA_VERSION=6.0.1
 
 FROM joomla:${JOOMLA_VERSION}-apache AS joomla
 
