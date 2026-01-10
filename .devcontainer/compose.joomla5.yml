@@ -5,5 +5,5 @@ services:
     build:
       context: ./joomla
       args:
-        JOOMLA_VERSION: "5.4.1"
+        JOOMLA_VERSION: "5.4.2"
         PHP_VERSION: "8.3"
