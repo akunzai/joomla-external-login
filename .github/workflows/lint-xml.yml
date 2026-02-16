@@ -1,16 +1,12 @@
 name: 'Linting XML'
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - '**.xml'
   pull_request:
     branches:
       - main
     paths:
       - '**.xml'
+      - '.github/workflows/lint-xml.yml'
   # Allow manually triggering the workflow.
   workflow_dispatch:
 

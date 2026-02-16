@@ -1,16 +1,12 @@
 name: Linting Dockerfile
 
 on:
-  push:
-      branches:
-      - main
-      paths:
-      - '**/Dockerfile'
   pull_request:
       branches:
       - main
       paths:
       - '**/Dockerfile'
+      - '.github/workflows/lint-dockerfile.yml'
   # Allow manually triggering the workflow.
   workflow_dispatch:
   
