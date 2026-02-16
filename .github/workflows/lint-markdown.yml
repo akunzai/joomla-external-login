@@ -1,16 +1,12 @@
 name: Linting Markdown
 
 on:
-  push:
-      branches:
-      - main
-      paths:
-      - '**.md'
   pull_request:
       branches:
       - main
       paths:
       - '**.md'
+      - '.github/workflows/lint-markdown.yml'
   # Allow manually triggering the workflow.
   workflow_dispatch:
   

@@ -1,12 +1,17 @@
 name: Build
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
+    paths:
+      - 'src/**'
+      - 'composer.json'
+      - 'composer.lock'
+      - '.php-cs-fixer.dist.php'
+      - 'phpstan.neon'
+      - 'phpstan-baseline.neon'
+      - '.github/workflows/build.yml'
   # Allow manually triggering the workflow.
   workflow_dispatch:
 

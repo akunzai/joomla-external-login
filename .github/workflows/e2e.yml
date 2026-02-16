@@ -1,12 +1,19 @@
 name: E2E Tests
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
+    paths:
+      - 'src/**'
+      - 'e2e/**'
+      - '.devcontainer/**'
+      - 'composer.json'
+      - 'composer.lock'
+      - 'manifest.xml'
+      - 'bundle.sh'
+      - 'bundle.php'
+      - '.github/workflows/e2e.yml'
   workflow_dispatch:
 
 permissions:

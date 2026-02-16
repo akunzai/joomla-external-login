@@ -1,16 +1,12 @@
 name: Linting Shell script
 
 on:
-  push:
-      branches:
-      - main
-      paths:
-      - '**.sh'
   pull_request:
       branches:
       - main
       paths:
       - '**.sh'
+      - '.github/workflows/lint-shell.yml'
   # Allow manually triggering the workflow.
   workflow_dispatch:
   
