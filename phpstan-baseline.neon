@@ -1,12 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Static method Joomla\\CMS\\Language\\Text\:\:sprintf\(\) invoked with 2 parameters, 1 required\.$#'
-			identifier: arguments.count
-			count: 1
-			path: src/administrator/components/com_externallogin/tmpl/about/default.php
-
-		-
 			message: '#^Parameter \#1 \$config of method Joomla\\CMS\\Plugin\\CMSPlugin\:\:__construct\(\) expects array, Joomla\\Event\\DispatcherInterface given\.$#'
 			identifier: argument.type
 			count: 1
