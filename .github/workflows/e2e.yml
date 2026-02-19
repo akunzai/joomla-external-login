@@ -32,11 +32,9 @@ jobs:
       matrix:
         joomla:
           - version: "5"
-            compose-override: "compose.joomla5.yml"
             php-version: "8.3"
-            joomla-version: "5.4.1"
+            joomla-version: "5.4.3"
           - version: "6"
-            compose-override: ""
             php-version: ""
             joomla-version: ""
     name: E2E (Joomla ${{ matrix.joomla.version }})
@@ -80,12 +78,7 @@ jobs:
       # Start services and install applications
       - name: Start Docker Compose services
         working-directory: .devcontainer
-        run: |
-          if [ -n "${{ matrix.joomla.compose-override }}" ]; then
-            docker compose -f compose.yml -f ${{ matrix.joomla.compose-override }} up -d --no-build
-          else
-            docker compose up -d --no-build
-          fi
+        run: docker compose up -d --no-build
 
       - name: Setup Joomla and install extension
         run: .devcontainer/joomla/install.sh
