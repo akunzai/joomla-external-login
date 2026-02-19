@@ -1,9 +1,0 @@
-# Docker Compose override for Joomla 5
-# Usage: docker compose -f compose.yml -f compose.joomla5.yml up -d
-services:
-  joomla:
-    build:
-      context: ./joomla
-      args:
-        JOOMLA_VERSION: "5.4.2"
-        PHP_VERSION: "8.3"

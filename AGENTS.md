@@ -14,8 +14,8 @@
   - `docker compose -f .devcontainer/compose.yml up -d`
   - `docker compose -f .devcontainer/compose.yml down`
 - Start / stop stack (Joomla 5)
-  - `docker compose -f .devcontainer/compose.yml -f .devcontainer/compose.joomla5.yml up -d`
-  - `docker compose -f .devcontainer/compose.yml -f .devcontainer/compose.joomla5.yml down`
+  - `JOOMLA_VERSION=5.4.3 PHP_VERSION=8.3 docker compose -f .devcontainer/compose.yml build && docker compose -f .devcontainer/compose.yml up -d`
+  - `docker compose -f .devcontainer/compose.yml down`
 - Work inside the container
   - Prefix project tasks with `docker compose -f .devcontainer/compose.yml exec -w /workspace joomla`
   - Install / update dependencies: `composer install`, `composer update`

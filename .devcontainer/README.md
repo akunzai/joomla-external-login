@@ -23,7 +23,7 @@ echo "127.0.0.1 auth.dev.local www.dev.local" | sudo tee -a /etc/hosts
 docker compose up -d
 
 # starting container (Joomla 5)
-docker compose -f compose.yml -f compose.joomla5.yml up -d
+JOOMLA_VERSION=5.4.3 PHP_VERSION=8.3 docker compose build && docker compose up -d
 
 # starting container for debug
 # > use VSCode to attach running joomla container for Xdebug
