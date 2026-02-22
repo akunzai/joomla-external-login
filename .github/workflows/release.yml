@@ -13,42 +13,53 @@ permissions:
   pull-requests: read
 
 concurrency:
-  group: release
+  group: release-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
   draft-release:
+    name: Update Release Draft
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
+      - name: Delete existing draft releases
+        run: |
+          gh release list --json tagName,isDraft \
+            --jq '.[] | select(.isDraft) | .tagName' | \
+            xargs -r -I{} gh release delete {} -y
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
       - uses: release-drafter/release-drafter@v6
+        with:
+          publish: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   publish-release:
+    name: Publish GitHub Release
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-      - name: Detect pre-release
+      - name: Check pre-release
         id: prerelease
-        env:
-          TAG: ${{ github.ref_name }}
         run: |
-          if [[ "$TAG" =~ (dev|beta|alpha|rc) ]]; then
-            echo "prerelease=true" >> $GITHUB_OUTPUT
+          TAG="${GITHUB_REF#refs/tags/}"
+          if echo "$TAG" | grep -qE '(dev|beta|alpha|rc)'; then
+            echo "prerelease=true" >> "$GITHUB_OUTPUT"
           else
-            echo "prerelease=false" >> $GITHUB_OUTPUT
+            echo "prerelease=false" >> "$GITHUB_OUTPUT"
           fi
       - name: Publish release
         uses: release-drafter/release-drafter@v6
         with:
           publish: true
           tag: ${{ github.ref_name }}
-          prerelease: ${{ steps.prerelease.outputs.prerelease }}
+          prerelease: ${{ steps.prerelease.outputs.prerelease == 'true' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout
+        uses: actions/checkout@v6
       - name: Bundle extension
         run: ./bundle.sh
       - name: Upload release artifact
