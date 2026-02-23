@@ -22,4 +22,4 @@ jobs:
         with:
           mode: minimum
           count: 1
-          labels: breaking,feature,enhancement,bug,refactor,chore,dependencies,github_actions,samples,documentation
+          labels: breaking,feature,enhancement,bug,fix,refactor,chore,maintenance,dependencies,github_actions,documentation
