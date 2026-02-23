@@ -1,66 +1,49 @@
 # Agent Guidelines for Joomla External Login
 
+## Documentation Principles
+
+1. **This file records only essential knowledge.** Advanced or complex topics should be split into subdirectory `AGENTS.md` files or relevant `README.md` files by domain.
+2. **Use subdirectory `AGENTS.md` to organize domain-specific knowledge.** For example, `e2e/AGENTS.md` for testing, `.devcontainer/AGENTS.md` for dev environment.
+3. **Record valuable knowledge back to related files** when solving problems or discovering useful patterns.
+4. **Do not redundantly modify `CLAUDE.md`.** It is a symlink to this file.
+5. **All files and code must be written in English.**
+
 ## Environment Quick Facts
 
-- Use the VS Code dev container; see `.devcontainer/README.md` for full setup.
-- Services expose Traefik `443`, and MySQL `3306`.
-- TLS certificates required: run `.devcontainer/generate-certs.sh .devcontainer/.secrets` to generate certs with mkcert.
-- All services now use HTTPS through Traefik reverse proxy.
+- Use the VS Code dev container; see [.devcontainer/AGENTS.md](.devcontainer/AGENTS.md) for detailed commands.
+- Services expose Traefik `443` and MySQL `3306`.
+- TLS certificates: run `.devcontainer/generate-certs.sh .devcontainer/.secrets`.
 - Access URLs: Joomla at `https://www.dev.local`, Keycloak at `https://auth.dev.local`.
 
 ## Essential Commands
 
-- Start / stop stack (Joomla 6, default)
-  - `docker compose -f .devcontainer/compose.yml up -d`
-  - `docker compose -f .devcontainer/compose.yml down`
-- Start / stop stack (Joomla 5)
-  - `JOOMLA_VERSION=5.4.3 PHP_VERSION=8.3 docker compose -f .devcontainer/compose.yml build && docker compose -f .devcontainer/compose.yml up -d`
-  - `docker compose -f .devcontainer/compose.yml down`
-- Work inside the container
-  - Prefix project tasks with `docker compose -f .devcontainer/compose.yml exec -w /workspace joomla`
-  - Install / update dependencies: `composer install`, `composer update`
-  - Code style: `composer run lint` (dry-run), `composer run fix` (auto-fix)
-  - Static analysis: `composer run phpstan`, `composer run phpstan-baseline`
-  - Validate metadata: `composer validate --strict`
-  - Bundle release: `./bundle.sh`
-- Manage extension in Joomla CLI (no workspace flag required)
-  - Install: `php /var/www/html/cli/joomla.php extension:install --path /workspace/dist/pkg_externallogin.zip`
-  - List: `php /var/www/html/cli/joomla.php extension:list | grep -iE '(external|caslogin)'`
-  - Remove: `bash -c "php /var/www/html/cli/joomla.php extension:list | grep -iE '(external|caslogin)' | awk '{print $2}' | xargs -I{} php /var/www/html/cli/joomla.php extension:remove -n {}"`
-- Quick file copy for rapid testing (skip full reinstall)
-  - Copy single PHP file: `docker compose -f .devcontainer/compose.yml cp src/plugins/system/caslogin/src/Extension/Caslogin.php joomla:/var/www/html/plugins/system/caslogin/src/Extension/Caslogin.php`
-  - Copy directory: `docker compose -f .devcontainer/compose.yml cp src/plugins/system/caslogin/language joomla:/var/www/html/plugins/system/caslogin/`
-  - Copy component template: `docker compose -f .devcontainer/compose.yml cp src/administrator/components/com_externallogin/tmpl/servers/default.php joomla:/var/www/html/administrator/components/com_externallogin/tmpl/servers/default.php`
-  - After copying, clear cache: `docker compose -f .devcontainer/compose.yml exec joomla php /var/www/html/cli/joomla.php cache:clean`
-- Diagnose issues
-  - Joomla errors: `tail -20 /www/html/administrator/logs/everything.php`
-  - Container logs: `docker compose -f .devcontainer/compose.yml logs --tail 100 joomla`
-- E2E tests (Playwright-based)
-  - **IMPORTANT: Always use `pnpm`, NOT `npm` for E2E tests**
-  - Install dependencies: `cd e2e && pnpm install`
-  - Run tests: `cd e2e && pnpm test` (headless), `pnpm test:headed` (browser visible)
-  - Run specific tests: `cd e2e && pnpm test -- --grep translation`
-  - Debug tests: `cd e2e && pnpm test:debug` or `pnpm test:ui` (interactive UI mode)
-  - View reports: `cd e2e && pnpm report`
-  - Tests require services running with HTTPS enabled
+```sh
+# Start / stop stack
+docker compose -f .devcontainer/compose.yml up -d
+docker compose -f .devcontainer/compose.yml down
+
+# Work inside the container
+docker compose -f .devcontainer/compose.yml exec -w /workspace joomla <command>
+
+# Common tasks (inside container)
+composer install          # install dependencies
+composer run lint         # check code style (dry-run)
+composer run fix          # auto-fix code style
+composer run phpstan      # static analysis
+./bundle.sh              # bundle release
+```
 
 ## Code Style Highlights
 
 - Follow PSR-12 with PHP 8.1 migration rules.
-- Order imports: `Joomla\CMS` → other Joomla → project namespaces, alphabetically.
+- Import order: `Joomla\CMS` → other Joomla → project namespaces, alphabetically.
 - Use fully qualified strict types and native function casing.
-- Keep PHPDoc blocks meaningful, aligned, and free of empty tags.
 - Naming: classes PascalCase, methods camelCase, files lowercase_underscores.
 - Maintain Joomla MVC inheritance patterns.
 - Include `defined('_JEXEC') or die;` at PHP entry points.
 - Use Joomla exceptions and `Text` for user-facing messages.
 
-## Language Requirements
+## Subdirectory Guides
 
-**All code comments, documentation, and project descriptions MUST be written in English.**
-
-- PHP comments (inline, block, PHPDoc) must be in English.
-- Git commit messages must be in English.
-- Variable, function, and class names must follow English naming conventions.
-- README files and documentation must be in English.
-- This ensures consistency and global community understanding across the project.
+- [.devcontainer/AGENTS.md](.devcontainer/AGENTS.md) — Dev container, extension management, diagnostics
+- [e2e/AGENTS.md](e2e/AGENTS.md) — E2E testing with Playwright (`pnpm` required)
