@@ -15,7 +15,7 @@ jobs:
     if: github.event.pull_request.head.repo.full_name == github.repository
     steps:
       - name: Apply labels
-        uses: actions/labeler@v5
+        uses: actions/labeler@v6
 
       - name: Check labels
         uses: mheap/github-action-required-labels@v5
