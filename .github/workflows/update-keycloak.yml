@@ -60,4 +60,3 @@ jobs:
             Release: https://github.com/jacekkow/keycloak-protocol-cas/releases/tag/${{ steps.get-version.outputs.latest_version }}
           branch: keycloak/${{ steps.get-version.outputs.latest_version }}
           delete-branch: true
-          labels: dependencies
