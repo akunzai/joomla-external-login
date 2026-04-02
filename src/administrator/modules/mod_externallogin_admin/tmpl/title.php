@@ -13,7 +13,6 @@
 // No direct access to this file
 defined('_JEXEC') or die;
 
-/** @var object $module */
 $module ??= (object) ['showtitle' => 0, 'title' => ''];
 ?>
 <?php if ($module->showtitle != 0) : ?>
