@@ -33,7 +33,7 @@ jobs:
         joomla:
           - version: "5"
             php-version: "8.3"
-            joomla-version: "5.4.3"
+            joomla-version: "5.4.5"
           - version: "6"
             php-version: ""
             joomla-version: ""

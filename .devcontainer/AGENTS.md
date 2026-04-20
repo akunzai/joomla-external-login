@@ -10,7 +10,7 @@ docker compose -f .devcontainer/compose.yml up -d
 docker compose -f .devcontainer/compose.yml down
 
 # Joomla 5
-JOOMLA_VERSION=5.4.3 PHP_VERSION=8.3 docker compose -f .devcontainer/compose.yml build && docker compose -f .devcontainer/compose.yml up -d
+JOOMLA_VERSION=5.4.5 PHP_VERSION=8.3 docker compose -f .devcontainer/compose.yml build && docker compose -f .devcontainer/compose.yml up -d
 docker compose -f .devcontainer/compose.yml down
 ```
 
