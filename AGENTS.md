@@ -5,8 +5,7 @@
 1. **This file records only essential knowledge.** Advanced or complex topics should be split into subdirectory `AGENTS.md` files or relevant `README.md` files by domain.
 2. **Use subdirectory `AGENTS.md` to organize domain-specific knowledge.** For example, `e2e/AGENTS.md` for testing, `.devcontainer/AGENTS.md` for dev environment.
 3. **Record valuable knowledge back to related files** when solving problems or discovering useful patterns.
-4. **Do not redundantly modify `CLAUDE.md`.** It is a symlink to this file.
-5. **All files and code must be written in English.**
+4. **All files and code must be written in English.**
 
 ## Environment Quick Facts
 
@@ -33,6 +32,18 @@ composer run phpstan      # static analysis
 ./bundle.sh              # bundle release
 ```
 
+## Architecture Overview
+
+- `src/`: Main source code for the Joomla Extension package
+  - `src/administrator/`: Backend component files (admin UI for com_externallogin)
+  - `src/components/`: Frontend component files
+  - `src/plugins/`: Core logic plugins
+    - `src/plugins/authentication/`: Authentication plugins handling login validation
+    - `src/plugins/system/`: System plugins (e.g., caslogin) handling global hooks and SSO routing
+    - `src/plugins/user/`: User plugins handling profile sync or user events
+- `e2e/`: End-to-end tests using Playwright
+- `dist/`: Output directory for bundled zip packages (`pkg_externallogin.zip`)
+
 ## Code Style Highlights
 
 - Follow PSR-12 with PHP 8.1 migration rules.
@@ -47,3 +58,10 @@ composer run phpstan      # static analysis
 
 - [.devcontainer/AGENTS.md](.devcontainer/AGENTS.md) — Dev container, extension management, diagnostics
 - [e2e/AGENTS.md](e2e/AGENTS.md) — E2E testing with Playwright (`pnpm` required)
+
+## Claude Code Compatibility
+
+> [!NOTE]
+> This repository maintains compatibility with Claude Code. The file `CLAUDE.md` is a symbolic link pointing to `AGENTS.md`. 
+> All commands, style guides, and workflows defined in `AGENTS.md` apply to both Antigravity (and other agentic assistants) and Claude Code.
+> **DO NOT** delete the `CLAUDE.md` symbolic link or edit it independently; all guidelines must be updated directly in `AGENTS.md`.
