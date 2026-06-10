@@ -4,11 +4,31 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    cooldown:
+      default-days: 3
+    groups:
+      composer-all:
+        patterns:
+          - "*"
+
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: monthly
+    cooldown:
+      default-days: 3
+    groups:
+      actions-all:
+        patterns:
+          - "*"
+
   - package-ecosystem: npm
     directory: /e2e
     schedule:
       interval: monthly
+    cooldown:
+      default-days: 3
+    groups:
+      npm-all:
+        patterns:
+          - "*"
