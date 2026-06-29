@@ -14,6 +14,13 @@
 - TLS certificates: run `.devcontainer/generate-certs.sh .devcontainer/.secrets`.
 - Access URLs: Joomla at `https://www.dev.local`, Keycloak at `https://auth.dev.local`.
 
+## Environment & Tooling
+
+This repository uses [mise](https://mise.jdx.dev/) to manage development runtimes and CLI versions (PHP, Composer, Node.js, and Aube).
+
+- To install the project's development tools, run: `mise install`
+- Runtimes are configured in [mise.toml](mise.toml) (using `adwinying/php` for precompiled static PHP binaries).
+
 ## Essential Commands
 
 ```sh
@@ -57,7 +64,7 @@ composer run phpstan      # static analysis
 ## Subdirectory Guides
 
 - [.devcontainer/AGENTS.md](.devcontainer/AGENTS.md) — Dev container, extension management, diagnostics
-- [e2e/AGENTS.md](e2e/AGENTS.md) — E2E testing with Playwright (`pnpm` required)
+- [e2e/AGENTS.md](e2e/AGENTS.md) — E2E testing with Playwright (`aube` required)
 
 ## Claude Code Compatibility
 
