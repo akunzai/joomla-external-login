@@ -1,0 +1,5 @@
+[tools]
+"github:adwinying/php" = "8.4"
+"github:composer/composer" = { version = "latest", postinstall = "mv \"$MISE_TOOL_INSTALL_PATH/composer.phar\" \"$MISE_TOOL_INSTALL_PATH/composer\" && chmod +x \"$MISE_TOOL_INSTALL_PATH/composer\"" }
+node = "lts"
+aube = "latest"

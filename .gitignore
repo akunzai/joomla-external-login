@@ -29,3 +29,7 @@ Thumbs.db
 /dist/
 .claude/
 .agent/
+
+# mise
+.mise.local.toml
+.mise/

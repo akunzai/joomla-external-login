@@ -84,33 +84,26 @@ jobs:
         run: .devcontainer/joomla/install.sh
 
       # E2E test preparation
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
+      - name: Setup mise
+        uses: jdx/mise-action@v4
         with:
-          node-version: '24'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Enable Corepack
-        run: corepack enable pnpm
-
-      - name: Get pnpm store directory
-        shell: bash
-        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - name: Cache pnpm store
+      - name: Cache Aube store
         uses: actions/cache@v5
         with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('e2e/pnpm-lock.yaml') }}
+          path: ~/.local/share/aube/store/v1
+          key: ${{ runner.os }}-aube-store-${{ hashFiles('e2e/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+            ${{ runner.os }}-aube-store-
 
       - name: Install E2E dependencies
         working-directory: e2e
-        run: pnpm install
+        run: aube install
 
       - name: Get Playwright version
         working-directory: e2e
-        run: echo "PLAYWRIGHT_VERSION=$(pnpm exec playwright --version | cut -d' ' -f2)" >> $GITHUB_ENV
+        run: echo "PLAYWRIGHT_VERSION=$(aubx playwright --version | cut -d' ' -f2)" >> $GITHUB_ENV
 
       - name: Cache Playwright browsers
         uses: actions/cache@v5
@@ -124,15 +117,15 @@ jobs:
         run: |
           if [ "${{ steps.playwright-cache.outputs.cache-hit }}" != 'true' ]; then
             echo "Cache miss - Installing browsers with system dependencies..."
-            pnpm exec playwright install --with-deps chromium
+            aubx playwright install --with-deps chromium
           else
             echo "Cache hit - Installing system dependencies only..."
-            pnpm exec playwright install-deps chromium
+            aubx playwright install-deps chromium
           fi
 
       - name: Run E2E tests
         working-directory: e2e
-        run: pnpm test
+        run: aubr test
 
       - name: Upload Playwright report
         uses: actions/upload-artifact@v7
