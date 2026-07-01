@@ -97,6 +97,12 @@ if dc_exec joomla test -f /var/www/html/cli/joomla.php; then
 
   dc_exec joomla php /var/www/html/cli/joomla.php extension:install --path /workspace/dist/pkg_externallogin.zip
 
+  echo "Disabling Joomla Guided Tours (Shepherd.js overlays interfere with E2E tests) ..."
+  joomla_mysql -e "
+    UPDATE ${JOOMLA_DB_PREFIX}extensions SET enabled = 0
+    WHERE type = 'plugin' AND folder = 'system' AND element = 'guidedtours';
+  " 2>/dev/null
+
   echo "Enabling External Login plugins ..."
   # Enable Authentication - External Login
   joomla_mysql -e "UPDATE ${JOOMLA_DB_PREFIX}extensions SET enabled=1 WHERE element='externallogin' AND type='plugin' AND folder='authentication';"
