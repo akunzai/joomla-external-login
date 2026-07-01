@@ -97,10 +97,10 @@ if dc_exec joomla test -f /var/www/html/cli/joomla.php; then
 
   dc_exec joomla php /var/www/html/cli/joomla.php extension:install --path /workspace/dist/pkg_externallogin.zip
 
-  echo "Disabling Joomla Guided Tours (Shepherd.js overlays interfere with E2E tests) ..."
+  echo "Disabling Joomla Guided Tours and Statistics opt-in (modal overlays interfere with E2E tests) ..."
   joomla_mysql -e "
     UPDATE ${JOOMLA_DB_PREFIX}extensions SET enabled = 0
-    WHERE type = 'plugin' AND folder = 'system' AND element = 'guidedtours';
+    WHERE type = 'plugin' AND folder = 'system' AND element IN ('guidedtours', 'stats');
   " 2>/dev/null
 
   echo "Enabling External Login plugins ..."
