@@ -40,7 +40,7 @@ jobs:
     name: E2E (Joomla ${{ matrix.joomla.version }})
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       # Prepare host environment
       - name: Create required directories and certificates
@@ -90,7 +90,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Cache Aube store
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/.local/share/aube/store/v1
           key: ${{ runner.os }}-aube-store-${{ hashFiles('e2e/pnpm-lock.yaml') }}
@@ -106,7 +106,7 @@ jobs:
         run: echo "PLAYWRIGHT_VERSION=$(aubx playwright --version | cut -d' ' -f2)" >> $GITHUB_ENV
 
       - name: Cache Playwright browsers
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         id: playwright-cache
         with:
           path: ~/.cache/ms-playwright

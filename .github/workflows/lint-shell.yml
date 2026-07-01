@@ -23,6 +23,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Lint shell script
         uses: reviewdog/action-shellcheck@v1
