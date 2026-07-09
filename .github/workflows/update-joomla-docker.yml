@@ -1,0 +1,126 @@
+name: Update Joomla Docker Image
+
+on:
+  schedule:
+    # Run every Wednesday at 00:00 UTC
+    - cron: '0 0 * * 3'
+  # Allow manually triggering the workflow.
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Check for latest joomla Docker image versions
+        id: get-version
+        run: |
+          get_latest_tag() {
+            local major="$1"
+            curl -s "https://hub.docker.com/v2/repositories/library/joomla/tags?page_size=100&name=${major}.&ordering=last_updated" \
+              | jq -r '.results[].name' \
+              | grep -E "^${major}\.[0-9]+\.[0-9]+-apache\$" \
+              | sort -V \
+              | tail -1 \
+              | sed 's/-apache$//'
+          }
+
+          # Joomla 6.x: pinned as the default JOOMLA_VERSION build arg
+          CURRENT_6=$(grep -oP 'ARG JOOMLA_VERSION=\K[0-9.]+' .devcontainer/joomla/Dockerfile)
+          LATEST_6=$(get_latest_tag 6)
+          echo "current_6=${CURRENT_6}" >> "$GITHUB_OUTPUT"
+          echo "latest_6=${LATEST_6}" >> "$GITHUB_OUTPUT"
+
+          # Joomla 5.x: pinned as the E2E workflow's Joomla 5 matrix leg
+          CURRENT_5=$(grep -oP 'joomla-version: "\K5[0-9.]+' .github/workflows/e2e.yml)
+          LATEST_5=$(get_latest_tag 5)
+          echo "current_5=${CURRENT_5}" >> "$GITHUB_OUTPUT"
+          echo "latest_5=${LATEST_5}" >> "$GITHUB_OUTPUT"
+
+          if [ -n "$LATEST_6" ] && [ "$LATEST_6" != "$CURRENT_6" ]; then
+            echo "needs_update_6=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "needs_update_6=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          if [ -n "$LATEST_5" ] && [ "$LATEST_5" != "$CURRENT_5" ]; then
+            echo "needs_update_5=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "needs_update_5=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Update Joomla 6 references
+        if: steps.get-version.outputs.needs_update_6 == 'true'
+        env:
+          CURRENT_VERSION: ${{ steps.get-version.outputs.current_6 }}
+          NEW_VERSION: ${{ steps.get-version.outputs.latest_6 }}
+        run: |
+          sed -i "s/ARG JOOMLA_VERSION=${CURRENT_VERSION}/ARG JOOMLA_VERSION=${NEW_VERSION}/" .devcontainer/joomla/Dockerfile
+          sed -i "s/${CURRENT_VERSION}/${NEW_VERSION}/g" composer.json
+
+      - name: Set up PHP
+        if: steps.get-version.outputs.needs_update_6 == 'true'
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: curl, dom, gd, intl, json, libxml, mbstring, pdo, simplexml, zip
+          coverage: none
+
+      - name: Regenerate composer.lock
+        if: steps.get-version.outputs.needs_update_6 == 'true'
+        run: composer update joomla/joomla-cms --no-interaction --no-progress
+
+      - name: Update Joomla 5 E2E matrix
+        if: steps.get-version.outputs.needs_update_5 == 'true'
+        env:
+          CURRENT_VERSION: ${{ steps.get-version.outputs.current_5 }}
+          NEW_VERSION: ${{ steps.get-version.outputs.latest_5 }}
+        run: |
+          sed -i "s/joomla-version: \"${CURRENT_VERSION}\"/joomla-version: \"${NEW_VERSION}\"/" .github/workflows/e2e.yml
+
+      - name: Build PR metadata
+        id: pr-meta
+        if: steps.get-version.outputs.needs_update_6 == 'true' || steps.get-version.outputs.needs_update_5 == 'true'
+        env:
+          NEEDS_6: ${{ steps.get-version.outputs.needs_update_6 }}
+          NEEDS_5: ${{ steps.get-version.outputs.needs_update_5 }}
+          LATEST_6: ${{ steps.get-version.outputs.latest_6 }}
+          LATEST_5: ${{ steps.get-version.outputs.latest_5 }}
+        run: |
+          if [ "$NEEDS_6" == 'true' ] && [ "$NEEDS_5" == 'true' ]; then
+            TITLE="chore: upgrade Joomla to ${LATEST_6} and ${LATEST_5}"
+            BRANCH="joomla/${LATEST_6}-${LATEST_5}"
+          elif [ "$NEEDS_6" == 'true' ]; then
+            TITLE="chore: upgrade Joomla to ${LATEST_6}"
+            BRANCH="joomla/${LATEST_6}"
+          else
+            TITLE="chore: upgrade Joomla E2E matrix to ${LATEST_5}"
+            BRANCH="joomla/${LATEST_5}"
+          fi
+          echo "title=${TITLE}" >> "$GITHUB_OUTPUT"
+          echo "branch=${BRANCH}" >> "$GITHUB_OUTPUT"
+
+      - name: Create Pull Request
+        if: steps.get-version.outputs.needs_update_6 == 'true' || steps.get-version.outputs.needs_update_5 == 'true'
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: ${{ steps.pr-meta.outputs.title }}
+          title: ${{ steps.pr-meta.outputs.title }}
+          body: |
+            Bump the `joomla` Docker image (https://hub.docker.com/_/joomla) used for development, CI, and E2E testing.
+
+            ${{ steps.get-version.outputs.needs_update_6 == 'true' && format('- Joomla 6: `{0}` → `{1}` (Dockerfile default, composer.json)', steps.get-version.outputs.current_6, steps.get-version.outputs.latest_6) || '' }}
+            ${{ steps.get-version.outputs.needs_update_5 == 'true' && format('- Joomla 5: `{0}` → `{1}` (E2E matrix leg)', steps.get-version.outputs.current_5, steps.get-version.outputs.latest_5) || '' }}
+
+            References:
+            ${{ steps.get-version.outputs.needs_update_6 == 'true' && format('- https://github.com/joomla/joomla-cms/releases/tag/{0}', steps.get-version.outputs.latest_6) || '' }}
+            ${{ steps.get-version.outputs.needs_update_5 == 'true' && format('- https://github.com/joomla/joomla-cms/releases/tag/{0}', steps.get-version.outputs.latest_5) || '' }}
+          branch: ${{ steps.pr-meta.outputs.branch }}
+          delete-branch: true
