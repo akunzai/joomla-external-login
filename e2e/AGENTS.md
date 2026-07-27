@@ -1,24 +1,24 @@
-# Agent Guidelines for E2E Tests
+# E2E Tests — Agent Guidelines
 
-End-to-end tests use [Playwright](https://playwright.dev/).
+**Context-offloaded SOP** for Playwright E2E. Root index: @AGENTS.md.
 
-**IMPORTANT: Always use `aube` (the Aube package manager), NOT `npm`.**
+Use **`aube` only** (not npm/pnpm/yarn). Runner binary is `aubr`.
 
 ## Prerequisites
 
-- Dev container services must be running with HTTPS enabled
-- Development tools installed via mise (`mise install`); see the root [AGENTS.md](../AGENTS.md) "Environment & Tooling" section
+- Compose stack up with HTTPS (@.devcontainer/AGENTS.md)
+- Toolchain: `mise install` (SSOT: @mise.toml)
 
 ## Commands
 
 ```sh
 cd e2e
 
-aube install              # install dependencies
-aubr test                 # run tests (headless)
-aubr test:headed          # run tests (browser visible)
-aubr test -- --grep <pattern>  # run specific tests
-aubr test:debug           # debug tests
-aubr test:ui              # interactive UI mode
-aubr report               # view HTML report
+aube install                    # install dependencies
+aubr test                       # headless
+aubr test:headed                # headed browser
+aubr test -- --grep <pattern>   # single test / filter
+aubr test:debug                 # debug
+aubr test:ui                    # interactive UI
+aubr report                     # HTML report
 ```

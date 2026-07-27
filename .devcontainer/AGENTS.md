@@ -1,6 +1,6 @@
-# Agent Guidelines for Dev Container
+# Dev Container — Agent Guidelines
 
-See [README.md](README.md) for full setup instructions including requirements, credentials, and URLs.
+**Context-offloaded SOP** for the compose stack. Human setup/credentials: @.devcontainer/README.md. Root index: @AGENTS.md.
 
 ## Starting the Stack
 
@@ -16,28 +16,26 @@ docker compose -f .devcontainer/compose.yml down
 
 ## Working Inside the Container
 
-Prefix project tasks with:
-
 ```sh
 docker compose -f .devcontainer/compose.yml exec -w /workspace joomla <command>
 ```
 
-### Common Tasks
+Common tasks (script SSOT: @composer.json):
 
 ```sh
-composer install                # install dependencies
-composer update                 # update dependencies
-composer run lint               # check code style (dry-run)
-composer run fix                # auto-fix code style
-composer run phpstan            # static analysis
-composer run phpstan-baseline   # update PHPStan baseline
-composer validate --strict      # validate metadata
-./bundle.sh                     # bundle release
+composer install
+composer update
+composer run lint
+composer run fix
+composer run phpstan
+composer run phpstan-baseline
+composer validate --strict
+./bundle.sh
 ```
 
 ## Managing the Joomla Extension
 
-These commands run inside the container (no `-w /workspace` needed):
+Run inside the container (no `-w /workspace`):
 
 ```sh
 # Install
@@ -50,28 +48,21 @@ php /var/www/html/cli/joomla.php extension:list | grep -iE '(external|caslogin)'
 bash -c "php /var/www/html/cli/joomla.php extension:list | grep -iE '(external|caslogin)' | awk '{print \$2}' | xargs -I{} php /var/www/html/cli/joomla.php extension:remove -n {}"
 ```
 
-## Quick File Copy for Rapid Testing
+## Quick File Copy (rapid iteration)
 
-Skip full reinstall by copying files directly:
+Skip full reinstall; copy then clear cache:
 
 ```sh
-# Copy single PHP file
 docker compose -f .devcontainer/compose.yml cp src/plugins/system/caslogin/src/Extension/Caslogin.php joomla:/var/www/html/plugins/system/caslogin/src/Extension/Caslogin.php
-
-# Copy directory
 docker compose -f .devcontainer/compose.yml cp src/plugins/system/caslogin/language joomla:/var/www/html/plugins/system/caslogin/
-
-# Copy component template
 docker compose -f .devcontainer/compose.yml cp src/administrator/components/com_externallogin/tmpl/servers/default.php joomla:/var/www/html/administrator/components/com_externallogin/tmpl/servers/default.php
-
-# Clear cache after copying
 docker compose -f .devcontainer/compose.yml exec joomla php /var/www/html/cli/joomla.php cache:clean
 ```
 
 ## Diagnosing Issues
 
 ```sh
-# Joomla error logs
+# Joomla error logs (inside container FS layout)
 tail -20 /www/html/administrator/logs/everything.php
 
 # Container logs

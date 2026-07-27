@@ -1,74 +1,61 @@
-# Agent Guidelines for Joomla External Login
+# Joomla External Login — Agent Guidelines
 
-## Documentation Principles
+**Index-driven entrypoint.** Prefer **Progressive Disclosure**: keep this file lean; **Context Offload** multi-step SOPs to nested guides via **Lazy Loading** (`@path`). **Trust model judgment** for generic coding practice; record only project-specific, non-derivable constraints.
 
-1. **This file records only essential knowledge.** Advanced or complex topics should be split into subdirectory `AGENTS.md` files or relevant `README.md` files by domain.
-2. **Use subdirectory `AGENTS.md` to organize domain-specific knowledge.** For example, `e2e/AGENTS.md` for testing, `.devcontainer/AGENTS.md` for dev environment.
-3. **Record valuable knowledge back to related files** when solving problems or discovering useful patterns.
-4. **All files and code must be written in English.**
+## Quick Commands
 
-## Environment Quick Facts
-
-- Use the VS Code dev container; see [.devcontainer/AGENTS.md](.devcontainer/AGENTS.md) for detailed commands.
-- Services expose Traefik `443` and MySQL `3306`.
-- TLS certificates: run `.devcontainer/generate-certs.sh .devcontainer/.secrets`.
-- Access URLs: Joomla at `https://www.dev.local`, Keycloak at `https://auth.dev.local`.
-
-## Environment & Tooling
-
-This repository uses [mise](https://mise.jdx.dev/) to manage development runtimes and CLI versions (PHP, Composer, Node.js, and Aube).
-
-- To install the project's development tools, run: `mise install`
-- Runtimes are configured in [mise.toml](mise.toml) (using `adwinying/php` for precompiled static PHP binaries).
-
-## Essential Commands
+Toolchain SSOT: @mise.toml — run `mise install` for PHP, Composer, Node, Aube.
 
 ```sh
-# Start / stop stack
+# Stack (full SOP: @.devcontainer/AGENTS.md)
 docker compose -f .devcontainer/compose.yml up -d
-docker compose -f .devcontainer/compose.yml down
-
-# Work inside the container
 docker compose -f .devcontainer/compose.yml exec -w /workspace joomla <command>
 
-# Common tasks (inside container)
-composer install          # install dependencies
-composer run lint         # check code style (dry-run)
-composer run fix          # auto-fix code style
-composer run phpstan      # static analysis
-./bundle.sh              # bundle release
+# Quality / release (script SSOT: @composer.json)
+composer install
+composer run lint       # php-cs-fixer dry-run
+composer run fix
+composer run phpstan
+./bundle.sh             # → dist/pkg_externallogin.zip
 ```
 
-## Architecture Overview
+**Dev endpoints:** Joomla `https://www.dev.local` · Keycloak `https://auth.dev.local` · Traefik `443` · MySQL `3306`. TLS: `.devcontainer/generate-certs.sh .devcontainer/.secrets`.
 
-- `src/`: Main source code for the Joomla Extension package
-  - `src/administrator/`: Backend component files (admin UI for com_externallogin)
-  - `src/components/`: Frontend component files
-  - `src/plugins/`: Core logic plugins
-    - `src/plugins/authentication/`: Authentication plugins handling login validation
-    - `src/plugins/system/`: System plugins (e.g., caslogin) handling global hooks and SSO routing
-    - `src/plugins/user/`: User plugins handling profile sync or user events
-- `e2e/`: End-to-end tests using Playwright
-- `dist/`: Output directory for bundled zip packages (`pkg_externallogin.zip`)
+## Architecture
 
-## Code Style Highlights
+| Path | Role |
+|------|------|
+| `src/` | Extension package: admin (`administrator/`), site (`components/`), plugins (`plugins/{authentication,system,user}/`) |
+| `e2e/` | Playwright E2E — @e2e/AGENTS.md |
+| `dist/` | Bundled zips (`pkg_externallogin.zip`) |
+| `.devcontainer/` | Compose stack, extension install, diagnostics — @.devcontainer/AGENTS.md |
 
-- Follow PSR-12 with PHP 8.1 migration rules.
-- Import order: `Joomla\CMS` → other Joomla → project namespaces, alphabetically.
-- Use fully qualified strict types and native function casing.
-- Naming: classes PascalCase, methods camelCase, files lowercase_underscores.
-- Maintain Joomla MVC inheritance patterns.
-- Include `defined('_JEXEC') or die;` at PHP entry points.
-- Use Joomla exceptions and `Text` for user-facing messages.
+## Code Style (project-specific)
 
-## Subdirectory Guides
+Machine-enforced SSOT: @.php-cs-fixer.dist.php (`@PSR12`, `@PHP83Migration`). Static analysis: @phpstan.neon.
 
-- [.devcontainer/AGENTS.md](.devcontainer/AGENTS.md) — Dev container, extension management, diagnostics
-- [e2e/AGENTS.md](e2e/AGENTS.md) — E2E testing with Playwright (`aube` required)
+Non-derivable conventions:
+
+- Import order: `Joomla\CMS` → other Joomla → project namespaces (alpha within each group)
+- PHP entry points: `defined('_JEXEC') or die;`
+- User-facing copy: Joomla `Text`; failures: Joomla exceptions
+- Components follow Joomla MVC inheritance
+- All source and docs in English
+
+## Context Offloading
+
+| Domain | Lazy-load |
+|--------|-----------|
+| Dev stack, extension lifecycle, file-copy testing, logs | @.devcontainer/AGENTS.md |
+| E2E (`aube` / Playwright) | @e2e/AGENTS.md |
+
+## Knowledge Writeback
+
+When a durable, non-obvious gotcha appears: propose a **context-tagged** bullet on the nearest relevant `AGENTS.md`. **Active Pruning:** keep any `## Lessons Learned` ≤ 5; drop obsolete version tags; promote durable rules into configs or Rich References rather than prose.
 
 ## Claude Code Compatibility
 
 > [!NOTE]
-> This repository maintains compatibility with Claude Code. The file `CLAUDE.md` is a symbolic link pointing to `AGENTS.md`. 
+> This repository maintains compatibility with Claude Code. The file `CLAUDE.md` is a symbolic link pointing to `AGENTS.md`.
 > All commands, style guides, and workflows defined in `AGENTS.md` apply to both Antigravity (and other agentic assistants) and Claude Code.
 > **DO NOT** delete the `CLAUDE.md` symbolic link or edit it independently; all guidelines must be updated directly in `AGENTS.md`.
