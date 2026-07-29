@@ -56,6 +56,4 @@ When a durable, non-obvious gotcha appears: propose a **context-tagged** bullet 
 ## Claude Code Compatibility
 
 > [!NOTE]
-> This repository maintains compatibility with Claude Code. The file `CLAUDE.md` is a symbolic link pointing to `AGENTS.md`.
-> All commands, style guides, and workflows defined in `AGENTS.md` apply to both Antigravity (and other agentic assistants) and Claude Code.
-> **DO NOT** delete the `CLAUDE.md` symbolic link or edit it independently; all guidelines must be updated directly in `AGENTS.md`.
+> `CLAUDE.md` is a symlink to `AGENTS.md` (shared SSOT). Edit `AGENTS.md` only.
