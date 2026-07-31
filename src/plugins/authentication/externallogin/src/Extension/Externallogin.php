@@ -20,7 +20,6 @@ use Joomla\CMS\Authentication\Authentication;
 use Joomla\CMS\Authentication\AuthenticationResponse;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Event\User\AuthenticationEvent;
-use Joomla\CMS\Event\User\AuthorisationEvent;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\Plugin\CMSPlugin;
@@ -61,74 +60,6 @@ class Externallogin extends CMSPlugin
     }
 
     /**
-     * This method should handle any authorisation and report back to the subject.
-     *
-     * @param AuthorisationEvent $event Authorisation event
-     *
-     * @since   5.0.0
-     */
-    public function onUserAuthorisation(AuthorisationEvent $event): void
-    {
-        $response = $event->getAuthenticationResponse();
-        $options = $event->getOptions();
-
-        if ($response->type != 'externallogin') {
-            return;
-        }
-
-        $response = ExternalAuthenticationResponse::fromResponse($response);
-        /** @var Registry */
-        $params = $response->server->params;
-        $userId = intval(UserHelper::getUserId($response->username));
-        $isUserNotFound = $userId === 0;
-        $isUserBlocked = $this->isUserBlocked($params, $response->username, $response->email);
-
-        if ($isUserBlocked) {
-            if (boolval($params->get('log_blocked', 0))) {
-                Log::add(
-                    new ExternalloginLogEntry(
-                        'User "' . $response->username . '" is trying to ' . ($isUserNotFound ? 'register' : 'login') . ' while the user is blocked',
-                        Log::ERROR,
-                        'authentication-externallogin-blocked'
-                    )
-                );
-            }
-            $response = $this->userLoginFail($response, $params->get('blocked_redirect_menuitem'), Authentication::STATUS_DENIED);
-            $event->addResult($response);
-            $event->stopPropagation();
-            return;
-        }
-
-        if ($isUserNotFound) {
-            if (boolval($params->get('autoregister', 0))) {
-                $response = $this->createNewUser($response);
-                $event->addResult($response);
-                return;
-            }
-            if (boolval($params->get('log_autoregister', 0))) {
-                Log::add(
-                    new ExternalloginLogEntry(
-                        'User "' . $response->username . '" is trying to register while auto-register is disabled',
-                        Log::WARNING,
-                        'authentication-externallogin-autoregister'
-                    )
-                );
-            }
-            $response = $this->userLoginFail($response, $params->get('unknown_redirect_menuitem'));
-            $event->addResult($response);
-            return;
-        }
-
-        if (boolval($params->get('autoupdate', 0))) {
-            $response = $this->updateUser($response, $userId);
-            $event->addResult($response);
-            return;
-        }
-
-        $event->addResult($response);
-    }
-
-    /**
      * This method should handle any authentication and report back to the subject.
      *
      * @param AuthenticationEvent $event Authentication event
@@ -154,7 +85,12 @@ class Externallogin extends CMSPlugin
         $response->subtype = $response->type;
         $response->type = 'externallogin';
 
-        // Stop event propagation to prevent other authentication plugins from running
+        // Blocked/auto-register/auto-update checks run here rather than in onUserAuthorisation,
+        // deliberately. By this point $response is an ExternalAuthenticationResponse carrying the
+        // protocol plugin's server/groups data; the AuthenticationEvent's own subject
+        // ($event->getAuthenticationResponse()) is always a plain core AuthenticationResponse
+        // that never gains those properties (only the whitelisted sync below), so onUserAuthorisation
+        // would never have access to $response->server/groups even if it were dispatched.
         if ($response->status === Authentication::STATUS_SUCCESS) {
             /** @var Registry */
             $params = $response->server->params;
@@ -193,10 +129,17 @@ class Externallogin extends CMSPlugin
             }
         }
 
-        // Sync modified response properties back to the original event response
+        // Sync modified response properties back to the original event subject — the object
+        // Joomla core (CMSApplication::login()) actually inspects the status of, and that
+        // authorise() later passes into onUserAuthorisation. Only copy properties the base
+        // AuthenticationResponse class itself declares: it never gains ExternalAuthenticationResponse
+        // -only properties like server/groups this way, which would otherwise reintroduce the
+        // PHP 8.2 dynamic property deprecation on a plain core object (see issue #231).
         $origResponse = $event->getAuthenticationResponse();
         foreach (get_object_vars($response) as $property => $value) {
-            $origResponse->$property = $value;
+            if (property_exists(AuthenticationResponse::class, $property)) {
+                $origResponse->$property = $value;
+            }
         }
 
         if ($response->status === Authentication::STATUS_SUCCESS) {
