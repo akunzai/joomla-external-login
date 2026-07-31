@@ -6,11 +6,13 @@ on:
       - main
     paths:
       - 'src/**'
+      - 'tests/**'
       - 'composer.json'
       - 'composer.lock'
       - '.php-cs-fixer.dist.php'
       - 'phpstan.neon'
       - 'phpstan-baseline.neon'
+      - 'phpunit.xml.dist'
       - '.github/workflows/build.yml'
   # Allow manually triggering the workflow.
   workflow_dispatch:
@@ -50,3 +52,5 @@ jobs:
         run: composer lint
       - name: PHPStan Static Analysis
         run: composer exec phpstan -- analyse --no-progress --no-interaction
+      - name: Run unit tests
+        run: composer run test
