@@ -76,8 +76,7 @@ class Externallogin extends CMSPlugin
             return;
         }
 
-        // Clone the response
-        $response = ExternalAuthenticationResponse::fromResponse(clone $response);
+        $response = ExternalAuthenticationResponse::fromResponse($response);
         /** @var Registry */
         $params = $response->server->params;
         $userId = intval(UserHelper::getUserId($response->username));
@@ -96,6 +95,7 @@ class Externallogin extends CMSPlugin
             }
             $response = $this->userLoginFail($response, $params->get('blocked_redirect_menuitem'), Authentication::STATUS_DENIED);
             $event->addResult($response);
+            $event->stopPropagation();
             return;
         }
 
@@ -155,6 +155,50 @@ class Externallogin extends CMSPlugin
         $response->type = 'externallogin';
 
         // Stop event propagation to prevent other authentication plugins from running
+        if ($response->status === Authentication::STATUS_SUCCESS) {
+            /** @var Registry */
+            $params = $response->server->params;
+            $userId = intval(UserHelper::getUserId($response->username));
+            $isUserNotFound = $userId === 0;
+            $isUserBlocked = $this->isUserBlocked($params, $response->username, $response->email);
+
+            if ($isUserBlocked) {
+                if (boolval($params->get('log_blocked', 0))) {
+                    Log::add(
+                        new ExternalloginLogEntry(
+                            'User "' . $response->username . '" is trying to ' . ($isUserNotFound ? 'register' : 'login') . ' while the user is blocked',
+                            Log::ERROR,
+                            'authentication-externallogin-blocked'
+                        )
+                    );
+                }
+                $this->userLoginFail($response, $params->get('blocked_redirect_menuitem'), Authentication::STATUS_DENIED);
+            } elseif ($isUserNotFound) {
+                if (boolval($params->get('autoregister', 0))) {
+                    $this->createNewUser($response);
+                } else {
+                    if (boolval($params->get('log_autoregister', 0))) {
+                        Log::add(
+                            new ExternalloginLogEntry(
+                                'User "' . $response->username . '" is trying to register while auto-register is disabled',
+                                Log::WARNING,
+                                'authentication-externallogin-autoregister'
+                            )
+                        );
+                    }
+                    $this->userLoginFail($response, $params->get('unknown_redirect_menuitem'));
+                }
+            } elseif (boolval($params->get('autoupdate', 0))) {
+                $this->updateUser($response, $userId);
+            }
+        }
+
+        // Sync modified response properties back to the original event response
+        $origResponse = $event->getAuthenticationResponse();
+        foreach (get_object_vars($response) as $property => $value) {
+            $origResponse->$property = $value;
+        }
+
         if ($response->status === Authentication::STATUS_SUCCESS) {
             $event->stopPropagation();
         }
