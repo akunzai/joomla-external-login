@@ -25,6 +25,10 @@ Thumbs.db
 # PHPStan
 /tmp/
 
+# PHPUnit
+.phpunit.result.cache
+.phpunit.cache/
+
 # misc
 /dist/
 .claude/

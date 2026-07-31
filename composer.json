@@ -48,7 +48,23 @@
 		"joomla/joomla-cms": "6.1.2",
 		"phpstan/extension-installer": "^1.4",
 		"phpstan/phpstan": "^2.1",
-		"phpstan/phpstan-deprecation-rules": "^2.0"
+		"phpstan/phpstan-deprecation-rules": "^2.0",
+		"phpunit/phpunit": "^11.5"
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Joomla\\Component\\Externallogin\\Administrator\\": "src/administrator/components/com_externallogin/src/",
+			"Joomla\\Plugin\\System\\Caslogin\\Extension\\": "src/plugins/system/caslogin/src/Extension/",
+			"Tests\\": "tests/"
+		},
+		"classmap": [
+			"vendor/joomla/joomla-cms/libraries/src",
+			"vendor/joomla/joomla-cms/libraries/vendor/joomla/di/src",
+			"vendor/joomla/joomla-cms/libraries/vendor/joomla/database/src",
+			"vendor/joomla/joomla-cms/libraries/vendor/joomla/event/src",
+			"vendor/joomla/joomla-cms/libraries/vendor/joomla/registry/src",
+			"vendor/joomla/joomla-cms/libraries/vendor/joomla/uri/src"
+		]
 	},
 	"prefer-stable": true,
 	"scripts": {
@@ -63,6 +79,9 @@
 		],
 		"phpstan-baseline": [
 			"phpstan analyse --generate-baseline"
+		],
+		"test": [
+			"phpunit"
 		],
 		"bundle": [
 			"./bundle.sh"
