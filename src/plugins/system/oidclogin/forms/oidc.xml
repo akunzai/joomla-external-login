@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="params">
+		<fieldset
+			name="logging"
+		>
+			<field
+				type="spacer"
+				label="PLG_SYSTEM_OIDCLOGIN_FIELD_SPACER_LABEL"
+			/>
+			<field
+				name="log_autologin"
+				type="radio"
+				default="0"
+				label="PLG_SYSTEM_OIDCLOGIN_FIELD_SERVER_LOG_AUTOLOGIN_LABEL"
+				description="PLG_SYSTEM_OIDCLOGIN_FIELD_SERVER_LOG_AUTOLOGIN_DESC"
+			>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field
+				name="log_login"
+				type="radio"
+				default="0"
+				label="PLG_SYSTEM_OIDCLOGIN_FIELD_SERVER_LOG_LOGIN_LABEL"
+				description="PLG_SYSTEM_OIDCLOGIN_FIELD_SERVER_LOG_LOGIN_DESC"
+			>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field
+				name="log_logout"
+				type="radio"
+				default="0"
+				label="PLG_SYSTEM_OIDCLOGIN_FIELD_SERVER_LOG_LOGOUT_LABEL"
+				description="PLG_SYSTEM_OIDCLOGIN_FIELD_SERVER_LOG_LOGOUT_DESC"
+			>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field
+				name="log_verify"
+				type="radio"
+				default="0"
+				label="PLG_SYSTEM_OIDCLOGIN_FIELD_SERVER_LOG_VERIFY_LABEL"
+				description="PLG_SYSTEM_OIDCLOGIN_FIELD_SERVER_LOG_VERIFY_DESC"
+			>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field
+				name="log_discovery"
+				type="radio"
+				default="0"
+				label="PLG_SYSTEM_OIDCLOGIN_FIELD_SERVER_LOG_DISCOVERY_LABEL"
+				description="PLG_SYSTEM_OIDCLOGIN_FIELD_SERVER_LOG_DISCOVERY_DESC"
+			>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field
+				name="log_groups"
+				type="radio"
+				default="0"
+				label="PLG_SYSTEM_OIDCLOGIN_FIELD_SERVER_LOG_GROUPS_LABEL"
+				description="PLG_SYSTEM_OIDCLOGIN_FIELD_SERVER_LOG_GROUPS_DESC"
+			>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+		</fieldset>
+		<fieldset
+			name="params"
+			label="PLG_SYSTEM_OIDCLOGIN_FIELDSET_ENDPOINT_LABEL"
+			description="PLG_SYSTEM_OIDCLOGIN_FIELDSET_ENDPOINT_DESC"
+		>
+			<field
+				name="issuer"
+				type="url"
+				size="50"
+				default=""
+				label="PLG_SYSTEM_OIDCLOGIN_FIELD_ISSUER_LABEL"
+				description="PLG_SYSTEM_OIDCLOGIN_FIELD_ISSUER_DESC"
+				required="true"
+			/>
+
+			<field
+				name="locale"
+				type="radio"
+				default="0"
+				label="PLG_SYSTEM_OIDCLOGIN_FIELD_LOCALE_LABEL"
+				description="PLG_SYSTEM_OIDCLOGIN_FIELD_LOCALE_DESC"
+			>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+		</fieldset>
+		<fieldset
+			name="client"
+			label="PLG_SYSTEM_OIDCLOGIN_FIELDSET_CLIENT_LABEL"
+			description="PLG_SYSTEM_OIDCLOGIN_FIELDSET_CLIENT_DESC"
+		>
+			<field
+				name="client_id"
+				type="text"
+				size="30"
+				default=""
+				label="PLG_SYSTEM_OIDCLOGIN_FIELD_CLIENT_ID_LABEL"
+				description="PLG_SYSTEM_OIDCLOGIN_FIELD_CLIENT_ID_DESC"
+				required="true"
+			/>
+
+			<field
+				name="client_secret"
+				type="password"
+				size="30"
+				default=""
+				label="PLG_SYSTEM_OIDCLOGIN_FIELD_CLIENT_SECRET_LABEL"
+				description="PLG_SYSTEM_OIDCLOGIN_FIELD_CLIENT_SECRET_DESC"
+				required="true"
+			/>
+		</fieldset>
+		<fieldset
+			name="attributes"
+			label="PLG_SYSTEM_OIDCLOGIN_FIELDSET_ATTRIBUTES_LABEL"
+			description="PLG_SYSTEM_OIDCLOGIN_FIELDSET_ATTRIBUTES_DESC"
+		>
+
+			<field
+				name="username_claim"
+				type="text"
+				required="true"
+				size="30"
+				default="preferred_username"
+				label="PLG_SYSTEM_OIDCLOGIN_FIELD_USERNAME_CLAIM_LABEL"
+				description="PLG_SYSTEM_OIDCLOGIN_FIELD_USERNAME_CLAIM_DESC"
+			/>
+
+			<field
+				name="name_claim"
+				type="text"
+				required="true"
+				size="30"
+				default="name"
+				label="PLG_SYSTEM_OIDCLOGIN_FIELD_NAME_CLAIM_LABEL"
+				description="PLG_SYSTEM_OIDCLOGIN_FIELD_NAME_CLAIM_DESC"
+			/>
+
+			<field
+				name="email_claim"
+				type="text"
+				required="true"
+				size="30"
+				default="email"
+				label="PLG_SYSTEM_OIDCLOGIN_FIELD_EMAIL_CLAIM_LABEL"
+				description="PLG_SYSTEM_OIDCLOGIN_FIELD_EMAIL_CLAIM_DESC"
+			/>
+
+			<field
+				name="groups_claim"
+				type="text"
+				size="30"
+				default=""
+				label="PLG_SYSTEM_OIDCLOGIN_FIELD_GROUPS_CLAIM_LABEL"
+				description="PLG_SYSTEM_OIDCLOGIN_FIELD_GROUPS_CLAIM_DESC"
+			/>
+
+			<field
+				name="group_integer"
+				type="radio"
+				default="0"
+				label="PLG_SYSTEM_OIDCLOGIN_FIELD_GROUP_INTEGER_LABEL"
+				description="PLG_SYSTEM_OIDCLOGIN_FIELD_GROUP_INTEGER_DESC"
+			>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+
+			<field
+				name="group_separator"
+				type="text"
+				size="10"
+				default="/"
+				label="PLG_SYSTEM_OIDCLOGIN_FIELD_GROUP_SEPARATOR_LABEL"
+				description="PLG_SYSTEM_OIDCLOGIN_FIELD_GROUP_SEPARATOR_DESC"
+			/>
+		</fieldset>
+		<fieldset
+			name="connection"
+			label="PLG_SYSTEM_OIDCLOGIN_FIELDSET_CONNECTION_LABEL"
+			description="PLG_SYSTEM_OIDCLOGIN_FIELDSET_CONNECTION_DESC"
+		>
+
+			<field
+				name="autologin"
+				type="radio"
+				default="0"
+				label="PLG_SYSTEM_OIDCLOGIN_FIELD_AUTOMATIC_LOGIN_LABEL"
+				description="PLG_SYSTEM_OIDCLOGIN_FIELD_AUTOMATIC_LOGIN_DESC"
+			>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+
+			<field
+				name="autologout"
+				type="radio"
+				default="0"
+				label="PLG_SYSTEM_OIDCLOGIN_FIELD_AUTOMATIC_LOGOUT_LABEL"
+				description="PLG_SYSTEM_OIDCLOGIN_FIELD_AUTOMATIC_LOGOUT_DESC"
+			>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+
+			<field
+				name="post_logout_redirect"
+				type="text"
+				size="30"
+				default=""
+				label="PLG_SYSTEM_OIDCLOGIN_FIELD_POST_LOGOUT_REDIRECT_LABEL"
+				description="PLG_SYSTEM_OIDCLOGIN_FIELD_POST_LOGOUT_REDIRECT_DESC"
+			/>
+
+			<field
+				name="timeout"
+				type="text"
+				size="10"
+				default="5"
+				label="PLG_SYSTEM_OIDCLOGIN_FIELD_TIMEOUT_LABEL"
+				description="PLG_SYSTEM_OIDCLOGIN_FIELD_TIMEOUT_DESC"
+			/>
+
+		</fieldset>
+	</fields>
+</form>

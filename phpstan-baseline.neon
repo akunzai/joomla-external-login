@@ -22,4 +22,10 @@ parameters:
 			message: '#^Parameter \#1 \$config of method Joomla\\CMS\\Plugin\\CMSPlugin\:\:__construct\(\) expects array, Joomla\\Event\\DispatcherInterface given\.$#'
 			identifier: argument.type
 			count: 1
+			path: src/plugins/system/oidclogin/src/Extension/Oidclogin.php
+
+		-
+			message: '#^Parameter \#1 \$config of method Joomla\\CMS\\Plugin\\CMSPlugin\:\:__construct\(\) expects array, Joomla\\Event\\DispatcherInterface given\.$#'
+			identifier: argument.type
+			count: 1
 			path: src/plugins/user/cbexternallogin/src/Extension/Cbexternallogin.php

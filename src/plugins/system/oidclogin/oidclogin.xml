@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="5" type="plugin" group="system" method="upgrade">
+
+	<name>PLG_SYSTEM_OIDCLOGIN</name>
+
+	<!-- The following elements are optional and free of formatting conttraints -->
+	<creationDate>Jul 2026</creationDate>
+	<author>Charley Wu, see contributor page</author>
+	<authorUrl>https://github.com/akunzai/joomla-external-login</authorUrl>
+	<license>GNU General Public License version 2 or later; see LICENSE</license>
+
+	<!--  The version string is recorded in the extension table -->
+	<version>5.1.0</version>
+
+	<!-- The description is optional and defaults to the name -->
+	<description>PLG_SYSTEM_OIDCLOGIN_DESCRIPTION</description>
+
+	<namespace path="src">Joomla\Plugin\System\Oidclogin</namespace>
+
+	<files>
+		<folder plugin="oidclogin">services</folder>
+		<folder>src</folder>
+		<folder>forms</folder>
+	</files>
+
+	<media destination="plg_system_oidclogin" folder="media">
+		<folder>images</folder>
+	</media>
+
+	<languages>
+		<language tag="en-GB">language/en-GB/plg_system_oidclogin.ini</language>
+		<language tag="en-GB">language/en-GB/plg_system_oidclogin.sys.ini</language>
+	</languages>
+
+</extension>
