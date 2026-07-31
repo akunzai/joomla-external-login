@@ -40,6 +40,7 @@ use Joomla\Component\Externallogin\Administrator\Table\ServerTable;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Event\DispatcherInterface;
 use Joomla\Event\Event;
+use Joomla\Http\HttpFactory;
 use Joomla\Registry\Registry;
 
 /**
@@ -774,49 +775,67 @@ class Caslogin extends CMSPlugin
 
     /**
      * Verify server availability.
+     *
+     * @param Registry $params
+     *
+     * @return string|false
      */
     private function verifyServerIsAlive($params)
     {
+        $options = [];
         $certificateFile = $params->get('certificate_file', '');
-        $certificatePath = $params->get('certificate_path', '');
 
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($curl, CURLOPT_URL, $this->getUrl($params));
-        curl_setopt($curl, CURLOPT_TIMEOUT, $params->get('timeout'));
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, $certificateFile || $certificatePath);
-        curl_setopt($curl, CURLOPT_CAINFO, $certificateFile);
-        curl_setopt($curl, CURLOPT_CAPATH, $certificatePath);
-        $result = curl_exec($curl);
-        curl_close($curl);
+        if (!empty($certificateFile)) {
+            $options['curl.certpath'] = $certificateFile;
+        }
 
-        return $result;
+        try {
+            $http = (new HttpFactory())->getHttp($options);
+            $timeout = (int) $params->get('timeout', 10);
+            $response = $http->get($this->getUrl($params), [], $timeout);
+
+            if ($response->getStatusCode() >= 200 && $response->getStatusCode() < 400) {
+                return (string) $response->getBody();
+            }
+        } catch (\Throwable $e) {
+            return false;
+        }
+
+        return false;
     }
 
     /**
      * Verify service ticket.
+     *
+     * @param Registry $params
+     * @param string $ticket
+     * @param string $service
+     *
+     * @return string|false
      */
     private function verifyServiceTicket($params, $ticket, $service)
     {
+        $options = [];
         $certificateFile = $params->get('certificate_file', '');
-        $certificatePath = $params->get('certificate_path', '');
 
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt(
-            $curl,
-            CURLOPT_URL,
-            $this->getUrl($params) . ($params->get('cas_v3') ? '/p3' : '') .
-                '/serviceValidate?ticket=' . $ticket . '&service=' . urlencode($service)
-        );
-        curl_setopt($curl, CURLOPT_TIMEOUT, $params->get('timeout'));
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, $certificateFile || $certificatePath);
-        curl_setopt($curl, CURLOPT_CAINFO, $certificateFile);
-        curl_setopt($curl, CURLOPT_CAPATH, $certificatePath);
-        $response = curl_exec($curl);
-        curl_close($curl);
+        if (!empty($certificateFile)) {
+            $options['curl.certpath'] = $certificateFile;
+        }
 
-        return $response;
+        try {
+            $http = (new HttpFactory())->getHttp($options);
+            $url = $this->getUrl($params) . ($params->get('cas_v3') ? '/p3' : '') .
+                '/serviceValidate?ticket=' . $ticket . '&service=' . urlencode($service);
+            $timeout = (int) $params->get('timeout', 10);
+            $response = $http->get($url, [], $timeout);
+
+            if ($response->getStatusCode() === 200) {
+                return (string) $response->getBody();
+            }
+        } catch (\Throwable $e) {
+            return false;
+        }
+
+        return false;
     }
 }
