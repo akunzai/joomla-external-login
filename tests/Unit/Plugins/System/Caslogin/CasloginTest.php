@@ -6,6 +6,7 @@ use DOMDocument;
 use DOMXPath;
 use Joomla\CMS\Authentication\Authentication;
 use Joomla\CMS\Authentication\AuthenticationResponse;
+use Joomla\Component\Externallogin\Administrator\Authentication\ExternalAuthenticationResponse;
 use Joomla\CMS\Factory;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Database\QueryInterface;
@@ -102,7 +103,7 @@ class CasloginTest extends TestCase
     public function testExtractsUsernameEmailAndFullnameFromTheCasResponse(): void
     {
         $plugin = $this->createPlugin(self::BASE_XML, self::BASE_PARAMS);
-        $response = new AuthenticationResponse();
+        $response = new ExternalAuthenticationResponse();
 
         $event = $this->dispatch($plugin, $response);
 
@@ -131,7 +132,7 @@ class CasloginTest extends TestCase
             XML;
 
         $plugin = $this->createPlugin($xml, self::BASE_PARAMS);
-        $response = new AuthenticationResponse();
+        $response = new ExternalAuthenticationResponse();
 
         $this->dispatch($plugin, $response);
 
@@ -143,7 +144,7 @@ class CasloginTest extends TestCase
     public function testGroupXpathEmptyLeavesGroupsUnset(): void
     {
         $plugin = $this->createPlugin(self::BASE_XML, self::BASE_PARAMS);
-        $response = new AuthenticationResponse();
+        $response = new ExternalAuthenticationResponse();
 
         $this->dispatch($plugin, $response);
 
@@ -154,7 +155,7 @@ class CasloginTest extends TestCase
     {
         $params = ['group_xpath' => 'cas:attributes/cas:role'] + self::BASE_PARAMS;
         $plugin = $this->createPlugin(self::BASE_XML, $params);
-        $response = new AuthenticationResponse();
+        $response = new ExternalAuthenticationResponse();
 
         $this->dispatch($plugin, $response);
 
@@ -180,7 +181,7 @@ class CasloginTest extends TestCase
             'group_separator' => '/',
         ] + self::BASE_PARAMS;
         $plugin = $this->createPlugin(self::BASE_XML, $params);
-        $response = new AuthenticationResponse();
+        $response = new ExternalAuthenticationResponse();
 
         $this->dispatch($plugin, $response);
 
@@ -209,7 +210,7 @@ class CasloginTest extends TestCase
 
         $params = ['group_xpath' => 'cas:attributes/cas:group', 'group_integer' => 1] + self::BASE_PARAMS;
         $plugin = $this->createPlugin(str_replace('Public/Editors', $group, self::BASE_XML), $params);
-        $response = new AuthenticationResponse();
+        $response = new ExternalAuthenticationResponse();
 
         $this->dispatch($plugin, $response);
 

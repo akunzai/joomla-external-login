@@ -32,6 +32,7 @@ use Joomla\CMS\Session\Session;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\User\UserFactoryInterface;
 use Joomla\CMS\MVC\Factory\MVCFactoryServiceInterface;
+use Joomla\Component\Externallogin\Administrator\Authentication\ExternalAuthenticationResponse;
 use Joomla\Component\Externallogin\Administrator\Helper\ExternalloginHelper;
 use Joomla\Component\Externallogin\Administrator\Model\ServersModel;
 use Joomla\Component\Externallogin\Administrator\Service\Logger\ExternalloginLogEntry;
@@ -528,34 +529,42 @@ class Caslogin extends CMSPlugin
             return;
         }
 
+        $extResponse = ExternalAuthenticationResponse::fromResponse($response);
+
         $server = $this->server;
         $params = $server->params;
         $sid = $server->id;
         // @phpstan-ignore assign.propertyType
-        $response->status = Authentication::STATUS_SUCCESS;
-        // @phpstan-ignore property.notFound
-        $response->server = $server;
-        $response->type = 'system.caslogin';
-        // @phpstan-ignore property.notFound
-        $response->message = '';
+        $extResponse->status = Authentication::STATUS_SUCCESS;
+        $extResponse->server = $server;
+        $extResponse->type = 'system.caslogin';
+        $extResponse->message = '';
 
-        $response->username = str_replace(
+        $extResponse->username = str_replace(
             ['<', '>', '"', "'", '%', ';', '(', ')', '&', '\\'],
             '',
             $this->xpath->evaluate($params->get('username_xpath'), $this->success)
         );
 
-        $response->email = str_replace(
+        $extResponse->email = str_replace(
             ['<', '>', '"', "'", '%', ';', '(', ')', '&', '\\'],
             '',
             $this->xpath->evaluate($params->get('email_xpath'), $this->success)
         );
 
-        $response->fullname = $this->xpath->evaluate($params->get('name_xpath'), $this->success);
+        $extResponse->fullname = $this->xpath->evaluate($params->get('name_xpath'), $this->success);
 
+        if ($response !== $extResponse) {
+            // @phpstan-ignore assign.propertyType
+            $response->status = $extResponse->status;
+            $response->type = $extResponse->type;
+            $response->username = $extResponse->username;
+            $response->email = $extResponse->email;
+            $response->fullname = $extResponse->fullname;
+        }
 
         // Set the modified response back to the event
-        $event->setArgument('response', $response);
+        $event->setArgument('response', $extResponse);
 
         if (empty($params->get('group_xpath'))) {
             // Add result to the result array
@@ -575,7 +584,7 @@ class Caslogin extends CMSPlugin
             if ($params->get('log_groups', 0)) {
                 Log::add(
                     new ExternalloginLogEntry(
-                        'Unsuccessful detection of groups for user "' . $response->username . '" on server ' . $sid,
+                        'Unsuccessful detection of groups for user "' . $extResponse->username . '" on server ' . $sid,
                         Log::WARNING,
                         'system-caslogin-groups'
                     )
@@ -596,14 +605,13 @@ class Caslogin extends CMSPlugin
         if ($params->get('log_groups', 0)) {
             Log::add(
                 new ExternalloginLogEntry(
-                    'Successful detection of groups for user "' . $response->username . '" on server ' . $sid,
+                    'Successful detection of groups for user "' . $extResponse->username . '" on server ' . $sid,
                     Log::INFO,
                     'system-caslogin-groups'
                 )
             );
         }
-        // @phpstan-ignore property.notFound
-        $response->groups = [];
+        $extResponse->groups = [];
 
         for ($i = 0; $i < $groups->length; $i++) {
             $group = (string) $groups->item($i)->nodeValue;
@@ -612,7 +620,7 @@ class Caslogin extends CMSPlugin
                 if ($params->get('log_groups', 0)) {
                     Log::add(
                         new ExternalloginLogEntry(
-                            'Found integer group ' . $group . ' of groups for user "' . $response->username . '" on server ' . $sid,
+                            'Found integer group ' . $group . ' of groups for user "' . $extResponse->username . '" on server ' . $sid,
                             Log::INFO,
                             'system-caslogin-groups'
                         )
@@ -630,19 +638,19 @@ class Caslogin extends CMSPlugin
                     if ($params->get('log_groups', 0)) {
                         Log::add(
                             new ExternalloginLogEntry(
-                                'Added integer group ' . $group . ' of groups for user "' . $response->username . '" on server ' . $sid,
+                                'Added integer group ' . $group . ' of groups for user "' . $extResponse->username . '" on server ' . $sid,
                                 Log::INFO,
                                 'system-caslogin-groups'
                             )
                         );
                     }
-                    $response->groups[] = $group;
+                    $extResponse->groups[] = $group;
                 }
             } else {
                 if ($params->get('log_groups', 0)) {
                     Log::add(
                         new ExternalloginLogEntry(
-                            'Found string group(s) "' . $group . '" for user "' . $response->username . '" on server ' . $sid,
+                            'Found string group(s) "' . $group . '" for user "' . $extResponse->username . '" on server ' . $sid,
                             Log::INFO,
                             'system-caslogin-groups'
                         )
@@ -650,12 +658,12 @@ class Caslogin extends CMSPlugin
                 }
 
                 $newGroups = (array) ExternalloginHelper::getGroups($group, $params->get('group_separator', ''));
-                $response->groups = array_merge($response->groups, $newGroups);
+                $extResponse->groups = array_merge($extResponse->groups, $newGroups);
 
                 if ($params->get('log_groups', 0)) {
                     $message = empty($newGroups)
                         ? 'No Joomla! groups found from "' . $group . '" on server ' . $sid
-                        : 'Added groups (' . implode(',', $newGroups) . ') for user "' .  $response->username . '" on server ' . $sid;
+                        : 'Added groups (' . implode(',', $newGroups) . ') for user "' .  $extResponse->username . '" on server ' . $sid;
                     Log::add(
                         new ExternalloginLogEntry(
                             $message,
@@ -667,7 +675,7 @@ class Caslogin extends CMSPlugin
             }
         }
 
-        $event->setArgument('response', $response);
+        $event->setArgument('response', $extResponse);
 
         // Add result to the result array
         if ($event instanceof ResultAwareInterface) {
