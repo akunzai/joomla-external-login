@@ -53,6 +53,20 @@ Non-derivable conventions:
 
 When a durable, non-obvious gotcha appears: propose a **context-tagged** bullet on the nearest relevant `AGENTS.md`. **Active Pruning:** keep any `## Lessons Learned` ≤ 5; drop obsolete version tags; promote durable rules into configs or Rich References rather than prose.
 
+## Agent skills
+
+### Issue tracker
+
+GitHub Issues on `akunzai/joomla-external-login` via the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Default five canonical roles, label string = role name. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context — `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agents/domain.md`.
+
 ## Claude Code Compatibility
 
 > [!NOTE]
