@@ -26,6 +26,7 @@ use Joomla\CMS\Log\Log;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\User\UserFactoryInterface;
 use Joomla\CMS\User\UserHelper;
+use Joomla\Component\Externallogin\Administrator\Authentication\ExternalAuthenticationResponse;
 use Joomla\Component\Externallogin\Administrator\Service\Logger\ExternalloginLogEntry;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Event\DispatcherInterface;
@@ -76,9 +77,8 @@ class Externallogin extends CMSPlugin
         }
 
         // Clone the response
-        $response = clone $response;
+        $response = ExternalAuthenticationResponse::fromResponse(clone $response);
         /** @var Registry */
-        /** @phpstan-ignore-next-line */
         $params = $response->server->params;
         $userId = intval(UserHelper::getUserId($response->username));
         $isUserNotFound = $userId === 0;
@@ -150,6 +150,7 @@ class Externallogin extends CMSPlugin
             return;
         }
 
+        $response = ExternalAuthenticationResponse::fromResponse($response);
         $response->subtype = $response->type;
         $response->type = 'externallogin';
 
@@ -160,14 +161,14 @@ class Externallogin extends CMSPlugin
     }
 
     /**
-     * @param AuthenticationResponse $response
+     * @param ExternalAuthenticationResponse $response
      *
-     * @return AuthenticationResponse
+     * @return ExternalAuthenticationResponse
      */
     private function createNewUser($response)
     {
         /** @var Registry $params */
-        $params = $response->server->params; // @phpstan-ignore property.notFound
+        $params = $response->server->params;
         $isLogAutoRegister = boolval($params->get('log_autoregister', 0));
         $db = Factory::getContainer()->get(DatabaseInterface::class);
         $userFactory = Factory::getContainer()->get(UserFactoryInterface::class);
@@ -180,7 +181,6 @@ class Externallogin extends CMSPlugin
 
         if (!$user->save()) {
             if ($isLogAutoRegister) {
-                /** @phpstan-ignore-next-line */
                 $serverId = $response->server->id;
                 Log::add(
                     new ExternalloginLogEntry(
@@ -206,7 +206,6 @@ class Externallogin extends CMSPlugin
                         . '" and email "'
                         . $response->email
                         . '" on server '
-                        /** @phpstan-ignore-next-line */
                         . $response->server->id,
                     Log::INFO,
                     'authentication-externallogin-autoregister'
@@ -230,7 +229,6 @@ class Externallogin extends CMSPlugin
         $db->execute();
 
         if ($isLogAutoRegister) {
-            /** @phpstan-ignore-next-line */
             $serverId = $response->server->id;
             $message = empty($response->groups)
                 ? 'Auto-register default group "' . $defaultUserGroup . '" for user "' . $user->username . '" on server ' . $serverId
@@ -248,15 +246,14 @@ class Externallogin extends CMSPlugin
     }
 
     /**
-     * @param AuthenticationResponse $response
+     * @param ExternalAuthenticationResponse $response
      * @param int $userId
      *
-     * @return AuthenticationResponse
+     * @return ExternalAuthenticationResponse
      */
     private function updateUser($response, $userId)
     {
         /** @var Registry */
-        /** @phpstan-ignore-next-line */
         $params = $response->server->params;
 
         $isLogAutoUpdate = boolval($params->get('log_autoupdate', 0));
@@ -295,7 +292,6 @@ class Externallogin extends CMSPlugin
             $db->execute();
 
             if ($isLogAutoUpdate) {
-                /** @phpstan-ignore-next-line */
                 $serverId = $response->server->id;
                 $groups = $response->groups;
                 Log::add(
@@ -316,7 +312,6 @@ class Externallogin extends CMSPlugin
 
         // Attempt to update the user
         if ($user->save() && $isLogAutoUpdate) {
-            /** @phpstan-ignore-next-line */
             $serverId = $response->server->id;
             Log::add(
                 new ExternalloginLogEntry(
@@ -355,11 +350,11 @@ class Externallogin extends CMSPlugin
     }
 
     /**
-     * @param AuthenticationResponse $response
+     * @param ExternalAuthenticationResponse $response
      * @param string|null $redirection
      * @param int $status
      *
-     * @return AuthenticationResponse
+     * @return ExternalAuthenticationResponse
      */
     private function userLoginFail(
         $response,
@@ -377,7 +372,7 @@ class Externallogin extends CMSPlugin
     }
 
     /**
-     * @param AuthenticationResponse $response
+     * @param ExternalAuthenticationResponse $response
      * @param int $userId
      * @param bool $isSkipExisting
      */
@@ -395,7 +390,6 @@ class Externallogin extends CMSPlugin
         }
 
         $query = $db->getQuery(true);
-        /** @phpstan-ignore-next-line */
         $serverId = intval($response->server->id);
         $query->insert(
             '#__externallogin_users'
