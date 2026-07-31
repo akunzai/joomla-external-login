@@ -798,6 +798,16 @@ class Caslogin extends CMSPlugin
                 return (string) $response->getBody();
             }
         } catch (\Throwable $e) {
+            if ($params->get('log_verify', 0)) {
+                Log::add(
+                    new ExternalloginLogEntry(
+                        'HTTP error while verifying server is alive: ' . $e->getMessage(),
+                        Log::WARNING,
+                        'system-caslogin-verify'
+                    )
+                );
+            }
+
             return false;
         }
 
@@ -833,6 +843,16 @@ class Caslogin extends CMSPlugin
                 return (string) $response->getBody();
             }
         } catch (\Throwable $e) {
+            if ($params->get('log_verify', 0)) {
+                Log::add(
+                    new ExternalloginLogEntry(
+                        'HTTP error while verifying service ticket: ' . $e->getMessage(),
+                        Log::WARNING,
+                        'system-caslogin-verify'
+                    )
+                );
+            }
+
             return false;
         }
 
