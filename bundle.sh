@@ -11,6 +11,7 @@ php "${pwd}/bundle.php" "${pwd}/src/modules/mod_externallogin_site/mod_externall
 php "${pwd}/bundle.php" "${pwd}/src/plugins/authentication/externallogin/externallogin.xml" "${pwd}/src/packages/plg_authentication_externallogin.zip"
 php "${pwd}/bundle.php" "${pwd}/src/plugins/system/externallogin/externallogin.xml" "${pwd}/src/packages/plg_system_externallogin.zip"
 php "${pwd}/bundle.php" "${pwd}/src/plugins/system/caslogin/caslogin.xml" "${pwd}/src/packages/plg_system_caslogin.zip"
+php "${pwd}/bundle.php" "${pwd}/src/plugins/system/oidclogin/oidclogin.xml" "${pwd}/src/packages/plg_system_oidclogin.zip"
 php "${pwd}/bundle.php" "${pwd}/src/plugins/user/cbexternallogin/cbexternallogin.xml" "${pwd}/src/packages/plg_user_cbexternallogin.zip"
 php "${pwd}/bundle.php" "${pwd}/src/pkg_externallogin.xml" "${output_file}"
 
