@@ -12,11 +12,17 @@ export class ServerEditPage {
   readonly autoRegisterNo: Locator;
   readonly autoUpdateYes: Locator;
   readonly autoUpdateNo: Locator;
+  readonly regexUserInput: Locator;
+  readonly regexEmailInput: Locator;
+  readonly groupXpathInput: Locator;
+  readonly groupIntegerYes: Locator;
+  readonly groupIntegerNo: Locator;
+  readonly groupSeparatorInput: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.heading = page.getByRole('heading', { name: /Servers Manager/i });
-    this.saveButton = page.getByRole('button', { name: 'Save' }).first();
+    this.saveButton = page.locator('button[data-task="server.apply"], button.button-apply, button.btn-success').or(page.getByRole('button', { name: 'Save', exact: true })).first();
     this.saveCloseButton = page.getByRole('button', { name: 'Save & Close' });
     this.closeButton = page.getByRole('button', { name: 'Close', exact: true });
     this.titleInput = page.getByRole('textbox', { name: 'Title' });
@@ -25,6 +31,12 @@ export class ServerEditPage {
     this.autoRegisterNo = page.locator('fieldset:has-text("Auto-register")').getByRole('radio', { name: 'No' });
     this.autoUpdateYes = page.locator('fieldset:has-text("Auto-update")').getByRole('radio', { name: 'Yes' });
     this.autoUpdateNo = page.locator('fieldset:has-text("Auto-update")').getByRole('radio', { name: 'No' });
+    this.regexUserInput = page.locator('input[name="jform[params][regex_user]"]');
+    this.regexEmailInput = page.locator('input[name="jform[params][regex_email]"]');
+    this.groupXpathInput = page.locator('textarea[name="jform[params][group_xpath]"], input[name="jform[params][group_xpath]"]');
+    this.groupIntegerYes = page.locator('fieldset:has-text("Group Integer"), fieldset:has-text("Integer Groups")').getByRole('radio', { name: 'Yes' });
+    this.groupIntegerNo = page.locator('fieldset:has-text("Group Integer"), fieldset:has-text("Integer Groups")').getByRole('radio', { name: 'No' });
+    this.groupSeparatorInput = page.locator('input[name="jform[params][group_separator]"]');
   }
 
   async goto(serverId: number) {
@@ -55,8 +67,51 @@ export class ServerEditPage {
     }
   }
 
+  async clickTab(tabName: string | RegExp) {
+    const tab = this.page.locator('#configTabs button, #configTabs a, button[role="tab"], a[role="tab"], .nav-tabs button, .nav-tabs a, .nav-tabs .nav-link').filter({ hasText: tabName });
+    if (await tab.count() > 0) {
+      await tab.first().click();
+      await this.page.waitForTimeout(300);
+    }
+  }
+
+  async setRegexUser(pattern: string) {
+    await this.clickTab(/Details/i);
+    await this.regexUserInput.clear();
+    await this.regexUserInput.fill(pattern);
+  }
+
+  async setRegexEmail(pattern: string) {
+    await this.clickTab(/Details/i);
+    await this.regexEmailInput.clear();
+    await this.regexEmailInput.fill(pattern);
+  }
+
+  async setGroupXpath(xpath: string) {
+    await this.clickTab(/Attributes/i);
+    await this.groupXpathInput.clear();
+    await this.groupXpathInput.fill(xpath);
+  }
+
+  async setGroupInteger(enabled: boolean) {
+    await this.clickTab(/Attributes/i);
+    if (enabled) {
+      await this.groupIntegerYes.check();
+    } else {
+      await this.groupIntegerNo.check();
+    }
+  }
+
+  async setGroupSeparator(separator: string) {
+    await this.clickTab(/Attributes/i);
+    await this.groupSeparatorInput.clear();
+    await this.groupSeparatorInput.fill(separator);
+  }
+
   async save() {
     await this.saveButton.click();
+    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForTimeout(1000);
   }
 
   async saveAndClose() {

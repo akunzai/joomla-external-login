@@ -123,4 +123,96 @@ test.describe('SSO with Keycloak', () => {
     const isVisible = await usersPage.isUserVisible(KEYCLOAK_USER_EMAIL);
     expect(isVisible).toBe(true);
   });
+
+  test('should deny login when user matches blocked user regex pattern', async ({
+    siteHomePage,
+    keycloakLoginPage,
+    serverEditPage,
+    authenticatedAdminPage,
+    page,
+  }) => {
+    void authenticatedAdminPage;
+
+    // Ensure site user is logged out first
+    await siteHomePage.goto();
+    if (await siteHomePage.isLoggedIn()) {
+      await siteHomePage.clickLogout();
+    }
+
+    // Configure server regex_user to block the test user (pattern that does not match 'test')
+    await serverEditPage.goto(1);
+    await serverEditPage.setRegexUser('^blocked_user_only.*$');
+    await serverEditPage.save();
+    expect(await serverEditPage.regexUserInput.inputValue()).toBe('^blocked_user_only.*$');
+
+    try {
+      // Attempt SSO login
+      await siteHomePage.goto();
+      await siteHomePage.clickExternalLogin();
+
+      await keycloakLoginPage.waitForKeycloakPage();
+      await keycloakLoginPage.login(KEYCLOAK_USERNAME, KEYCLOAK_PASSWORD);
+
+      // Wait for navigation back to Joomla
+      await page.waitForTimeout(2000);
+
+      // Verify user is NOT logged in (blocked)
+      const isLoggedIn = await siteHomePage.isLoggedIn();
+      expect(isLoggedIn).toBe(false);
+    } finally {
+      // Reset server regex_user to allow all users (.*)
+      await serverEditPage.goto(1);
+      await serverEditPage.setRegexUser('.*');
+      await serverEditPage.save();
+    }
+  });
+
+  test('should map user groups from CAS attributes during SSO login', async ({
+    siteHomePage,
+    keycloakLoginPage,
+    serverEditPage,
+    usersPage,
+    authenticatedAdminPage,
+    page,
+  }) => {
+    void authenticatedAdminPage;
+
+    // Ensure site user is logged out first
+    await siteHomePage.goto();
+    if (await siteHomePage.isLoggedIn()) {
+      await siteHomePage.clickLogout();
+    }
+
+    // Configure CAS server group attribute mapping (e.g. cas:attributes/cas:display_name)
+    await serverEditPage.goto(1);
+    await serverEditPage.setGroupXpath('cas:attributes/cas:display_name');
+    await serverEditPage.setGroupSeparator(' ');
+    await serverEditPage.save();
+    expect(await serverEditPage.groupXpathInput.inputValue()).toBe('cas:attributes/cas:display_name');
+
+    try {
+      // Perform SSO login
+      await siteHomePage.goto();
+      await siteHomePage.clickExternalLogin();
+
+      await keycloakLoginPage.waitForKeycloakPage();
+      await keycloakLoginPage.login(KEYCLOAK_USERNAME, KEYCLOAK_PASSWORD);
+
+      await page.waitForURL(/^https:\/\/www\.dev\.local\/?/, { timeout: 15000 });
+
+      // Verify logged in on site
+      expect(await siteHomePage.isLoggedIn()).toBe(true);
+
+      // Check user in com_externallogin admin users list
+      await usersPage.goto();
+      await usersPage.searchUser(KEYCLOAK_USER_EMAIL);
+      expect(await usersPage.isUserVisible(KEYCLOAK_USER_EMAIL)).toBe(true);
+    } finally {
+      // Reset server group mapping settings
+      await serverEditPage.goto(1);
+      await serverEditPage.setGroupXpath('');
+      await serverEditPage.setGroupSeparator('');
+      await serverEditPage.save();
+    }
+  });
 });
