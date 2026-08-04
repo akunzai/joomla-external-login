@@ -49,9 +49,12 @@ Non-derivable conventions:
 | Dev stack, extension lifecycle, file-copy testing, logs | @.devcontainer/AGENTS.md |
 | E2E (`aube` / Playwright) | @e2e/AGENTS.md |
 
-## Knowledge Writeback
+## Self-Reflection
 
-When a durable, non-obvious gotcha appears: propose a **context-tagged** bullet on the nearest relevant `AGENTS.md`. **Active Pruning:** keep any `## Lessons Learned` ≤ 5; drop obsolete version tags; promote durable rules into configs or Rich References rather than prose.
+When solving a problem reveals non-obvious knowledge (gotchas, hidden configs, env quirks):
+1. **Distill**: Create a concise, context-tagged candidate rule (≤ 2 bullets).
+2. **Promote**: Confirm with user, write to topic doc in `docs/<topic>.md` (fallback: `docs/lessons-learned.md`), and add a `@path` reference line under Rich References.
+3. **Prune**: Review and propose deleting stale entries when underlying stack/configs change.
 
 ## Agent skills
 
