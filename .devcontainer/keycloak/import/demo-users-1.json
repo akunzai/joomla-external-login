@@ -1,0 +1,24 @@
+{
+  "realm" : "demo",
+  "users" : [ {
+    "id" : "d3f1d9a0-7b3e-4b3a-9e77-1a2b3c4d5e6f",
+    "createdTimestamp" : 1696259429184,
+    "username" : "test-oidc",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "firstName" : "Oidc",
+    "lastName" : "Tester",
+    "email" : "test-oidc@example.com",
+    "credentials" : [ {
+      "type" : "password",
+      "value" : "test-oidc",
+      "temporary" : false
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-demo" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  } ]
+}
