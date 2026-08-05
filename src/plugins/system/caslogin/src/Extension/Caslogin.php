@@ -99,6 +99,8 @@ class Caslogin extends CMSPlugin
         $app = Factory::getApplication();
         $context = $event->getArgument('context');
         if ($context == 'com_externallogin') {
+            // Ensure language is loaded for translation
+            $this->loadLanguage();
             $wa = $app->getDocument()->getWebAssetManager();
             $wa->addInlineStyle(
                 '.icon-caslogin {'
