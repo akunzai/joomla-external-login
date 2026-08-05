@@ -20,7 +20,7 @@ Upload Package File: `pkg_externallogin.zip`
 
 ### Server details
 
-- Title: `Keycloak`
+- Title: `Keycloak CAS`
 - Auto-register: `Yes`
 - Auto-update: `Yes`
 
@@ -44,7 +44,7 @@ Upload Package File: `pkg_externallogin.zip`
 
 ### Module
 
-- Servers: `Keycloak`
+- Servers: `Keycloak CAS`
 - Position: `sidebar-right`
 - Status: `Published`
 

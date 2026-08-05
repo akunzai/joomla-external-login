@@ -117,16 +117,16 @@ if dc_exec joomla test -f /var/www/html/cli/joomla.php; then
 
   echo "Adding CAS Server definition ..."
   CAS_PARAMS='{"autoregister":"1","autoupdate":"1","ssl":"1","url":"auth.dev.local","dir":"realms/demo/protocol/cas","cas_v3":"1","port":"443","username_xpath":"string(cas:attributes/cas:email)","name_xpath":"string(cas:attributes/cas:display_name)","email_xpath":"string(cas:attributes/cas:email)"}'
-  joomla_mysql -e "INSERT IGNORE INTO ${JOOMLA_DB_PREFIX}externallogin_servers (title, published, plugin, ordering, params) VALUES ('Keycloak', 1, 'system.caslogin', 1, '${CAS_PARAMS}');"
+  joomla_mysql -e "INSERT IGNORE INTO ${JOOMLA_DB_PREFIX}externallogin_servers (title, published, plugin, ordering, params) VALUES ('Keycloak CAS', 1, 'system.caslogin', 1, '${CAS_PARAMS}');"
 
   echo "Adding OIDC Server definition ..."
   OIDC_PARAMS='{"autoregister":"1","autoupdate":"1","issuer":"https://auth.dev.local/realms/demo","client_id":"joomla-oidc","client_secret":"dev-oidc-secret","username_claim":"preferred_username","name_claim":"name","email_claim":"email"}'
   joomla_mysql -e "INSERT IGNORE INTO ${JOOMLA_DB_PREFIX}externallogin_servers (title, published, plugin, ordering, params) VALUES ('Keycloak OIDC', 1, 'system.oidclogin', 2, '${OIDC_PARAMS}');"
 
   echo "Configuring External Login module ..."
-  # Get the server IDs for Keycloak (CAS) and Keycloak OIDC
+  # Get the server IDs for Keycloak CAS and Keycloak OIDC
   # shellcheck disable=2312
-  SERVER_ID=$(joomla_mysql -sN -e "SELECT id FROM ${JOOMLA_DB_PREFIX}externallogin_servers WHERE title='Keycloak' LIMIT 1;" | tr -d '\r')
+  SERVER_ID=$(joomla_mysql -sN -e "SELECT id FROM ${JOOMLA_DB_PREFIX}externallogin_servers WHERE title='Keycloak CAS' LIMIT 1;" | tr -d '\r')
   # shellcheck disable=2312
   OIDC_SERVER_ID=$(joomla_mysql -sN -e "SELECT id FROM ${JOOMLA_DB_PREFIX}externallogin_servers WHERE title='Keycloak OIDC' LIMIT 1;" | tr -d '\r')
   # Update module params with server selection and show_logout (CAS listed first so it stays the default selection)

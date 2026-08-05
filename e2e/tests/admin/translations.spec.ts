@@ -53,7 +53,7 @@ test.describe('Translation Verification', () => {
 
   test('should have translated tab labels on server edit', async ({ serversPage, page }) => {
     await serversPage.goto();
-    await serversPage.clickServerLink('Keycloak');
+    await serversPage.clickServerLink('Keycloak CAS');
 
     // Verify CAS plugin tabs are translated
     // These should show as translated labels, not PLG_SYSTEM_CASLOGIN_* keys
@@ -65,7 +65,7 @@ test.describe('Translation Verification', () => {
 
   test('should not have untranslated strings on server edit page', async ({ serversPage, page }) => {
     await serversPage.goto();
-    await serversPage.clickServerLink('Keycloak');
+    await serversPage.clickServerLink('Keycloak CAS');
 
     const pageContent = await page.content();
     // Only check for our extension's translation keys
