@@ -29,6 +29,7 @@
 		<file type="plugin" id="plg_authentication_externallogin" group="authentication">plg_authentication_externallogin.zip</file>
 		<file type="plugin" id="plg_system_externallogin" group="system">plg_system_externallogin.zip</file>
 		<file type="plugin" id="plg_system_caslogin" group="system">plg_system_caslogin.zip</file>
+		<file type="plugin" id="plg_system_oidclogin" group="system">plg_system_oidclogin.zip</file>
 		<file type="plugin" id="plg_user_cbexternallogin" group="system">plg_user_cbexternallogin.zip</file>
 	</files>
 

@@ -110,6 +110,8 @@ if dc_exec joomla test -f /var/www/html/cli/joomla.php; then
   joomla_mysql -e "UPDATE ${JOOMLA_DB_PREFIX}extensions SET enabled=1 WHERE element='externallogin' AND type='plugin' AND folder='system';"
   # Enable System - CAS Login
   joomla_mysql -e "UPDATE ${JOOMLA_DB_PREFIX}extensions SET enabled=1 WHERE element='caslogin' AND type='plugin' AND folder='system';"
+  # Enable System - OIDC Login
+  joomla_mysql -e "UPDATE ${JOOMLA_DB_PREFIX}extensions SET enabled=1 WHERE element='oidclogin' AND type='plugin' AND folder='system';"
 
   dc_exec joomla php /var/www/html/cli/joomla.php cache:clean || true
 
