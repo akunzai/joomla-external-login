@@ -33,6 +33,7 @@ Thumbs.db
 /dist/
 .claude/
 .agent/
+.playwright-cli/
 
 # mise
 .mise.local.toml
