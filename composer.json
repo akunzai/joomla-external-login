@@ -56,6 +56,7 @@
 			"Joomla\\Component\\Externallogin\\Administrator\\": "src/administrator/components/com_externallogin/src/",
 			"Joomla\\Plugin\\Authentication\\Externallogin\\Extension\\": "src/plugins/authentication/externallogin/src/Extension/",
 			"Joomla\\Plugin\\System\\Caslogin\\Extension\\": "src/plugins/system/caslogin/src/Extension/",
+			"Joomla\\Plugin\\System\\Oidclogin\\": "src/plugins/system/oidclogin/src/",
 			"Tests\\": "tests/"
 		},
 		"classmap": [
@@ -64,7 +65,10 @@
 			"vendor/joomla/joomla-cms/libraries/vendor/joomla/database/src",
 			"vendor/joomla/joomla-cms/libraries/vendor/joomla/event/src",
 			"vendor/joomla/joomla-cms/libraries/vendor/joomla/registry/src",
-			"vendor/joomla/joomla-cms/libraries/vendor/joomla/uri/src"
+			"vendor/joomla/joomla-cms/libraries/vendor/joomla/uri/src",
+			"vendor/joomla/joomla-cms/libraries/vendor/joomla/http/src",
+			"vendor/joomla/joomla-cms/libraries/vendor/lcobucci/clock/src",
+			"vendor/joomla/joomla-cms/libraries/vendor/lcobucci/jwt/src"
 		]
 	},
 	"prefer-stable": true,
