@@ -10,6 +10,7 @@ The [Joomla!](https://www.joomla.org/) authentication extension allows to login 
 ## Supported authentication standards
 
 - [CAS](https://apereo.github.io/cas/development/protocol/CAS-Protocol-Specification.html) 3.0
+- [OpenID Connect](https://openid.net/specs/openid-connect-core-1_0.html) (Authorization Code Flow with PKCE)
 
 ## Requirements
 
@@ -40,6 +41,10 @@ composer run phpstan
 Navigate to `System->Install->Extensions` in Joomla! backend and upload the package file `pkg_externallogin.zip` to install
 
 > You can get notified once a new version is released and update this extension through Joomla! admin UI
+
+## Known limitations
+
+- **CAS: one server per account.** The CAS plugin binds a Joomla account to the specific CAS server it first authenticated against. If that account later tries to log in through a *different* CAS server, the plugin rejects the login rather than silently accepting it. This matters if you configure more than one CAS server (or a CAS server alongside an OIDC server) and expect the same username to log in through either one — it won't, unless the account is registered for that server. There is currently no admin UI to add or change this binding manually; a Joomla administrator can edit it directly via `Components -> External Login -> Users`.
 
 ## History of this extension
 
