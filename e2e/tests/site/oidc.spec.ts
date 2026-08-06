@@ -62,7 +62,46 @@ test.describe('OIDC login with Keycloak', () => {
 
     await expect(siteHomePage.logoutButton).toBeVisible();
 
-    // Leave the site logged out for subsequent tests / suites.
+    // Leave the site logged out for subsequent tests / suites. The configured server has
+    // autologout enabled, so this chains into Keycloak's RP-Initiated Logout and lands back
+    // on the site via post_logout_redirect.
     await siteHomePage.clickLogout();
+    await page.waitForURL(/^https:\/\/www\.dev\.local\/?/, { timeout: 15000 });
+  });
+
+  test('should end the Keycloak session on logout when autologout is enabled (RP-Initiated Logout)', async ({
+    siteHomePage,
+    keycloakLoginPage,
+    page,
+  }) => {
+    await siteHomePage.goto();
+    await siteHomePage.clickExternalLogin(OIDC_SERVER_TITLE);
+
+    await keycloakLoginPage.waitForKeycloakPage();
+    await keycloakLoginPage.login(OIDC_KEYCLOAK_USERNAME, OIDC_KEYCLOAK_PASSWORD);
+
+    await page.waitForURL(/^https:\/\/www\.dev\.local\/?/, { timeout: 15000 });
+    expect(await siteHomePage.isLoggedIn()).toBe(true);
+
+    // Logout triggers the plugin's RP-Initiated Logout redirect to Keycloak's
+    // end_session_endpoint with id_token_hint, which (with post_logout_redirect configured)
+    // sends the browser straight back to the site once Keycloak's own session is ended.
+    await siteHomePage.clickLogout();
+    await page.waitForURL(/^https:\/\/www\.dev\.local\/?/, { timeout: 15000 });
+    await expect(siteHomePage.externalLoginButton).toBeVisible();
+
+    // Prove it was the *IdP* session that ended, not just the local Joomla one: if Keycloak's
+    // SSO session had survived, a fresh OIDC login attempt would silently re-authenticate
+    // without prompting for credentials. Requiring the login form again is the signal.
+    await siteHomePage.goto();
+    await siteHomePage.clickExternalLogin(OIDC_SERVER_TITLE);
+    await keycloakLoginPage.waitForKeycloakPage();
+    await expect(keycloakLoginPage.usernameInput).toBeVisible();
+
+    // Finish logging back in and log out again so subsequent tests / suites start fresh.
+    await keycloakLoginPage.login(OIDC_KEYCLOAK_USERNAME, OIDC_KEYCLOAK_PASSWORD);
+    await page.waitForURL(/^https:\/\/www\.dev\.local\/?/, { timeout: 15000 });
+    await siteHomePage.clickLogout();
+    await page.waitForURL(/^https:\/\/www\.dev\.local\/?/, { timeout: 15000 });
   });
 });

@@ -31,6 +31,7 @@ use Joomla\CMS\Uri\Uri;
 use Joomla\Component\Externallogin\Administrator\Authentication\ExternalAuthenticationResponse;
 use Joomla\Component\Externallogin\Administrator\Service\Logger\ExternalloginLogEntry;
 use Joomla\Component\Externallogin\Administrator\Table\ServerTable;
+use Joomla\Database\DatabaseInterface;
 use Joomla\Event\DispatcherInterface;
 use Joomla\Event\Event;
 use Joomla\Http\HttpFactory;
@@ -71,6 +72,21 @@ class Oidclogin extends CMSPlugin
      * @var array<string, mixed>
      */
     protected array $claims = [];
+
+    /**
+     * The externallogin server row bound to the user being logged out, captured by
+     * onUserLogout (before Joomla destroys the session) for onUserAfterLogout to redirect with,
+     * once the local session is already gone.
+     *
+     * @var object|null
+     */
+    protected $logoutServer;
+
+    /**
+     * The id_token retained from the user's OIDC login, captured by onUserLogout from session
+     * state before Joomla's own onUserLogout listener destroys it.
+     */
+    protected ?string $logoutIdToken = null;
 
     /**
      * Constructor.
@@ -361,6 +377,10 @@ class Oidclogin extends CMSPlugin
         $this->claims = array_merge($idTokenClaims, $userInfoClaims);
         $this->server = $server;
 
+        // Retained for RP-Initiated Logout's id_token_hint. Must be read back from session state
+        // during onUserLogout, before Joomla's own onUserLogout listener destroys the session.
+        $app->setUserState('system.oidclogin.idtoken.' . $serverID, (string) $tokens['id_token']);
+
         $service = Uri::getInstance();
 
         foreach (['code', 'state', 'error', 'error_description', 'session_state', 'iss'] as $var) {
@@ -476,6 +496,120 @@ class Oidclogin extends CMSPlugin
             $results[] = true;
             $event->setArgument('result', $results);
         }
+    }
+
+    /**
+     * User logout event.
+     *
+     * Captures the externallogin server and retained id_token for the user being logged out,
+     * while the session (and thus the id_token stored in it) is still intact — Joomla's own
+     * onUserLogout listener destroys the session immediately after this event, before
+     * onUserAfterLogout fires.
+     *
+     * @param array{id: int, username: string} $user
+     * @param array<string, mixed> $options
+     *
+     * @return bool
+     */
+    public function onUserLogout($user, $options = [])
+    {
+        /** @var CMSApplication */
+        $app = Factory::getApplication();
+        $db = Factory::getContainer()->get(DatabaseInterface::class);
+        $query = $db->getQuery(true);
+        $query->select('a.*')
+            ->from('#__externallogin_servers AS a')
+            ->leftJoin('#__externallogin_users AS e ON e.server_id = a.id')
+            ->where('a.plugin = ' . $db->quote('system.oidclogin'))
+            ->where('e.user_id = ' . (int) $user['id']);
+        $db->setQuery($query);
+        $server = $db->loadObject();
+
+        if (is_null($server)) {
+            return true;
+        }
+
+        $params = new Registry($server->params);
+
+        if (!boolval($params->get('autologout'))) {
+            return true;
+        }
+
+        $idToken = $app->getUserState('system.oidclogin.idtoken.' . $server->id);
+
+        if (!is_string($idToken) || $idToken === '') {
+            return true;
+        }
+
+        $this->logoutServer = $server;
+        $this->logoutIdToken = $idToken;
+
+        return true;
+    }
+
+    /**
+     * Redirect to the OIDC end_session_endpoint (RP-Initiated Logout) when a user logs out.
+     *
+     * Degrades to a local-only Joomla logout — never a hard failure — when autologout is off,
+     * no id_token was captured, or the IdP's discovery document has no end_session_endpoint.
+     */
+    public function onUserAfterLogout($options)
+    {
+        /** @var CMSApplication */
+        $app = Factory::getApplication();
+        $local = $app->getInput()->get('local');
+
+        if (isset($local) || $this->logoutServer === null || $this->logoutIdToken === null) {
+            return true;
+        }
+
+        $server = $this->logoutServer;
+        $params = new Registry($server->params);
+
+        $this->log(
+            $params,
+            'log_logout',
+            'system-oidclogin-logout',
+            'Logout of user "' . $options['username'] . '" on server ' . $server->id,
+            Log::INFO
+        );
+
+        // A null discovery document means the fetch itself failed; getDiscoveryDocument() has
+        // already logged that unconditionally, so don't log a second, misleading message here.
+        $discovery = $this->getDiscoveryDocument($params, $server->id);
+
+        if ($discovery === null) {
+            return true;
+        }
+
+        if (empty($discovery['end_session_endpoint'])) {
+            $this->log(
+                $params,
+                'log_logout',
+                'system-oidclogin-logout',
+                'No end_session_endpoint in discovery document on server ' . $server->id . ', falling back to local-only logout',
+                Log::WARNING
+            );
+
+            return true;
+        }
+
+        $query = [
+            'id_token_hint' => $this->logoutIdToken,
+        ];
+
+        $postLogoutRedirect = $params->get('post_logout_redirect');
+
+        if (!empty($postLogoutRedirect)) {
+            $query['post_logout_redirect_uri'] = $postLogoutRedirect;
+        }
+
+        $separator = str_contains((string) $discovery['end_session_endpoint'], '?') ? '&' : '?';
+        $redirect = $discovery['end_session_endpoint'] . $separator . http_build_query($query);
+
+        $app->redirect($redirect, 302);
+
+        return true;
     }
 
     /**
