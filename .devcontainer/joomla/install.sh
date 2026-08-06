@@ -116,7 +116,9 @@ if dc_exec joomla test -f /var/www/html/cli/joomla.php; then
   dc_exec joomla php /var/www/html/cli/joomla.php cache:clean || true
 
   echo "Adding CAS Server definition ..."
-  CAS_PARAMS='{"autoregister":"1","autoupdate":"1","ssl":"1","url":"auth.dev.local","dir":"realms/demo/protocol/cas","cas_v3":"1","port":"443","username_xpath":"string(cas:attributes/cas:email)","name_xpath":"string(cas:attributes/cas:display_name)","email_xpath":"string(cas:attributes/cas:email)"}'
+  # autologout: log out of the Keycloak CAS session too, so it doesn't linger as a Keycloak SSO
+  # session that silently re-authenticates a later OIDC login attempt with the CAS identity (#249).
+  CAS_PARAMS='{"autoregister":"1","autoupdate":"1","autologout":"1","ssl":"1","url":"auth.dev.local","dir":"realms/demo/protocol/cas","cas_v3":"1","port":"443","username_xpath":"string(cas:attributes/cas:email)","name_xpath":"string(cas:attributes/cas:display_name)","email_xpath":"string(cas:attributes/cas:email)"}'
   joomla_mysql -e "INSERT IGNORE INTO ${JOOMLA_DB_PREFIX}externallogin_servers (title, published, plugin, ordering, params) VALUES ('Keycloak CAS', 1, 'system.caslogin', 1, '${CAS_PARAMS}');"
 
   echo "Adding OIDC Server definition ..."
