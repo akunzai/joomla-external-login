@@ -172,6 +172,9 @@ class Caslogin extends CMSPlugin
      */
     public function onAfterInitialise(): void
     {
+        // Ensure language is loaded for translation (early-lifecycle timing gap, issue #251)
+        $this->loadLanguage();
+
         /** @var CMSApplication */
         $app = Factory::getApplication();
         $user = $app->getIdentity();
