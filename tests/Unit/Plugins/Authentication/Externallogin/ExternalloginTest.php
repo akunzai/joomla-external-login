@@ -222,7 +222,10 @@ class ExternalloginTest extends TestCase
         $database = $this->createMock(DatabaseInterface::class);
         $database->method('getQuery')->willReturn($this->createMockQuery());
         $database->method('createQuery')->willReturn($this->createMockQuery());
-        $database->method('loadResult')->willReturn(42); // existing user id
+        // First loadResult() call resolves the username to an existing user id; the second
+        // resolves that user's #__externallogin_users.server_id, which must match $server->id
+        // for the login to be allowed through.
+        $database->method('loadResult')->willReturnOnConsecutiveCalls(42, 1);
         $this->bindDatabase($database);
 
         $plugin = $this->createPlugin();
@@ -239,6 +242,83 @@ class ExternalloginTest extends TestCase
         // deprecation, issue #231).
         $this->assertFalse(isset($subject->server), 'server must not be set as a dynamic property on the plain AuthenticationResponse subject.');
         $this->assertFalse(isset($subject->groups), 'groups must not be set as a dynamic property on the plain AuthenticationResponse subject.');
+    }
+
+    /**
+     * Reproduces issue #254: without this check, a login resolving to an existing Joomla user
+     * succeeds regardless of which server (if any) that user is actually bound to, letting a
+     * matching username on an unrelated server hijack — or, with autoupdate on, silently
+     * overwrite the profile of — an account bound to a different server.
+     */
+    public function testExistingUserLinkedToDifferentServerIsDeniedWithAutoupdateOn(): void
+    {
+        $server = (object) ['id' => 1, 'params' => new Registry([
+            'regex_user' => '.*',
+            'regex_email' => '.*',
+            'autoupdate' => 1, // must not matter: the binding check runs before autoupdate
+        ])];
+        $this->bindDispatcherWithProtocolPlugin($server, 'eve', 'eve@example.com');
+
+        $database = $this->createMock(DatabaseInterface::class);
+        $database->method('getQuery')->willReturn($this->createMockQuery());
+        $database->method('createQuery')->willReturn($this->createMockQuery());
+        // Existing user id 42, bound to server 99 — not server 1, which is authenticating now.
+        $database->method('loadResult')->willReturnOnConsecutiveCalls(42, 99);
+        $this->bindDatabase($database);
+
+        $plugin = $this->createPlugin();
+        $event = $this->dispatch($plugin);
+
+        $this->assertSame(Authentication::STATUS_DENIED, $event->getAuthenticationResponse()->status);
+    }
+
+    public function testExistingUserLinkedToDifferentServerIsDeniedWithAutoupdateOff(): void
+    {
+        $server = (object) ['id' => 1, 'params' => new Registry([
+            'regex_user' => '.*',
+            'regex_email' => '.*',
+            'autoupdate' => 0,
+        ])];
+        $this->bindDispatcherWithProtocolPlugin($server, 'eve', 'eve@example.com');
+
+        $database = $this->createMock(DatabaseInterface::class);
+        $database->method('getQuery')->willReturn($this->createMockQuery());
+        $database->method('createQuery')->willReturn($this->createMockQuery());
+        // Existing user id 42, bound to server 99 — not server 1, which is authenticating now.
+        $database->method('loadResult')->willReturnOnConsecutiveCalls(42, 99);
+        $this->bindDatabase($database);
+
+        $plugin = $this->createPlugin();
+        $event = $this->dispatch($plugin);
+
+        $this->assertSame(Authentication::STATUS_DENIED, $event->getAuthenticationResponse()->status);
+    }
+
+    /**
+     * Mirrors Caslogin's own NO_ACTIVATED_SERVER case: a Joomla username collision with an
+     * account that was never activated for external login at all (no #__externallogin_users row)
+     * must not silently succeed just because autoupdate happens to be on.
+     */
+    public function testExistingUserWithNoServerBindingAtAllIsDenied(): void
+    {
+        $server = (object) ['id' => 1, 'params' => new Registry([
+            'regex_user' => '.*',
+            'regex_email' => '.*',
+            'autoupdate' => 1,
+        ])];
+        $this->bindDispatcherWithProtocolPlugin($server, 'frank', 'frank@example.com');
+
+        $database = $this->createMock(DatabaseInterface::class);
+        $database->method('getQuery')->willReturn($this->createMockQuery());
+        $database->method('createQuery')->willReturn($this->createMockQuery());
+        // Existing user id 42, but no #__externallogin_users row at all.
+        $database->method('loadResult')->willReturnOnConsecutiveCalls(42, null);
+        $this->bindDatabase($database);
+
+        $plugin = $this->createPlugin();
+        $event = $this->dispatch($plugin);
+
+        $this->assertSame(Authentication::STATUS_DENIED, $event->getAuthenticationResponse()->status);
     }
 
     public function testAutoupdateWithGroupsRunsExactlyOnce(): void
@@ -263,7 +343,9 @@ class ExternalloginTest extends TestCase
         $database = $this->createMock(DatabaseInterface::class);
         $database->method('getQuery')->willReturn($query);
         $database->method('createQuery')->willReturn($query);
-        $database->method('loadResult')->willReturn(42);
+        // First loadResult() call resolves the username to an existing user id; the second
+        // resolves that user's #__externallogin_users.server_id, matching $server->id.
+        $database->method('loadResult')->willReturnOnConsecutiveCalls(42, 1);
         // updateUser() issues exactly one DELETE + one INSERT against #__user_usergroup_map per
         // invocation. onUserAuthenticate() is the ONLY place this logic runs (onUserAuthorisation
         // was removed as dead code — see class docblock note), so a single onUserAuthenticate

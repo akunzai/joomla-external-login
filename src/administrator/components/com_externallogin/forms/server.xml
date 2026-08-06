@@ -153,6 +153,15 @@
 				<option value="">JDEFAULT</option>
 			</field>
 
+			<field
+				name="not_activated_redirect_menuitem"
+				type="menuitem"
+				label="COM_EXTERNALLOGIN_FIELD_SERVER_NOT_ACTIVATED_REDIRECTURL_LABEL"
+				description="COM_EXTERNALLOGIN_FIELD_SERVER_NOT_ACTIVATED_REDIRECTURL_DESC"
+				>
+				<option value="">JDEFAULT</option>
+			</field>
+
  	    </fieldset>
 		<fieldset
 			name="logging"
@@ -198,6 +207,16 @@
 				default="0"
 				label="COM_EXTERNALLOGIN_FIELD_SERVER_LOG_BLOCKED_LABEL"
 				description="COM_EXTERNALLOGIN_FIELD_SERVER_LOG_BLOCKED_DESC"
+			>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field
+				name="log_not_activated"
+				type="radio"
+				default="0"
+				label="COM_EXTERNALLOGIN_FIELD_SERVER_LOG_NOT_ACTIVATED_LABEL"
+				description="COM_EXTERNALLOGIN_FIELD_SERVER_LOG_NOT_ACTIVATED_DESC"
 			>
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
