@@ -150,6 +150,64 @@ class ExternalloginTest extends TestCase
             $event->getAuthenticationResponse()->status,
             'Blocked user must be denied on the true event subject, not just a disconnected local copy.'
         );
+        $this->assertTrue(
+            $event->isStopped(),
+            'A denied login is still a definitive decision by this plugin — propagation must stop so a later plugin (e.g. authentication/joomla) cannot overwrite it (issue #249).'
+        );
+    }
+
+    /**
+     * Reproduces issue #249: once the protocol plugin has made a decision on this login attempt
+     * (here, a denial because auto-register is disabled for an unknown user), a later
+     * authentication/joomla-like plugin — which always fails on the empty credentials CAS/OIDC
+     * logins submit — must never get a chance to run and clobber the specific denial reason with
+     * its own generic message.
+     */
+    public function testDeniedLoginStopsPropagationBeforeTheCoreJoomlaPluginCanOverwriteIt(): void
+    {
+        $server = (object) ['id' => 1, 'params' => new Registry([
+            'regex_user' => '.*',
+            'regex_email' => '.*',
+            'autoregister' => 0,
+        ])];
+        $this->bindDispatcherWithProtocolPlugin($server, 'dave', 'dave@example.com');
+
+        $database = $this->createMock(DatabaseInterface::class);
+        $database->method('getQuery')->willReturn($this->createMockQuery());
+        $database->method('createQuery')->willReturn($this->createMockQuery());
+        $database->method('loadResult')->willReturn(null); // unknown user
+        $this->bindDatabase($database);
+
+        $plugin = $this->createPlugin();
+
+        // Simulate the real onUserAuthenticate chain: externallogin (ordering 0) runs first,
+        // then a core-Joomla-like plugin (ordering 2) that always fails empty credentials and
+        // unconditionally overwrites the shared response, exactly like plugins/authentication/joomla.
+        $coreJoomlaLikePluginRan = false;
+        $chainDispatcher = new Dispatcher();
+        $chainDispatcher->addListener('onUserAuthenticate', [$plugin, 'onUserAuthenticate']);
+        $chainDispatcher->addListener('onUserAuthenticate', function (AuthenticationEvent $event) use (&$coreJoomlaLikePluginRan) {
+            $coreJoomlaLikePluginRan = true;
+            $response = $event->getAuthenticationResponse();
+            $response->status = Authentication::STATUS_FAILURE;
+            $response->error_message = 'Empty password not allowed.';
+        });
+
+        $subject = new AuthenticationResponse();
+        $event = new AuthenticationEvent('onUserAuthenticate', [
+            'credentials' => ['username' => '', 'password' => ''],
+            'options' => [],
+            'subject' => $subject,
+        ]);
+        $chainDispatcher->dispatch('onUserAuthenticate', $event);
+
+        $this->assertFalse(
+            $coreJoomlaLikePluginRan,
+            'Propagation must stop after externallogin denies the login, before a later core plugin can run.'
+        );
+        // userLoginFail()'s default status for an unknown user with auto-register disabled.
+        $this->assertSame(Authentication::STATUS_DENIED | Authentication::STATUS_UNKNOWN, $event->getAuthenticationResponse()->status);
+        $this->assertNotSame('Empty password not allowed.', $event->getAuthenticationResponse()->error_message);
     }
 
     public function testSuccessfulExistingUserLoginDoesNotAddDynamicPropertiesToTheSubject(): void
