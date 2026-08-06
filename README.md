@@ -44,7 +44,7 @@ Navigate to `System->Install->Extensions` in Joomla! backend and upload the pack
 
 ## Known limitations
 
-- **CAS: one server per account.** The CAS plugin binds a Joomla account to the specific CAS server it first authenticated against. If that account later tries to log in through a *different* CAS server, the plugin rejects the login rather than silently accepting it. This matters if you configure more than one CAS server (or a CAS server alongside an OIDC server) and expect the same username to log in through either one — it won't, unless the account is registered for that server. There is currently no admin UI to add or change this binding manually; a Joomla administrator can edit it directly via `Components -> External Login -> Users`.
+- **One server per account.** A Joomla account binds to the specific server (CAS or OIDC) it first authenticated against, enforced uniformly for every protocol by the shared `authentication/externallogin` bridge plugin. If that account later tries to log in through a *different* server — including a different server of the same protocol — the login is rejected rather than silently accepted or merged. This matters if you configure more than one server (e.g. two CAS servers, or a CAS server alongside an OIDC server) and expect the same username to log in through either one — it won't, unless the account is registered for that server. There is currently no admin UI to add or change this binding manually; a Joomla administrator can edit it directly via `Components -> External Login -> Users`. See [ADR 0001](docs/adr/0001-one-account-binds-one-external-login-server.md) for the rationale.
 
 ## History of this extension
 

@@ -55,7 +55,12 @@ class Externallogin extends CMSPlugin
         Log::addLogger(
             ['logger' => 'externallogin', 'db_table' => '#__externallogin_logs', 'plugin' => 'authentication-externallogin'],
             Log::ALL,
-            ['authentication-externallogin-autoregister', 'authentication-externallogin-autoupdate', 'authentication-externallogin-blocked']
+            [
+                'authentication-externallogin-autoregister',
+                'authentication-externallogin-autoupdate',
+                'authentication-externallogin-blocked',
+                'authentication-externallogin-activation',
+            ]
         );
     }
 
@@ -124,6 +129,18 @@ class Externallogin extends CMSPlugin
                     }
                     $this->userLoginFail($response, $params->get('unknown_redirect_menuitem'));
                 }
+            } elseif (!$this->isActivatedForServer($userId, intval($response->server->id))) {
+                if (boolval($params->get('log_not_activated', 0))) {
+                    Log::add(
+                        new ExternalloginLogEntry(
+                            'User "' . $response->username . '" is trying to login on server ' . $response->server->id
+                                . ' but is not activated for this server',
+                            Log::WARNING,
+                            'authentication-externallogin-activation'
+                        )
+                    );
+                }
+                $this->userLoginFail($response, $params->get('not_activated_redirect_menuitem'), Authentication::STATUS_DENIED);
             } elseif (boolval($params->get('autoupdate', 0))) {
                 $this->updateUser($response, $userId);
             }
@@ -320,8 +337,28 @@ class Externallogin extends CMSPlugin
             );
         }
         Access::clearStatics();
-        $this->addLoginRecord($response, $userId, true);
         return $response;
+    }
+
+    /**
+     * Whether an existing Joomla user is bound (`#__externallogin_users`) to the given server.
+     * A user with no binding row at all (e.g. a native Joomla account never activated for
+     * external login) is treated the same as one bound to a different server — false either way.
+     *
+     * @param int $userId
+     * @param int $serverId
+     *
+     * @return bool
+     */
+    private function isActivatedForServer($userId, $serverId)
+    {
+        $db = Factory::getContainer()->get(DatabaseInterface::class);
+        $query = $db->getQuery(true);
+        $query->select('server_id')->from('#__externallogin_users')->where('user_id = ' . $userId);
+        $db->setQuery($query);
+        $boundServerId = $db->loadResult();
+
+        return $boundServerId !== null && intval($boundServerId) === $serverId;
     }
 
     /**
@@ -365,21 +402,10 @@ class Externallogin extends CMSPlugin
     /**
      * @param ExternalAuthenticationResponse $response
      * @param int $userId
-     * @param bool $isSkipExisting
      */
-    private function addLoginRecord($response, $userId, $isSkipExisting = false)
+    private function addLoginRecord($response, $userId)
     {
         $db = Factory::getContainer()->get(DatabaseInterface::class);
-        if ($isSkipExisting) {
-            $query = $db->getQuery(true);
-            $query->select('*')->from('#__externallogin_users')->where('user_id = ' . $userId);
-            $db->setQuery($query);
-            $results = $db->loadObject();
-            if (!empty($results)) {
-                return;
-            }
-        }
-
         $query = $db->getQuery(true);
         $serverId = intval($response->server->id);
         $query->insert(
