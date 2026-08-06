@@ -428,7 +428,7 @@ class Caslogin extends CMSPlugin
                     }
 
                     if (!$access) {
-                        $app->enqueueMessage(Text::_('PLG_SYSTEM_CASLOGIN_NO_ACTIVATED_SERVER'), 'error');
+                        $app->enqueueMessage(Text::_('PLG_SYSTEM_CASLOGIN_NO_ACTIVATION_ON_SERVER'), 'error');
                     }
                 }
             } catch (Exception $e) {
