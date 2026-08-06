@@ -142,9 +142,13 @@ class Externallogin extends CMSPlugin
             }
         }
 
-        if ($response->status === Authentication::STATUS_SUCCESS) {
-            $event->stopPropagation();
-        }
+        // A protocol plugin (caslogin/oidclogin) already made a definitive decision on this
+        // attempt — success or a specific denial (blocked/unknown-user/failed autoregister).
+        // Stop propagation regardless of outcome: CAS/OIDC logins never populate
+        // username/password, so leaving the event open lets a later core plugin (e.g.
+        // authentication/joomla) treat the empty credentials as its own failure and overwrite
+        // this response's status/error_message with a generic, misleading one (issue #249).
+        $event->stopPropagation();
     }
 
     /**
