@@ -28,7 +28,10 @@ export class ServersPage {
   }
 
   async getServerRow(title: string): Promise<Locator> {
-    return this.page.locator('tr').filter({ hasText: title });
+    // Match by exact server title link so "Keycloak CAS" does not also match "Keycloak OIDC".
+    return this.page.locator('tr').filter({
+      has: this.page.getByRole('link', { name: title, exact: true }),
+    });
   }
 
   async selectServer(title: string) {

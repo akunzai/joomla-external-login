@@ -23,7 +23,26 @@ export class SiteHomePage {
     await this.page.goto('/');
   }
 
-  async clickExternalLogin() {
+  /**
+   * Click the External Login module's submit button. When more than one
+   * server is configured, the module renders a server-selection dropdown
+   * ahead of the shared "Log in" submit button; pass `serverTitle` to pick
+   * a specific server (matched against the dropdown's option text), or
+   * omit it to use the first configured server (its default selection).
+   */
+  async clickExternalLogin(serverTitle?: string) {
+    const select = this.externalLoginModule.locator('select');
+
+    if (await select.isVisible({ timeout: 1000 }).catch(() => false)) {
+      if (serverTitle) {
+        await select.selectOption({ label: serverTitle });
+      } else {
+        // Option index 0 is the placeholder "Select..." entry; 1 is the first real server.
+        const firstServerValue = await select.locator('option').nth(1).getAttribute('value');
+        await select.selectOption({ value: firstServerValue ?? '' });
+      }
+    }
+
     await this.externalLoginButton.click();
   }
 

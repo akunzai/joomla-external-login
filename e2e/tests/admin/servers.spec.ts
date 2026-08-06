@@ -13,29 +13,31 @@ test.describe('External Login Servers', () => {
     await expect(serversPage.newButton).toBeVisible();
   });
 
-  test('should show Keycloak server', async ({ serversPage }) => {
+  test('should show Keycloak CAS and OIDC servers', async ({ serversPage }) => {
     await serversPage.goto();
 
-    const keycloakRow = await serversPage.getServerRow('Keycloak');
-    await expect(keycloakRow).toBeVisible();
+    const casRow = await serversPage.getServerRow('Keycloak CAS');
+    await expect(casRow).toBeVisible();
+    await expect(casRow.getByRole('cell', { name: 'CAS', exact: true })).toBeVisible();
 
-    // Check plugin column shows CAS in the row
-    await expect(keycloakRow.getByText('CAS')).toBeVisible();
+    const oidcRow = await serversPage.getServerRow('Keycloak OIDC');
+    await expect(oidcRow).toBeVisible();
+    await expect(oidcRow.getByRole('cell', { name: 'OIDC', exact: true })).toBeVisible();
   });
 
   test('should open server edit page', async ({ serversPage, serverEditPage }) => {
     await serversPage.goto();
-    await serversPage.clickServerLink('Keycloak');
+    await serversPage.clickServerLink('Keycloak CAS');
 
-    await expect(serverEditPage.titleInput).toHaveValue('Keycloak');
+    await expect(serverEditPage.titleInput).toHaveValue('Keycloak CAS');
   });
 
   test('should edit server settings', async ({ serversPage, serverEditPage, page }) => {
     await serversPage.goto();
-    await serversPage.clickServerLink('Keycloak');
+    await serversPage.clickServerLink('Keycloak CAS');
 
     // Verify current settings
-    await expect(serverEditPage.titleInput).toHaveValue('Keycloak');
+    await expect(serverEditPage.titleInput).toHaveValue('Keycloak CAS');
 
     // Check auto-register is enabled
     await expect(serverEditPage.autoRegisterYes).toBeChecked();
@@ -52,23 +54,23 @@ test.describe('External Login Servers', () => {
     await serversPage.goto();
 
     // Get initial status
-    const keycloakRow = await serversPage.getServerRow('Keycloak');
+    const keycloakRow = await serversPage.getServerRow('Keycloak CAS');
     await expect(keycloakRow).toBeVisible();
 
     // Select and unpublish
-    await serversPage.selectServer('Keycloak');
+    await serversPage.selectServer('Keycloak CAS');
     await serversPage.unpublishButton.click();
 
     // Wait for page refresh
     await page.waitForTimeout(1000);
 
     // Select and publish again
-    await serversPage.selectServer('Keycloak');
+    await serversPage.selectServer('Keycloak CAS');
     await serversPage.publishButton.click();
 
     // Verify it's published
     await page.waitForTimeout(1000);
-    const row = await serversPage.getServerRow('Keycloak');
+    const row = await serversPage.getServerRow('Keycloak CAS');
     await expect(row).toBeVisible();
   });
 });
