@@ -57,8 +57,8 @@ docker compose -f compose.yml -f compose.debug.yml up -d
 ### Keycloak user
 
 - realm: `demo`
-- Username: `test` or `test-oidc`
-- Password: `test` or `test-oidc`
+- Username: `test` or `test2`
+- Password: `test` or `test2`
 
 ## Setup
 

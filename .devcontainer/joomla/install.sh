@@ -122,7 +122,10 @@ if dc_exec joomla test -f /var/www/html/cli/joomla.php; then
   joomla_mysql -e "INSERT IGNORE INTO ${JOOMLA_DB_PREFIX}externallogin_servers (title, published, plugin, ordering, params) VALUES ('Keycloak CAS', 1, 'system.caslogin', 1, '${CAS_PARAMS}');"
 
   echo "Adding OIDC Server definition ..."
-  OIDC_PARAMS='{"autoregister":"1","autoupdate":"1","issuer":"https://auth.dev.local/realms/demo","client_id":"joomla-oidc","client_secret":"dev-oidc-secret","username_claim":"preferred_username","name_claim":"name","email_claim":"email"}'
+  # autologout: end the Keycloak OIDC session too (RP-Initiated Logout), mirroring the CAS
+  # server's own autologout above (#249); post_logout_redirect sends the browser back to the
+  # site so e2e can assert on the resulting page after the round trip.
+  OIDC_PARAMS='{"autoregister":"1","autoupdate":"1","autologout":"1","post_logout_redirect":"https://www.dev.local/","issuer":"https://auth.dev.local/realms/demo","client_id":"joomla-oidc","client_secret":"dev-oidc-secret","username_claim":"preferred_username","name_claim":"name","email_claim":"email"}'
   joomla_mysql -e "INSERT IGNORE INTO ${JOOMLA_DB_PREFIX}externallogin_servers (title, published, plugin, ordering, params) VALUES ('Keycloak OIDC', 1, 'system.oidclogin', 2, '${OIDC_PARAMS}');"
 
   echo "Configuring External Login module ..."

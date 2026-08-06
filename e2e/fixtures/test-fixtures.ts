@@ -16,14 +16,13 @@ export const KEYCLOAK_USERNAME = 'test';
 export const KEYCLOAK_PASSWORD = 'test';
 export const KEYCLOAK_USER_EMAIL = 'test@example.com';
 export const KEYCLOAK_USER_DISPLAY_NAME = 'Foo Bar';
-// A separate Keycloak identity for the OIDC suite: it must not share the CAS
-// suite's KEYCLOAK_USERNAME identity, since CAS enforces its own "activated
-// for this server" binding once a Joomla account exists for a username —
-// which would otherwise reject the CAS suite's login after the OIDC suite
-// registers the same account against a different server.
-export const OIDC_KEYCLOAK_USERNAME = 'test-oidc';
-export const OIDC_KEYCLOAK_PASSWORD = 'test-oidc';
-export const OIDC_KEYCLOAK_USER_EMAIL = 'test-oidc@example.com';
+// A second Keycloak identity, not inherently tied to OIDC: the externallogin bridge plugin
+// binds a Joomla account to whichever server first logs it in, so reusing KEYCLOAK_USERNAME
+// here would make the OIDC suite's login attempt get rejected as "not activated for this
+// server" once the CAS suite has already registered that identity against the CAS server.
+export const OIDC_KEYCLOAK_USERNAME = 'test2';
+export const OIDC_KEYCLOAK_PASSWORD = 'test2';
+export const OIDC_KEYCLOAK_USER_EMAIL = 'test2@example.com';
 
 // Define fixture types
 type Fixtures = {
