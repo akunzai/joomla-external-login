@@ -75,6 +75,14 @@
       "clientRole" : false,
       "containerId" : "d6d2a42d-e33a-493d-b150-fb09e7d48d0d",
       "attributes" : { }
+    }, {
+      "id" : "c2e63671-23c9-40d4-8a3a-be4ef6555c25",
+      "name" : "Editor",
+      "description" : "Maps to the Joomla \"Editor\" group for OIDC group-mapping e2e coverage",
+      "composite" : false,
+      "clientRole" : false,
+      "containerId" : "d6d2a42d-e33a-493d-b150-fb09e7d48d0d",
+      "attributes" : { }
     } ],
     "client" : {
       "realm-management" : [ {
@@ -1253,6 +1261,7 @@
       "config" : {
         "user.attribute" : "foo",
         "access.token.claim" : "true",
+        "userinfo.token.claim" : "true",
         "claim.name" : "resource_access.${client_id}.roles",
         "jsonType.label" : "String",
         "multivalued" : "true"
@@ -1273,6 +1282,7 @@
       "config" : {
         "user.attribute" : "foo",
         "access.token.claim" : "true",
+        "userinfo.token.claim" : "true",
         "claim.name" : "realm_access.roles",
         "jsonType.label" : "String",
         "multivalued" : "true"

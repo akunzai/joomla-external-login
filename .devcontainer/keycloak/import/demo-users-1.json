@@ -17,7 +17,7 @@
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
-    "realmRoles" : [ "default-roles-demo" ],
+    "realmRoles" : [ "default-roles-demo", "Editor" ],
     "notBefore" : 0,
     "groups" : [ ]
   } ]
