@@ -32,6 +32,26 @@ class CasloginTest extends TestCase
 {
     use TestDatabaseTrait;
 
+    protected function setUp(): void
+    {
+        // The email_verified_xpath denial branch calls Text::_(...), which goes through
+        // Factory::getLanguage(). Stub Factory::$language so unit tests never hit the
+        // createLanguage() path (needs JPATH_CONFIGURATION / a full CMS bootstrap).
+        Factory::$language = new class {
+            public function _($string, $jsSafe = false, $interpretBackSlashes = true): string
+            {
+                return $string;
+            }
+        };
+    }
+
+    protected function tearDown(): void
+    {
+        // Keep TestDatabaseTrait's container reset — class tearDown replaces the trait method.
+        Factory::$container = null;
+        Factory::$language = null;
+    }
+
     /**
      * Parses $xml exactly as Caslogin::onAfterInitialise() does, returning
      * the [DOMXPath, authenticationSuccess node] pair the plugin caches on
@@ -154,8 +174,13 @@ class CasloginTest extends TestCase
 
         $event = $this->dispatch($plugin, $response);
 
-        $this->assertSame(Authentication::STATUS_FAILURE, $response->status);
-        $this->assertEmpty($event->getArgument('result', []));
+        // Must claim the attempt (non-empty result) so authentication/externallogin stops
+        // propagation and the core authentication/joomla plugin cannot overwrite the denial
+        // with "Empty password not allowed." (#249-class bug on the email_verified deny path).
+        $this->assertSame(Authentication::STATUS_DENIED, $response->status);
+        $this->assertContains(true, $event->getArgument('result', []));
+        $this->assertNotSame('', (string) $response->error_message);
+        $this->assertStringNotContainsStringIgnoringCase('Empty password', (string) $response->error_message);
     }
 
     /**

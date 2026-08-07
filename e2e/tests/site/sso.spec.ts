@@ -205,6 +205,11 @@ test.describe('SSO with Keycloak', () => {
       // Verify user is NOT logged in (denied)
       const isLoggedIn = await siteHomePage.isLoggedIn();
       expect(isLoggedIn).toBe(false);
+
+      // Protocol-level denials must claim the auth attempt so core authentication/joomla
+      // cannot clobber the real reason with its empty-credentials fallback (#249-class bug).
+      await expect(page.getByText(/Empty password not allowed/i)).toHaveCount(0);
+      await expect(page.getByText(/email address is not verified/i)).toBeVisible();
     } finally {
       // Restore the seeded email_verified_xpath (rather than clearing it), so the demo server
       // keeps demonstrating the pass-path with the check active for later runs/tests.

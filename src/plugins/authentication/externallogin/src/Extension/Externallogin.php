@@ -165,7 +165,8 @@ class Externallogin extends CMSPlugin
         }
 
         // A protocol plugin (caslogin/oidclogin) already made a definitive decision on this
-        // attempt — success or a specific denial (blocked/unknown-user/failed autoregister).
+        // attempt — success, a bridge-side denial (blocked/unknown-user/not-activated), or a
+        // protocol-side denial (e.g. email_verified / email_verified_xpath resolving false).
         // Stop propagation regardless of outcome: CAS/OIDC logins never populate
         // username/password, so leaving the event open lets a later core plugin (e.g.
         // authentication/joomla) treat the empty credentials as its own failure and overwrite

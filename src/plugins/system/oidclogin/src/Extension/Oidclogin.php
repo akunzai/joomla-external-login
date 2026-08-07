@@ -540,6 +540,32 @@ class Oidclogin extends CMSPlugin
         if (ClaimsResolver::resolve($this->claims, 'email_verified') === false) {
             $this->log($params, 'log_login', 'system-oidclogin-login', 'Unverified email claim (email_verified=false) on server ' . $server->id, Log::WARNING);
 
+            // Claim this attempt with an explicit denial rather than a silent early return.
+            // Leaving result empty lets authentication/externallogin skip stopPropagation(), so
+            // a later core plugin (authentication/joomla) overwrites the response with the
+            // misleading "Empty password not allowed." message (same class of bug as #249).
+            // @phpstan-ignore assign.propertyType
+            $extResponse->status = Authentication::STATUS_DENIED;
+            $extResponse->type = 'system.oidclogin';
+            $extResponse->error_message = Text::_('PLG_SYSTEM_OIDCLOGIN_EMAIL_NOT_VERIFIED');
+
+            if ($response !== $extResponse) {
+                // @phpstan-ignore assign.propertyType
+                $response->status = $extResponse->status;
+                $response->type = $extResponse->type;
+                $response->error_message = $extResponse->error_message;
+            }
+
+            $event->setArgument('response', $extResponse);
+
+            if ($event instanceof ResultAwareInterface) {
+                $event->addResult(true);
+            } else {
+                $results = $event->getArgument('result', []);
+                $results[] = true;
+                $event->setArgument('result', $results);
+            }
+
             return;
         }
 
