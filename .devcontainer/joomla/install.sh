@@ -125,7 +125,13 @@ if dc_exec joomla test -f /var/www/html/cli/joomla.php; then
   # autologout: end the Keycloak OIDC session too (RP-Initiated Logout), mirroring the CAS
   # server's own autologout above (#249); post_logout_redirect sends the browser back to the
   # site so e2e can assert on the resulting page after the round trip.
-  OIDC_PARAMS='{"autoregister":"1","autoupdate":"1","autologout":"1","post_logout_redirect":"https://www.dev.local/","issuer":"https://auth.dev.local/realms/demo","client_id":"joomla-oidc","client_secret":"dev-oidc-secret","username_claim":"preferred_username","name_claim":"name","email_claim":"email"}'
+  # username_claim: email, matching the CAS server's username_xpath above, so the same Keycloak
+  # identity resolves to the same Joomla username across both protocols — letting the shared
+  # isActivatedForServer cross-server binding check (#254) catch identity reuse uniformly instead
+  # of falling through to a raw Joomla core "duplicate email" registration failure.
+  # groups_claim: realm_access.roles, Keycloak's default location for realm-role claims, so a
+  # fresh devcontainer already exercises OIDC group/role mapping (#239) out of the box.
+  OIDC_PARAMS='{"autoregister":"1","autoupdate":"1","autologout":"1","post_logout_redirect":"https://www.dev.local/","issuer":"https://auth.dev.local/realms/demo","client_id":"joomla-oidc","client_secret":"dev-oidc-secret","username_claim":"email","name_claim":"name","email_claim":"email","groups_claim":"realm_access.roles"}'
   joomla_mysql -e "INSERT IGNORE INTO ${JOOMLA_DB_PREFIX}externallogin_servers (title, published, plugin, ordering, params) VALUES ('Keycloak OIDC', 1, 'system.oidclogin', 2, '${OIDC_PARAMS}');"
 
   echo "Configuring External Login module ..."

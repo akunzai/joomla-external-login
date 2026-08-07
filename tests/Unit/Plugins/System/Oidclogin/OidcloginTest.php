@@ -5,12 +5,15 @@ namespace Tests\Unit\Plugins\System\Oidclogin;
 use Joomla\CMS\Authentication\Authentication;
 use Joomla\CMS\Authentication\AuthenticationResponse;
 use Joomla\Component\Externallogin\Administrator\Authentication\ExternalAuthenticationResponse;
+use Joomla\Database\DatabaseInterface;
 use Joomla\Event\Event;
 use Joomla\Plugin\System\Oidclogin\Extension\Oidclogin;
 use Joomla\Registry\Registry;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use Tests\Unit\Traits\TestDatabaseTrait;
 
 /**
  * Exercises Oidclogin::onExternalLogin() — the dot-path claims-extraction
@@ -25,6 +28,8 @@ use ReflectionClass;
 #[CoversClass(Oidclogin::class)]
 class OidcloginTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     /**
      * Builds an Oidclogin instance with $claims/$server pre-set via
      * reflection, ready to call onExternalLogin() on directly.
@@ -176,5 +181,125 @@ class OidcloginTest extends TestCase
         $this->assertSame('carol', $response->username);
         $this->assertSame('carol@example.com', $response->email);
         $this->assertSame('Carol Example', $response->fullname);
+    }
+
+    public function testGroupsClaimEmptyLeavesGroupsUnset(): void
+    {
+        $plugin = $this->createPlugin(self::BASE_CLAIMS, self::BASE_PARAMS + ['groups_claim' => '']);
+        $response = new ExternalAuthenticationResponse();
+
+        $this->dispatch($plugin, $response);
+
+        $this->assertFalse(isset($response->groups));
+    }
+
+    public function testGroupsClaimMissingFromClaimsLeavesGroupsUnset(): void
+    {
+        $params = self::BASE_PARAMS + ['groups_claim' => 'realm_access.roles'];
+        $plugin = $this->createPlugin(self::BASE_CLAIMS, $params);
+        $response = new ExternalAuthenticationResponse();
+
+        $this->dispatch($plugin, $response);
+
+        $this->assertFalse(isset($response->groups));
+    }
+
+    public function testGroupsClaimResolvesNestedKeycloakRealmAccessRolesShape(): void
+    {
+        // Keycloak's default claim shape: realm_access.roles, a flat array of role names.
+        $query = $this->createMockQuery();
+        $query->method('leftJoin')->willReturnSelf();
+
+        $database = $this->createMock(DatabaseInterface::class);
+        $database->method('quote')->willReturnCallback(fn ($text) => "'" . $text . "'");
+        $database->method('getQuery')->willReturn($query);
+        $database->method('loadColumn')->willReturn([5]);
+
+        $this->bindDatabase($database);
+
+        $claims = self::BASE_CLAIMS + ['realm_access' => ['roles' => ['Public/Editors']]];
+        $params = self::BASE_PARAMS + ['groups_claim' => 'realm_access.roles', 'group_separator' => '/'];
+        $plugin = $this->createPlugin($claims, $params);
+        $response = new ExternalAuthenticationResponse();
+
+        $this->dispatch($plugin, $response);
+
+        $this->assertSame([5], $response->groups);
+    }
+
+    /**
+     * @return iterable<string, array{string, int|null, array<string>}>
+     */
+    public static function numericGroupProvider(): iterable
+    {
+        yield 'existing group' => ['7', 7, ['7']];
+        yield 'missing group' => ['999', null, []];
+    }
+
+    #[DataProvider('numericGroupProvider')]
+    public function testNumericGroupWhenGroupIntegerEnabled(string $group, ?int $databaseResult, array $expectedGroups): void
+    {
+        $query = $this->createMockQuery();
+
+        $database = $this->createMock(DatabaseInterface::class);
+        $database->method('getQuery')->willReturn($query);
+        $database->method('loadResult')->willReturn($databaseResult);
+
+        $this->bindDatabase($database);
+
+        $claims = self::BASE_CLAIMS + ['roles' => [$group]];
+        $params = self::BASE_PARAMS + ['groups_claim' => 'roles', 'group_integer' => 1];
+        $plugin = $this->createPlugin($claims, $params);
+        $response = new ExternalAuthenticationResponse();
+
+        $this->dispatch($plugin, $response);
+
+        $this->assertSame($expectedGroups, $response->groups);
+    }
+
+    public function testGroupSeparatorControlsHowStringGroupsAreSplit(): void
+    {
+        $query = $this->createMockQuery();
+        $query->method('leftJoin')->willReturnSelf();
+
+        $database = $this->createMock(DatabaseInterface::class);
+        $database->method('quote')->willReturnCallback(fn ($text) => "'" . $text . "'");
+        $database->method('getQuery')->willReturn($query);
+        $database->method('loadColumn')->willReturn([9]);
+
+        $this->bindDatabase($database);
+
+        $claims = self::BASE_CLAIMS + ['roles' => ['Public:Editors']];
+        $params = self::BASE_PARAMS + ['groups_claim' => 'roles', 'group_separator' => ':'];
+        $plugin = $this->createPlugin($claims, $params);
+        $response = new ExternalAuthenticationResponse();
+
+        $this->dispatch($plugin, $response);
+
+        $this->assertSame([9], $response->groups);
+    }
+
+    public function testGroupValuesWithNoMatchingJoomlaGroupStillSucceedsWithEmptyGroups(): void
+    {
+        $query = $this->createMockQuery();
+        $query->method('leftJoin')->willReturnSelf();
+
+        $database = $this->createMock(DatabaseInterface::class);
+        $database->method('quote')->willReturnCallback(fn ($text) => "'" . $text . "'");
+        $database->method('getQuery')->willReturn($query);
+        $database->method('loadColumn')->willReturn([]);
+
+        $this->bindDatabase($database);
+
+        $claims = self::BASE_CLAIMS + ['roles' => ['no-such-group']];
+        $params = self::BASE_PARAMS + ['groups_claim' => 'roles'];
+        $plugin = $this->createPlugin($claims, $params);
+        $response = new ExternalAuthenticationResponse();
+
+        $event = $this->dispatch($plugin, $response);
+
+        $this->assertSame(Authentication::STATUS_SUCCESS, $response->status);
+        $this->assertSame([], $response->groups);
+        $this->assertContains(true, $event->getArgument('result', []));
     }
 }

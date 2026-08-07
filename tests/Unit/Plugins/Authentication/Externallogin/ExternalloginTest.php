@@ -33,11 +33,32 @@ use ReflectionClass;
 #[CoversClass(Externallogin::class)]
 class ExternalloginTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        // The isActivatedForServer denial branch calls Factory::getApplication()->enqueueMessage(
+        // Text::_(...)). Stub just enough of the application/language surface to satisfy that —
+        // Factory::$language short-circuits Factory::getLanguage() before it reaches the deprecated
+        // createLanguage() path, which needs a real config/container/LanguageFactoryInterface.
+        Factory::$application = new class {
+            public function enqueueMessage($msg, $type = 'message'): void
+            {
+            }
+        };
+        Factory::$language = new class {
+            public function _($string, $jsSafe = false, $interpretBackSlashes = true): string
+            {
+                return $string;
+            }
+        };
+    }
+
     protected function tearDown(): void
     {
-        // Factory::$container/$database are static and shared across tests.
+        // Factory::$container/$database/$application/$language are static and shared across tests.
         Factory::$container = null;
         Factory::$database = null;
+        Factory::$application = null;
+        Factory::$language = null;
     }
 
     private function createPlugin(): Externallogin

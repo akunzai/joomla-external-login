@@ -29,6 +29,7 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Session\Session;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Component\Externallogin\Administrator\Authentication\ExternalAuthenticationResponse;
+use Joomla\Component\Externallogin\Administrator\Helper\ExternalloginHelper;
 use Joomla\Component\Externallogin\Administrator\Service\Logger\ExternalloginLogEntry;
 use Joomla\Component\Externallogin\Administrator\Table\ServerTable;
 use Joomla\Database\DatabaseInterface;
@@ -488,6 +489,112 @@ class Oidclogin extends CMSPlugin
             $response->username = $extResponse->username;
             $response->email = $extResponse->email;
             $response->fullname = $extResponse->fullname;
+        }
+
+        $event->setArgument('response', $extResponse);
+
+        $groupsClaim = (string) $params->get('groups_claim', '');
+
+        if ($groupsClaim === '') {
+            if ($event instanceof ResultAwareInterface) {
+                $event->addResult(true);
+            } else {
+                $results = $event->getArgument('result', []);
+                $results[] = true;
+                $event->setArgument('result', $results);
+            }
+
+            return;
+        }
+
+        $groupValues = ClaimsResolver::resolve($this->claims, $groupsClaim);
+
+        if (!is_array($groupValues) || empty($groupValues)) {
+            $this->log(
+                $params,
+                'log_groups',
+                'system-oidclogin-groups',
+                'Unsuccessful detection of groups for user "' . $extResponse->username . '" on server ' . $server->id,
+                Log::WARNING
+            );
+
+            if ($event instanceof ResultAwareInterface) {
+                $event->addResult(true);
+            } else {
+                $results = $event->getArgument('result', []);
+                $results[] = true;
+                $event->setArgument('result', $results);
+            }
+
+            return;
+        }
+
+        $this->log(
+            $params,
+            'log_groups',
+            'system-oidclogin-groups',
+            'Successful detection of groups for user "' . $extResponse->username . '" on server ' . $server->id,
+            Log::INFO
+        );
+
+        $extResponse->groups = [];
+
+        foreach ($groupValues as $groupValue) {
+            if (!is_scalar($groupValue)) {
+                continue;
+            }
+
+            $group = (string) $groupValue;
+
+            if ($group === '') {
+                continue;
+            }
+
+            if (is_numeric($group) && $params->get('group_integer', 0)) {
+                $this->log(
+                    $params,
+                    'log_groups',
+                    'system-oidclogin-groups',
+                    'Found integer group ' . $group . ' of groups for user "' . $extResponse->username . '" on server ' . $server->id,
+                    Log::INFO
+                );
+
+                $dbo = Factory::getContainer()->get(DatabaseInterface::class);
+                $query = $dbo->getQuery(true);
+                $query->select('id')
+                    ->from('#__usergroups')
+                    ->where('id = ' . (int) $group);
+                $dbo->setQuery($query);
+
+                if ($dbo->loadResult()) {
+                    $this->log(
+                        $params,
+                        'log_groups',
+                        'system-oidclogin-groups',
+                        'Added integer group ' . $group . ' of groups for user "' . $extResponse->username . '" on server ' . $server->id,
+                        Log::INFO
+                    );
+                    $extResponse->groups[] = $group;
+                }
+
+                continue;
+            }
+
+            $this->log(
+                $params,
+                'log_groups',
+                'system-oidclogin-groups',
+                'Found string group(s) "' . $group . '" for user "' . $extResponse->username . '" on server ' . $server->id,
+                Log::INFO
+            );
+
+            $newGroups = (array) ExternalloginHelper::getGroups($group, (string) $params->get('group_separator', ''));
+            $extResponse->groups = array_merge($extResponse->groups, $newGroups);
+
+            $message = empty($newGroups)
+                ? 'No Joomla! groups found from "' . $group . '" on server ' . $server->id
+                : 'Added groups (' . implode(',', $newGroups) . ') for user "' . $extResponse->username . '" on server ' . $server->id;
+            $this->log($params, 'log_groups', 'system-oidclogin-groups', $message, Log::INFO);
         }
 
         $event->setArgument('response', $extResponse);
