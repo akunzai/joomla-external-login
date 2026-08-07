@@ -15,6 +15,7 @@ export class ServerEditPage {
   readonly regexUserInput: Locator;
   readonly regexEmailInput: Locator;
   readonly groupXpathInput: Locator;
+  readonly emailVerifiedXpathInput: Locator;
   readonly groupsClaimInput: Locator;
   readonly groupIntegerYes: Locator;
   readonly groupIntegerNo: Locator;
@@ -37,6 +38,7 @@ export class ServerEditPage {
     this.regexUserInput = page.locator('input[name="jform[params][regex_user]"]');
     this.regexEmailInput = page.locator('input[name="jform[params][regex_email]"]');
     this.groupXpathInput = page.locator('textarea[name="jform[params][group_xpath]"], input[name="jform[params][group_xpath]"]');
+    this.emailVerifiedXpathInput = page.locator('textarea[name="jform[params][email_verified_xpath]"], input[name="jform[params][email_verified_xpath]"]');
     this.groupsClaimInput = page.locator('input[name="jform[params][groups_claim]"]');
     this.groupIntegerYes = page.locator('fieldset:has-text("Group Integer"), fieldset:has-text("Integer Groups")').getByRole('radio', { name: 'Yes' });
     this.groupIntegerNo = page.locator('fieldset:has-text("Group Integer"), fieldset:has-text("Integer Groups")').getByRole('radio', { name: 'No' });
@@ -99,6 +101,12 @@ export class ServerEditPage {
     await this.clickTab(/Attributes/i);
     await this.groupXpathInput.clear();
     await this.groupXpathInput.fill(xpath);
+  }
+
+  async setEmailVerifiedXpath(xpath: string) {
+    await this.clickTab(/Attributes/i);
+    await this.emailVerifiedXpathInput.clear();
+    await this.emailVerifiedXpathInput.fill(xpath);
   }
 
   async setGroupsClaim(claim: string) {
