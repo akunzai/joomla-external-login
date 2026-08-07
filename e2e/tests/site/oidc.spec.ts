@@ -8,6 +8,9 @@ import {
 
 const OIDC_SERVER_TITLE = 'Keycloak OIDC';
 const OIDC_SERVER_ID = 2;
+// Joomla core's stock install fixture group id — not configurable by this project's own
+// install.sh, so stable across a fresh devcontainer stack.
+const JOOMLA_EDITOR_GROUP_ID = 4;
 
 test.describe('OIDC login with Keycloak', () => {
   test('should display External Login module on home page', async ({ siteHomePage }) => {
@@ -117,6 +120,7 @@ test.describe('OIDC login with Keycloak', () => {
     keycloakLoginPage,
     serverEditPage,
     usersPage,
+    coreUsersPage,
     authenticatedAdminPage,
     page,
   }) => {
@@ -153,6 +157,12 @@ test.describe('OIDC login with Keycloak', () => {
       await usersPage.goto();
       await usersPage.searchUser(OIDC_KEYCLOAK_USER_EMAIL);
       expect(await usersPage.isUserVisible(OIDC_KEYCLOAK_USER_EMAIL)).toBe(true);
+
+      // Prove the claim actually reached Joomla's ACL: the Keycloak "Editor" realm role
+      // on test2 (demo-users-1.json) must have resolved through ExternalloginHelper::getGroups()
+      // into the real "Editor" Joomla group — not just that login/bridging succeeded.
+      await coreUsersPage.gotoFilteredByGroup(JOOMLA_EDITOR_GROUP_ID);
+      expect(await coreUsersPage.isUserVisible(OIDC_KEYCLOAK_USER_EMAIL)).toBe(true);
 
       // Leave the site logged out for subsequent tests / suites.
       await siteHomePage.goto();

@@ -4,6 +4,7 @@ import { AdminDashboardPage } from '../pages/admin/dashboard.page';
 import { ServersPage } from '../pages/admin/servers.page';
 import { ServerEditPage } from '../pages/admin/server-edit.page';
 import { UsersPage } from '../pages/admin/users.page';
+import { CoreUsersPage } from '../pages/admin/core-users.page';
 import { LogsPage } from '../pages/admin/logs.page';
 import { PluginsPage } from '../pages/admin/plugins.page';
 import { SiteHomePage } from '../pages/site/home.page';
@@ -31,6 +32,7 @@ type Fixtures = {
   serversPage: ServersPage;
   serverEditPage: ServerEditPage;
   usersPage: UsersPage;
+  coreUsersPage: CoreUsersPage;
   logsPage: LogsPage;
   pluginsPage: PluginsPage;
   siteHomePage: SiteHomePage;
@@ -58,6 +60,10 @@ export const test = base.extend<Fixtures>({
 
   usersPage: async ({ page }, use) => {
     await use(new UsersPage(page));
+  },
+
+  coreUsersPage: async ({ page }, use) => {
+    await use(new CoreUsersPage(page));
   },
 
   logsPage: async ({ page }, use) => {
