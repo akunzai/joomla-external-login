@@ -22,6 +22,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Menu\SiteMenu;
 use Joomla\CMS\MVC\Factory\MVCFactoryServiceInterface;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
 use Joomla\Component\Externallogin\Administrator\Model\ServersModel;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Event\DispatcherInterface;
@@ -245,43 +246,64 @@ class ExternalloginHelper
     public static function url(string|int $redirect): string
     {
         if (!is_numeric($redirect)) {
-            return urldecode((string) $redirect);
-        }
-
-        // Get site menu
-        $menu = Factory::getContainer()->get(SiteMenu::class);
-        $item = $menu->getItem((int) $redirect);
-
-        if ($item) {
-            switch ($item->type) {
-                case 'url':
-                    if ((strpos($item->link, 'index.php?') === 0) && (strpos($item->link, 'Itemid=') === false)) {
-                        // If this is an internal Joomla link, ensure the Itemid is set.
-                        $link = $item->link . '&Itemid=' . $item->id;
-                    } else {
-                        $link = $item->link;
-                    }
-                    break;
-
-                case 'alias':
-                    $link = 'index.php?Itemid=' . $item->getParams()->get('aliasoptions');
-                    break;
-
-                default:
-                    $link = 'index.php?Itemid=' . $item->id;
-                    break;
-            }
+            $link = urldecode((string) $redirect);
         } else {
-            $link = 'index.php';
+            // Get site menu
+            $menu = Factory::getContainer()->get(SiteMenu::class);
+            $item = $menu->getItem((int) $redirect);
+
+            if ($item) {
+                switch ($item->type) {
+                    case 'url':
+                        if ((strpos($item->link, 'index.php?') === 0) && (strpos($item->link, 'Itemid=') === false)) {
+                            // If this is an internal Joomla link, ensure the Itemid is set.
+                            $link = $item->link . '&Itemid=' . $item->id;
+                        } else {
+                            $link = $item->link;
+                        }
+                        break;
+
+                    case 'alias':
+                        $link = 'index.php?Itemid=' . $item->getParams()->get('aliasoptions');
+                        break;
+
+                    default:
+                        $link = 'index.php?Itemid=' . $item->id;
+                        break;
+                }
+            } else {
+                $link = 'index.php';
+            }
+
+            $app = Factory::getApplication();
+            $secure = ($app->get('force_ssl', 0) === 2) ? 1 : -1;
+
+            if ($item) {
+                $secure = $item->getParams()->get('secure', $secure) === 1 ? 1 : 2;
+            }
+
+            $link = Route::_($link, true, $secure);
         }
 
-        $app = Factory::getApplication();
-        $secure = ($app->get('force_ssl', 0) === 2) ? 1 : -1;
+        // IdP service / redirect_uri parameters need an absolute URL. A bare relative
+        // "index.php" (common in users.login.form.data.return after failed login) must
+        // not be passed through unchanged.
+        $link = trim((string) $link);
 
-        if ($item) {
-            $secure = $item->getParams()->get('secure', $secure) === 1 ? 1 : 2;
+        if ($link === '') {
+            return Uri::root();
         }
 
-        return Route::_($link, true, $secure);
+        if (preg_match('#^[a-z][a-z0-9+.-]*:#i', $link) || str_starts_with($link, '//')) {
+            if (str_starts_with($link, '//')) {
+                $scheme = Uri::getInstance(Uri::root())->getScheme() ?: 'https';
+
+                return $scheme . ':' . $link;
+            }
+
+            return $link;
+        }
+
+        return rtrim(Uri::root(), '/') . '/' . ltrim($link, '/');
     }
 }

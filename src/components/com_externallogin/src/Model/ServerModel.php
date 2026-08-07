@@ -125,6 +125,12 @@ class ServerModel extends ItemModel
             }
         }
 
+        // CAS/OIDC IdPs require an absolute service / redirect_uri. After a failed Joomla login,
+        // users.login.form.data.return is often the bare relative "index.php"; passing that
+        // through as the CAS service produces service=index.php and Keycloak "Client not found."
+        // (Surfaced once #262 made retries from /component/users/login reachable.)
+        $url = $this->toAbsoluteUrl($url);
+
         // Compute the URI
         $uri = Uri::getInstance($url);
 
@@ -151,5 +157,33 @@ class ServerModel extends ItemModel
         }
         $result = is_array($results) ? $results[0] : $results;
         return $result;
+    }
+
+    /**
+     * Expand a site-relative path into an absolute URL using the current site root.
+     *
+     * Bare values like "index.php" or root-relative "/foo" have no host; IdPs reject them
+     * as service / redirect_uri parameters.
+     */
+    private function toAbsoluteUrl(string $url): string
+    {
+        $url = trim($url);
+
+        if ($url === '') {
+            return Uri::root();
+        }
+
+        // Already absolute (has a scheme) or protocol-relative.
+        if (preg_match('#^[a-z][a-z0-9+.-]*:#i', $url) || str_starts_with($url, '//')) {
+            if (str_starts_with($url, '//')) {
+                $scheme = Uri::getInstance(Uri::root())->getScheme() ?: 'https';
+
+                return $scheme . ':' . $url;
+            }
+
+            return $url;
+        }
+
+        return rtrim(Uri::root(), '/') . '/' . ltrim($url, '/');
     }
 }
