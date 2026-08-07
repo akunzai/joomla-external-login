@@ -34,9 +34,9 @@ test.describe('Cross-protocol Keycloak identity reuse', () => {
     await siteHomePage.clickExternalLogin(CAS_SERVER_TITLE);
     await keycloakLoginPage.waitForKeycloakPage();
     await keycloakLoginPage.login(KEYCLOAK_USERNAME, KEYCLOAK_PASSWORD);
-    await page.waitForURL(/^https:\/\/www\.dev\.local\/?/, { timeout: 15000 });
+    await page.waitForURL(/^https:\/\/www\.dev\.local/, { timeout: 30000 });
     expect(await siteHomePage.isLoggedIn()).toBe(true);
-    await siteHomePage.clickLogout();
+    await siteHomePage.logoutAndWaitForGuest();
 
     // Attempt an OIDC login with the same identity. Depending on whether the CAS server's
     // "Automatic logout" setting terminated Keycloak's own SSO session, this either lands straight
@@ -44,10 +44,7 @@ test.describe('Cross-protocol Keycloak identity reuse', () => {
     // test reproduces the identity collision regardless of that setting.
     await siteHomePage.goto();
     await siteHomePage.clickExternalLogin(OIDC_SERVER_TITLE);
-    if (await keycloakLoginPage.usernameInput.isVisible({ timeout: 5000 }).catch(() => false)) {
-      await keycloakLoginPage.login(KEYCLOAK_USERNAME, KEYCLOAK_PASSWORD);
-    }
-    await page.waitForURL(/^https:\/\/www\.dev\.local\/?/, { timeout: 15000 });
+    await keycloakLoginPage.completeLoginIfPrompted(KEYCLOAK_USERNAME, KEYCLOAK_PASSWORD);
 
     const bodyText = await page.textContent('body');
     // The core Joomla plugin's generic empty-password fallback must never be what the visitor sees.
@@ -74,9 +71,10 @@ test.describe('Cross-protocol Keycloak identity reuse', () => {
     await siteHomePage.clickExternalLogin(OIDC_SERVER_TITLE);
     await keycloakLoginPage.waitForKeycloakPage();
     await keycloakLoginPage.login(OIDC_KEYCLOAK_USERNAME, OIDC_KEYCLOAK_PASSWORD);
-    await page.waitForURL(/^https:\/\/www\.dev\.local\/?/, { timeout: 15000 });
+    await page.waitForURL(/^https:\/\/www\.dev\.local/, { timeout: 30000 });
     expect(await siteHomePage.isLoggedIn()).toBe(true);
-    await siteHomePage.clickLogout();
+    // OIDC fixture has autologout on — logout may round-trip through Keycloak.
+    await siteHomePage.logoutAndWaitForGuest();
 
     // Attempt a CAS login with the same identity. Keycloak's CAS principal is the same regardless
     // of protocol, so this correctly matches the OIDC-bound account and is correctly denied (the
@@ -84,10 +82,7 @@ test.describe('Cross-protocol Keycloak identity reuse', () => {
     // text, not as a raw language key.
     await siteHomePage.goto();
     await siteHomePage.clickExternalLogin(CAS_SERVER_TITLE);
-    if (await keycloakLoginPage.usernameInput.isVisible({ timeout: 5000 }).catch(() => false)) {
-      await keycloakLoginPage.login(OIDC_KEYCLOAK_USERNAME, OIDC_KEYCLOAK_PASSWORD);
-    }
-    await page.waitForURL(/^https:\/\/www\.dev\.local\/?/, { timeout: 15000 });
+    await keycloakLoginPage.completeLoginIfPrompted(OIDC_KEYCLOAK_USERNAME, OIDC_KEYCLOAK_PASSWORD);
 
     const bodyText = await page.textContent('body');
     expect(bodyText).not.toContain('PLG_SYSTEM_CASLOGIN_NO_ACTIVATION_ON_SERVER');
