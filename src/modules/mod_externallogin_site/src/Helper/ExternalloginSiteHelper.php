@@ -80,10 +80,29 @@ class ExternalloginSiteHelper
                 $url .= '&redirect=' . $redirect;
             }
 
-            $item->url = $url;
+            // Route so the option value used by document.location.href is root-relative (or
+            // absolute). A bare "index.php?..." is resolved against the current SEF directory —
+            // e.g. from /component/users/login after a failed SSO — and 404s (#262).
+            $item->url = $this->routeServerUrl($url);
         }
 
         return $items;
+    }
+
+    /**
+     * Turn an internal index.php query into a URL safe for client-side navigation from any path.
+     */
+    private function routeServerUrl(string $url): string
+    {
+        $routed = Route::_($url, false);
+
+        // Route::_() may still return a path without a leading slash (non-SEF "index.php?..." or
+        // a SEF segment). Prefix "/" so the browser resolves from the site root.
+        if ($routed !== '' && !preg_match('#^(?:[a-z][a-z0-9+.-]*:|//|/)#i', $routed)) {
+            $routed = '/' . $routed;
+        }
+
+        return $routed;
     }
 
     /**

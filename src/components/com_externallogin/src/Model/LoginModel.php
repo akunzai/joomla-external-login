@@ -16,6 +16,7 @@ use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\Router\Route;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Registry\Registry;
 
@@ -149,7 +150,15 @@ class LoginModel extends ListModel
                 }
             }
 
-            $item->url = $url;
+            // Same client-side navigation hazard as mod_externallogin_site (#262): bare
+            // "index.php?..." is resolved against the current SEF directory and can 404.
+            $routed = Route::_($url, false);
+
+            if ($routed !== '' && !preg_match('#^(?:[a-z][a-z0-9+.-]*:|//|/)#i', $routed)) {
+                $routed = '/' . $routed;
+            }
+
+            $item->url = $routed;
         }
 
         return $items;
