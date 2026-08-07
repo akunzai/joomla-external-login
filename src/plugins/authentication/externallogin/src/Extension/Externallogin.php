@@ -21,6 +21,7 @@ use Joomla\CMS\Authentication\AuthenticationResponse;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Event\User\AuthenticationEvent;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\User\UserFactoryInterface;
@@ -140,6 +141,10 @@ class Externallogin extends CMSPlugin
                         )
                     );
                 }
+                Factory::getApplication()->enqueueMessage(
+                    Text::_('PLG_AUTHENTICATION_EXTERNALLOGIN_NOT_ACTIVATED'),
+                    'error'
+                );
                 $this->userLoginFail($response, $params->get('not_activated_redirect_menuitem'), Authentication::STATUS_DENIED);
             } elseif (boolval($params->get('autoupdate', 0))) {
                 $this->updateUser($response, $userId);
