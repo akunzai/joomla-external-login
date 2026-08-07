@@ -255,7 +255,7 @@
       } ],
       "security-admin-console" : [ ],
       "admin-cli" : [ ],
-      "joomla" : [ ],
+      "joomla-cas" : [ ],
       "account-console" : [ ],
       "broker" : [ {
         "id" : "cb6fbe16-406d-45a1-97ef-fa2fca4b8862",
@@ -696,7 +696,7 @@
     "optionalClientScopes" : [ "address", "phone", "offline_access", "microprofile-jwt" ]
   }, {
     "id" : "5246bd18-aca4-411b-8d15-0329c8908edd",
-    "clientId" : "joomla",
+    "clientId" : "joomla-cas",
     "name" : "",
     "description" : "",
     "rootUrl" : "",
