@@ -176,6 +176,16 @@
 			/>
 
 			<field
+				name="email_verified_xpath"
+				type="textarea"
+				cols="50"
+				rows="5"
+				default=""
+				label="PLG_SYSTEM_CASLOGIN_FIELD_EMAIL_VERIFIED_XPATH_LABEL"
+				description="PLG_SYSTEM_CASLOGIN_FIELD_EMAIL_VERIFIED_XPATH_DESC"
+			/>
+
+			<field
 				name="group_xpath"
 				type="textarea"
 				cols="50"

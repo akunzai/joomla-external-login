@@ -32,6 +32,26 @@ class CasloginTest extends TestCase
 {
     use TestDatabaseTrait;
 
+    protected function setUp(): void
+    {
+        // The email_verified_xpath denial branch calls Text::_(...), which goes through
+        // Factory::getLanguage(). Stub Factory::$language so unit tests never hit the
+        // createLanguage() path (needs JPATH_CONFIGURATION / a full CMS bootstrap).
+        Factory::$language = new class {
+            public function _($string, $jsSafe = false, $interpretBackSlashes = true): string
+            {
+                return $string;
+            }
+        };
+    }
+
+    protected function tearDown(): void
+    {
+        // Keep TestDatabaseTrait's container reset — class tearDown replaces the trait method.
+        Factory::$container = null;
+        Factory::$language = null;
+    }
+
     /**
      * Parses $xml exactly as Caslogin::onAfterInitialise() does, returning
      * the [DOMXPath, authenticationSuccess node] pair the plugin caches on
@@ -93,6 +113,11 @@ class CasloginTest extends TestCase
         </cas:serviceResponse>
         XML;
 
+    // Guards against XPath's "empty node-set = string" comparison, which is always false and
+    // would otherwise misclassify an absent attribute as an explicit "false" (see the
+    // email_verified_xpath cookbook in cas.xml's field description).
+    private const EMAIL_VERIFIED_XPATH = "boolean(not(cas:attributes/cas:emailVerified) or cas:attributes/cas:emailVerified = 'true')";
+
     private const BASE_PARAMS = [
         'username_xpath' => 'string(cas:user)',
         'email_xpath' => 'string(cas:attributes/cas:email)',
@@ -112,6 +137,86 @@ class CasloginTest extends TestCase
         $this->assertSame('Alice Example', $response->fullname);
         $this->assertSame(Authentication::STATUS_SUCCESS, $response->status);
         $this->assertSame('system.caslogin', $response->type);
+        $this->assertContains(true, $event->getArgument('result', []));
+    }
+
+    public function testEmailVerifiedXpathUnsetLeavesLoginUnaffected(): void
+    {
+        $plugin = $this->createPlugin(self::BASE_XML, self::BASE_PARAMS);
+        $response = new ExternalAuthenticationResponse();
+
+        $event = $this->dispatch($plugin, $response);
+
+        $this->assertSame(Authentication::STATUS_SUCCESS, $response->status);
+        $this->assertContains(true, $event->getArgument('result', []));
+    }
+
+    public function testEmailVerifiedXpathResolvingFalseDeniesLogin(): void
+    {
+        $xml = <<<'XML'
+            <cas:serviceResponse xmlns:cas="http://www.yale.edu/tp/cas">
+                <cas:authenticationSuccess>
+                    <cas:user>alice</cas:user>
+                    <cas:attributes>
+                        <cas:email>alice@example.com</cas:email>
+                        <cas:display_name>Alice Example</cas:display_name>
+                        <cas:emailVerified>false</cas:emailVerified>
+                    </cas:attributes>
+                </cas:authenticationSuccess>
+            </cas:serviceResponse>
+            XML;
+
+        $params = [
+            'email_verified_xpath' => self::EMAIL_VERIFIED_XPATH,
+        ] + self::BASE_PARAMS;
+        $plugin = $this->createPlugin($xml, $params);
+        $response = new ExternalAuthenticationResponse();
+
+        $event = $this->dispatch($plugin, $response);
+
+        // Must claim the attempt (non-empty result) so authentication/externallogin stops
+        // propagation and the core authentication/joomla plugin cannot overwrite the denial
+        // with "Empty password not allowed." (#249-class bug on the email_verified deny path).
+        $this->assertSame(Authentication::STATUS_DENIED, $response->status);
+        $this->assertContains(true, $event->getArgument('result', []));
+        $this->assertNotSame('', (string) $response->error_message);
+        $this->assertStringNotContainsStringIgnoringCase('Empty password', (string) $response->error_message);
+    }
+
+    /**
+     * @return iterable<string, array{string}>
+     */
+    public static function emailVerifiedNotDeniedProvider(): iterable
+    {
+        yield 'resolves true' => [
+            <<<'XML'
+                <cas:serviceResponse xmlns:cas="http://www.yale.edu/tp/cas">
+                    <cas:authenticationSuccess>
+                        <cas:user>alice</cas:user>
+                        <cas:attributes>
+                            <cas:email>alice@example.com</cas:email>
+                            <cas:display_name>Alice Example</cas:display_name>
+                            <cas:emailVerified>true</cas:emailVerified>
+                        </cas:attributes>
+                    </cas:authenticationSuccess>
+                </cas:serviceResponse>
+                XML,
+        ];
+        yield 'attribute absent' => [self::BASE_XML];
+    }
+
+    #[DataProvider('emailVerifiedNotDeniedProvider')]
+    public function testEmailVerifiedXpathResolvingTrueOrAbsentLeavesLoginUnaffected(string $xml): void
+    {
+        $params = [
+            'email_verified_xpath' => self::EMAIL_VERIFIED_XPATH,
+        ] + self::BASE_PARAMS;
+        $plugin = $this->createPlugin($xml, $params);
+        $response = new ExternalAuthenticationResponse();
+
+        $event = $this->dispatch($plugin, $response);
+
+        $this->assertSame(Authentication::STATUS_SUCCESS, $response->status);
         $this->assertContains(true, $event->getArgument('result', []));
     }
 

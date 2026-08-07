@@ -4,6 +4,7 @@ namespace Tests\Unit\Plugins\System\Oidclogin;
 
 use Joomla\CMS\Authentication\Authentication;
 use Joomla\CMS\Authentication\AuthenticationResponse;
+use Joomla\CMS\Factory;
 use Joomla\Component\Externallogin\Administrator\Authentication\ExternalAuthenticationResponse;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Event\Event;
@@ -29,6 +30,26 @@ use Tests\Unit\Traits\TestDatabaseTrait;
 class OidcloginTest extends TestCase
 {
     use TestDatabaseTrait;
+
+    protected function setUp(): void
+    {
+        // The email_verified denial branch calls Text::_(...), which goes through
+        // Factory::getLanguage(). Stub Factory::$language so unit tests never hit the
+        // createLanguage() path (needs JPATH_CONFIGURATION / a full CMS bootstrap).
+        Factory::$language = new class {
+            public function _($string, $jsSafe = false, $interpretBackSlashes = true): string
+            {
+                return $string;
+            }
+        };
+    }
+
+    protected function tearDown(): void
+    {
+        // Keep TestDatabaseTrait's container reset — class tearDown replaces the trait method.
+        Factory::$container = null;
+        Factory::$language = null;
+    }
 
     /**
      * Builds an Oidclogin instance with $claims/$server pre-set via
@@ -168,7 +189,7 @@ class OidcloginTest extends TestCase
         $this->assertSame([], $event->getArgument('result', []));
     }
 
-    public function testExplicitlyUnverifiedEmailPreventsLoginWithoutAddingAResult(): void
+    public function testExplicitlyUnverifiedEmailDeniesLoginAndClaimsTheAttempt(): void
     {
         $claims = self::BASE_CLAIMS + ['email_verified' => false];
 
@@ -177,8 +198,13 @@ class OidcloginTest extends TestCase
 
         $event = $this->dispatch($plugin, $response);
 
-        $this->assertNotSame(Authentication::STATUS_SUCCESS, $response->status);
-        $this->assertSame([], $event->getArgument('result', []));
+        // Must claim the attempt (non-empty result) so authentication/externallogin stops
+        // propagation and the core authentication/joomla plugin cannot overwrite the denial
+        // with "Empty password not allowed." (#249-class bug on the email_verified deny path).
+        $this->assertSame(Authentication::STATUS_DENIED, $response->status);
+        $this->assertContains(true, $event->getArgument('result', []));
+        $this->assertNotSame('', (string) $response->error_message);
+        $this->assertStringNotContainsStringIgnoringCase('Empty password', (string) $response->error_message);
     }
 
     public function testMissingEmailVerifiedClaimStillSucceeds(): void

@@ -167,6 +167,58 @@ test.describe('SSO with Keycloak', () => {
     }
   });
 
+  test('should deny login when email_verified_xpath resolves to false', async ({
+    siteHomePage,
+    keycloakLoginPage,
+    serverEditPage,
+    authenticatedAdminPage,
+    page,
+  }) => {
+    void authenticatedAdminPage;
+
+    // Ensure site user is logged out first
+    await siteHomePage.goto();
+    if (await siteHomePage.isLoggedIn()) {
+      await siteHomePage.clickLogout();
+    }
+
+    // Force the check to false() regardless of the actual emailVerified attribute, so this
+    // exercises the deny path without depending on a dedicated unverified Keycloak fixture user.
+    await serverEditPage.goto(1);
+    await serverEditPage.clickTab(/Attributes/i);
+    const originalXpath = await serverEditPage.emailVerifiedXpathInput.inputValue();
+    await serverEditPage.setEmailVerifiedXpath('false()');
+    await serverEditPage.save();
+    expect(await serverEditPage.emailVerifiedXpathInput.inputValue()).toBe('false()');
+
+    try {
+      // Attempt SSO login
+      await siteHomePage.goto();
+      await siteHomePage.clickExternalLogin();
+
+      await keycloakLoginPage.waitForKeycloakPage();
+      await keycloakLoginPage.login(KEYCLOAK_USERNAME, KEYCLOAK_PASSWORD);
+
+      // Wait for navigation back to Joomla
+      await page.waitForTimeout(2000);
+
+      // Verify user is NOT logged in (denied)
+      const isLoggedIn = await siteHomePage.isLoggedIn();
+      expect(isLoggedIn).toBe(false);
+
+      // Protocol-level denials must claim the auth attempt so core authentication/joomla
+      // cannot clobber the real reason with its empty-credentials fallback (#249-class bug).
+      await expect(page.getByText(/Empty password not allowed/i)).toHaveCount(0);
+      await expect(page.getByText(/email address is not verified/i)).toBeVisible();
+    } finally {
+      // Restore the seeded email_verified_xpath (rather than clearing it), so the demo server
+      // keeps demonstrating the pass-path with the check active for later runs/tests.
+      await serverEditPage.goto(1);
+      await serverEditPage.setEmailVerifiedXpath(originalXpath);
+      await serverEditPage.save();
+    }
+  });
+
   test('should map user groups from CAS attributes during SSO login', async ({
     siteHomePage,
     keycloakLoginPage,
