@@ -175,4 +175,81 @@ test.describe('OIDC login with Keycloak', () => {
       await serverEditPage.save();
     }
   });
+
+  test('should redirect guest to IdP when OIDC autologin is enabled', async ({
+    siteHomePage,
+    serverEditPage,
+    authenticatedAdminPage,
+    page,
+    browser,
+  }) => {
+    void authenticatedAdminPage;
+    void siteHomePage;
+
+    // Enable autologin on the OIDC server (default off in the install fixture).
+    // Done on the admin-authenticated fixture page so we can tear it down afterwards.
+    await serverEditPage.goto(OIDC_SERVER_ID);
+    await serverEditPage.setAutologin(true);
+    await serverEditPage.save();
+
+    // Isolated guest context: earlier tests in this file leave residual
+    // com_externallogin.server / oidclogin session state that would short-circuit
+    // the autologin branch once a server is already selected for the session.
+    const guestContext = await browser.newContext({ ignoreHTTPSErrors: true });
+    const guestPage = await guestContext.newPage();
+
+    try {
+      // Fresh guest visit — no login-button click. Autologin uses prompt=none
+      // (OIDC silent authentication), so the browser is redirected to Keycloak's
+      // authorization endpoint. Capture that request to prove the redirect fired
+      // without the user clicking the External Login module button.
+      const authRequestPromise = guestPage.waitForRequest(
+        (request) =>
+          request.url().includes('auth.dev.local') &&
+          request.url().includes('/protocol/openid-connect/auth') &&
+          request.url().includes('prompt=none'),
+        { timeout: 15000 },
+      );
+
+      await guestPage.goto('https://www.dev.local/', { waitUntil: 'commit' });
+      const authRequest = await authRequestPromise;
+      expect(authRequest.url()).toContain('client_id=joomla-oidc');
+
+      // Without an existing IdP session, prompt=none bounces back with
+      // error=login_required. The visitor remains a guest, and the once-per-session
+      // guard prevents a redirect loop.
+      await guestPage.waitForURL(/^https:\/\/www\.dev\.local/, { timeout: 15000 });
+      const logoutVisible = await guestPage
+        .locator('.externallogin input[type="submit"], .externallogin button')
+        .filter({ hasText: /Log out/i })
+        .first()
+        .isVisible({ timeout: 3000 })
+        .catch(() => false);
+      expect(logoutVisible).toBe(false);
+
+      // Second visit in the same session must not re-hit the IdP authorization endpoint.
+      let secondAuthHit = false;
+      const secondAuthListener = (request: { url: () => string }) => {
+        if (
+          request.url().includes('auth.dev.local') &&
+          request.url().includes('/protocol/openid-connect/auth')
+        ) {
+          secondAuthHit = true;
+        }
+      };
+      guestPage.on('request', secondAuthListener);
+      try {
+        await guestPage.goto('https://www.dev.local/', { waitUntil: 'domcontentloaded' });
+        await guestPage.waitForTimeout(2000);
+      } finally {
+        guestPage.off('request', secondAuthListener);
+      }
+      expect(secondAuthHit).toBe(false);
+    } finally {
+      await guestContext.close();
+      await serverEditPage.goto(OIDC_SERVER_ID);
+      await serverEditPage.setAutologin(false);
+      await serverEditPage.save();
+    }
+  });
 });

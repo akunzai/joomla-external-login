@@ -19,6 +19,8 @@ export class ServerEditPage {
   readonly groupIntegerYes: Locator;
   readonly groupIntegerNo: Locator;
   readonly groupSeparatorInput: Locator;
+  readonly autologinYes: Locator;
+  readonly autologinNo: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -39,6 +41,10 @@ export class ServerEditPage {
     this.groupIntegerYes = page.locator('fieldset:has-text("Group Integer"), fieldset:has-text("Integer Groups")').getByRole('radio', { name: 'Yes' });
     this.groupIntegerNo = page.locator('fieldset:has-text("Group Integer"), fieldset:has-text("Integer Groups")').getByRole('radio', { name: 'No' });
     this.groupSeparatorInput = page.locator('input[name="jform[params][group_separator]"]');
+    // Connection-tab "Automatic login" (autologin) radios — match by the param name so
+    // we don't confuse them with the similarly labelled "Automatic logout" radios.
+    this.autologinYes = page.locator('input[name="jform[params][autologin]"][value="1"]');
+    this.autologinNo = page.locator('input[name="jform[params][autologin]"][value="0"]');
   }
 
   async goto(serverId: number) {
@@ -114,6 +120,15 @@ export class ServerEditPage {
     await this.clickTab(/Attributes/i);
     await this.groupSeparatorInput.clear();
     await this.groupSeparatorInput.fill(separator);
+  }
+
+  async setAutologin(enabled: boolean) {
+    await this.clickTab(/Connection/i);
+    if (enabled) {
+      await this.autologinYes.check({ force: true });
+    } else {
+      await this.autologinNo.check({ force: true });
+    }
   }
 
   async save() {

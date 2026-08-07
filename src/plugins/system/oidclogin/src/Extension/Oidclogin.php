@@ -30,6 +30,7 @@ use Joomla\CMS\Session\Session;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Component\Externallogin\Administrator\Authentication\ExternalAuthenticationResponse;
 use Joomla\Component\Externallogin\Administrator\Helper\ExternalloginHelper;
+use Joomla\Component\Externallogin\Administrator\Model\ServersModel;
 use Joomla\Component\Externallogin\Administrator\Service\Logger\ExternalloginLogEntry;
 use Joomla\Component\Externallogin\Administrator\Table\ServerTable;
 use Joomla\Database\DatabaseInterface;
@@ -197,7 +198,7 @@ class Oidclogin extends CMSPlugin
      * Redirects to the IdP's discovered authorization_endpoint using
      * Authorization Code Flow with PKCE. The state/nonce/code_verifier for
      * this attempt are stored in the Joomla session (user state), not the
-     * database, mirroring how Caslogin stores its own per-attempt state.
+     * database — they are one-time values for the return leg only.
      */
     public function onGetLoginUrl(Event $event): void
     {
@@ -209,48 +210,17 @@ class Oidclogin extends CMSPlugin
 
         /** @var Registry $params */
         $params = $server->params;
-        $discovery = $this->getDiscoveryDocument($params, $server->id);
-
-        if ($discovery === null || empty($discovery['authorization_endpoint'])) {
-            return;
-        }
-
         $service = $event->getArgument('service');
 
         if ($service instanceof Uri) {
             $service = (string) $service;
         }
 
-        $state = bin2hex(random_bytes(16));
-        $nonce = bin2hex(random_bytes(16));
-        $verifier = $this->base64UrlEncode(random_bytes(32));
-        $challenge = $this->base64UrlEncode(hash('sha256', $verifier, true));
+        $url = $this->buildAuthorizationUrl($params, $server->id, (string) $service);
 
-        /** @var CMSApplication */
-        $app = Factory::getApplication();
-        $app->setUserState('system.oidclogin.state.' . $server->id, $state);
-        $app->setUserState('system.oidclogin.nonce.' . $server->id, $nonce);
-        $app->setUserState('system.oidclogin.verifier.' . $server->id, $verifier);
-        $app->setUserState('system.oidclogin.redirect.' . $server->id, $service);
-
-        $query = [
-            'response_type' => 'code',
-            'client_id' => (string) $params->get('client_id'),
-            'redirect_uri' => $service,
-            'scope' => 'openid profile email',
-            'state' => $state,
-            'nonce' => $nonce,
-            'code_challenge' => $challenge,
-            'code_challenge_method' => 'S256',
-        ];
-
-        if ($params->get('locale')) {
-            [$locale] = explode('-', Factory::getApplication()->getLanguage()->getTag());
-            $query['ui_locales'] = $locale;
+        if ($url === null) {
+            return;
         }
-
-        $separator = str_contains((string) $discovery['authorization_endpoint'], '?') ? '&' : '?';
-        $url = $discovery['authorization_endpoint'] . $separator . http_build_query($query);
 
         $this->log($params, 'log_login', 'system-oidclogin-login', 'Redirecting to authorization endpoint on server ' . $server->id, Log::INFO);
 
@@ -264,11 +234,12 @@ class Oidclogin extends CMSPlugin
     /**
      * After initialise event.
      *
-     * Detects the return leg of an authorization-code login attempt this
-     * plugin itself initiated (a "code"/"state"/"error" query parameter),
-     * exchanges the code for tokens, verifies the ID Token, merges in
-     * UserInfo claims, and rewires the request so Joomla's own login
-     * machinery picks it up — mirroring Caslogin::onAfterInitialise().
+     * 1. Autologin — when a guest has no OIDC callback in flight, redirect once
+     *    per session to a published, autologin-enabled OIDC server using
+     *    prompt=none (OIDC silent authentication).
+     * 2. Callback — when the IdP returns a code/error, exchange the code for
+     *    tokens, verify the ID Token, merge UserInfo claims, and rewire the
+     *    request so Joomla's own login machinery picks it up.
      */
     public function onAfterInitialise(): void
     {
@@ -287,20 +258,106 @@ class Oidclogin extends CMSPlugin
         $code = $input->get('code', '', 'RAW');
         $state = $input->get('state', '', 'RAW');
         $error = $input->get('error', '', 'RAW');
+        $serverID = $app->isClient('administrator') ? $input->get('server') : $app->getUserState('com_externallogin.server');
+        /** @var MVCFactoryServiceInterface */
+        $component = $app->bootComponent('com_externallogin');
+        $mvcFactory = $component->getMVCFactory();
 
+        // No OIDC callback in flight — try autologin (once per session per server).
         if (!$code && !$error) {
+            if (!$serverID) {
+                /** @var ServersModel $model */
+                $model = $mvcFactory->createModel('Servers', 'Administrator', ['ignore_request' => true]);
+
+                if (!$model) {
+                    return;
+                }
+
+                $model->setState('filter.published', 1);
+                $model->setState('filter.plugin', 'system.oidclogin');
+                $model->setState('list.start', 0);
+                $model->setState('list.limit', 0);
+                $model->setState('list.ordering', 'a.ordering');
+                $model->setState('list.direction', 'ASC');
+                $servers = $model->getItems();
+
+                foreach ($servers as $server) {
+                    $params = new Registry($server->params);
+                    $serverID = $server->id;
+
+                    if (boolval($params->get('autologin')) && !$app->getUserState('system.oidclogin.autologin.' . $server->id)) {
+                        if (!$this->verifyServerIsAlive($params)) {
+                            $this->log(
+                                $params,
+                                'log_verify',
+                                'system-oidclogin-verify',
+                                'Unsuccessful verification of server ' . $serverID,
+                                Log::WARNING
+                            );
+
+                            continue;
+                        }
+
+                        $this->log(
+                            $params,
+                            'log_verify',
+                            'system-oidclogin-verify',
+                            'Successful verification of server ' . $serverID,
+                            Log::INFO
+                        );
+
+                        $service = (string) Uri::getInstance();
+                        // prompt=none: silent auth when the IdP already has a session; otherwise
+                        // the IdP returns error=login_required and we do not retry this session.
+                        $url = $this->buildAuthorizationUrl($params, $server->id, $service, true);
+
+                        if ($url === null) {
+                            continue;
+                        }
+
+                        $this->log(
+                            $params,
+                            'log_autologin',
+                            'system-oidclogin-autologin',
+                            'Trying autologin on server ' . $serverID,
+                            Log::INFO
+                        );
+
+                        $app->setUserState('com_externallogin.server', $server->id);
+                        $app->setUserState('system.oidclogin.autologin.' . $server->id, 1);
+                        $app->redirect($url, 302);
+
+                        break;
+                    }
+                }
+
+                return;
+            }
+
+            // serverID is set but no callback arrived — the visitor cancelled, the IdP was
+            // unreachable after the probe, or a prior attempt left residual state. Log when
+            // log_autologin is on (can fire on every subsequent guest request with residual
+            // com_externallogin.server until the session ends).
+            /** @var ServerTable|bool $server */
+            $server = $mvcFactory->createTable('Server', 'Administrator');
+
+            if ($server && $server->load($serverID) && $server->plugin == 'system.oidclogin') {
+                $this->log(
+                    $server->params,
+                    'log_autologin',
+                    'system-oidclogin-autologin',
+                    'Autologin failed on server ' . $serverID,
+                    Log::INFO
+                );
+            }
+
             return;
         }
-
-        $serverID = $app->isClient('administrator') ? $input->get('server') : $app->getUserState('com_externallogin.server');
 
         if (!$serverID) {
             return;
         }
 
-        /** @var MVCFactoryServiceInterface */
-        $component = $app->bootComponent('com_externallogin');
-        $mvcFactory = $component->getMVCFactory();
         /** @var ServerTable|bool $server */
         $server = $mvcFactory->createTable('Server', 'Administrator');
 
@@ -322,6 +379,17 @@ class Oidclogin extends CMSPlugin
         $app->setUserState('system.oidclogin.redirect.' . $serverID, null);
 
         if ($error || !$code || !$state || !is_string($expectedState) || !hash_equals($expectedState, (string) $state)) {
+            // prompt=none autologin failures surface as error=login_required (or interaction_required).
+            if ($error && $app->getUserState('system.oidclogin.autologin.' . $serverID)) {
+                $this->log(
+                    $params,
+                    'log_autologin',
+                    'system-oidclogin-autologin',
+                    'Autologin failed on server ' . $serverID . ': ' . $error,
+                    Log::INFO
+                );
+            }
+
             $this->log(
                 $params,
                 'log_login',
@@ -736,6 +804,110 @@ class Oidclogin extends CMSPlugin
     }
 
     /**
+     * Build the IdP authorization URL (Authorization Code + PKCE), storing
+     * state/nonce/verifier/redirect_uri in the session for the return leg.
+     *
+     * @param Registry $params
+     * @param int|string $serverID
+     * @param bool $promptNone when true, set prompt=none for OIDC silent authentication
+     */
+    private function buildAuthorizationUrl($params, $serverID, string $redirectUri, bool $promptNone = false): ?string
+    {
+        $discovery = $this->getDiscoveryDocument($params, $serverID);
+
+        if ($discovery === null || empty($discovery['authorization_endpoint'])) {
+            return null;
+        }
+
+        $state = bin2hex(random_bytes(16));
+        $nonce = bin2hex(random_bytes(16));
+        $verifier = $this->base64UrlEncode(random_bytes(32));
+        $challenge = $this->base64UrlEncode(hash('sha256', $verifier, true));
+
+        /** @var CMSApplication */
+        $app = Factory::getApplication();
+        $app->setUserState('system.oidclogin.state.' . $serverID, $state);
+        $app->setUserState('system.oidclogin.nonce.' . $serverID, $nonce);
+        $app->setUserState('system.oidclogin.verifier.' . $serverID, $verifier);
+        $app->setUserState('system.oidclogin.redirect.' . $serverID, $redirectUri);
+
+        $query = [
+            'response_type' => 'code',
+            'client_id' => (string) $params->get('client_id'),
+            'redirect_uri' => $redirectUri,
+            'scope' => 'openid profile email',
+            'state' => $state,
+            'nonce' => $nonce,
+            'code_challenge' => $challenge,
+            'code_challenge_method' => 'S256',
+        ];
+
+        if ($promptNone) {
+            $query['prompt'] = 'none';
+        }
+
+        if ($params->get('locale')) {
+            [$locale] = explode('-', Factory::getApplication()->getLanguage()->getTag());
+            $query['ui_locales'] = $locale;
+        }
+
+        $separator = str_contains((string) $discovery['authorization_endpoint'], '?') ? '&' : '?';
+
+        return $discovery['authorization_endpoint'] . $separator . http_build_query($query);
+    }
+
+    /**
+     * Lightweight reachability probe for an OIDC IdP: GET the discovery
+     * document at <issuer>/.well-known/openid-configuration.
+     * On success, warms the discovery cache so the following
+     * buildAuthorizationUrl() call does not re-fetch the same document.
+     *
+     * @param Registry $params
+     */
+    private function verifyServerIsAlive($params): bool
+    {
+        $issuer = rtrim((string) $params->get('issuer'), '/');
+
+        if ($issuer === '') {
+            return false;
+        }
+
+        try {
+            $http = (new HttpFactory())->getHttp();
+            $timeout = (int) $params->get('timeout', 5);
+            $response = $http->get($issuer . '/.well-known/openid-configuration', [], $timeout);
+
+            if ($response->getStatusCode() < 200 || $response->getStatusCode() >= 400) {
+                return false;
+            }
+
+            $document = json_decode((string) $response->getBody(), true);
+
+            if (
+                is_array($document)
+                && !empty($document['authorization_endpoint'])
+                && !empty($document['token_endpoint'])
+                && !empty($document['jwks_uri'])
+            ) {
+                $cache = $this->getCacheController();
+                $cache->cache->store(json_encode($document), 'discovery.' . md5($issuer));
+            }
+
+            return true;
+        } catch (Throwable $e) {
+            $this->log(
+                $params,
+                'log_verify',
+                'system-oidclogin-verify',
+                'HTTP error while verifying server is alive: ' . $e->getMessage(),
+                Log::WARNING
+            );
+
+            return false;
+        }
+    }
+
+    /**
      * Fetch (and cache) the OIDC discovery document for a server's issuer.
      *
      * @param Registry $params
@@ -1077,8 +1249,8 @@ class Oidclogin extends CMSPlugin
     }
 
     /**
-     * Log a message when the given server parameter toggle is enabled,
-     * mirroring Caslogin's log_* pattern.
+     * Log a message when the given server parameter toggle is enabled
+     * (per-server log_* flags such as log_autologin, log_login, …).
      *
      * @param Registry $params
      */
