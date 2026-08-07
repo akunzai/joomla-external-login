@@ -93,6 +93,11 @@ class CasloginTest extends TestCase
         </cas:serviceResponse>
         XML;
 
+    // Guards against XPath's "empty node-set = string" comparison, which is always false and
+    // would otherwise misclassify an absent attribute as an explicit "false" (see the
+    // email_verified_xpath cookbook in cas.xml's field description).
+    private const EMAIL_VERIFIED_XPATH = "boolean(not(cas:attributes/cas:emailVerified) or cas:attributes/cas:emailVerified = 'true')";
+
     private const BASE_PARAMS = [
         'username_xpath' => 'string(cas:user)',
         'email_xpath' => 'string(cas:attributes/cas:email)',
@@ -112,6 +117,81 @@ class CasloginTest extends TestCase
         $this->assertSame('Alice Example', $response->fullname);
         $this->assertSame(Authentication::STATUS_SUCCESS, $response->status);
         $this->assertSame('system.caslogin', $response->type);
+        $this->assertContains(true, $event->getArgument('result', []));
+    }
+
+    public function testEmailVerifiedXpathUnsetLeavesLoginUnaffected(): void
+    {
+        $plugin = $this->createPlugin(self::BASE_XML, self::BASE_PARAMS);
+        $response = new ExternalAuthenticationResponse();
+
+        $event = $this->dispatch($plugin, $response);
+
+        $this->assertSame(Authentication::STATUS_SUCCESS, $response->status);
+        $this->assertContains(true, $event->getArgument('result', []));
+    }
+
+    public function testEmailVerifiedXpathResolvingFalseDeniesLogin(): void
+    {
+        $xml = <<<'XML'
+            <cas:serviceResponse xmlns:cas="http://www.yale.edu/tp/cas">
+                <cas:authenticationSuccess>
+                    <cas:user>alice</cas:user>
+                    <cas:attributes>
+                        <cas:email>alice@example.com</cas:email>
+                        <cas:display_name>Alice Example</cas:display_name>
+                        <cas:emailVerified>false</cas:emailVerified>
+                    </cas:attributes>
+                </cas:authenticationSuccess>
+            </cas:serviceResponse>
+            XML;
+
+        $params = [
+            'email_verified_xpath' => self::EMAIL_VERIFIED_XPATH,
+        ] + self::BASE_PARAMS;
+        $plugin = $this->createPlugin($xml, $params);
+        $response = new ExternalAuthenticationResponse();
+
+        $event = $this->dispatch($plugin, $response);
+
+        $this->assertSame(Authentication::STATUS_FAILURE, $response->status);
+        $this->assertEmpty($event->getArgument('result', []));
+    }
+
+    /**
+     * @return iterable<string, array{string}>
+     */
+    public static function emailVerifiedNotDeniedProvider(): iterable
+    {
+        yield 'resolves true' => [
+            <<<'XML'
+                <cas:serviceResponse xmlns:cas="http://www.yale.edu/tp/cas">
+                    <cas:authenticationSuccess>
+                        <cas:user>alice</cas:user>
+                        <cas:attributes>
+                            <cas:email>alice@example.com</cas:email>
+                            <cas:display_name>Alice Example</cas:display_name>
+                            <cas:emailVerified>true</cas:emailVerified>
+                        </cas:attributes>
+                    </cas:authenticationSuccess>
+                </cas:serviceResponse>
+                XML,
+        ];
+        yield 'attribute absent' => [self::BASE_XML];
+    }
+
+    #[DataProvider('emailVerifiedNotDeniedProvider')]
+    public function testEmailVerifiedXpathResolvingTrueOrAbsentLeavesLoginUnaffected(string $xml): void
+    {
+        $params = [
+            'email_verified_xpath' => self::EMAIL_VERIFIED_XPATH,
+        ] + self::BASE_PARAMS;
+        $plugin = $this->createPlugin($xml, $params);
+        $response = new ExternalAuthenticationResponse();
+
+        $event = $this->dispatch($plugin, $response);
+
+        $this->assertSame(Authentication::STATUS_SUCCESS, $response->status);
         $this->assertContains(true, $event->getArgument('result', []));
     }
 

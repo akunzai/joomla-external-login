@@ -737,6 +737,17 @@
         "jsonType.label" : "String"
       }
     }, {
+      "id" : "53f91361-2bc6-4976-89ba-2da28263fbad",
+      "name" : "email verified",
+      "protocol" : "cas",
+      "protocolMapper" : "cas-usermodel-property-mapper",
+      "consentRequired" : false,
+      "config" : {
+        "user.attribute" : "emailVerified",
+        "claim.name" : "emailVerified",
+        "jsonType.label" : "boolean"
+      }
+    }, {
       "id" : "4f85e1c4-5f33-465d-9401-7821adc671eb",
       "name" : "full name",
       "protocol" : "cas",

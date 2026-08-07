@@ -540,6 +540,38 @@ class Caslogin extends CMSPlugin
         $server = $this->server;
         $params = $server->params;
         $sid = $server->id;
+
+        // email_verified_xpath is opt-in (default empty, no behavior change) because, unlike
+        // OIDC's spec-standard email_verified claim, the CAS protocol defines no attribute set
+        // at all - whatever "verified" looks like is entirely up to how the specific
+        // CAS-emitting server is configured. Since username_xpath defaults to the identity's
+        // email, an IdP that lets a user set an arbitrary/unverified email could otherwise let
+        // them claim an existing Joomla account's username. Only refuse on an explicit boolean
+        // false (or the literal string "false", for admins who copy the string(...) pattern used
+        // by the other xpath fields); an absent attribute or a misconfigured expression leaves
+        // the login unaffected rather than locking accounts out.
+        $emailVerifiedXpath = (string) $params->get('email_verified_xpath', '');
+
+        if ($emailVerifiedXpath !== '') {
+            $emailVerified = $this->xpath->evaluate($emailVerifiedXpath, $this->success);
+            $denied = $emailVerified === false
+                || (is_string($emailVerified) && strcasecmp(trim($emailVerified), 'false') === 0);
+
+            if ($denied) {
+                if ($params->get('log_login', 0)) {
+                    Log::add(
+                        new ExternalloginLogEntry(
+                            'Unverified email attribute (email_verified_xpath resolved to false) on server ' . $sid,
+                            Log::WARNING,
+                            'system-caslogin-login'
+                        )
+                    );
+                }
+
+                return;
+            }
+        }
+
         // @phpstan-ignore assign.propertyType
         $extResponse->status = Authentication::STATUS_SUCCESS;
         $extResponse->server = $server;

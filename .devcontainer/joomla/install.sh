@@ -118,7 +118,16 @@ if dc_exec joomla test -f /var/www/html/cli/joomla.php; then
   echo "Adding CAS Server definition ..."
   # autologout: log out of the Keycloak CAS session too, so it doesn't linger as a Keycloak SSO
   # session that silently re-authenticates a later OIDC login attempt with the CAS identity (#249).
-  CAS_PARAMS='{"autoregister":"1","autoupdate":"1","autologout":"1","ssl":"1","url":"auth.dev.local","dir":"realms/demo/protocol/cas","cas_v3":"1","port":"443","username_xpath":"string(cas:attributes/cas:email)","name_xpath":"string(cas:attributes/cas:display_name)","email_xpath":"string(cas:attributes/cas:email)"}'
+  # email_verified_xpath (#259): demonstrates the opt-in verified-email check against the
+  # "email verified" CAS attribute mapper added below. The not(...) guard keeps a response that
+  # omits the attribute entirely from being misread as an explicit false (XPath's empty-node-set
+  # comparisons are always false) - only a present attribute holding a literal "false" denies.
+  # Built with a double-quoted bash string (not single-quoted) specifically so the xpath's single
+  # quotes need no backslash-escaping: a backslash surviving into the MySQL single-quoted string
+  # literal below gets consumed by MySQL's own escaping, corrupting the stored JSON before Joomla
+  # ever parses it (Registry::__construct() then throws "Error decoding JSON data: Syntax error"
+  # on every request that loads this server's params).
+  CAS_PARAMS="{\"autoregister\":\"1\",\"autoupdate\":\"1\",\"autologout\":\"1\",\"ssl\":\"1\",\"url\":\"auth.dev.local\",\"dir\":\"realms/demo/protocol/cas\",\"cas_v3\":\"1\",\"port\":\"443\",\"username_xpath\":\"string(cas:attributes/cas:email)\",\"name_xpath\":\"string(cas:attributes/cas:display_name)\",\"email_xpath\":\"string(cas:attributes/cas:email)\",\"email_verified_xpath\":\"boolean(not(cas:attributes/cas:emailVerified) or cas:attributes/cas:emailVerified = 'true')\"}"
   joomla_mysql -e "INSERT IGNORE INTO ${JOOMLA_DB_PREFIX}externallogin_servers (title, published, plugin, ordering, params) VALUES ('Keycloak CAS', 1, 'system.caslogin', 1, '${CAS_PARAMS}');"
 
   echo "Adding OIDC Server definition ..."
