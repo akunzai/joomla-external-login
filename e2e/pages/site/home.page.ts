@@ -50,6 +50,16 @@ export class SiteHomePage {
     await this.logoutButton.click();
   }
 
+  /**
+   * Logout and wait until the External Login module shows Log in again.
+   * OIDC servers with autologout may bounce through the IdP before returning.
+   */
+  async logoutAndWaitForGuest(timeout = 15000) {
+    await this.clickLogout();
+    await this.page.waitForURL(/^https:\/\/www\.dev\.local/, { timeout });
+    await this.externalLoginButton.waitFor({ state: 'visible', timeout });
+  }
+
   async isLoggedIn(): Promise<boolean> {
     return this.logoutButton.isVisible({ timeout: 5000 }).catch(() => false);
   }
