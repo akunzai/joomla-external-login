@@ -131,7 +131,7 @@
 				type="text"
 				required="true"
 				size="30"
-				default="preferred_username"
+				default="email"
 				label="PLG_SYSTEM_OIDCLOGIN_FIELD_USERNAME_CLAIM_LABEL"
 				description="PLG_SYSTEM_OIDCLOGIN_FIELD_USERNAME_CLAIM_DESC"
 			/>

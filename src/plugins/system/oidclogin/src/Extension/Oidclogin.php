@@ -452,7 +452,7 @@ class Oidclogin extends CMSPlugin
         /** @var Registry $params */
         $params = $server->params;
 
-        $username = ClaimsResolver::resolve($this->claims, (string) $params->get('username_claim', 'preferred_username'));
+        $username = ClaimsResolver::resolve($this->claims, (string) $params->get('username_claim', 'email'));
         $email = ClaimsResolver::resolve($this->claims, (string) $params->get('email_claim', 'email'));
         $fullname = ClaimsResolver::resolve($this->claims, (string) $params->get('name_claim', 'name'));
 
