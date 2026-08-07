@@ -462,6 +462,19 @@ class Oidclogin extends CMSPlugin
             return;
         }
 
+        // email_verified is the OIDC-standard signal that the provider actually confirmed the
+        // address rather than accepting a self-asserted value. Since username_claim now defaults
+        // to email (matching CAS's own default), an unverified email is no longer just a cosmetic
+        // profile-field risk — it can determine which existing Joomla account isActivatedForServer()
+        // matches the login against. Only refuse on an explicit "false"; the claim is OPTIONAL per
+        // spec, and many providers omit it entirely, so absence is left as-is (documented as an
+        // admin-side trust decision, not something this plugin can verify on its own).
+        if (ClaimsResolver::resolve($this->claims, 'email_verified') === false) {
+            $this->log($params, 'log_login', 'system-oidclogin-login', 'Unverified email claim (email_verified=false) on server ' . $server->id, Log::WARNING);
+
+            return;
+        }
+
         // @phpstan-ignore assign.propertyType
         $extResponse->status = Authentication::STATUS_SUCCESS;
         $extResponse->server = $server;

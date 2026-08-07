@@ -6,7 +6,7 @@
     "username" : "test2",
     "enabled" : true,
     "totp" : false,
-    "emailVerified" : false,
+    "emailVerified" : true,
     "firstName" : "Test",
     "lastName" : "Two",
     "email" : "test2@example.com",
