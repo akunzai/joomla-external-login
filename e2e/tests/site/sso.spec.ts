@@ -210,6 +210,19 @@ test.describe('SSO with Keycloak', () => {
       // cannot clobber the real reason with its empty-credentials fallback (#249-class bug).
       await expect(page.getByText(/Empty password not allowed/i)).toHaveCount(0);
       await expect(page.getByText(/email address is not verified/i)).toBeVisible();
+
+      // #262: after a failed SSO, core leaves the user on /component/users/login. Retrying
+      // External Login from that SEF path must not resolve a relative index.php?... into a 404.
+      // Keycloak still holds an SSO session from the first attempt, so #username often never
+      // appears — wait for a request to the IdP instead of waitForKeycloakPage().
+      const idpRequest = page.waitForRequest(
+        (req) => req.url().includes('auth.dev.local'),
+        { timeout: 15000 },
+      );
+      await siteHomePage.clickExternalLogin();
+      await idpRequest;
+      await expect(page).not.toHaveURL(/\/component\/users\/index\.php/);
+      await expect(page.getByText(/The requested page can't be found|404 Page not found/i)).toHaveCount(0);
     } finally {
       // Restore the seeded email_verified_xpath (rather than clearing it), so the demo server
       // keeps demonstrating the pass-path with the check active for later runs/tests.
