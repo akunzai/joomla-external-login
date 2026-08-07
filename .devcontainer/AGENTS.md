@@ -56,7 +56,17 @@ Skip full reinstall; copy then clear cache:
 docker compose -f .devcontainer/compose.yml cp src/plugins/system/caslogin/src/Extension/Caslogin.php joomla:/var/www/html/plugins/system/caslogin/src/Extension/Caslogin.php
 docker compose -f .devcontainer/compose.yml cp src/plugins/system/caslogin/language joomla:/var/www/html/plugins/system/caslogin/
 docker compose -f .devcontainer/compose.yml cp src/administrator/components/com_externallogin/tmpl/servers/default.php joomla:/var/www/html/administrator/components/com_externallogin/tmpl/servers/default.php
-docker compose -f .devcontainer/compose.yml exec joomla php /var/www/html/cli/joomla.php cache:clean
+# Always clear cache as www-data. Root CLI rewrites administrator/cache/language
+# as root-owned; Apache then hits Permission denied and can 500 the admin UI
+# (language-load recursion).
+docker compose -f .devcontainer/compose.yml exec -u www-data joomla php /var/www/html/cli/joomla.php cache:clean
+```
+
+If you already ran CLI or `compose cp` as root and admin returns HTTP 500:
+
+```sh
+docker compose -f .devcontainer/compose.yml exec joomla \
+  chown -R www-data:www-data /var/www/html/administrator/cache /var/www/html/cache /var/www/html/tmp
 ```
 
 ## Diagnosing Issues
@@ -68,3 +78,5 @@ tail -20 /www/html/administrator/logs/everything.php
 # Container logs
 docker compose -f .devcontainer/compose.yml logs --tail 100 joomla
 ```
+
+**Admin HTTP 500 after file-copy / cache:clean:** check ownership first — `ls -la /var/www/html/administrator/cache/language` owned by `root` (with Apache as `www-data`) matches this failure mode. Container logs often show `file_put_contents(.../cache/language...): Permission denied` and a deep `Language::load` stack. Fix with the `chown` above, then re-test `/administrator/`.
