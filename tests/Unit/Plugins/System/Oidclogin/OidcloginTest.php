@@ -168,6 +168,43 @@ class OidcloginTest extends TestCase
         $this->assertSame([], $event->getArgument('result', []));
     }
 
+    public function testExplicitlyUnverifiedEmailPreventsLoginWithoutAddingAResult(): void
+    {
+        $claims = self::BASE_CLAIMS + ['email_verified' => false];
+
+        $plugin = $this->createPlugin($claims, self::BASE_PARAMS);
+        $response = new ExternalAuthenticationResponse();
+
+        $event = $this->dispatch($plugin, $response);
+
+        $this->assertNotSame(Authentication::STATUS_SUCCESS, $response->status);
+        $this->assertSame([], $event->getArgument('result', []));
+    }
+
+    public function testMissingEmailVerifiedClaimStillSucceeds(): void
+    {
+        // email_verified is OPTIONAL per the OIDC spec; providers that omit it entirely (i.e.
+        // BASE_CLAIMS, which carries no email_verified key) must not be blocked by the new check.
+        $plugin = $this->createPlugin(self::BASE_CLAIMS, self::BASE_PARAMS);
+        $response = new ExternalAuthenticationResponse();
+
+        $this->dispatch($plugin, $response);
+
+        $this->assertSame(Authentication::STATUS_SUCCESS, $response->status);
+    }
+
+    public function testExplicitlyVerifiedEmailStillSucceeds(): void
+    {
+        $claims = self::BASE_CLAIMS + ['email_verified' => true];
+
+        $plugin = $this->createPlugin($claims, self::BASE_PARAMS);
+        $response = new ExternalAuthenticationResponse();
+
+        $this->dispatch($plugin, $response);
+
+        $this->assertSame(Authentication::STATUS_SUCCESS, $response->status);
+    }
+
     public function testUsesCustomConfiguredClaimNames(): void
     {
         $claims = ['sub' => 'x', 'upn' => 'carol', 'mail' => 'carol@example.com', 'display_name' => 'Carol Example'];
