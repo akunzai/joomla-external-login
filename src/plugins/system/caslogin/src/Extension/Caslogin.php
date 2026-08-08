@@ -820,13 +820,16 @@ class Caslogin extends CMSPlugin
         if ($params->get('logouturl')) {
             $redirect = $this->getUrl($params) . '/logout?service=' . urlencode($params->get('logouturl')) . $locale;
         } elseif ($app->getInput()->get('return')) {
-            $return = base64_decode($app->getInput()->get('return', '', 'base64'));
+            // Always resolve through ExternalloginHelper::url so untrusted absolute
+            // return values cannot become open-redirect CAS service targets (audit F-03).
+            $return = base64_decode($app->getInput()->get('return', '', 'base64'), true);
 
-            if (is_numeric($return)) {
-                $return = ExternalloginHelper::url($return);
+            if ($return !== false && trim((string) $return) !== '') {
+                $service = ExternalloginHelper::url($return);
+                $redirect = $this->getUrl($params) . '/logout?service=' . urlencode($service) . $locale;
+            } else {
+                $redirect = $this->getUrl($params) . '/logout' . str_replace('&', '?', $locale);
             }
-
-            $redirect = $this->getUrl($params) . '/logout?service=' . urlencode($return) . $locale;
         } else {
             $redirect = $this->getUrl($params) . '/logout' . str_replace('&', '?', $locale);
         }

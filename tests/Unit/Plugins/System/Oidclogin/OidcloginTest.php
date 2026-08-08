@@ -207,28 +207,60 @@ class OidcloginTest extends TestCase
         $this->assertStringNotContainsStringIgnoringCase('Empty password', (string) $response->error_message);
     }
 
-    public function testMissingEmailVerifiedClaimStillSucceeds(): void
+    public function testMissingEmailVerifiedClaimDeniesWhenUsernameIsEmail(): void
     {
-        // email_verified is OPTIONAL per the OIDC spec; providers that omit it entirely (i.e.
-        // BASE_CLAIMS, which carries no email_verified key) must not be blocked by the new check.
+        // Production default username_claim is email: missing email_verified must fail closed (audit F-04).
+        $params = ['username_claim' => 'email', 'email_claim' => 'email', 'name_claim' => 'name'];
+        $plugin = $this->createPlugin(self::BASE_CLAIMS, $params);
+        $response = new ExternalAuthenticationResponse();
+
+        $event = $this->dispatch($plugin, $response);
+
+        $this->assertSame(Authentication::STATUS_DENIED, $response->status);
+        $this->assertContains(true, $event->getArgument('result', []));
+    }
+
+    public function testMissingEmailVerifiedAllowedWhenAdminOptsIn(): void
+    {
+        $params = [
+            'username_claim' => 'email',
+            'email_claim' => 'email',
+            'name_claim' => 'name',
+            'allow_unverified_email' => 1,
+        ];
+        $plugin = $this->createPlugin(self::BASE_CLAIMS, $params);
+        $response = new ExternalAuthenticationResponse();
+
+        $this->dispatch($plugin, $response);
+
+        $this->assertSame(Authentication::STATUS_SUCCESS, $response->status);
+        $this->assertSame('alice@example.com', $response->username);
+    }
+
+    public function testMissingEmailVerifiedSucceedsWhenUsernameIsNotEmailClaim(): void
+    {
+        // BASE_PARAMS uses preferred_username — email_verified absence is allowed.
         $plugin = $this->createPlugin(self::BASE_CLAIMS, self::BASE_PARAMS);
         $response = new ExternalAuthenticationResponse();
 
         $this->dispatch($plugin, $response);
 
         $this->assertSame(Authentication::STATUS_SUCCESS, $response->status);
+        $this->assertSame('alice', $response->username);
     }
 
     public function testExplicitlyVerifiedEmailStillSucceeds(): void
     {
+        $params = ['username_claim' => 'email', 'email_claim' => 'email', 'name_claim' => 'name'];
         $claims = self::BASE_CLAIMS + ['email_verified' => true];
 
-        $plugin = $this->createPlugin($claims, self::BASE_PARAMS);
+        $plugin = $this->createPlugin($claims, $params);
         $response = new ExternalAuthenticationResponse();
 
         $this->dispatch($plugin, $response);
 
         $this->assertSame(Authentication::STATUS_SUCCESS, $response->status);
+        $this->assertSame('alice@example.com', $response->username);
     }
 
     public function testUsesCustomConfiguredClaimNames(): void
