@@ -48,8 +48,8 @@ Full write-ups: **[docs/known-limitations.md](docs/known-limitations.md)**. Rebi
 
 - **One server per account** — login via a different CAS/OIDC server is rejected until an admin rebinds the account ([howto](docs/server-binding.md), [ADR 0001](docs/adr/0001-one-account-binds-one-external-login-server.md)).
 - **Keycloak role claims** — enable “Add to userinfo/ID token” on the built-in roles mappers; the plugin never reads the access token.
-- **OIDC `username_claim` defaults to `email`** — matches CAS’s email-based username; trade-offs and alternatives in the doc.
-- **CAS email verification is opt-in** — optional `email_verified_xpath` (XPath cookbook in the doc); OIDC uses the standard `email_verified` claim.
+- **OIDC `username_claim` defaults to `email`** — matches CAS’s email-based username; requires `email_verified=true` unless **Allow unverified email** is enabled (see doc).
+- **CAS email verification is opt-in** — optional `email_verified_xpath` (XPath cookbook in the doc).
 - **Azure AD `groups` are not mapped** — opaque GUIDs; use named App Roles instead.
 
 ## History of this extension

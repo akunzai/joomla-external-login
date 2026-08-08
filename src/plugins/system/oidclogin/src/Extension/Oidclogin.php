@@ -530,15 +530,30 @@ class Oidclogin extends CMSPlugin
             return;
         }
 
-        // email_verified is the OIDC-standard signal that the provider actually confirmed the
-        // address rather than accepting a self-asserted value. Since username_claim now defaults
-        // to email (matching CAS's own default), an unverified email is no longer just a cosmetic
-        // profile-field risk — it can determine which existing Joomla account isActivatedForServer()
-        // matches the login against. Only refuse on an explicit "false"; the claim is OPTIONAL per
-        // spec, and many providers omit it entirely, so absence is left as-is (documented as an
-        // admin-side trust decision, not something this plugin can verify on its own).
-        if (ClaimsResolver::resolve($this->claims, 'email_verified') === false) {
-            $this->log($params, 'log_login', 'system-oidclogin-login', 'Unverified email claim (email_verified=false) on server ' . $server->id, Log::WARNING);
+        // email_verified is the OIDC-standard signal that the provider confirmed the address.
+        // username_claim defaults to email, so an unverified or missing claim can select which
+        // Joomla account isActivatedForServer() matches. Policy:
+        // - always deny email_verified === false;
+        // - when username is taken from the email claim (default), also require
+        //   email_verified === true unless admin opts into allow_unverified_email.
+        // Providers that omit the claim must either verify email at the IdP and send true,
+        // use a non-email username_claim, or enable allow_unverified_email.
+        $usernameClaim = (string) $params->get('username_claim', 'email');
+        $emailClaim = (string) $params->get('email_claim', 'email');
+        $usernameFromEmailClaim = $usernameClaim === 'email' || $usernameClaim === $emailClaim;
+        $allowUnverifiedEmail = boolval($params->get('allow_unverified_email', 0));
+        $emailVerified = ClaimsResolver::resolve($this->claims, 'email_verified');
+        $emailNotVerified = $emailVerified === false
+            || ($usernameFromEmailClaim && !$allowUnverifiedEmail && $emailVerified !== true);
+
+        if ($emailNotVerified) {
+            $this->log(
+                $params,
+                'log_login',
+                'system-oidclogin-login',
+                'Unverified or missing email_verified claim on server ' . $server->id,
+                Log::WARNING
+            );
 
             // Claim this attempt with an explicit denial rather than a silent early return.
             // Leaving result empty lets authentication/externallogin skip stopPropagation(), so

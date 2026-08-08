@@ -48,7 +48,7 @@ Trade-offs:
 
 Set `username_claim` to `preferred_username` (or another stable claim) if those trade-offs do not fit your deployment.
 
-OIDC also denies login when the IdP explicitly sends `email_verified: false` (hardcoded claim check).
+When **username is the email claim** (the default), login requires `email_verified === true` unless the server option **Allow unverified email** is enabled. Explicit `email_verified: false` is always denied. Providers that omit the claim must send `true`, use a non-email `username_claim`, or opt into allow-unverified.
 
 ---
 
