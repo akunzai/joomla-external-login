@@ -83,8 +83,8 @@ services:
       - traefik.http.services.openmage.loadbalancer.server.port=8080
 
   mysql:
-    # https://hub.docker.com/_/mysql
-    image: mysql
+    # https://hub.docker.com/_/mysql — pin major.minor for reproducible CI pulls / cache hits
+    image: mysql:8.4
     volumes:
       - type: volume
         source: mysql_data
@@ -96,8 +96,8 @@ services:
       - 127.0.0.1:3306:3306
 
   traefik:
-    # https://hub.docker.com/_/traefik
-    image: traefik
+    # https://hub.docker.com/_/traefik — pin v3 line (same idea as mysql)
+    image: traefik:v3.7
     networks:
       default:
         aliases:
