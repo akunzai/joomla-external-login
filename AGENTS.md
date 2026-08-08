@@ -15,7 +15,8 @@ docker compose -f .devcontainer/compose.yml exec -w /workspace joomla <command>
 composer install
 composer run lint       # php-cs-fixer dry-run
 composer run fix
-composer run phpstan
+composer run phpstan    # includes --memory-limit=512M (default 128M OOMs on this tree)
+composer test
 ./bundle.sh             # → dist/pkg_externallogin.zip
 ```
 
