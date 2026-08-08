@@ -80,10 +80,10 @@
 			"php-cs-fixer fix"
 		],
 		"phpstan": [
-			"phpstan analyse"
+			"phpstan analyse --memory-limit=512M"
 		],
 		"phpstan-baseline": [
-			"phpstan analyse --generate-baseline"
+			"phpstan analyse --memory-limit=512M --generate-baseline"
 		],
 		"test": [
 			"phpunit"
