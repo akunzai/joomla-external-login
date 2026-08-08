@@ -21,11 +21,11 @@ if ($servers === []) {
     return;
 }
 ?>
-<h4><?php echo $servers[0]->title; ?></h4>
+<h4><?php echo htmlspecialchars($servers[0]->title, ENT_QUOTES, 'UTF-8'); ?></h4>
 <div class="control-group">
 	<div class="controls">
 		<div class="btn-group pull-left">
-			<button tabindex="3" class="btn btn-primary btn-large" onclick="document.location.href='<?php echo $servers[0]->url; ?>'; return false;">
+			<button tabindex="3" class="btn btn-primary btn-large" onclick="document.location.href='<?php echo htmlspecialchars($servers[0]->url, ENT_QUOTES, 'UTF-8'); ?>'; return false;">
 				<i class="icon-lock icon-white"></i> <?php echo Text::_('MOD_EXTERNALLOGIN_ADMIN_LOGIN'); ?>
 			</button>
 		</div>

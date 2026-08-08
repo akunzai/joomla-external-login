@@ -53,7 +53,7 @@ HTMLHelper::_('behavior.keepalive');
 				<select id="server-login">
 					<option value=""><?php echo Text::_('COM_EXTERNALLOGIN_SELECT_OPTION'); ?></option>
 					<?php foreach ($this->items as $server) : ?>
-						<option value="<?php echo htmlspecialchars($server->url, ENT_COMPAT, 'UTF-8'); ?>"><?php echo $server->title; ?></option>
+						<option value="<?php echo htmlspecialchars($server->url, ENT_COMPAT, 'UTF-8'); ?>"><?php echo htmlspecialchars($server->title, ENT_QUOTES, 'UTF-8'); ?></option>
 					<?php endforeach; ?>
 				</select>
 				<div class="clr"></div>
