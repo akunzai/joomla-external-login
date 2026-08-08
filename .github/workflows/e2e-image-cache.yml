@@ -1,0 +1,74 @@
+# Warm GHA BuildKit caches for e2e custom images on main so new PRs can
+# cache-from on their first run (PR jobs may restore caches from the default branch).
+# Scopes must match .github/workflows/e2e.yml (joomla-5 / joomla-6 / keycloak).
+name: E2E Image Cache
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.devcontainer/joomla/**'
+      - '.devcontainer/keycloak/**'
+      - '.github/workflows/e2e-image-cache.yml'
+      - '.github/workflows/e2e.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  warm-joomla:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        joomla:
+          - version: "5"
+            php-version: "8.3"
+            joomla-version: "5.4.7"
+          - version: "6"
+            php-version: "8.4"
+            joomla-version: "6.1.2"
+    name: Warm Joomla ${{ matrix.joomla.version }} cache
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      # No load/push — only export type=gha layers for PR e2e cache-from.
+      - name: Build Joomla image (cache export)
+        uses: docker/build-push-action@v7
+        with:
+          context: .devcontainer/joomla
+          build-args: |
+            JOOMLA_VERSION=${{ matrix.joomla.joomla-version }}
+            PHP_VERSION=${{ matrix.joomla.php-version }}
+          cache-from: type=gha,scope=joomla-${{ matrix.joomla.version }}
+          cache-to: type=gha,mode=max,scope=joomla-${{ matrix.joomla.version }}
+
+  warm-keycloak:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    name: Warm Keycloak cache
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Build Keycloak image (cache export)
+        uses: docker/build-push-action@v7
+        with:
+          context: .devcontainer/keycloak
+          cache-from: type=gha,scope=keycloak
+          cache-to: type=gha,mode=max,scope=keycloak

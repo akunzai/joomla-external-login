@@ -18,6 +18,8 @@ on:
 
 permissions:
   contents: read
+  # buildx type=gha cache-to needs write on private repos; harmless on public
+  actions: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -31,12 +33,13 @@ jobs:
       fail-fast: false
       matrix:
         joomla:
+          # Always set build-args so Joomla 6 is not a special empty case.
           - version: "5"
             php-version: "8.3"
             joomla-version: "5.4.7"
           - version: "6"
-            php-version: ""
-            joomla-version: ""
+            php-version: "8.4"
+            joomla-version: "6.1.2"
     name: E2E (Joomla ${{ matrix.joomla.version }})
     steps:
       - name: Checkout
@@ -54,13 +57,21 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
 
+      # type=gha only persists reliably via docker/build-push-action (or bake-action).
+      # Scopes match .github/workflows/e2e-image-cache.yml (main warms caches for
+      # first-run PRs; PR jobs can restore from the default branch).
+      - name: Pull service images
+        working-directory: .devcontainer
+        # Tags come from compose.yml (SSOT); only Hub services — not joomla/keycloak.
+        run: docker compose pull mysql traefik
+
       - name: Build Joomla image
         uses: docker/build-push-action@v7
         with:
           context: .devcontainer/joomla
           build-args: |
-            ${{ matrix.joomla.joomla-version != '' && format('JOOMLA_VERSION={0}', matrix.joomla.joomla-version) || '' }}
-            ${{ matrix.joomla.php-version != '' && format('PHP_VERSION={0}', matrix.joomla.php-version) || '' }}
+            JOOMLA_VERSION=${{ matrix.joomla.joomla-version }}
+            PHP_VERSION=${{ matrix.joomla.php-version }}
           load: true
           tags: joomla:external-login
           cache-from: type=gha,scope=joomla-${{ matrix.joomla.version }}
