@@ -23,7 +23,7 @@ $servers ??= [];
 <select id="mod-server-login-<?php echo $module->id; ?>" class="span">
 	<option value=""><?php echo Text::_('MOD_EXTERNALLOGIN_SITE_SELECT_OPTION'); ?></option>
 	<?php foreach ($servers as $server) : ?>
-		<option value="<?php echo htmlspecialchars($server->url, ENT_COMPAT, 'UTF-8'); ?>"><?php echo $server->title; ?></option>
+		<option value="<?php echo htmlspecialchars($server->url, ENT_COMPAT, 'UTF-8'); ?>"><?php echo htmlspecialchars($server->title, ENT_QUOTES, 'UTF-8'); ?></option>
 	<?php endforeach; ?>
 </select>
 <div class="clr"></div>

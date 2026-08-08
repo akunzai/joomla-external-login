@@ -26,6 +26,6 @@ if ($servers === []) {
 }
 ?>
 <?php if ($params->get('show_title', 0)) : ?>
-	<h4><?php echo $servers[0]->title; ?></h4>
+	<h4><?php echo htmlspecialchars($servers[0]->title, ENT_QUOTES, 'UTF-8'); ?></h4>
 <?php endif; ?>
-<input type="submit" class="btn btn-primary" onclick="document.location.href='<?php echo $servers[0]->url; ?>';return false;" class="button" value="<?php echo htmlspecialchars(Text::_('JLOGIN'), ENT_COMPAT, 'UTF-8'); ?>" />
+<input type="submit" class="btn btn-primary" onclick="document.location.href='<?php echo htmlspecialchars($servers[0]->url, ENT_QUOTES, 'UTF-8'); ?>';return false;" class="button" value="<?php echo htmlspecialchars(Text::_('JLOGIN'), ENT_COMPAT, 'UTF-8'); ?>" />

@@ -245,7 +245,11 @@ class ExternalloginHelper
      */
     public static function url(string|int $redirect): string
     {
-        if (!is_numeric($redirect)) {
+        // Non-numeric values come from request (e.g. ?redirect=https://…); menu Itemids are
+        // admin-configured and may intentionally point at an external "url" menu type.
+        $fromUntrustedString = !is_numeric($redirect);
+
+        if ($fromUntrustedString) {
             $link = urldecode((string) $redirect);
         } else {
             // Get site menu
@@ -297,8 +301,14 @@ class ExternalloginHelper
         if (preg_match('#^[a-z][a-z0-9+.-]*:#i', $link) || str_starts_with($link, '//')) {
             if (str_starts_with($link, '//')) {
                 $scheme = Uri::getInstance(Uri::root())->getScheme() ?: 'https';
+                $link = $scheme . ':' . $link;
+            }
 
-                return $scheme . ':' . $link;
+            // Untrusted absolute URLs (e.g. ?redirect=https://evil.example/) must not become
+            // open redirects or IdP service/redirect_uri targets. Same bar as the HTTP_REFERER
+            // fallback in Site\Model\ServerModel::getItem().
+            if ($fromUntrustedString && !Uri::isInternal($link)) {
+                return Uri::root();
             }
 
             return $link;
