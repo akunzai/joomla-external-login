@@ -288,6 +288,38 @@ class OidcloginTest extends TestCase
         $this->assertFalse(isset($response->groups));
     }
 
+    public function testFormatClaimsForLogEncodesClaimsAsJson(): void
+    {
+        $json = Oidclogin::formatClaimsForLog([
+            'sub' => 'abc',
+            'email' => 'alice@example.com',
+            'email_verified' => true,
+            'realm_access' => ['roles' => ['user']],
+        ]);
+
+        $decoded = json_decode($json, true);
+        $this->assertIsArray($decoded);
+        $this->assertSame('alice@example.com', $decoded['email']);
+        $this->assertSame(['user'], $decoded['realm_access']['roles']);
+    }
+
+    public function testFormatClaimsForLogRedactsCredentialShapedKeys(): void
+    {
+        $json = Oidclogin::formatClaimsForLog([
+            'sub' => 'abc',
+            'access_token' => 'should-not-appear',
+            'nested' => ['id_token' => 'also-secret', 'name' => 'ok'],
+        ]);
+
+        $this->assertStringNotContainsString('should-not-appear', $json);
+        $this->assertStringNotContainsString('also-secret', $json);
+
+        $decoded = json_decode($json, true);
+        $this->assertSame('[redacted]', $decoded['access_token']);
+        $this->assertSame('[redacted]', $decoded['nested']['id_token']);
+        $this->assertSame('ok', $decoded['nested']['name']);
+    }
+
     public function testGroupsClaimMissingFromClaimsLeavesGroupsUnset(): void
     {
         $params = self::BASE_PARAMS + ['groups_claim' => 'realm_access.roles'];

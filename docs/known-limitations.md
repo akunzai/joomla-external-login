@@ -9,6 +9,7 @@ Short index for operators and integrators. The root [README](../README.md) links
 | [OIDC `username_claim` default](#oidc-username_claim-default) | Defaults to `email`, not `preferred_username` |
 | [CAS email verification](#cas-email-verification) | Opt-in `email_verified_xpath`; cookbook of XPath shapes |
 | [Azure AD `groups`](#azure-ad-groups) | Opaque GUIDs are not mapped; use App Roles |
+| [OIDC claims logging](#oidc-claims-logging) | Opt-in `log_claims` dumps PII; disable after debugging |
 
 ---
 
@@ -76,6 +77,12 @@ so a response that omits the attribute is not treated as false (XPath empty node
 | Multi-valued list of verified addresses | `boolean(not(cas:attributes/cas:verified_email) or cas:attributes/cas:verified_email = cas:attributes/cas:email)` (node-set `=` node-set is existential in XPath 1.0) |
 
 Demo manual field values: [`.devcontainer/joomla/README.md`](../.devcontainer/joomla/README.md).
+
+---
+
+## OIDC claims logging
+
+Server param **Claims analysis** (`log_claims`, default off) logs the merged ID Token + UserInfo claims as JSON after verification — the OIDC counterpart of CAS **XML analysis**. Use only for short-lived debugging of claim paths; disable afterwards. Logs contain PII and must not include access/refresh/ID token strings (the plugin redacts credential-shaped keys if they ever appear in the claims map).
 
 ---
 

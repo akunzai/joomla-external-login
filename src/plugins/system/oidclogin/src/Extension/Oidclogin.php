@@ -111,6 +111,7 @@ class Oidclogin extends CMSPlugin
                 'system-oidclogin-verify',
                 'system-oidclogin-discovery',
                 'system-oidclogin-groups',
+                'system-oidclogin-claims',
             ]
         );
     }
@@ -448,6 +449,17 @@ class Oidclogin extends CMSPlugin
 
         $this->claims = array_merge($idTokenClaims, $userInfoClaims);
         $this->server = $server;
+
+        // Opt-in claims dump (CAS log_xml parity): only after JWT/UserInfo verification, never raw tokens.
+        if ($params->get('log_claims', 0)) {
+            $this->log(
+                $params,
+                'log_claims',
+                'system-oidclogin-claims',
+                'Analyzing claims on server ' . $serverID . "\n" . self::formatClaimsForLog($this->claims),
+                Log::INFO
+            );
+        }
 
         // Retained for RP-Initiated Logout's id_token_hint. Must be read back from session state
         // during onUserLogout, before Joomla's own onUserLogout listener destroys the session.
@@ -1300,6 +1312,58 @@ class Oidclogin extends CMSPlugin
         if ($params->get($toggle, 0)) {
             Log::add(new ExternalloginLogEntry($message, $priority, $category));
         }
+    }
+
+    /**
+     * JSON-encode claims for debugging logs, redacting credential-shaped keys if present.
+     * Public for unit tests — not an extension API.
+     *
+     * @param array<string, mixed> $claims
+     *
+     * @since 5.2.0
+     */
+    public static function formatClaimsForLog(array $claims): string
+    {
+        $encoded = json_encode(
+            self::redactSensitiveClaimKeys($claims),
+            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR
+        );
+
+        return is_string($encoded) ? $encoded : '{}';
+    }
+
+    private static function redactSensitiveClaimKeys(mixed $value): mixed
+    {
+        if (!is_array($value)) {
+            return $value;
+        }
+
+        $redacted = [];
+
+        foreach ($value as $key => $child) {
+            if (is_string($key) && self::isSensitiveClaimKey($key)) {
+                $redacted[$key] = '[redacted]';
+                continue;
+            }
+
+            $redacted[$key] = self::redactSensitiveClaimKeys($child);
+        }
+
+        return $redacted;
+    }
+
+    private static function isSensitiveClaimKey(string $key): bool
+    {
+        $normalized = strtolower($key);
+
+        return in_array($normalized, [
+            'access_token',
+            'refresh_token',
+            'id_token',
+            'client_secret',
+            'code_verifier',
+            'authorization',
+        ], true);
     }
 
     private function base64UrlEncode(string $data): string
