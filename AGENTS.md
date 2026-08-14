@@ -1,17 +1,17 @@
-# Joomla External Login — Agent Guidelines
+# Joomla External Login Developer Guidelines
 
-**Index-driven entrypoint.** Prefer **Progressive Disclosure**: keep this file lean; **Context Offload** multi-step SOPs to nested guides via **Lazy Loading** (`@path`). **Trust model judgment** for generic coding practice; record only project-specific, non-derivable constraints.
-
-## Quick Commands
+Joomla 5/6 extension package providing external authentication (CAS, OIDC) and user synchronization.
 
 Toolchain SSOT: @mise.toml — run `mise install` for PHP, Composer, Node, Aube.
 
+## Commands
+
 ```sh
-# Stack (full SOP: @.devcontainer/AGENTS.md)
+# Stack & lifecycle (SOP: @.devcontainer/AGENTS.md)
 docker compose -f .devcontainer/compose.yml up -d
 docker compose -f .devcontainer/compose.yml exec -w /workspace joomla <command>
 
-# Quality / release (script SSOT: @composer.json)
+# Quality & packaging (SSOT: @composer.json)
 composer install
 composer run lint       # php-cs-fixer dry-run
 composer run fix
@@ -20,58 +20,32 @@ composer test
 ./bundle.sh             # → dist/pkg_externallogin.zip
 ```
 
-**Dev endpoints:** Joomla `https://www.dev.local` · Keycloak `https://auth.dev.local` · Traefik `443` · MySQL `3306`. TLS: `.devcontainer/generate-certs.sh .devcontainer/.secrets`.
+**Dev endpoints:** Joomla `https://www.dev.local` · Keycloak `https://auth.dev.local` · Traefik `443` · MySQL `3306`.
 
-## Architecture
+## Pointers
 
-| Path | Role |
-|------|------|
-| `src/` | Extension package: admin (`administrator/`), site (`components/`), plugins (`plugins/{authentication,system,user}/`) |
-| `e2e/` | Playwright E2E — @e2e/AGENTS.md |
-| `dist/` | Bundled zips (`pkg_externallogin.zip`) |
-| `.devcontainer/` | Compose stack, extension install, diagnostics — @.devcontainer/AGENTS.md |
+- Dev stack & extension lifecycle: @.devcontainer/AGENTS.md
+- E2E tests (Playwright / `aube`): @e2e/AGENTS.md
+- Domain model & ADRs: @docs/agents/domain.md
+- Issue tracker SOP: @docs/agents/issue-tracker.md
+- Triage labels: @docs/agents/triage-labels.md
+- Code style rules: @.php-cs-fixer.dist.php
+- Static analysis: @phpstan.neon
 
-## Code Style (project-specific)
-
-Machine-enforced SSOT: @.php-cs-fixer.dist.php (`@PSR12`, `@PHP83Migration`). Static analysis: @phpstan.neon.
+## Code Style
 
 Non-derivable conventions:
 
-- Import order: `Joomla\CMS` → other Joomla → project namespaces (alpha within each group)
+- Import order: `Joomla\CMS` → other Joomla → project namespaces (alphabetical within groups)
 - PHP entry points: `defined('_JEXEC') or die;`
 - User-facing copy: Joomla `Text`; failures: Joomla exceptions
-- Components follow Joomla MVC inheritance
-- All source and docs in English
-
-## Context Offloading
-
-| Domain | Lazy-load |
-|--------|-----------|
-| Dev stack, extension lifecycle, file-copy testing, logs | @.devcontainer/AGENTS.md |
-| E2E (`aube` / Playwright) | @e2e/AGENTS.md |
 
 ## Self-Reflection
 
-When solving a problem reveals non-obvious knowledge (gotchas, hidden configs, env quirks):
-1. **Distill**: Create a concise, context-tagged candidate rule (≤ 2 bullets).
-2. **Promote**: Confirm with user, write to topic doc in `docs/<topic>.md` (fallback: `docs/lessons-learned.md`), and add a `@path` reference line under Rich References.
-3. **Prune**: Review and propose deleting stale entries when underlying stack/configs change.
-
-## Agent skills
-
-### Issue tracker
-
-GitHub Issues on `akunzai/joomla-external-login` via the `gh` CLI. See `docs/agents/issue-tracker.md`.
-
-### Triage labels
-
-Default five canonical roles, label string = role name. See `docs/agents/triage-labels.md`.
-
-### Domain docs
-
-Single-context — `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agents/domain.md`.
+- **Candidate**: Distill a non-obvious gotcha into ≤ 2 context-tagged bullets. Propose it before writing.
+- **Promote**: On confirmation, write it to a dedicated file — merge an existing topic doc, else `docs/<topic>.md`, else `docs/lessons-learned.md`. Add or update one `@path` line under Pointers.
+- **Prune**: Drop entries once stale (obsolete version, now enforced, duplicated, or a transcript) — not by a fixed count.
 
 ## Claude Code Compatibility
 
-> [!NOTE]
-> `CLAUDE.md` is a symlink to `AGENTS.md` (shared SSOT). Edit `AGENTS.md` only.
+`CLAUDE.md` is a symbolic link pointing to `AGENTS.md`. Edit `AGENTS.md` directly.
