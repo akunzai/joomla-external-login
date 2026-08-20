@@ -1,7 +1,7 @@
 ARG PHP_VERSION=8.4
 ARG PHP_EXTRA_BUILD_DEPS=""
 # https://hub.docker.com/_/joomla
-ARG JOOMLA_VERSION=6.1.2
+ARG JOOMLA_VERSION=6.1.3
 
 # Joomla upstream tree only — changes to JOOMLA_VERSION must not rebuild PHP extensions.
 FROM joomla:${JOOMLA_VERSION}-apache AS joomla-src

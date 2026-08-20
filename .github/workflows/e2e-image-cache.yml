@@ -32,10 +32,10 @@ jobs:
         joomla:
           - version: "5"
             php-version: "8.3"
-            joomla-version: "5.4.7"
+            joomla-version: "5.4.8"
           - version: "6"
             php-version: "8.4"
-            joomla-version: "6.1.2"
+            joomla-version: "6.1.3"
     name: Warm Joomla ${{ matrix.joomla.version }} cache
     steps:
       - name: Checkout

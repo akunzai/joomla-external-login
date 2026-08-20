@@ -62,7 +62,10 @@ jobs:
           NEW_VERSION: ${{ steps.get-version.outputs.latest_6 }}
         run: |
           sed -i "s/ARG JOOMLA_VERSION=${CURRENT_VERSION}/ARG JOOMLA_VERSION=${NEW_VERSION}/" .devcontainer/joomla/Dockerfile
+          sed -i "s/default = \"${CURRENT_VERSION}\"/default = \"${NEW_VERSION}\"/" .devcontainer/docker-bake.hcl
           sed -i "s/${CURRENT_VERSION}/${NEW_VERSION}/g" composer.json
+          sed -i "s/joomla-version: \"${CURRENT_VERSION}\"/joomla-version: \"${NEW_VERSION}\"/" .github/workflows/e2e.yml
+          sed -i "s/joomla-version: \"${CURRENT_VERSION}\"/joomla-version: \"${NEW_VERSION}\"/" .github/workflows/e2e-image-cache.yml
 
       - name: Set up PHP
         if: steps.get-version.outputs.needs_update_6 == 'true'
@@ -83,6 +86,7 @@ jobs:
           NEW_VERSION: ${{ steps.get-version.outputs.latest_5 }}
         run: |
           sed -i "s/joomla-version: \"${CURRENT_VERSION}\"/joomla-version: \"${NEW_VERSION}\"/" .github/workflows/e2e.yml
+          sed -i "s/joomla-version: \"${CURRENT_VERSION}\"/joomla-version: \"${NEW_VERSION}\"/" .github/workflows/e2e-image-cache.yml
 
       - name: Build PR metadata
         id: pr-meta
@@ -116,7 +120,7 @@ jobs:
           body: |
             Bump the `joomla` Docker image (https://hub.docker.com/_/joomla) used for development, CI, and E2E testing.
 
-            ${{ steps.get-version.outputs.needs_update_6 == 'true' && format('- Joomla 6: `{0}` → `{1}` (Dockerfile default, composer.json)', steps.get-version.outputs.current_6, steps.get-version.outputs.latest_6) || '' }}
+            ${{ steps.get-version.outputs.needs_update_6 == 'true' && format('- Joomla 6: `{0}` → `{1}` (Dockerfile default, docker-bake.hcl, composer.json, E2E matrix)', steps.get-version.outputs.current_6, steps.get-version.outputs.latest_6) || '' }}
             ${{ steps.get-version.outputs.needs_update_5 == 'true' && format('- Joomla 5: `{0}` → `{1}` (E2E matrix leg)', steps.get-version.outputs.current_5, steps.get-version.outputs.latest_5) || '' }}
 
             References:
