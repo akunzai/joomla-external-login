@@ -5,13 +5,13 @@ bug:
 refactor:
   - head-branch: ['^refactor/']
 dependencies:
-  - head-branch: ['^dependabot/', '^keycloak/']
+  - head-branch: ['^dependabot/', '^keycloak/', '^joomla/']
   - changed-files:
       - any-glob-to-any-file:
           - 'composer.json'
           - 'composer.lock'
           - 'e2e/package.json'
-          - 'e2e/package-lock.json'
+          - 'e2e/pnpm-lock.yaml'
 github_actions:
   - head-branch: ['^ci/']
   - changed-files:

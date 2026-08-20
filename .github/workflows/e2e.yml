@@ -36,10 +36,10 @@ jobs:
           # Always set build-args so Joomla 6 is not a special empty case.
           - version: "5"
             php-version: "8.3"
-            joomla-version: "5.4.7"
+            joomla-version: "5.4.8"
           - version: "6"
             php-version: "8.4"
-            joomla-version: "6.1.2"
+            joomla-version: "6.1.3"
     name: E2E (Joomla ${{ matrix.joomla.version }})
     steps:
       - name: Checkout
