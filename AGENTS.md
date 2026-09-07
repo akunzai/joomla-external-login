@@ -17,6 +17,7 @@ composer run lint       # php-cs-fixer dry-run
 composer run fix
 composer run phpstan    # includes --memory-limit=512M (default 128M OOMs on this tree)
 composer test
+composer test -- --filter <pattern>   # single test
 ./bundle.sh             # → dist/pkg_externallogin.zip
 ```
 
@@ -41,11 +42,11 @@ Non-derivable conventions:
 - PHP entry points: `defined('_JEXEC') or die;`
 - User-facing copy: Joomla `Text`; failures: Joomla exceptions
 
-## Self-Reflection
+## Prevent Recurrence
 
-- **Candidate**: Distill a non-obvious gotcha into ≤ 2 context-tagged bullets. Propose it before writing.
-- **Promote**: On confirmation, put it where whoever would break it must already pass — enforce it (assert/type/test) when the fix is in hand, else a comment at that site, else an agent-facing doc (`docs/agents/<topic>.md`, else `docs/agents/lessons-learned.md`) with one `@path` line under Pointers. Never both.
-- **Prune**: Drop entries once stale (obsolete version, now enforced, duplicated, or a transcript) — not by a fixed count.
+- **Candidate**: Name who hits this again, in which file, on what change. No such scenario, nothing to propose.
+- **Promote**: Offer the first tier that reaches them and only that one, pending confirmation — enforce it (assert/type/test) with its size quoted, else a comment at that site, else an agent-facing doc (`docs/agents/<topic>.md`, else `docs/agents/lessons-learned.md`) with one `@path` line under Pointers and one sentence on why the tiers above cannot hold it.
+- **Prune**: When adding to a file, audit the rest of it in the same pass. Drop entries once stale (obsolete version, now enforced, duplicated, or a transcript) — not by a fixed count.
 
 ## Claude Code Compatibility
 
