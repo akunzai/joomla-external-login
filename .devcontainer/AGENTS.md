@@ -1,6 +1,6 @@
 # Dev Container — Agent Guidelines
 
-**Context-offloaded SOP** for the compose stack. Human setup/credentials: @.devcontainer/README.md. Root index: @AGENTS.md.
+**Context-offloaded SOP** for the compose stack. Human setup/credentials: `.devcontainer/README.md`. Root index: `AGENTS.md`.
 
 ## Starting the Stack
 
@@ -20,7 +20,7 @@ docker compose -f .devcontainer/compose.yml down
 docker compose -f .devcontainer/compose.yml exec -w /workspace joomla <command>
 ```
 
-Common tasks (script SSOT: @composer.json):
+Common tasks (script SSOT: `composer.json`):
 
 ```sh
 composer install

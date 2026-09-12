@@ -2,20 +2,20 @@
 
 Joomla 5/6 extension package providing external authentication (CAS, OIDC) and user synchronization.
 
-Toolchain SSOT: @mise.toml — run `mise install` for PHP, Composer, Node, Aube.
+Toolchain SSOT: `mise.toml` — run `mise install` for PHP, Composer, Node, Aube.
 
 ## Pointers
 
-- Verification: @docs/agents/verification.md
-- Dev stack & extension lifecycle: @.devcontainer/AGENTS.md
-- E2E tests (Playwright / `aube`): @e2e/AGENTS.md
-- Domain model & ADRs: @docs/agents/domain.md
-- Issue tracker: @docs/agents/issue-tracker.md
-- Pull requests: @docs/agents/pull-request.md
-- Triage labels: @docs/agents/triage-labels.md
-- Code style rules: @.php-cs-fixer.dist.php
-- Static analysis: @phpstan.neon
-- Known limitations: @docs/known-limitations.md
+- Before running or reporting verification, read `docs/agents/verification.md`
+- When opening a pull or merge request, read `docs/agents/pull-request.md`
+- When filing or triaging an issue, read `docs/agents/issue-tracker.md`
+- Dev stack & extension lifecycle: `.devcontainer/AGENTS.md`
+- E2E tests (Playwright / `aube`): `e2e/AGENTS.md`
+- Domain model & ADRs: `docs/agents/domain.md`
+- Triage labels: `docs/agents/triage-labels.md`
+- Code style rules: `.php-cs-fixer.dist.php`
+- Static analysis: `phpstan.neon`
+- Known limitations: `docs/known-limitations.md`
 
 ## Code Style
 
@@ -28,7 +28,7 @@ Non-derivable conventions:
 ## Prevent Recurrence
 
 - **Candidate**: Name who hits this again, in which file, on what change. No such scenario, nothing to propose.
-- **Promote**: Offer the first tier that reaches them and only that one, pending confirmation — enforce it (assert/type/test) with its size quoted, else a comment at that site, else an agent-facing doc (`docs/agents/<topic>.md`, else `docs/agents/lessons-learned.md`) with one `@path` line under Pointers and one sentence on why the tiers above cannot hold it.
+- **Promote**: Offer the first tier that reaches them and only that one, pending confirmation — enforce it (assert/type/test) with its size quoted, else a comment at that site, else an agent-facing doc (`docs/agents/<topic>.md`, else `docs/agents/lessons-learned.md`) with one backtick-path line under Pointers and one sentence on why the tiers above cannot hold it.
 - **Prune**: When adding to a file, audit the rest of it in the same pass. Drop entries once stale (obsolete version, now enforced, duplicated, or a transcript) — not by a fixed count.
 
 ## Claude Code Compatibility
