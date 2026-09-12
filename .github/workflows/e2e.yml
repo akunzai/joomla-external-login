@@ -7,7 +7,9 @@ on:
     paths:
       - 'src/**'
       - 'e2e/**'
+      - '!e2e/**/*.md'
       - '.devcontainer/**'
+      - '!.devcontainer/**/*.md'
       - 'composer.json'
       - 'composer.lock'
       - 'manifest.xml'
@@ -114,7 +116,7 @@ jobs:
 
       - name: Get Playwright version
         working-directory: e2e
-        run: echo "PLAYWRIGHT_VERSION=$(aubx playwright --version | cut -d' ' -f2)" >> $GITHUB_ENV
+        run: echo "PLAYWRIGHT_VERSION=$(aube dlx playwright --version | cut -d' ' -f2)" >> $GITHUB_ENV
 
       - name: Cache Playwright browsers
         uses: actions/cache@v6
@@ -128,15 +130,15 @@ jobs:
         run: |
           if [ "${{ steps.playwright-cache.outputs.cache-hit }}" != 'true' ]; then
             echo "Cache miss - Installing browsers with system dependencies..."
-            aubx playwright install --with-deps chromium
+            aube dlx playwright install --with-deps chromium
           else
             echo "Cache hit - Installing system dependencies only..."
-            aubx playwright install-deps chromium
+            aube dlx playwright install-deps chromium
           fi
 
       - name: Run E2E tests
         working-directory: e2e
-        run: aubr test
+        run: aube test
 
       - name: Upload Playwright report
         uses: actions/upload-artifact@v7
