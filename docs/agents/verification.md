@@ -33,7 +33,7 @@ Task runner commands are defined in `composer.json`.
 | Unit tests (all) | `composer test` |
 | Single test | `composer test -- --filter <pattern>` |
 | Extension package build | `./bundle.sh` |
-| E2E tests (headless) | `cd e2e && aubr test` |
+| E2E tests (headless) | `cd e2e && aube test` |
 
 ## Human prerequisites
 
