@@ -39,7 +39,8 @@ Use a concise descriptive title with no Conventional Commit prefix.
 <details>
 <summary>Technical details</summary>
 
-suspected cause, related code paths, repro commands, log excerpts
+<everything an implementer needs — for example, suspected cause, related
+code paths, repro commands, log excerpts>
 
 </details>
 ```
@@ -74,7 +75,8 @@ this needs a deployed environment rather than a local run>
 <details>
 <summary>Technical details</summary>
 
-related code paths, prior art, log excerpts, open questions
+<only background — for example, related code paths, prior art, log
+excerpts, open questions>
 
 </details>
 ```

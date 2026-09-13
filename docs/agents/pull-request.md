@@ -36,8 +36,9 @@ characters — they live in history and get searched by tooling.
    references as `![alt](./after.png)` is rewritten to point at the
    uploaded asset. Only when capture is genuinely impossible, leave a
    named placeholder comment.
-3. A collapsed technical trailer holding affected paths, implementation
-   notes, verification commands, and log excerpts.
+3. A collapsed technical trailer holding implementation notes, verification,
+   and lessons learned. Skip affected paths — the forge's own diff view
+   already shows those.
 
 **No personally identifiable information in any attachment**, whatever
 you end up attaching. `verification.md`'s capture rules say what that
