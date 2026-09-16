@@ -31,6 +31,10 @@ characters — they live in history and get searched by tooling.
 
    Pair before and after. At most one diagram unless it is such a pair.
 
+   In a Mermaid label, write a path parameter as `:id`, not `{id}` — `{}`
+   opens a rhombus node and fails the parse — and break lines with `<br/>`,
+   not `\n`, which is not a line break inside a quoted label.
+
    Upload the file with the repeatable `--attach` flag —
    `gh pr create --attach './after.png#After'`.
    Alt text follows the path after `#`, and a path the body already
