@@ -67,6 +67,9 @@ Credentials come from GitHub Actions repository secrets.
 
 - Recording: `to-walkthrough-video` or `tcut` — fallback: Playwright video recordings in `e2e/test-results/`
 - Screenshots: Playwright screenshots or terminal output captures
+- UI locale: **`en`**. The extension ships `en-GB` language files only.
+  Browser automation defaults to `en-US`, which matches. Captions follow
+  English.
 
 **This document is where the capture rules live**, and the request
 document points here rather than restating them. A capture taken on the
