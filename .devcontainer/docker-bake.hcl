@@ -5,7 +5,7 @@
 // Raw bake/buildx CLI type=gha does not export cache in GHA for this workflow.
 
 variable "JOOMLA_VERSION" {
-  default = "6.1.4"
+  default = "6.2.0"
 }
 
 variable "PHP_VERSION" {
