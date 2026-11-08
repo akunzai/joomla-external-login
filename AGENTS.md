@@ -2,7 +2,7 @@
 
 Joomla 5/6 extension package providing external authentication (CAS, OIDC) and user synchronization.
 
-Toolchain SSOT: `mise.toml` — run `mise install` for PHP, Composer, Node, Aube.
+Toolchain SSOT: `mise.toml` — run `mise install` for PHP, Composer, Bun.
 
 ## Pointers
 
@@ -10,7 +10,7 @@ Toolchain SSOT: `mise.toml` — run `mise install` for PHP, Composer, Node, Aube
 - When opening a pull or merge request, read `docs/agents/pull-request.md`
 - When filing or triaging an issue, read `docs/agents/issue-tracker.md`
 - Dev stack & extension lifecycle: `.devcontainer/AGENTS.md`
-- E2E tests (Playwright / `aube`): `e2e/AGENTS.md`
+- E2E tests (Playwright / `bun`): `e2e/AGENTS.md`
 - Domain model & ADRs: `docs/agents/domain.md`
 - Triage labels: `docs/agents/triage-labels.md`
 - Code style rules: `.php-cs-fixer.dist.php`

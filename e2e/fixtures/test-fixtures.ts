@@ -88,19 +88,18 @@ export const test = base.extend<Fixtures>({
     await page.waitForURL(/\/administrator\/index\.php/);
 
     // Wait for page to fully load
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
 
     // Handle first-time welcome tour if it appears
     const shepherdModal = page.locator('.shepherd-modal-is-visible');
-    if (await shepherdModal.isVisible({ timeout: 2000 }).catch(() => false)) {
+    if (await shepherdModal.isVisible().catch(() => false)) {
       // Try to click Skip/Cancel button
       const skipButton = page.locator('.shepherd-cancel-icon, .shepherd-button-secondary');
-      if (await skipButton.first().isVisible({ timeout: 1000 }).catch(() => false)) {
+      if (await skipButton.first().isVisible().catch(() => false)) {
         await skipButton.first().click({ force: true });
-        await page.waitForTimeout(300);
       }
       // If still visible, remove via JavaScript
-      if (await shepherdModal.isVisible({ timeout: 500 }).catch(() => false)) {
+      if (await shepherdModal.isVisible().catch(() => false)) {
         await page.evaluate(() => {
           document.querySelectorAll('.shepherd-modal-overlay-container, .shepherd-element, svg.shepherd-modal-is-visible').forEach(el => el.remove());
         });
@@ -109,11 +108,11 @@ export const test = base.extend<Fixtures>({
 
     // Handle Joomla Statistics opt-in dialog if it appears
     const statisticsDialog = page.locator('joomla-dialog, .joomla-modal').filter({ hasText: /statistics/i });
-    if (await statisticsDialog.isVisible({ timeout: 1000 }).catch(() => false)) {
+    if (await statisticsDialog.isVisible().catch(() => false)) {
       const noButton = statisticsDialog.getByRole('button', { name: 'No' });
-      if (await noButton.isVisible({ timeout: 500 }).catch(() => false)) {
+      if (await noButton.isVisible().catch(() => false)) {
         await noButton.click({ force: true });
-        await page.waitForTimeout(300);
+        await noButton.waitFor({ state: 'hidden', timeout: 2000 }).catch(() => {});
       }
     }
 
