@@ -1,7 +1,7 @@
 import { chromium, type FullConfig } from '@playwright/test';
 
 async function globalSetup(config: FullConfig) {
-  const baseURL = config.projects[0].use.baseURL || 'https://www.dev.local';
+  const baseURL = config.projects[0].use.baseURL || 'https://www.dev.local:8443';
 
   console.log('Waiting for Joomla to be ready...');
 
