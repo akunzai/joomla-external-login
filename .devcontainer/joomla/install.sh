@@ -10,9 +10,10 @@ if [[ ! -t 0 ]] || [[ ! -t 1 ]]; then
 fi
 
 # Helper function for docker compose exec
+CONTAINER_COMPOSE="${CONTAINER_COMPOSE:-${DOCKER_COMPOSE:-docker compose}}"
 dc_exec() {
   # shellcheck disable=SC2086
-  docker compose exec ${TTY_FLAG} "$@"
+  ${CONTAINER_COMPOSE} exec ${TTY_FLAG} "$@"
 }
 
 # shellcheck disable=1091
@@ -32,7 +33,7 @@ JOOMLA_COOKIE_DOMAIN="${JOOMLA_COOKIE_DOMAIN:-}"
 joomla_mysql() {
   # Always use -T for MySQL operations (no TTY needed)
   # shellcheck disable=SC2086
-  docker compose exec -T -e MYSQL_PWD="${JOOMLA_DB_PASSWORD}" mysql mysql -u"${JOOMLA_DB_USER}" "${JOOMLA_DB_NAME}" "$@"
+  ${CONTAINER_COMPOSE} exec -T -e MYSQL_PWD="${JOOMLA_DB_PASSWORD}" mysql mysql -u"${JOOMLA_DB_USER}" "${JOOMLA_DB_NAME}" "$@"
 }
 
 echo "Waiting for Joomla container to initialize ..."
@@ -59,7 +60,7 @@ echo "Checking database ..."
 for _ in $(seq 1 20); do
   # Always use -T for MySQL operations (no TTY needed)
   # shellcheck disable=SC2086,SC2312
-  docker compose exec -T -e MYSQL_PWD="${MYSQL_ROOT_PASSWORD:-secret}" mysql mysql -uroot -e 'show databases;' 2>/dev/null | grep -qF 'joomla' && break
+  ${CONTAINER_COMPOSE} exec -T -e MYSQL_PWD="${MYSQL_ROOT_PASSWORD:-secret}" mysql mysql -uroot -e 'show databases;' 2>/dev/null | grep -qF 'joomla' && break
   sleep 1
 done
 
@@ -128,7 +129,7 @@ if dc_exec joomla test -f /var/www/html/cli/joomla.php; then
   # own string-literal parser (not just JSON's) treats backslash as an escape character and
   # consumes it before Joomla ever sees the value (Registry::__construct() then throws
   # "Error decoding JSON data: Syntax error" on every request that loads this server's params).
-  CAS_PARAMS="{\"autoregister\":\"1\",\"autoupdate\":\"1\",\"autologout\":\"1\",\"ssl\":\"1\",\"url\":\"auth.dev.local\",\"dir\":\"realms/demo/protocol/cas\",\"cas_v3\":\"1\",\"port\":\"443\",\"username_xpath\":\"string(cas:attributes/cas:email)\",\"name_xpath\":\"string(cas:attributes/cas:display_name)\",\"email_xpath\":\"string(cas:attributes/cas:email)\",\"email_verified_xpath\":\"boolean(not(cas:attributes/cas:emailVerified) or cas:attributes/cas:emailVerified = 'true')\"}"
+  CAS_PARAMS="{\"autoregister\":\"1\",\"autoupdate\":\"1\",\"autologout\":\"1\",\"ssl\":\"1\",\"url\":\"auth.dev.local\",\"dir\":\"realms/demo/protocol/cas\",\"cas_v3\":\"1\",\"port\":\"8443\",\"username_xpath\":\"string(cas:attributes/cas:email)\",\"name_xpath\":\"string(cas:attributes/cas:display_name)\",\"email_xpath\":\"string(cas:attributes/cas:email)\",\"email_verified_xpath\":\"boolean(not(cas:attributes/cas:emailVerified) or cas:attributes/cas:emailVerified = 'true')\"}"
   CAS_PARAMS_SQL="${CAS_PARAMS//\'/\'\'}"
   joomla_mysql -e "INSERT IGNORE INTO ${JOOMLA_DB_PREFIX}externallogin_servers (title, published, plugin, ordering, params) VALUES ('Keycloak CAS', 1, 'system.caslogin', 1, '${CAS_PARAMS_SQL}');"
 
@@ -142,7 +143,7 @@ if dc_exec joomla test -f /var/www/html/cli/joomla.php; then
   # of falling through to a raw Joomla core "duplicate email" registration failure.
   # groups_claim: realm_access.roles, Keycloak's default location for realm-role claims, so a
   # fresh devcontainer already exercises OIDC group/role mapping (#239) out of the box.
-  OIDC_PARAMS='{"autoregister":"1","autoupdate":"1","autologout":"1","post_logout_redirect":"https://www.dev.local/","issuer":"https://auth.dev.local/realms/demo","client_id":"joomla-oidc","client_secret":"dev-oidc-secret","username_claim":"email","name_claim":"name","email_claim":"email","groups_claim":"realm_access.roles"}'
+  OIDC_PARAMS='{"autoregister":"1","autoupdate":"1","autologout":"1","post_logout_redirect":"https://www.dev.local:8443/","issuer":"https://auth.dev.local:8443/realms/demo","client_id":"joomla-oidc","client_secret":"dev-oidc-secret","username_claim":"email","name_claim":"name","email_claim":"email","groups_claim":"realm_access.roles"}'
   joomla_mysql -e "INSERT IGNORE INTO ${JOOMLA_DB_PREFIX}externallogin_servers (title, published, plugin, ordering, params) VALUES ('Keycloak OIDC', 1, 'system.oidclogin', 2, '${OIDC_PARAMS}');"
 
   echo "Configuring External Login module ..."

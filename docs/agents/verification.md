@@ -18,7 +18,7 @@ prerequisite — see Human prerequisites below.
 
 **Proof it ran**: PHPUnit exits 0 with all tests passing (`OK (57 tests, 120 assertions)`), PHPStan reports `[OK] No errors`, and PHP CS Fixer reports no fixable files.
 
-Entry point: `https://www.dev.local`. Test account: admin / credentials in `.devcontainer/README.md`.
+Entry point: `https://www.dev.local:8443`. Test account: admin / credentials in `.devcontainer/README.md`.
 
 ## Checks
 
@@ -46,7 +46,7 @@ Run once, by a person. The start command fails until they are done.
 
 ## Ports
 
-This stack is reached by hostname, so ports cannot be offset. **Only one
+Traefik binds host ports `8080` (HTTP) and `8443` (HTTPS) on loopback (`127.0.0.1`), avoiding collisions with host-level services and rootless container engines (such as Podman). This stack is reached by hostname with port 8443. **Only one
 agent runs the environment at a time**; the lock is `.devcontainer/.lock`.
 
 ## Changes that need a deployed environment

@@ -14,7 +14,7 @@ export default defineConfig({
     timeout: 10000,
   },
   use: {
-    baseURL: process.env.BASE_URL || 'https://www.dev.local',
+    baseURL: process.env.BASE_URL || 'https://www.dev.local:8443',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'on-first-retry',

@@ -32,13 +32,11 @@ services:
     depends_on:
       - mysql
       - traefik
-    external_links:
-      - traefik:store.dev.local
-      - traefik:www.dev.local
     labels:
       - traefik.enable=true
       - traefik.http.routers.joomla.entrypoints=websecure
       - traefik.http.routers.joomla.rule=Host(`www.dev.local`)
+      - traefik.http.services.joomla.loadbalancer.server.port=80
 
   keycloak:
     build: ./keycloak
@@ -73,9 +71,6 @@ services:
     depends_on:
       - mysql
       - traefik
-    external_links:
-      - traefik:www.dev.local
-      - traefik:auth.dev.local
     labels:
       - traefik.enable=true
       - traefik.http.routers.openmage.entrypoints=websecure
@@ -104,7 +99,7 @@ services:
           - auth.dev.local
           - www.dev.local
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${CONTAINER_SOCKET_PATH:-${DOCKER_SOCKET_PATH:-/var/run/docker.sock}}:/var/run/docker.sock:ro
       - ./traefik/etc:/etc/traefik
     command:
       - --api.insecure=true
@@ -112,14 +107,14 @@ services:
       - --entrypoints.web.address=:80
       - --entrypoints.web.http.redirections.entryPoint.to=websecure
       - --entrypoints.web.http.redirections.entryPoint.scheme=https
-      - --entrypoints.websecure.address=:443
+      - --entrypoints.websecure.address=:8443
       - --entrypoints.websecure.http.tls=true
       - --providers.docker=true
       - --providers.docker.exposedByDefault=false
       - --providers.file.directory=/etc/traefik/dynamic/
     ports:
-      - 80:80
-      - 443:443
+      - 127.0.0.1:8080:80
+      - 127.0.0.1:8443:8443
       - 127.0.0.1:9090:8080
     secrets:
       - cert.pem

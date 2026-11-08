@@ -211,7 +211,7 @@ test.describe('OIDC login with Keycloak', () => {
         { timeout: 15000 },
       );
 
-      await guestPage.goto('https://www.dev.local/', { waitUntil: 'commit' });
+      await guestPage.goto('/', { waitUntil: 'commit' });
       const authRequest = await authRequestPromise;
       expect(authRequest.url()).toContain('client_id=joomla-oidc');
 
@@ -239,7 +239,7 @@ test.describe('OIDC login with Keycloak', () => {
       };
       guestPage.on('request', secondAuthListener);
       try {
-        await guestPage.goto('https://www.dev.local/', { waitUntil: 'domcontentloaded' });
+        await guestPage.goto('/', { waitUntil: 'domcontentloaded' });
         await guestPage.waitForTimeout(2000);
       } finally {
         guestPage.off('request', secondAuthListener);

@@ -36,5 +36,6 @@ Thumbs.db
 .playwright-cli/
 
 # mise
+mise.local.toml
 .mise.local.toml
 .mise/

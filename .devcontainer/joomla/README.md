@@ -34,7 +34,7 @@ Upload Package File: `pkg_externallogin.zip`
 - URL: `auth.dev.local`
 - Path: `realms/demo/protocol/cas`
 - Use CAS 3.0 URL: `Yes`
-- Port: `443`
+- Port: `8443`
 
 ### CAS attributes
 
@@ -63,7 +63,7 @@ Demo IdP client (Keycloak realm `demo`): confidential client `joomla-oidc` / sec
 
 ### OIDC parameters
 
-- Issuer URL: `https://auth.dev.local/realms/demo`
+- Issuer URL: `https://auth.dev.local:8443/realms/demo`
 
 ### Client
 
@@ -82,7 +82,7 @@ Demo IdP client (Keycloak realm `demo`): confidential client `joomla-oidc` / sec
 ### Connection
 
 - Automatic logout: `Yes` (RP-Initiated Logout)
-- Post-logout redirect: `https://www.dev.local/` (optional; browser returns here after IdP logout)
+- Post-logout redirect: `https://www.dev.local:8443/` (optional; browser returns here after IdP logout)
 
 OIDC also refuses login when the IdP explicitly sends `email_verified: false` (hardcoded claim check, not a form field).
 
