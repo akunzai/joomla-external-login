@@ -19,6 +19,14 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     video: 'on-first-retry',
     ignoreHTTPSErrors: true,
+    launchOptions: {
+      args: [
+        '--host-resolver-rules=MAP *dev.local 127.0.0.1',
+        '--disable-gpu',
+        '--disable-dev-shm-usage',
+        '--disable-background-networking',
+      ],
+    },
   },
   projects: [
     {

@@ -33,13 +33,13 @@ Task runner commands are defined in `composer.json`.
 | Unit tests (all) | `composer test` |
 | Single test | `composer test -- --filter <pattern>` |
 | Extension package build | `./bundle.sh` |
-| E2E tests (headless) | `cd e2e && aube test` |
+| E2E tests (headless) | `cd e2e && bun run --bun test` |
 
 ## Human prerequisites
 
 Run once, by a person. The start command fails until they are done.
 
-- [ ] Install toolchain via `mise install` (PHP 8.4, Composer, Node LTS, Aube)
+- [ ] Install toolchain via `mise install` (PHP 8.4, Composer, Bun)
 - [ ] Run `composer install` in repository root
 - [ ] For E2E / dev stack: trust local certificates (`mkcert -install`) and configure `.secrets/` per `.devcontainer/README.md`
 - [ ] Add `/etc/hosts` entries: `127.0.0.1 www.dev.local auth.dev.local store.dev.local`

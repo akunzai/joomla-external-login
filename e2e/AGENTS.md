@@ -2,7 +2,7 @@
 
 **Context-offloaded SOP** for Playwright E2E. Root index: `AGENTS.md`.
 
-Use **`aube` only** (not npm/pnpm/yarn). Runner command is `aube run` or `aube test`.
+Use **`bun` only** (not npm/pnpm/yarn). Runner command is `bun run --bun test` or `bun test:e2e`.
 
 ## Prerequisites
 
@@ -14,11 +14,11 @@ Use **`aube` only** (not npm/pnpm/yarn). Runner command is `aube run` or `aube t
 ```sh
 cd e2e
 
-aube install                    # install dependencies
-aube test                       # headless
-aube run test:headed            # headed browser
-aube test -- --grep <pattern>   # single test / filter
-aube run test:debug             # debug
-aube run test:ui                # interactive UI
-aube run report                 # HTML report
+bun install                     # install dependencies
+bun run --bun test              # headless
+bun run test:headed             # headed browser
+bun run --bun test -- --grep <pattern>   # single test / filter
+bun run test:debug              # debug
+bun run test:ui                 # interactive UI
+bun run report                  # HTML report
 ```
