@@ -53,6 +53,14 @@ Navigate to `System->Install->Extensions` in Joomla! backend and upload the pack
 4. **OIDC only:** when `username_claim` is `email` (the default), the IdP must send `email_verified=true`, or enable **Allow unverified email** on the server. CAS behaviour is unchanged unless you set `email_verified_xpath`.
 5. See **[known limitations](docs/known-limitations.md)** for claim mapping (Keycloak roles, Azure AD groups) and related operator notes.
 
+## Upgrading to 5.2.1 (OIDC hardening)
+
+OIDC servers that worked on 5.2.0 can be rejected after upgrading if their configuration relied on what 5.2.1 no longer accepts. The reason is always written to the External Login logs (`system-oidclogin-discovery`).
+
+- The **Issuer URL** must use `https`, and the discovery document's `issuer` must equal it.
+- Discovered endpoints must use `https` and live on the issuer's host. List any other hosts in **Trusted endpoint hosts** ([details](docs/known-limitations.md#oidc-endpoint-hosts)).
+- The **Client secret** is no longer shown in the server form; leave it blank to keep the stored value.
+
 ## Known limitations
 
 Full write-ups: **[docs/known-limitations.md](docs/known-limitations.md)**.
@@ -61,6 +69,7 @@ Full write-ups: **[docs/known-limitations.md](docs/known-limitations.md)**.
 - **Keycloak role claims** — enable “Add to userinfo/ID token” on the built-in roles mappers; the plugin never reads the access token.
 - **OIDC `username_claim` defaults to `email`** — matches CAS’s email-based username; requires `email_verified=true` unless **Allow unverified email** is enabled (see doc).
 - **CAS email verification is opt-in** — optional `email_verified_xpath` (XPath cookbook in the doc).
+- **OIDC endpoints must be on the issuer host** — other hosts must be listed in **Trusted endpoint hosts** (see doc).
 - **Azure AD `groups` are not mapped** — opaque GUIDs; use named App Roles instead.
 
 ## History of this extension

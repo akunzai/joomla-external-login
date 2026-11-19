@@ -88,4 +88,44 @@ class JwkConverterTest extends TestCase
         $this->assertNull(JwkConverter::find($jwks, ''));
         $this->assertNull(JwkConverter::find($jwks, 'missing'));
     }
+
+    public function testFindSkipsKeysNotUsableForSignatureVerification(): void
+    {
+        [, $jwk] = $this->generateRsaJwk('kid-a');
+
+        $this->assertSame($jwk, JwkConverter::find(['keys' => [$jwk]], 'kid-a', 'RS256'));
+        $this->assertNull(JwkConverter::find(['keys' => [$jwk + ['use' => 'enc']]], 'kid-a', 'RS256'));
+        $this->assertNotNull(JwkConverter::find(['keys' => [$jwk + ['use' => 'sig']]], 'kid-a', 'RS256'));
+        $this->assertNull(JwkConverter::find(['keys' => [$jwk + ['key_ops' => ['encrypt']]]], 'kid-a', 'RS256'));
+        $this->assertNull(JwkConverter::find(['keys' => [$jwk + ['key_ops' => 'verify']]], 'kid-a', 'RS256'));
+        $this->assertNotNull(JwkConverter::find(['keys' => [$jwk + ['key_ops' => ['verify']]]], 'kid-a', 'RS256'));
+        $this->assertNull(JwkConverter::find(['keys' => [$jwk]], 'kid-a', 'RS512'), 'The key declares alg RS256');
+    }
+
+    public function testFindPicksTheUsableKeyWhenSeveralShareAKid(): void
+    {
+        [, $encryption] = $this->generateRsaJwk('shared');
+        [, $signing] = $this->generateRsaJwk('shared');
+        $encryption['use'] = 'enc';
+
+        $this->assertSame($signing, JwkConverter::find(['keys' => [$encryption, $signing]], 'shared', 'RS256'));
+    }
+
+    public function testFindMatchesEntraPerKeyIssuerAgainstTheTokenTenant(): void
+    {
+        [, $jwk] = $this->generateRsaJwk('kid-a');
+        unset($jwk['alg']);
+        $jwk['issuer'] = 'https://login.microsoftonline.com/{tenantid}/v2.0';
+        $jwks = ['keys' => [$jwk]];
+        $tenant = '00000000-0000-0000-0000-000000000001';
+        $issuer = 'https://login.microsoftonline.com/' . $tenant . '/v2.0';
+
+        $this->assertSame($jwk, JwkConverter::find($jwks, 'kid-a', 'RS256', $issuer, $tenant));
+        $this->assertNull(JwkConverter::find($jwks, 'kid-a', 'RS256', $issuer, 'another-tenant'));
+        $this->assertNull(JwkConverter::find($jwks, 'kid-a', 'RS256', $issuer, null));
+
+        $jwk['issuer'] = $issuer;
+        $this->assertNotNull(JwkConverter::find(['keys' => [$jwk]], 'kid-a', 'RS256', $issuer, null));
+        $this->assertNull(JwkConverter::find(['keys' => [$jwk]], 'kid-a', 'RS256', 'https://evil.example', null));
+    }
 }
