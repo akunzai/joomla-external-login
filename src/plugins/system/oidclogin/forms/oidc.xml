@@ -92,6 +92,18 @@
 				label="PLG_SYSTEM_OIDCLOGIN_FIELD_ISSUER_LABEL"
 				description="PLG_SYSTEM_OIDCLOGIN_FIELD_ISSUER_DESC"
 				required="true"
+				validate="url"
+				schemes="https"
+			/>
+
+			<field
+				name="trusted_endpoint_hosts"
+				type="textarea"
+				rows="3"
+				default=""
+				filter="string"
+				label="PLG_SYSTEM_OIDCLOGIN_FIELD_TRUSTED_ENDPOINT_HOSTS_LABEL"
+				description="PLG_SYSTEM_OIDCLOGIN_FIELD_TRUSTED_ENDPOINT_HOSTS_DESC"
 			/>
 
 			<field
@@ -109,6 +121,7 @@
 			name="client"
 			label="PLG_SYSTEM_OIDCLOGIN_FIELDSET_CLIENT_LABEL"
 			description="PLG_SYSTEM_OIDCLOGIN_FIELDSET_CLIENT_DESC"
+			addfieldprefix="Joomla\Plugin\System\Oidclogin\Field"
 		>
 			<field
 				name="client_id"
@@ -122,7 +135,7 @@
 
 			<field
 				name="client_secret"
-				type="password"
+				type="secret"
 				size="30"
 				default=""
 				label="PLG_SYSTEM_OIDCLOGIN_FIELD_CLIENT_SECRET_LABEL"

@@ -24,26 +24,74 @@ use Lcobucci\JWT\Signer\Key\InMemory;
 final class JwkConverter
 {
     /**
-     * Find the JWK matching the given key id within a decoded JWKS document.
+     * Find the signature-verification JWK matching the given key id within a decoded JWKS document.
+     *
+     * A key with the right "kid" is skipped when it declares that it may not verify this token:
+     * "use" other than "sig", "key_ops" without "verify", an "alg" other than the token's, or
+     * (Microsoft Entra ID) an "issuer" other than the token's, where "{tenantid}" stands for
+     * the token's "tid" claim.
      *
      * @param array<string, mixed> $jwks The decoded JWKS document (a "keys" array)
      * @param string|null $kid The key id to look for
+     * @param string|null $alg The token's "alg" header; null skips the "alg" check
+     * @param string|null $issuer The token's "iss" claim; null skips the "issuer" check
+     * @param string|null $tenantId The token's "tid" claim, substituted for "{tenantid}"
      *
      * @return array<string, mixed>|null The matching JWK, or null when not found
      */
-    public static function find(array $jwks, ?string $kid): ?array
+    public static function find(array $jwks, ?string $kid, ?string $alg = null, ?string $issuer = null, ?string $tenantId = null): ?array
     {
         if ($kid === null || $kid === '') {
             return null;
         }
 
         foreach ((array) ($jwks['keys'] ?? []) as $jwk) {
-            if (is_array($jwk) && ($jwk['kid'] ?? null) === $kid) {
+            if (is_array($jwk) && ($jwk['kid'] ?? null) === $kid && self::isUsableForVerification($jwk, $alg, $issuer, $tenantId)) {
                 return $jwk;
             }
         }
 
         return null;
+    }
+
+    /**
+     * @param array<mixed> $jwk
+     */
+    private static function isUsableForVerification(array $jwk, ?string $alg, ?string $issuer, ?string $tenantId): bool
+    {
+        if (array_key_exists('use', $jwk) && $jwk['use'] !== 'sig') {
+            return false;
+        }
+
+        if (array_key_exists('key_ops', $jwk) && (!is_array($jwk['key_ops']) || !in_array('verify', $jwk['key_ops'], true))) {
+            return false;
+        }
+
+        if ($alg !== null && array_key_exists('alg', $jwk) && $jwk['alg'] !== $alg) {
+            return false;
+        }
+
+        if ($issuer !== null && array_key_exists('issuer', $jwk)) {
+            if (!is_string($jwk['issuer'])) {
+                return false;
+            }
+
+            $keyIssuer = $jwk['issuer'];
+
+            if (str_contains($keyIssuer, '{tenantid}')) {
+                if ($tenantId === null || $tenantId === '') {
+                    return false;
+                }
+
+                $keyIssuer = str_replace('{tenantid}', $tenantId, $keyIssuer);
+            }
+
+            if ($keyIssuer !== $issuer) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

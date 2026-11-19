@@ -5,10 +5,12 @@ namespace Tests\Unit\Plugins\System\Oidclogin;
 use Joomla\CMS\Authentication\Authentication;
 use Joomla\CMS\Authentication\AuthenticationResponse;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Field\PasswordField;
 use Joomla\Component\Externallogin\Administrator\Authentication\ExternalAuthenticationResponse;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Event\Event;
 use Joomla\Plugin\System\Oidclogin\Extension\Oidclogin;
+use Joomla\Plugin\System\Oidclogin\Field\SecretField;
 use Joomla\Registry\Registry;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -428,5 +430,63 @@ class OidcloginTest extends TestCase
         $this->assertSame(Authentication::STATUS_SUCCESS, $response->status);
         $this->assertSame([], $response->groups);
         $this->assertContains(true, $event->getArgument('result', []));
+    }
+
+    public function testKeepStoredSecretFillsABlankSubmittedSecret(): void
+    {
+        $data = ['id' => 5, 'params' => ['client_id' => 'joomla', 'client_secret' => '']];
+
+        $this->assertSame('stored', Oidclogin::keepStoredSecret($data, 'stored')['params']['client_secret']);
+
+        unset($data['params']['client_secret']);
+        $this->assertSame('stored', Oidclogin::keepStoredSecret($data, 'stored')['params']['client_secret']);
+    }
+
+    public function testKeepStoredSecretKeepsANewlySubmittedSecret(): void
+    {
+        $data = ['id' => 5, 'params' => ['client_secret' => 'rotated']];
+
+        $this->assertSame('rotated', Oidclogin::keepStoredSecret($data, 'stored')['params']['client_secret']);
+    }
+
+    public function testKeepStoredSecretLeavesDataAloneWithoutAStoredSecret(): void
+    {
+        $data = ['id' => 0, 'params' => ['client_secret' => '']];
+
+        $this->assertSame($data, Oidclogin::keepStoredSecret($data, ''));
+        $this->assertSame(['id' => 5], Oidclogin::keepStoredSecret(['id' => 5], 'stored'));
+    }
+
+    /**
+     * The form's validation and rendering need a booted Joomla application (covered by E2E);
+     * these assertions pin the declarations that drive them.
+     */
+    private function serverFormField(string $name): \SimpleXMLElement
+    {
+        $xml = simplexml_load_file(dirname(__DIR__, 5) . '/src/plugins/system/oidclogin/forms/oidc.xml');
+        $fields = $xml->xpath('//field[@name="' . $name . '"]');
+        $this->assertCount(1, $fields);
+
+        return $fields[0];
+    }
+
+    public function testClientSecretIsAWriteOnlyRequiredSecretField(): void
+    {
+        $field = $this->serverFormField('client_secret');
+
+        $this->assertSame('secret', (string) $field['type']);
+        $this->assertSame('true', (string) $field['required'], 'A new server must still require a secret');
+
+        $fieldset = $field->xpath('parent::fieldset')[0];
+        $this->assertSame('Joomla\\Plugin\\System\\Oidclogin\\Field', (string) $fieldset['addfieldprefix']);
+        $this->assertTrue(is_subclass_of(SecretField::class, PasswordField::class));
+    }
+
+    public function testIssuerFieldOnlyAcceptsHttps(): void
+    {
+        $field = $this->serverFormField('issuer');
+
+        $this->assertSame('url', (string) $field['validate']);
+        $this->assertSame('https', (string) $field['schemes']);
     }
 }

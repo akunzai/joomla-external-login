@@ -17,6 +17,7 @@ use Joomla\CMS\Authentication\Authentication;
 use Joomla\CMS\Authentication\AuthenticationResponse;
 use Joomla\CMS\Cache\CacheController;
 use Joomla\CMS\Cache\CacheControllerFactoryInterface;
+use Joomla\CMS\Event\Model\BeforeValidateDataEvent;
 use Joomla\CMS\Event\Model\PrepareFormEvent;
 use Joomla\CMS\Event\Result\ResultAwareInterface;
 use Joomla\CMS\Factory;
@@ -36,9 +37,13 @@ use Joomla\Component\Externallogin\Administrator\Table\ServerTable;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Event\DispatcherInterface;
 use Joomla\Event\Event;
+use Joomla\Http\Http;
 use Joomla\Http\HttpFactory;
 use Joomla\Plugin\System\Oidclogin\Claims\ClaimsResolver;
+use Joomla\Plugin\System\Oidclogin\Claims\IdTokenClaimsValidator;
+use Joomla\Plugin\System\Oidclogin\Discovery\DiscoveryValidator;
 use Joomla\Plugin\System\Oidclogin\Jwk\JwkConverter;
+use Joomla\Plugin\System\Oidclogin\Session\LoginTransactions;
 use Joomla\Registry\Registry;
 use Lcobucci\Clock\SystemClock;
 use Lcobucci\JWT\Encoding\JoseEncoder;
@@ -191,6 +196,93 @@ class Oidclogin extends CMSPlugin
         $this->loadLanguage();
         Form::addFormPath(dirname(__DIR__, 2) . '/forms');
         $form->loadFile('oidc', false);
+
+        // The stored client secret is never rendered, so on an existing server a blank field
+        // means "keep it" and must not be blocked as a missing required value.
+        if (self::getServerId($event->getData()) > 0) {
+            $form->setFieldAttribute('client_secret', 'required', 'false', 'params');
+        }
+    }
+
+    /**
+     * Before validating a submitted server form: a blank client secret on an existing
+     * server keeps the stored one (the form never renders it, see SecretField).
+     * A new server still fails the field's required validation.
+     */
+    public function onContentBeforeValidateData(BeforeValidateDataEvent $event): void
+    {
+        $form = $event->getArgument('subject');
+
+        if (!$form instanceof Form || $form->getName() !== 'com_externallogin.server.system.oidclogin') {
+            return;
+        }
+
+        $data = $event->getArgument('data');
+
+        if (!is_array($data)) {
+            return;
+        }
+
+        $serverID = self::getServerId($data);
+
+        if ($serverID <= 0) {
+            return;
+        }
+
+        /** @var CMSApplication */
+        $app = Factory::getApplication();
+        /** @var MVCFactoryServiceInterface */
+        $component = $app->bootComponent('com_externallogin');
+        /** @var ServerTable|bool $server */
+        $server = $component->getMVCFactory()->createTable('Server', 'Administrator');
+
+        if (!$server || !$server->load($serverID) || $server->plugin !== 'system.oidclogin') {
+            return;
+        }
+
+        $event->updateData(self::keepStoredSecret($data, (string) $server->params->get('client_secret', '')));
+    }
+
+    /**
+     * Fill a blank submitted client secret from the stored one.
+     * Public for unit tests — not an extension API.
+     *
+     * @param array<string, mixed> $data the submitted server form data
+     *
+     * @return array<string, mixed>
+     *
+     * @since 5.2.1
+     */
+    public static function keepStoredSecret(array $data, string $storedSecret): array
+    {
+        $params = $data['params'] ?? null;
+
+        if (!is_array($params) || $storedSecret === '') {
+            return $data;
+        }
+
+        if (!isset($params['client_secret']) || $params['client_secret'] === '') {
+            $params['client_secret'] = $storedSecret;
+            $data['params'] = $params;
+        }
+
+        return $data;
+    }
+
+    /**
+     * Server id from form data (array or object), falling back to the request's "id".
+     *
+     * @param mixed $data
+     */
+    private static function getServerId($data): int
+    {
+        $id = is_array($data) ? ($data['id'] ?? null) : (is_object($data) ? ($data->id ?? null) : null);
+
+        if (is_numeric($id) && (int) $id > 0) {
+            return (int) $id;
+        }
+
+        return (int) Factory::getApplication()->getInput()->getInt('id', 0);
     }
 
     /**
@@ -368,18 +460,25 @@ class Oidclogin extends CMSPlugin
 
         /** @var Registry $params */
         $params = $server->params;
-        $expectedState = $app->getUserState('system.oidclogin.state.' . $serverID);
-        $nonce = $app->getUserState('system.oidclogin.nonce.' . $serverID);
-        $verifier = $app->getUserState('system.oidclogin.verifier.' . $serverID);
-        $redirectUri = $app->getUserState('system.oidclogin.redirect.' . $serverID);
+        // Consume only the transaction this callback's state belongs to: other pending logins
+        // (another tab, a later manual login) survive a stale or forged callback, and the
+        // consumed one cannot be replayed.
+        $transactionsKey = 'system.oidclogin.transactions.' . $serverID;
+        $stored = $app->getUserState($transactionsKey);
+        [$transaction, $remaining] = LoginTransactions::consume(is_string($stored) ? $stored : null, (string) $state, time());
+        $app->setUserState($transactionsKey, $remaining);
 
-        // One-time values: clear them regardless of the outcome below.
-        $app->setUserState('system.oidclogin.state.' . $serverID, null);
-        $app->setUserState('system.oidclogin.nonce.' . $serverID, null);
-        $app->setUserState('system.oidclogin.verifier.' . $serverID, null);
-        $app->setUserState('system.oidclogin.redirect.' . $serverID, null);
+        $nonce = is_string($transaction['nonce'] ?? null) ? $transaction['nonce'] : '';
+        $verifier = is_string($transaction['verifier'] ?? null) ? $transaction['verifier'] : '';
+        $redirectUri = is_string($transaction['redirect_uri'] ?? null) ? $transaction['redirect_uri'] : '';
 
-        if ($error || !$code || !$state || !is_string($expectedState) || !hash_equals($expectedState, (string) $state)) {
+        if ($transaction !== null && !$error && ($nonce === '' || $verifier === '' || $redirectUri === '')) {
+            $this->log($params, 'log_login', 'system-oidclogin-login', 'Rejected OIDC callback on server ' . $serverID . ' (incomplete login transaction)', Log::WARNING);
+
+            return;
+        }
+
+        if ($error || !$code || $transaction === null) {
             // prompt=none autologin failures surface as error=login_required (or interaction_required).
             if ($error && $app->getUserState('system.oidclogin.autologin.' . $serverID)) {
                 $this->log(
@@ -410,26 +509,13 @@ class Oidclogin extends CMSPlugin
             return;
         }
 
-        $tokens = $this->exchangeCode(
-            $params,
-            $discovery,
-            (string) $code,
-            is_string($verifier) ? $verifier : null,
-            is_string($redirectUri) ? $redirectUri : '',
-            $serverID
-        );
+        $tokens = $this->exchangeCode($params, $discovery, (string) $code, $verifier, $redirectUri, $serverID);
 
-        if ($tokens === null || empty($tokens['id_token'])) {
+        if ($tokens === null || empty($tokens['id_token']) || !is_string($tokens['id_token'])) {
             return;
         }
 
-        $idTokenClaims = $this->verifyIdToken(
-            $params,
-            $discovery,
-            (string) $tokens['id_token'],
-            is_string($nonce) ? $nonce : null,
-            $serverID
-        );
+        $idTokenClaims = $this->verifyIdToken($params, $discovery, $tokens['id_token'], $nonce, $serverID);
 
         if ($idTokenClaims === null) {
             return;
@@ -441,13 +527,15 @@ class Oidclogin extends CMSPlugin
             return;
         }
 
-        if (isset($idTokenClaims['sub'], $userInfoClaims['sub']) && $idTokenClaims['sub'] !== $userInfoClaims['sub']) {
-            $this->log($params, 'log_verify', 'system-oidclogin-verify', 'UserInfo "sub" mismatch on server ' . $serverID, Log::ERROR);
+        $subjectError = IdTokenClaimsValidator::validateUserInfoSubject($idTokenClaims, $userInfoClaims);
+
+        if ($subjectError !== null) {
+            $this->log($params, 'log_verify', 'system-oidclogin-verify', $subjectError . ' on server ' . $serverID, Log::ERROR);
 
             return;
         }
 
-        $this->claims = array_merge($idTokenClaims, $userInfoClaims);
+        $this->claims = IdTokenClaimsValidator::merge($idTokenClaims, $userInfoClaims);
         $this->server = $server;
 
         // Opt-in claims dump (CAS log_xml parity): only after JWT/UserInfo verification, never raw tokens.
@@ -461,9 +549,13 @@ class Oidclogin extends CMSPlugin
             );
         }
 
-        // Retained for RP-Initiated Logout's id_token_hint. Must be read back from session state
-        // during onUserLogout, before Joomla's own onUserLogout listener destroys the session.
-        $app->setUserState('system.oidclogin.idtoken.' . $serverID, (string) $tokens['id_token']);
+        // Retained for RP-Initiated Logout's id_token_hint only when autologout is on. Must be read
+        // back from session state during onUserLogout, before Joomla's own onUserLogout listener
+        // destroys the session.
+        $app->setUserState(
+            'system.oidclogin.idtoken.' . $serverID,
+            boolval($params->get('autologout')) ? $tokens['id_token'] : null
+        );
 
         $service = Uri::getInstance();
 
@@ -879,10 +971,14 @@ class Oidclogin extends CMSPlugin
 
         /** @var CMSApplication */
         $app = Factory::getApplication();
-        $app->setUserState('system.oidclogin.state.' . $serverID, $state);
-        $app->setUserState('system.oidclogin.nonce.' . $serverID, $nonce);
-        $app->setUserState('system.oidclogin.verifier.' . $serverID, $verifier);
-        $app->setUserState('system.oidclogin.redirect.' . $serverID, $redirectUri);
+        $transactionsKey = 'system.oidclogin.transactions.' . $serverID;
+        $stored = $app->getUserState($transactionsKey);
+        $app->setUserState($transactionsKey, LoginTransactions::add(
+            is_string($stored) ? $stored : null,
+            $state,
+            ['nonce' => $nonce, 'verifier' => $verifier, 'redirect_uri' => $redirectUri],
+            time()
+        ));
 
         $query = [
             'response_type' => 'code',
@@ -919,49 +1015,30 @@ class Oidclogin extends CMSPlugin
      */
     private function verifyServerIsAlive($params): bool
     {
-        $issuer = rtrim((string) $params->get('issuer'), '/');
-
-        if ($issuer === '') {
-            return false;
-        }
-
         try {
-            $http = (new HttpFactory())->getHttp();
-            $timeout = (int) $params->get('timeout', 5);
-            $response = $http->get($issuer . '/.well-known/openid-configuration', [], $timeout);
-
-            if ($response->getStatusCode() < 200 || $response->getStatusCode() >= 400) {
-                return false;
-            }
-
-            $document = json_decode((string) $response->getBody(), true);
-
-            if (
-                is_array($document)
-                && !empty($document['authorization_endpoint'])
-                && !empty($document['token_endpoint'])
-                && !empty($document['jwks_uri'])
-            ) {
-                $cache = $this->getCacheController();
-                $cache->cache->store(json_encode($document), 'discovery.' . md5($issuer));
-            }
-
-            return true;
+            $document = $this->fetchDiscoveryDocument($params);
         } catch (Throwable $e) {
             $this->log(
                 $params,
                 'log_verify',
                 'system-oidclogin-verify',
-                'HTTP error while verifying server is alive: ' . $e->getMessage(),
+                'Error while verifying server is alive: ' . $e->getMessage(),
                 Log::WARNING
             );
 
             return false;
         }
+
+        $cache = $this->getCacheController();
+        $cache->cache->store(json_encode($document), 'discovery.' . md5(rtrim((string) $params->get('issuer'), '/')));
+
+        return true;
     }
 
     /**
      * Fetch (and cache) the OIDC discovery document for a server's issuer.
+     * Cached documents are re-validated, so a configuration change (issuer, trusted
+     * endpoint hosts) or an upgrade takes effect without clearing the cache.
      *
      * @param Registry $params
      * @param int|string $serverID
@@ -979,36 +1056,19 @@ class Oidclogin extends CMSPlugin
         if ($cached !== false) {
             $document = json_decode((string) $cached, true);
 
-            if (is_array($document)) {
+            if (is_array($document) && $this->validateDiscoveryDocument($params, $document) === null) {
                 return $document;
             }
         }
 
         try {
-            $http = (new HttpFactory())->getHttp();
-            $timeout = (int) $params->get('timeout', 5);
-            $response = $http->get($issuer . '/.well-known/openid-configuration', [], $timeout);
-
-            if ($response->getStatusCode() !== 200) {
-                throw new RuntimeException('Unexpected HTTP status ' . $response->getStatusCode());
-            }
-
-            $document = json_decode((string) $response->getBody(), true);
-
-            if (
-                !is_array($document)
-                || empty($document['authorization_endpoint'])
-                || empty($document['token_endpoint'])
-                || empty($document['jwks_uri'])
-            ) {
-                throw new RuntimeException('Malformed discovery document');
-            }
+            $document = $this->fetchDiscoveryDocument($params);
         } catch (Throwable $e) {
-            // Unconditional: no usable cache and the live fetch failed, so login is about to hard-fail —
-            // this must always be visible, regardless of the log_discovery toggle.
+            // Unconditional: no usable cache and the live fetch failed or was rejected, so login is
+            // about to hard-fail — this must always be visible, regardless of the log_discovery toggle.
             Log::add(
                 new ExternalloginLogEntry(
-                    'Unable to fetch discovery document on server ' . $serverID . ': ' . $e->getMessage(),
+                    'Unable to use discovery document on server ' . $serverID . ': ' . $e->getMessage(),
                     Log::ERROR,
                     'system-oidclogin-discovery'
                 )
@@ -1021,6 +1081,67 @@ class Oidclogin extends CMSPlugin
         $cache->cache->store(json_encode($document), $id);
 
         return $document;
+    }
+
+    /**
+     * Fetch and validate the discovery document at <issuer>/.well-known/openid-configuration.
+     *
+     * @param Registry $params
+     *
+     * @throws RuntimeException when the issuer or the document is not acceptable
+     *
+     * @return array<string, mixed>
+     */
+    private function fetchDiscoveryDocument($params): array
+    {
+        $issuer = rtrim((string) $params->get('issuer'), '/');
+        $reason = DiscoveryValidator::validateIssuer($issuer);
+
+        if ($reason !== null) {
+            throw new RuntimeException($reason);
+        }
+
+        $response = $this->getHttp()->get($issuer . '/.well-known/openid-configuration', [], (int) $params->get('timeout', 5));
+
+        if ($response->getStatusCode() !== 200) {
+            throw new RuntimeException('Unexpected HTTP status ' . $response->getStatusCode());
+        }
+
+        $document = json_decode((string) $response->getBody(), true);
+
+        if (!is_array($document)) {
+            throw new RuntimeException('Malformed discovery document');
+        }
+
+        $reason = $this->validateDiscoveryDocument($params, $document);
+
+        if ($reason !== null) {
+            throw new RuntimeException($reason);
+        }
+
+        return $document;
+    }
+
+    /**
+     * @param Registry $params
+     * @param array<string, mixed> $document
+     */
+    private function validateDiscoveryDocument($params, array $document): ?string
+    {
+        return DiscoveryValidator::validate(
+            $document,
+            rtrim((string) $params->get('issuer'), '/'),
+            DiscoveryValidator::parseTrustedHosts((string) $params->get('trusted_endpoint_hosts', ''))
+        );
+    }
+
+    /**
+     * HTTP client for identity provider calls. Redirects are never followed, so credentials,
+     * codes and tokens are only ever sent to the validated endpoint itself.
+     */
+    private function getHttp(): Http
+    {
+        return (new HttpFactory())->getHttp(['follow_location' => false]);
     }
 
     /**
@@ -1049,7 +1170,7 @@ class Oidclogin extends CMSPlugin
         }
 
         try {
-            $http = (new HttpFactory())->getHttp();
+            $http = $this->getHttp();
             $timeout = (int) $params->get('timeout', 5);
             $response = $http->get($jwksUri, [], $timeout);
 
@@ -1092,7 +1213,7 @@ class Oidclogin extends CMSPlugin
      *
      * @return array<string, mixed>|null
      */
-    private function verifyIdToken($params, array $discovery, string $idToken, ?string $nonce, $serverID): ?array
+    private function verifyIdToken($params, array $discovery, string $idToken, string $nonce, $serverID): ?array
     {
         try {
             $token = (new Parser(new JoseEncoder()))->parse($idToken);
@@ -1108,8 +1229,23 @@ class Oidclogin extends CMSPlugin
             return null;
         }
 
+        // Reject an unsupported algorithm before touching the JWKS (no refetch for a token we cannot verify).
+        $alg = $token->headers()->get('alg');
+        $alg = is_string($alg) ? $alg : '';
+        $signer = $this->getSigner($alg);
+
+        if ($signer === null) {
+            $this->log($params, 'log_verify', 'system-oidclogin-verify', 'Unsupported ID token signing algorithm "' . $alg . '" on server ' . $serverID, Log::ERROR);
+
+            return null;
+        }
+
         $kid = $token->headers()->get('kid');
         $kid = is_string($kid) ? $kid : null;
+        $tokenIssuer = $token->claims()->get('iss');
+        $tokenIssuer = is_string($tokenIssuer) ? $tokenIssuer : '';
+        $tenantId = $token->claims()->get('tid');
+        $tenantId = is_string($tenantId) ? $tenantId : null;
         $jwksUri = (string) $discovery['jwks_uri'];
 
         $jwks = $this->getJwks($params, $jwksUri, $serverID);
@@ -1118,7 +1254,7 @@ class Oidclogin extends CMSPlugin
             return null;
         }
 
-        $jwk = JwkConverter::find($jwks, $kid);
+        $jwk = JwkConverter::find($jwks, $kid, $alg, $tokenIssuer, $tenantId);
 
         if ($jwk === null) {
             // The key might be missing because the IdP just rotated its signing keys; refetch once.
@@ -1128,7 +1264,7 @@ class Oidclogin extends CMSPlugin
                 return null;
             }
 
-            $jwk = JwkConverter::find($jwks, $kid);
+            $jwk = JwkConverter::find($jwks, $kid, $alg, $tokenIssuer, $tenantId);
         }
 
         if ($jwk === null) {
@@ -1138,10 +1274,9 @@ class Oidclogin extends CMSPlugin
         }
 
         $key = JwkConverter::toKey($jwk);
-        $signer = $this->getSigner((string) $token->headers()->get('alg'));
 
-        if ($key === null || $signer === null) {
-            $this->log($params, 'log_verify', 'system-oidclogin-verify', 'Unsupported JWKS key or signing algorithm on server ' . $serverID, Log::ERROR);
+        if ($key === null) {
+            $this->log($params, 'log_verify', 'system-oidclogin-verify', 'Unsupported JWKS key on server ' . $serverID, Log::ERROR);
 
             return null;
         }
@@ -1162,8 +1297,10 @@ class Oidclogin extends CMSPlugin
 
         $claims = $token->claims()->all();
 
-        if ($nonce !== null && $nonce !== '' && ($claims['nonce'] ?? null) !== $nonce) {
-            $this->log($params, 'log_verify', 'system-oidclogin-verify', 'ID token nonce mismatch on server ' . $serverID, Log::ERROR);
+        $claimsError = IdTokenClaimsValidator::validate($claims, (string) $params->get('client_id'), $nonce);
+
+        if ($claimsError !== null) {
+            $this->log($params, 'log_verify', 'system-oidclogin-verify', $claimsError . ' on server ' . $serverID, Log::ERROR);
 
             return null;
         }
@@ -1182,10 +1319,10 @@ class Oidclogin extends CMSPlugin
      *
      * @return array<string, mixed>|null
      */
-    private function exchangeCode($params, array $discovery, string $code, ?string $verifier, string $redirectUri, $serverID): ?array
+    private function exchangeCode($params, array $discovery, string $code, string $verifier, string $redirectUri, $serverID): ?array
     {
         try {
-            $http = (new HttpFactory())->getHttp();
+            $http = $this->getHttp();
             $timeout = (int) $params->get('timeout', 5);
 
             $data = [
@@ -1194,11 +1331,8 @@ class Oidclogin extends CMSPlugin
                 'redirect_uri' => $redirectUri,
                 'client_id' => (string) $params->get('client_id'),
                 'client_secret' => (string) $params->get('client_secret'),
+                'code_verifier' => $verifier,
             ];
-
-            if (!empty($verifier)) {
-                $data['code_verifier'] = $verifier;
-            }
 
             $response = $http->post(
                 (string) $discovery['token_endpoint'],
@@ -1245,7 +1379,7 @@ class Oidclogin extends CMSPlugin
         }
 
         try {
-            $http = (new HttpFactory())->getHttp();
+            $http = $this->getHttp();
             $timeout = (int) $params->get('timeout', 5);
             $response = $http->get(
                 (string) $discovery['userinfo_endpoint'],

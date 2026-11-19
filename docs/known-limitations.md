@@ -8,6 +8,7 @@ Short index for operators and integrators. The root [README](../README.md) links
 | [Keycloak role claims](#keycloak-role-claims) | Roles must be on ID Token / UserInfo, not only the access token |
 | [OIDC `username_claim` default](#oidc-username_claim-default) | Defaults to `email`, not `preferred_username` |
 | [CAS email verification](#cas-email-verification) | Opt-in `email_verified_xpath`; cookbook of XPath shapes |
+| [OIDC endpoint hosts](#oidc-endpoint-hosts) | Endpoints off the issuer host need **Trusted endpoint hosts** |
 | [Azure AD `groups`](#azure-ad-groups) | Opaque GUIDs are not mapped; use App Roles |
 | [OIDC claims logging](#oidc-claims-logging) | Opt-in `log_claims` dumps PII; disable after debugging |
 
@@ -83,6 +84,16 @@ Demo manual field values: [`.devcontainer/joomla/README.md`](../.devcontainer/jo
 ## OIDC claims logging
 
 Server param **Claims analysis** (`log_claims`, default off) logs the merged ID Token + UserInfo claims as JSON after verification — the OIDC counterpart of CAS **XML analysis**. Use only for short-lived debugging of claim paths; disable afterwards. Logs contain PII and must not include access/refresh/ID token strings (the plugin redacts credential-shaped keys if they ever appear in the claims map).
+
+---
+
+## OIDC endpoint hosts
+
+Since 5.2.1 the discovery document is only accepted when its `issuer` equals the configured **Issuer URL** (https only) and every endpoint the plugin calls — `authorization_endpoint`, `token_endpoint`, `jwks_uri`, `userinfo_endpoint`, `end_session_endpoint` — uses `https` on the issuer's host. This keeps the client secret, authorization code and tokens from being sent to a host the administrator never configured. Redirects from the identity provider's endpoints are not followed.
+
+Providers that serve endpoints from other hosts need those hosts in the server option **Trusted endpoint hosts** (comma or newline separated), for example Google: `oauth2.googleapis.com, openidconnect.googleapis.com, www.googleapis.com`. For Microsoft Entra ID issuers (`login.microsoftonline.com`), `graph.microsoft.com` is trusted automatically.
+
+A rejected discovery document is always logged (`system-oidclogin-discovery`) with the offending endpoint and host, regardless of the logging toggles.
 
 ---
 
