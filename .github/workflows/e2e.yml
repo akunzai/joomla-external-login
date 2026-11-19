@@ -8,6 +8,9 @@ on:
       - 'e2e/**'
       - '.github/workflows/e2e.yml'
   workflow_dispatch:
+  # Called by release.yml so a tag is never published untested
+  # (e.g. a security advisory merged from its private fork runs no PR checks).
+  workflow_call:
 
 permissions:
   contents: read
@@ -15,7 +18,8 @@ permissions:
   actions: write
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  # Literal prefix: under workflow_call, github.workflow is the caller's name.
+  group: e2e-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:

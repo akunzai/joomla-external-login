@@ -36,9 +36,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  e2e:
+    name: E2E
+    if: startsWith(github.ref, 'refs/tags/')
+    uses: ./.github/workflows/e2e.yml
+    permissions:
+      contents: read
+      actions: write
+
   publish-release:
     name: Publish GitHub Release
     if: startsWith(github.ref, 'refs/tags/')
+    needs: e2e
     runs-on: ubuntu-latest
     steps:
       - name: Check pre-release
