@@ -4,6 +4,15 @@ A Joomla account is bound to **exactly one** external-login server (CAS or OIDC)
 
 Design rationale: [ADR 0001](adr/0001-one-account-binds-one-external-login-server.md).
 
+## Which account a login reaches
+
+- **CAS**, and **OIDC servers in username mode**: the account whose username equals the username claim.
+- **OIDC servers in subject mode** (the default for servers created in 5.3.0 or later): the account bound to the provider's verified issuer and subject (`iss` + `sub`), stored in the binding's `issuer` and `subject` columns. A changed username or email at the provider still reaches the same account. An account already bound to the server records its `iss` + `sub` on its first login after the server is switched to subject mode. A login whose `sub` or `iss` differs from the stored pair is denied.
+
+The **Users** screen shows a stored subject and issuer under the server title.
+
+Design rationale: [ADR 0002](adr/0002-oidc-accounts-bind-to-issuer-and-subject.md).
+
 ## What happens at login
 
 If a visitor authenticates via server B but the matching Joomla account is already bound to server A, the login is **rejected** (not silently reassigned or merged). The user-facing guidance is to sign in through the original server or contact a site administrator.
@@ -21,8 +30,10 @@ Rebinding is an **admin-only** action. It is never performed automatically when 
 
 That runs `UserModel::enableExternallogin()`:
 
-- row exists → `UPDATE server_id` to the chosen server  
+- row exists → `UPDATE server_id` to the chosen server, and clear the stored OIDC issuer and subject  
 - no row → `INSERT` a new binding  
+
+Rebinding to the **same** server is how to recover an OIDC account whose issuer changed: it clears the stored pair, and the next login records the new one.
 
 You do **not** need to Disable first. Using **Enable External Login** again with a different server overwrites the binding.
 
@@ -48,7 +59,9 @@ WHERE u.username = 'user@example.com';
 
 -- Point the account at another server (replace ids)
 UPDATE #__externallogin_users
-SET server_id = 2   -- target server id
+SET server_id = 2,  -- target server id
+    issuer = NULL,  -- clear the stored OIDC subject
+    subject = NULL
 WHERE user_id = 42; -- Joomla user id
 ```
 

@@ -27,6 +27,8 @@ use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\User\UserFactoryInterface;
 use Joomla\CMS\User\UserHelper;
 use Joomla\Component\Externallogin\Administrator\Authentication\ExternalAuthenticationResponse;
+use Joomla\Component\Externallogin\Administrator\Authentication\SubjectBinding;
+use Joomla\Component\Externallogin\Administrator\Authentication\SubjectMatchOutcome;
 use Joomla\Component\Externallogin\Administrator\Service\Logger\ExternalloginLogEntry;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Event\DispatcherInterface;
@@ -100,7 +102,27 @@ class Externallogin extends CMSPlugin
         if ($response->status === Authentication::STATUS_SUCCESS) {
             /** @var Registry */
             $params = $response->server->params;
+            $serverId = intval($response->server->id);
             $userId = intval(UserHelper::getUserId($response->username));
+
+            // Subject mode (OIDC only, ADR 0002): the verified issuer + subject choose the
+            // account, and the username claim only names it.
+            $isSubjectMode = $response->issuer !== null
+                && $response->subject !== null
+                && SubjectBinding::isSubjectMode($params);
+            $subjectMatch = $isSubjectMode
+                ? SubjectBinding::resolve(
+                    $serverId,
+                    $this->findUserIdBySubject($serverId, $response->issuer, $response->subject),
+                    $userId,
+                    $this->getBinding($userId)
+                )
+                : null;
+
+            if ($subjectMatch !== null && $subjectMatch->outcome === SubjectMatchOutcome::Bound) {
+                $userId = $subjectMatch->userId;
+            }
+
             $isUserNotFound = $userId === 0;
             $isUserBlocked = $this->isUserBlocked($params, $response->username, $response->email);
 
@@ -115,9 +137,25 @@ class Externallogin extends CMSPlugin
                     );
                 }
                 $this->userLoginFail($response, $params->get('blocked_redirect_menuitem'), Authentication::STATUS_DENIED);
+            } elseif ($subjectMatch !== null && $subjectMatch->outcome === SubjectMatchOutcome::Mismatch) {
+                // Always logged, unlike the opt-in categories: a subject or issuer mismatch is a
+                // security event and the administrator's only lead for a changed issuer.
+                Log::add(
+                    new ExternalloginLogEntry(
+                        'User "' . $response->username . '" is trying to login on server ' . $serverId
+                            . ' with a subject or issuer that does not match the one recorded for this account',
+                        Log::WARNING,
+                        'authentication-externallogin-activation'
+                    )
+                );
+                Factory::getApplication()->enqueueMessage(
+                    Text::_('PLG_AUTHENTICATION_EXTERNALLOGIN_SUBJECT_MISMATCH'),
+                    'error'
+                );
+                $this->userLoginFail($response, $params->get('not_activated_redirect_menuitem'), Authentication::STATUS_DENIED);
             } elseif ($isUserNotFound) {
                 if (boolval($params->get('autoregister', 0))) {
-                    $this->createNewUser($response);
+                    $this->createNewUser($response, $isSubjectMode);
                 } else {
                     if (boolval($params->get('log_autoregister', 0))) {
                         Log::add(
@@ -146,6 +184,8 @@ class Externallogin extends CMSPlugin
                     'error'
                 );
                 $this->userLoginFail($response, $params->get('not_activated_redirect_menuitem'), Authentication::STATUS_DENIED);
+            } elseif ($subjectMatch !== null) {
+                $this->loginBySubject($response, $userId, $subjectMatch->outcome === SubjectMatchOutcome::FirstUse);
             } elseif (boolval($params->get('autoupdate', 0))) {
                 $this->updateUser($response, $userId);
             }
@@ -176,10 +216,11 @@ class Externallogin extends CMSPlugin
 
     /**
      * @param ExternalAuthenticationResponse $response
+     * @param bool $recordSubject Record the response's issuer + subject on the new binding
      *
      * @return ExternalAuthenticationResponse
      */
-    private function createNewUser($response)
+    private function createNewUser($response, $recordSubject = false)
     {
         /** @var Registry $params */
         $params = $response->server->params;
@@ -208,7 +249,7 @@ class Externallogin extends CMSPlugin
         }
 
         Access::clearStatics();
-        $this->addLoginRecord($response, intval($user->id));
+        $this->addLoginRecord($response, intval($user->id), $recordSubject);
 
         if ($isLogAutoRegister) {
             Log::add(
@@ -262,10 +303,11 @@ class Externallogin extends CMSPlugin
     /**
      * @param ExternalAuthenticationResponse $response
      * @param int $userId
+     * @param bool $syncUsername Also rename the account to the username claim (subject mode only)
      *
-     * @return ExternalAuthenticationResponse
+     * @return bool Whether the account was saved, or needed no save
      */
-    private function updateUser($response, $userId)
+    private function updateUser($response, $userId, $syncUsername = false)
     {
         /** @var Registry */
         $params = $response->server->params;
@@ -277,6 +319,11 @@ class Externallogin extends CMSPlugin
         $user = $userFactory->loadUserById(0);
 
         $user->load($userId);
+        $currentUsername = $user->username;
+        if ($syncUsername && $user->username !== $response->username) {
+            $user->username = $response->username;
+            $isNeedsUpdate = true;
+        }
         if ($user->email != $response->email) {
             $user->email = $response->email;
             $isNeedsUpdate = true;
@@ -321,11 +368,30 @@ class Externallogin extends CMSPlugin
         }
 
         if (!$isNeedsUpdate) {
-            return $response;
+            return true;
         }
 
-        // Attempt to update the user
-        if ($user->save() && $isLogAutoUpdate) {
+        // Attempt to update the user. Joomla refuses a username or email another account
+        // already uses; only subject mode, which renames accounts, acts on that refusal.
+        if (!$user->save()) {
+            // Subject mode denies the login on this failure, so it is always logged.
+            if ($syncUsername) {
+                Log::add(
+                    new ExternalloginLogEntry(
+                        'Auto-update of user "' . $currentUsername . '" to username "' . $response->username
+                            . '" and email "' . $response->email . '" on server ' . $response->server->id
+                            . ' failed: ' . $user->getError(),
+                        Log::ERROR,
+                        'authentication-externallogin-autoupdate'
+                    )
+                );
+            }
+            Access::clearStatics();
+
+            return false;
+        }
+
+        if ($isLogAutoUpdate) {
             $serverId = $response->server->id;
             Log::add(
                 new ExternalloginLogEntry(
@@ -343,7 +409,7 @@ class Externallogin extends CMSPlugin
             );
         }
         Access::clearStatics();
-        return $response;
+        return true;
     }
 
     /**
@@ -408,20 +474,110 @@ class Externallogin extends CMSPlugin
     /**
      * @param ExternalAuthenticationResponse $response
      * @param int $userId
+     * @param bool $recordSubject Also record the response's issuer + subject
      */
-    private function addLoginRecord($response, $userId)
+    private function addLoginRecord($response, $userId, $recordSubject = false)
     {
         $db = Factory::getContainer()->get(DatabaseInterface::class);
         $query = $db->getQuery(true);
         $serverId = intval($response->server->id);
-        $query->insert(
-            '#__externallogin_users'
-        )->columns(
-            'server_id, user_id'
-        )->values(
-            $serverId . ',' . $userId
-        );
+        $query->insert('#__externallogin_users');
+
+        if ($recordSubject) {
+            $query->columns('server_id, user_id, issuer, subject')
+                ->values($serverId . ',' . $userId . ',' . $db->quote((string) $response->issuer) . ',' . $db->quote((string) $response->subject));
+        } else {
+            $query->columns('server_id, user_id')->values($serverId . ',' . $userId);
+        }
+
         $db->setQuery($query);
         $db->execute();
+    }
+
+    /**
+     * Account bound to this server with this issuer + subject, if any.
+     */
+    private function findUserIdBySubject(int $serverId, string $issuer, string $subject): ?int
+    {
+        $db = Factory::getContainer()->get(DatabaseInterface::class);
+        $query = $db->getQuery(true)
+            ->select('user_id')
+            ->from('#__externallogin_users')
+            ->where('server_id = ' . $serverId)
+            ->where('issuer = ' . $db->quote($issuer))
+            ->where('subject = ' . $db->quote($subject));
+        $db->setQuery($query);
+        $userId = $db->loadResult();
+
+        return $userId === null ? null : intval($userId);
+    }
+
+    /**
+     * @return array{server_id: int, issuer: ?string, subject: ?string}|null
+     */
+    private function getBinding(int $userId): ?array
+    {
+        if ($userId === 0) {
+            return null;
+        }
+
+        $db = Factory::getContainer()->get(DatabaseInterface::class);
+        $query = $db->getQuery(true)
+            ->select('server_id, issuer, subject')
+            ->from('#__externallogin_users')
+            ->where('user_id = ' . $userId);
+        $db->setQuery($query);
+        $row = $db->loadAssoc();
+
+        if (!$row) {
+            return null;
+        }
+
+        return [
+            'server_id' => intval($row['server_id']),
+            'issuer' => $row['issuer'] ?? null,
+            'subject' => $row['subject'] ?? null,
+        ];
+    }
+
+    /**
+     * Completes a subject-mode login to an account bound to this server (ADR 0002).
+     *
+     * With autoupdate on, the account's username and email follow the claims; a clash with
+     * another account denies the login instead of silently keeping the old values. With it off,
+     * the account keeps its username, and the response is pointed at it so Joomla core logs in
+     * to this account rather than to whatever the username claim now names.
+     *
+     * @param ExternalAuthenticationResponse $response
+     * @param bool $recordSubject Record the response's issuer + subject (trust on first use)
+     */
+    private function loginBySubject($response, int $userId, bool $recordSubject): void
+    {
+        /** @var Registry */
+        $params = $response->server->params;
+
+        if (boolval($params->get('autoupdate', 0))) {
+            if (!$this->updateUser($response, $userId, true)) {
+                $this->userLoginFail($response, $params->get('incorrect_redirect_menuitem'), Authentication::STATUS_DENIED);
+
+                return;
+            }
+        } else {
+            $user = Factory::getContainer()->get(UserFactoryInterface::class)->loadUserById($userId);
+            $response->username = $user->username;
+        }
+
+        if ($recordSubject) {
+            $db = Factory::getContainer()->get(DatabaseInterface::class);
+            $query = $db->getQuery(true)
+                ->update('#__externallogin_users')
+                ->set('issuer = ' . $db->quote((string) $response->issuer))
+                ->set('subject = ' . $db->quote((string) $response->subject))
+                ->where('user_id = ' . $userId)
+                ->where('server_id = ' . intval($response->server->id))
+                ->where('subject IS NULL');
+            $db->setQuery($query);
+            $db->execute();
+        }
     }
 }

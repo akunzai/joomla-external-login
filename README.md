@@ -47,7 +47,7 @@ Navigate to `System->Install->Extensions` in Joomla! backend and upload the pack
 
 ## Upgrading
 
-Release-specific upgrade steps: **[docs/upgrading.md](docs/upgrading.md)** ([5.2.1](docs/upgrading.md#521-oidc-hardening), [5.2](docs/upgrading.md#52)).
+Release-specific upgrade steps: **[docs/upgrading.md](docs/upgrading.md)** ([5.3](docs/upgrading.md#53-oidc-subject-binding), [5.2.1](docs/upgrading.md#521-oidc-hardening), [5.2](docs/upgrading.md#52)).
 
 ## Known limitations
 

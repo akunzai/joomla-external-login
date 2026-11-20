@@ -30,6 +30,7 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Session\Session;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Component\Externallogin\Administrator\Authentication\ExternalAuthenticationResponse;
+use Joomla\Component\Externallogin\Administrator\Authentication\SubjectBinding;
 use Joomla\Component\Externallogin\Administrator\Helper\ExternalloginHelper;
 use Joomla\Component\Externallogin\Administrator\Model\ServersModel;
 use Joomla\Component\Externallogin\Administrator\Service\Logger\ExternalloginLogEntry;
@@ -608,6 +609,37 @@ class Oidclogin extends CMSPlugin
     }
 
     /**
+     * Claims this login attempt with an explicit denial rather than a silent early return.
+     * Leaving result empty lets authentication/externallogin skip stopPropagation(), so a later
+     * core plugin (authentication/joomla) overwrites the response with the misleading
+     * "Empty password not allowed." message (same class of bug as #249).
+     */
+    private function deny(Event $event, AuthenticationResponse $response, ExternalAuthenticationResponse $extResponse, string $message): void
+    {
+        // @phpstan-ignore assign.propertyType
+        $extResponse->status = Authentication::STATUS_DENIED;
+        $extResponse->type = 'system.oidclogin';
+        $extResponse->error_message = $message;
+
+        if ($response !== $extResponse) {
+            // @phpstan-ignore assign.propertyType
+            $response->status = $extResponse->status;
+            $response->type = $extResponse->type;
+            $response->error_message = $extResponse->error_message;
+        }
+
+        $event->setArgument('response', $extResponse);
+
+        if ($event instanceof ResultAwareInterface) {
+            $event->addResult(true);
+        } else {
+            $results = $event->getArgument('result', []);
+            $results[] = true;
+            $event->setArgument('result', $results);
+        }
+    }
+
+    /**
      * External Login event.
      */
     public function onExternalLogin(Event $event): void
@@ -659,33 +691,33 @@ class Oidclogin extends CMSPlugin
                 Log::WARNING
             );
 
-            // Claim this attempt with an explicit denial rather than a silent early return.
-            // Leaving result empty lets authentication/externallogin skip stopPropagation(), so
-            // a later core plugin (authentication/joomla) overwrites the response with the
-            // misleading "Empty password not allowed." message (same class of bug as #249).
-            // @phpstan-ignore assign.propertyType
-            $extResponse->status = Authentication::STATUS_DENIED;
-            $extResponse->type = 'system.oidclogin';
-            $extResponse->error_message = Text::_('PLG_SYSTEM_OIDCLOGIN_EMAIL_NOT_VERIFIED');
-
-            if ($response !== $extResponse) {
-                // @phpstan-ignore assign.propertyType
-                $response->status = $extResponse->status;
-                $response->type = $extResponse->type;
-                $response->error_message = $extResponse->error_message;
-            }
-
-            $event->setArgument('response', $extResponse);
-
-            if ($event instanceof ResultAwareInterface) {
-                $event->addResult(true);
-            } else {
-                $results = $event->getArgument('result', []);
-                $results[] = true;
-                $event->setArgument('result', $results);
-            }
+            $this->deny($event, $response, $extResponse, Text::_('PLG_SYSTEM_OIDCLOGIN_EMAIL_NOT_VERIFIED'));
 
             return;
+        }
+
+        // iss and sub are mandatory and verified in the ID token since 5.2.1, and the ID token's
+        // values win the merge with UserInfo. Subject-mode servers bind accounts to them (ADR 0002).
+        $issuer = $this->claims['iss'] ?? null;
+        $subject = $this->claims['sub'] ?? null;
+
+        if (is_string($issuer) && is_string($subject)) {
+            if (SubjectBinding::isSubjectMode($params) && !SubjectBinding::fits($issuer, $subject)) {
+                // Always logged: the denial is otherwise invisible to the administrator.
+                Log::add(
+                    new ExternalloginLogEntry(
+                        'Issuer or subject longer than ' . SubjectBinding::MAX_LENGTH . ' characters on server ' . $server->id,
+                        Log::WARNING,
+                        'system-oidclogin-login'
+                    )
+                );
+                $this->deny($event, $response, $extResponse, Text::_('PLG_SYSTEM_OIDCLOGIN_SUBJECT_TOO_LONG'));
+
+                return;
+            }
+
+            $extResponse->issuer = $issuer;
+            $extResponse->subject = $subject;
         }
 
         // @phpstan-ignore assign.propertyType

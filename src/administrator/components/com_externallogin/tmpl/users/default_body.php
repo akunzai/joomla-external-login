@@ -46,6 +46,12 @@ $plugins = ArrayHelper::pivot(ExternalloginHelper::getPlugins(), 'value');
 		</td>
 		<td>
 			<?php echo $this->escape($item->title); ?>
+			<?php if (!empty($item->subject)) : ?>
+				<div class="small text-muted text-break">
+					<?php echo Text::_('COM_EXTERNALLOGIN_GRID_USER_SUBJECT'); ?>: <?php echo $this->escape($item->subject); ?><br>
+					<?php echo Text::_('COM_EXTERNALLOGIN_GRID_USER_ISSUER'); ?>: <?php echo $this->escape($item->issuer); ?>
+				</div>
+			<?php endif; ?>
 		</td>
 		<td class="center">
 			<?php echo HTMLHelper::_('externallogin_users.joomla', $item->joomla, $i, isset($item->plugin)); ?>
