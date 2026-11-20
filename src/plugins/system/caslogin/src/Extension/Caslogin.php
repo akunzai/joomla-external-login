@@ -476,7 +476,7 @@ class Caslogin extends CMSPlugin
         if ($app->isClient('administrator')) {
             $input->set('option', 'com_login');
             $input->set('task', 'login');
-            $input->set(Session::getFormToken(), 1);
+            $input->post->set(Session::getFormToken(), 1);
             $request->set('return', base64_encode($return));
 
             return;

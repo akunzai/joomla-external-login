@@ -11,7 +11,9 @@ export class AdminLoginPage {
     this.page = page;
     this.usernameInput = page.getByRole('textbox', { name: 'Username' });
     this.passwordInput = page.getByRole('textbox', { name: 'Password' });
-    this.loginButton = page.getByRole('button', { name: 'Log in' });
+    // Scoped to core mod_login's form: the External Login administrator module on the same page
+    // renders its own "Log in" button.
+    this.loginButton = page.locator('#form-login').getByRole('button', { name: 'Log in' });
     this.errorMessage = page.getByText('Username and password do not match', { exact: false });
   }
 
@@ -23,6 +25,13 @@ export class AdminLoginPage {
     await this.usernameInput.fill(username);
     await this.passwordInput.fill(password);
     await this.loginButton.click();
+  }
+
+  /** Starts administrator SSO through the External Login administrator module. */
+  async clickExternalLogin(serverTitle: string) {
+    const module = this.page.locator('#external-login');
+    await module.getByLabel('Choose server').selectOption({ label: serverTitle });
+    await module.getByRole('button', { name: 'Log in' }).click();
   }
 
   async isLoggedIn(): Promise<boolean> {

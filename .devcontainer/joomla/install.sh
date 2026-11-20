@@ -161,6 +161,15 @@ if dc_exec joomla test -f /var/www/html/cli/joomla.php; then
   # Set module to show on all pages (menu assignment)
   joomla_mysql -e "DELETE FROM ${JOOMLA_DB_PREFIX}modules_menu WHERE moduleid=${MODULE_ID}; INSERT INTO ${JOOMLA_DB_PREFIX}modules_menu (moduleid, menuid) VALUES (${MODULE_ID}, 0);"
 
+  echo "Configuring External Login administrator module ..."
+  # Shown on the /administrator/ login page (com_login renders the "login" position), so e2e can
+  # cover administrator SSO through both servers (#303).
+  ADMIN_MODULE_PARAMS="{\"server\":[\"${SERVER_ID}\",\"${OIDC_SERVER_ID}\"],\"cache\":\"0\",\"layout\":\"_:default\"}"
+  joomla_mysql -e "UPDATE ${JOOMLA_DB_PREFIX}modules SET published=1, position='login', params='${ADMIN_MODULE_PARAMS}' WHERE module='mod_externallogin_admin' AND client_id=1;"
+  # shellcheck disable=2312
+  ADMIN_MODULE_ID=$(joomla_mysql -sN -e "SELECT id FROM ${JOOMLA_DB_PREFIX}modules WHERE module='mod_externallogin_admin' AND client_id=1 LIMIT 1;" | tr -d '\r')
+  joomla_mysql -e "DELETE FROM ${JOOMLA_DB_PREFIX}modules_menu WHERE moduleid=${ADMIN_MODULE_ID}; INSERT INTO ${JOOMLA_DB_PREFIX}modules_menu (moduleid, menuid) VALUES (${ADMIN_MODULE_ID}, 0);"
+
   echo "Configuring Joomla settings ..."
   dc_exec joomla php /var/www/html/cli/joomla.php config:set log_path=/var/www/html/administrator/logs
   dc_exec joomla php /var/www/html/cli/joomla.php config:set sef_rewrite=true
