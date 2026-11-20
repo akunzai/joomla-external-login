@@ -143,8 +143,17 @@ if dc_exec joomla test -f /var/www/html/cli/joomla.php; then
   # of falling through to a raw Joomla core "duplicate email" registration failure.
   # groups_claim: realm_access.roles, Keycloak's default location for realm-role claims, so a
   # fresh devcontainer already exercises OIDC group/role mapping (#239) out of the box.
-  OIDC_PARAMS='{"autoregister":"1","autoupdate":"1","autologout":"1","post_logout_redirect":"https://www.dev.local:8443/","issuer":"https://auth.dev.local:8443/realms/demo","client_id":"joomla-oidc","client_secret":"dev-oidc-secret","username_claim":"email","name_claim":"name","email_claim":"email","groups_claim":"realm_access.roles"}'
+  # binding_mode: username, matching what the 5.3.0 schema update writes into OIDC servers that
+  # existed before it (ADR 0002), so this server keeps 5.2.1's username-claim binding.
+  OIDC_PARAMS='{"autoregister":"1","autoupdate":"1","autologout":"1","post_logout_redirect":"https://www.dev.local:8443/","issuer":"https://auth.dev.local:8443/realms/demo","client_id":"joomla-oidc","client_secret":"dev-oidc-secret","binding_mode":"username","username_claim":"email","name_claim":"name","email_claim":"email","groups_claim":"realm_access.roles"}'
   joomla_mysql -e "INSERT IGNORE INTO ${JOOMLA_DB_PREFIX}externallogin_servers (title, published, plugin, ordering, params) VALUES ('Keycloak OIDC', 1, 'system.oidclogin', 2, '${OIDC_PARAMS}');"
+
+  echo "Adding OIDC Server definition (subject binding) ..."
+  # binding_mode: subject (#304, ADR 0002) - accounts bind to the verified iss + sub, so e2e can
+  # change a Keycloak user's email and still reach the same Joomla account. Same Keycloak client
+  # as above; no groups_claim, so subject-mode accounts keep the default group.
+  OIDC_SUBJECT_PARAMS='{"autoregister":"1","autoupdate":"1","autologout":"1","post_logout_redirect":"https://www.dev.local:8443/","issuer":"https://auth.dev.local:8443/realms/demo","client_id":"joomla-oidc","client_secret":"dev-oidc-secret","binding_mode":"subject","username_claim":"email","name_claim":"name","email_claim":"email","log_autoupdate":"1","log_not_activated":"1"}'
+  joomla_mysql -e "INSERT IGNORE INTO ${JOOMLA_DB_PREFIX}externallogin_servers (title, published, plugin, ordering, params) VALUES ('Keycloak OIDC (subject)', 1, 'system.oidclogin', 3, '${OIDC_SUBJECT_PARAMS}');"
 
   echo "Configuring External Login module ..."
   # Get the server IDs for Keycloak CAS and Keycloak OIDC
@@ -152,8 +161,10 @@ if dc_exec joomla test -f /var/www/html/cli/joomla.php; then
   SERVER_ID=$(joomla_mysql -sN -e "SELECT id FROM ${JOOMLA_DB_PREFIX}externallogin_servers WHERE title='Keycloak CAS' LIMIT 1;" | tr -d '\r')
   # shellcheck disable=2312
   OIDC_SERVER_ID=$(joomla_mysql -sN -e "SELECT id FROM ${JOOMLA_DB_PREFIX}externallogin_servers WHERE title='Keycloak OIDC' LIMIT 1;" | tr -d '\r')
+  # shellcheck disable=2312
+  OIDC_SUBJECT_SERVER_ID=$(joomla_mysql -sN -e "SELECT id FROM ${JOOMLA_DB_PREFIX}externallogin_servers WHERE title='Keycloak OIDC (subject)' LIMIT 1;" | tr -d '\r')
   # Update module params with server selection and show_logout (CAS listed first so it stays the default selection)
-  MODULE_PARAMS="{\"server\":[\"${SERVER_ID}\",\"${OIDC_SERVER_ID}\"],\"cache\":\"0\",\"layout\":\"_:default\",\"show_logout\":\"1\"}"
+  MODULE_PARAMS="{\"server\":[\"${SERVER_ID}\",\"${OIDC_SERVER_ID}\",\"${OIDC_SUBJECT_SERVER_ID}\"],\"cache\":\"0\",\"layout\":\"_:default\",\"show_logout\":\"1\"}"
   joomla_mysql -e "UPDATE ${JOOMLA_DB_PREFIX}modules SET published=1, position='sidebar-right', params='${MODULE_PARAMS}' WHERE module='mod_externallogin_site' AND client_id=0;"
   # Get module ID
   # shellcheck disable=2312

@@ -213,6 +213,8 @@ class UserModel extends BaseDatabaseModel
                 if ($this->_db->loadResult()) {
                     $query->update('#__externallogin_users');
                     $query->where('user_id = ' . (int) $pk);
+                    // A rebind (even to the same server) clears the stored OIDC subject (ADR 0002).
+                    $query->set('issuer = NULL')->set('subject = NULL');
                 } else {
                     $query->insert('#__externallogin_users');
                     $query->set('user_id = ' . (int) $pk);
@@ -280,6 +282,8 @@ class UserModel extends BaseDatabaseModel
             if ($success) {
                 $query->update("#__externallogin_users");
                 $query->where("user_id = '$userID'");
+                // A rebind (even to the same server) clears the stored OIDC subject (ADR 0002).
+                $query->set('issuer = NULL')->set('subject = NULL');
             } else {
                 $query->insert("#__externallogin_users");
                 $query->set("user_id = '$userID'");

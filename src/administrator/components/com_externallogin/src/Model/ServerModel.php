@@ -210,6 +210,8 @@ class ServerModel extends AdminModel
                 if ($this->_db->loadResult()) {
                     $query->update('#__externallogin_users');
                     $query->where('user_id = ' . (int) $user->id);
+                    // A rebind (even to the same server) clears the stored OIDC subject (ADR 0002).
+                    $query->set('issuer = NULL')->set('subject = NULL');
                 } else {
                     $query->insert('#__externallogin_users');
                     $query->set('user_id = ' . (int) $user->id);

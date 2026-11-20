@@ -52,6 +52,21 @@ class ExternalAuthenticationResponse extends AuthenticationResponse
     public string $subtype = '';
 
     /**
+     * Verified issuer (`iss`) of the identity, set only by protocols that have a stable
+     * subject identifier (OIDC). Null for CAS.
+     *
+     * @since 5.3.0
+     */
+    public ?string $issuer = null;
+
+    /**
+     * Verified subject (`sub`) of the identity, unique within $issuer. Null for CAS.
+     *
+     * @since 5.3.0
+     */
+    public ?string $subject = null;
+
+    /**
      * Create an ExternalAuthenticationResponse from a standard AuthenticationResponse.
      *
      * @since 5.2.0

@@ -23,9 +23,12 @@ CREATE TABLE IF NOT EXISTS `#__externallogin_servers` (
 CREATE TABLE IF NOT EXISTS `#__externallogin_users` (
 	`server_id` int NOT NULL,
 	`user_id` int NOT NULL,
+	`issuer` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+	`subject` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
 	INDEX (`server_id`),
 	UNIQUE (`user_id`),
-	UNIQUE (`server_id`, `user_id`)
+	UNIQUE (`server_id`, `user_id`),
+	UNIQUE INDEX `idx_server_issuer_subject` (`server_id`, `issuer`, `subject`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `#__externallogin_logs` (

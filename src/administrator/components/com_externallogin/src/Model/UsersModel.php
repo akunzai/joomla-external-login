@@ -95,6 +95,8 @@ class UsersModel extends ListModel
         $query->join('LEFT', '#__externallogin_users AS u ON a.id=u.user_id');
         $query->join('LEFT', '#__externallogin_servers AS s ON u.server_id=s.id');
         $query->select('s.title');
+        $query->select('u.issuer');
+        $query->select('u.subject');
         $query->select('s.published');
         $query->select('s.plugin');
 

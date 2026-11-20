@@ -149,6 +149,21 @@
 			description="PLG_SYSTEM_OIDCLOGIN_FIELDSET_ATTRIBUTES_DESC"
 		>
 
+			<!-- New servers default to subject. Servers that existed before 5.3.0 have
+			     binding_mode=username written by the 5.3.0 schema update, and code reads a
+			     missing value as username (ADR 0002). -->
+			<field
+				name="binding_mode"
+				type="list"
+				default="subject"
+				label="PLG_SYSTEM_OIDCLOGIN_FIELD_BINDING_MODE_LABEL"
+				description="PLG_SYSTEM_OIDCLOGIN_FIELD_BINDING_MODE_DESC"
+				validate="options"
+			>
+				<option value="subject">PLG_SYSTEM_OIDCLOGIN_FIELD_BINDING_MODE_SUBJECT</option>
+				<option value="username">PLG_SYSTEM_OIDCLOGIN_FIELD_BINDING_MODE_USERNAME</option>
+			</field>
+
 			<field
 				name="username_claim"
 				type="text"
