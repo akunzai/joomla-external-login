@@ -69,7 +69,10 @@ podman compose -f compose.yml -f compose.debug.yml up -d
 
 When using rootless Podman:
 
-- Point Traefik to the Podman socket: `export CONTAINER_SOCKET_PATH="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/podman/podman.sock"` (or your platform's Podman machine socket path).
+- Point Traefik to the Podman socket **as the container engine sees it**:
+  - Linux: `export CONTAINER_SOCKET_PATH="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/podman/podman.sock"`
+  - macOS (Podman machine): the socket path inside the VM, e.g. `/run/user/501/podman/podman.sock` (`podman info --format '{{.Host.RemoteSocket.Path}}'` without `unix://`). The macOS-side API socket from `podman machine inspect` cannot be mounted into a container.
+- Keep `CONTAINER_COMPOSE` and `CONTAINER_SOCKET_PATH` on the same engine. A socket from another engine (e.g. Kiri's or Docker Desktop's) makes Traefik fail with `statfs <path>: operation not supported`, and `podman-compose` then waits for Traefik forever with only MySQL running. Start the stack with `$CONTAINER_COMPOSE up -d` rather than typing an engine's command; to use Podman while another engine is running, stop that engine or set both variables in `mise.local.toml`.
 - Configure your DevContainer-compatible IDE (e.g., set container engine path to `podman`).
 - When running helper scripts: `CONTAINER_COMPOSE="podman compose" ./joomla/install.sh` (or `podman-compose`).
 
@@ -80,8 +83,8 @@ You can configure your local container engine settings in `mise.local.toml`:
 ```toml
 [env]
 CONTAINER_COMPOSE = "podman compose"
-# macOS (Podman machine - dynamic socket resolution):
-CONTAINER_SOCKET_PATH = "{{exec(command='podman machine inspect --format \"{{.ConnectionInfo.PodmanSocket.Path}}\"')}}"
+# macOS (Podman machine): the socket path inside the VM
+CONTAINER_SOCKET_PATH = "{{exec(command='podman info --format \"{{.Host.RemoteSocket.Path}}\" | sed \"s|^unix://||\"')}}"
 # Linux (rootless):
 # CONTAINER_SOCKET_PATH = "{{env.XDG_RUNTIME_DIR}}/podman/podman.sock"
 ```
